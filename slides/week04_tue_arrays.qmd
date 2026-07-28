@@ -1,0 +1,379 @@
+---
+title: "Arrays with numpy"
+subtitle: "HWRS 564a · Week 4 · Tuesday, September 15"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 4, session 1 of 2
+:::
+
+1. Quiz — five minutes, on control flow and functions
+2. What an array is, and why not a list
+3. Elementwise arithmetic, and broadcasting
+4. Two dimensions, and what `axis=` actually means
+5. Indexing, slicing, and boolean masks
+
+By the end you will be manipulating a model grid the way you will be doing it
+from Week 10 onward.
+
+# Why not a list {background-color="#0C234B"}
+
+## The same job, twice
+
+```python
+# a list
+depths_ft = []
+for d in depths_m:
+    depths_ft.append(d * 3.28084)
+
+# an array
+depths_ft = depths_m * 3.28084
+```
+
+::: {.fragment}
+Shorter, yes. That is the least of it.
+:::
+
+## It is also much faster
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 12
+import time
+import numpy as np
+
+big_list = list(range(1_000_000))
+big_array = np.arange(1_000_000)
+
+t0 = time.perf_counter()
+_ = [x * 2.5 for x in big_list]
+list_ms = (time.perf_counter() - t0) * 1000
+
+t0 = time.perf_counter()
+_ = big_array * 2.5
+array_ms = (time.perf_counter() - t0) * 1000
+
+print(f"list:  {list_ms:7.1f} ms")
+print(f"numpy: {array_ms:7.1f} ms  ->  {list_ms / array_ms:.0f}x faster")
+```
+
+::: {.fragment}
+The loop still happens. It happens in compiled C instead of in Python.
+:::
+
+## Why you should care in *this* course
+
+::: {.incremental}
+- A Week 11 model grid is 40 × 60 — small
+- A basin model is 500 × 800 × 12 layers ≈ 5 million cells
+- The solver touches every one of them, every iteration, every time step
+:::
+
+::: {.fragment .due-notice}
+At 5 million cells a 50× difference is the difference between a coffee break and
+going home. This is not a style preference.
+:::
+
+## What an array is
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+import numpy as np
+
+depths = np.array([31.2, 45.8, 88.4, 12.0, 67.3])
+
+print(depths.shape)   # how big, in each dimension
+print(depths.dtype)   # ONE type for everything in it
+print(depths.ndim)    # how many dimensions
+```
+
+::: {.fragment}
+Fixed size, one dtype, a shape. A list has none of those — which is exactly why
+it can't be fast.
+:::
+
+# Arithmetic {background-color="#0C234B"}
+
+## Elementwise, by default
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 8
+import numpy as np
+
+land_surface = np.array([730.0, 742.5, 715.0, 760.2, 728.8])
+depth_to_water = np.array([31.2, 45.8, 88.4, 12.0, 67.3])
+
+head = land_surface - depth_to_water
+print(head)
+print(head.mean(), head.max() - head.min())
+```
+
+::: {.fragment}
+Array-with-array works position by position. Array-with-scalar applies the
+scalar everywhere — that is **broadcasting**, and it is why `depths * 3.28084`
+does what you expect.
+:::
+
+## Your turn: hydraulic gradients
+
+Five well pairs. Compute the gradient for all of them at once, then find the
+steepest.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_grad
+import numpy as np
+head_up = np.array([412.5, 409.1, 405.0, 418.2, 402.7])
+head_down = np.array([408.2, 404.8, 401.9, 410.0, 399.9])
+distance = np.array([850.0, 620.0, 740.0, 1150.0, 400.0])
+```
+
+```{pyodide}
+#| exercise: ex_grad
+gradients = ______
+steepest = ______
+print(f"gradients: {np.round(gradients, 5)}")
+print(f"steepest:  {steepest:.5f}")
+```
+
+::: {.hint exercise="ex_grad"}
+::: {.callout-note collapse="false"}
+## Hint
+
+No loop. Subtract one array from the other, divide by the third — numpy lines
+them up for you. `.max()` finds the largest.
+:::
+:::
+
+::: {.solution exercise="ex_grad"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+gradients = (head_up - head_down) / distance
+steepest = gradients.max()
+```
+
+The steepest is `0.007` — the last pair, which has the *smallest* head drop of
+the five but is only 400 m apart. Gradient is a ratio; neither number tells you
+anything on its own.
+:::
+:::
+
+# Two dimensions {background-color="#AB0520"}
+
+## A grid is a 2D array
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 9
+import numpy as np
+
+heads = np.array([
+    [412.1, 411.4, 410.2, 408.9, 406.3, 403.1],
+    [412.0, 411.2, 409.8, 408.1, 405.7, 402.9],
+    [411.8, 410.9, 409.1, 406.2, 405.1, 402.6],
+    [411.7, 410.8, 409.6, 408.0, 405.4, 402.7],
+])
+print(heads.shape)      # (rows, columns)
+print(heads.mean())     # collapses everything
+```
+
+## `axis` is what gets *collapsed*
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+print("axis=0 collapses the rows -> one value per column")
+print(np.round(heads.mean(axis=0), 2))
+
+print("\naxis=1 collapses the columns -> one value per row")
+print(np.round(heads.mean(axis=1), 2))
+```
+
+::: {.fragment}
+Say it as "the axis that disappears." Every other phrasing I've tried leads
+people to pick the wrong one about half the time.
+:::
+
+## Your turn: pick the axis
+
+Compute the mean head **in each column** — six numbers, one per column — and the
+head drop from the west edge to the east edge, averaged over all rows.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_axis
+import numpy as np
+heads = np.array([
+    [412.1, 411.4, 410.2, 408.9, 406.3, 403.1],
+    [412.0, 411.2, 409.8, 408.1, 405.7, 402.9],
+    [411.8, 410.9, 409.1, 406.2, 405.1, 402.6],
+    [411.7, 410.8, 409.6, 408.0, 405.4, 402.7],
+])
+```
+
+```{pyodide}
+#| exercise: ex_axis
+column_means = heads.mean(axis=______)
+total_drop = ______
+print(f"column means: {np.round(column_means, 2)}")
+print(f"mean west-to-east drop: {total_drop:.2f} m")
+```
+
+::: {.hint exercise="ex_axis"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+You want six numbers out of a 4 × 6 array, so the dimension of length 4 — the
+rows — has to disappear.
+:::
+:::
+
+::: {.hint exercise="ex_axis"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+Once you have `column_means`, the drop is just its first element minus its last.
+:::
+:::
+
+::: {.solution exercise="ex_axis"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+column_means = heads.mean(axis=0)
+total_drop = column_means[0] - column_means[-1]
+```
+
+`9.07` m over six cells. If the cells are 250 m wide that is a gradient of about
+0.0073 — steep for a basin, which is a hint that this grid is a teaching
+example rather than a real one.
+:::
+:::
+
+## Indexing
+
+```python
+heads[2, 3]      # one cell:  row 2, column 3
+heads[2]         # a whole row
+heads[:, 3]      # a whole column
+heads[:2, :2]    # the top-left 2x2 block
+```
+
+::: {.fragment}
+Row first, then column — the same order MODFLOW uses for
+`[layer, row, column]`. Getting used to it now saves you in Week 11.
+:::
+
+::: {.fragment}
+Slices are half-open: `[:2]` gives you rows 0 and 1, not 0 through 2.
+:::
+
+## Boolean masks
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+mask = heads < 406.0
+
+print(mask.sum(), "cells below 406 m")
+print(heads[mask])
+
+heads_capped = np.where(heads < 406.0, 406.0, heads)
+print(np.round(heads_capped[2], 1))
+```
+
+::: {.fragment}
+`np.where(condition, if_true, if_false)` is the vectorized `if`. This is how you
+set a boundary condition across a grid without writing a nested loop.
+:::
+
+## Your turn: find the well
+
+One cell in this grid is drawn down relative to its neighbours. Find how many
+cells sit below 406 m, and the value of the single lowest head.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_mask
+import numpy as np
+heads = np.array([
+    [412.1, 411.4, 410.2, 408.9, 406.3, 403.1],
+    [412.0, 411.2, 409.8, 408.1, 405.7, 402.9],
+    [411.8, 410.9, 409.1, 406.2, 405.1, 402.6],
+    [411.7, 410.8, 409.6, 408.0, 405.4, 402.7],
+])
+```
+
+```{pyodide}
+#| exercise: ex_mask
+n_below = ______
+lowest = ______
+print(f"{n_below} cells below 406 m; lowest is {lowest} m")
+```
+
+::: {.hint exercise="ex_mask"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+`heads < 406.0` gives an array of `True`/`False`. Summing it counts the `True`s,
+because `True` is 1.
+:::
+:::
+
+::: {.hint exercise="ex_mask"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+`.min()` works on the whole array at once — you don't need the mask for that
+part.
+:::
+:::
+
+::: {.solution exercise="ex_mask"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+n_below = (heads < 406.0).sum()
+lowest = heads.min()
+```
+
+`8` cells, lowest `402.6`. Note that the lowest value is on the *downgradient
+boundary*, not at the well — the drawdown at 406.2 in row 2 is only anomalous
+compared to its neighbours. Finding a well by looking for the global minimum
+would have found the wrong cell.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- An array has a shape and one dtype, and that is what makes it fast
+- Arithmetic is elementwise; scalars broadcast
+- `axis=` names the dimension that *disappears*
+- Masks and `np.where` replace loops over cells
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Parts 1–2 of `labs/week04/week04_lab_arrays_iteration.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Iteration: solving equations you cannot rearrange, and finding out what happens
+when you take too big a time step.

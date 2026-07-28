@@ -1,0 +1,400 @@
+---
+title: "Hydrographs, capture, and ET"
+subtitle: "HWRS 564a · Week 13 · Thursday, November 19"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+ROOT = Path.cwd().parent
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh."
+
+NROW, NCOL, DELR = 40, 60, 250.0
+WELL_ROW, WELL_COL = 20, 30
+PUMP = 20000.0
+
+WS = ROOT / "_run" / "week13_slides"
+WS.mkdir(parents=True, exist_ok=True)
+
+perlen = [1.0, 30.0] + [365.0] * 10
+nstp = [1, 30] + [4] * 10
+steady = [True] + [False] * 11
+NPER = len(perlen)
+
+mf = flopy.modflow.Modflow("t", model_ws=str(WS), exe_name=str(MF_EXE))
+flopy.modflow.ModflowDis(mf, 1, NROW, NCOL, delr=DELR, delc=DELR,
+                         top=600.0, botm=400.0, nper=NPER,
+                         perlen=perlen, nstp=nstp, steady=steady)
+ib = np.ones((1, NROW, NCOL), dtype=int)
+ib[:, :, 0] = -1
+ib[:, :, -1] = -1
+strt = np.full((1, NROW, NCOL), 660.0)
+strt[:, :, 0] = 620.0
+strt[:, :, -1] = 700.0
+flopy.modflow.ModflowBas(mf, ibound=ib, strt=strt)
+flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=0, sy=0.15, ss=1e-5, ipakcb=53)
+flopy.modflow.ModflowWel(
+    mf, stress_period_data={p: [[0, WELL_ROW, WELL_COL, 0.0 if p == 0 else -PUMP]]
+                            for p in range(NPER)}, ipakcb=53)
+flopy.modflow.ModflowRch(mf, rech={p: 1.2e-4 for p in range(NPER)}, ipakcb=53)
+flopy.modflow.ModflowPcg(mf)
+flopy.modflow.ModflowOc(
+    mf, stress_period_data={(p, s): ["save head", "save budget"]
+                            for p in range(NPER) for s in range(nstp[p])})
+mf.write_input()
+ok, buff = mf.run_model(silent=True, report=True)
+assert ok, "\n".join(buff[-20:])
+
+hds = flopy.utils.HeadFile(str(WS / "t.hds"))
+times = np.array(hds.get_times())
+well_head = np.array([hds.get_data(totim=t)[0, WELL_ROW, WELL_COL] for t in times])
+years = (times - 1.0) / 365.0
+drawdown = well_head[0] - well_head
+pct = drawdown / drawdown[-1] * 100
+
+
+def blocks(list_path):
+    lines = Path(list_path).read_text().splitlines()
+    out = []
+    for s in [i for i, l in enumerate(lines) if "VOLUMETRIC BUDGET" in l]:
+        half, terms = "in", {}
+        for line in lines[s:s + 30]:
+            t = line.strip()
+            if t.startswith("OUT:"):
+                half = "out"
+            if "=" not in t or t.startswith(("TOTAL", "IN - OUT", "PERCENT")):
+                continue
+            terms.setdefault(t.split("=")[0].strip(), {})[half] = float(t.split()[-1])
+        out.append(terms)
+    return out
+
+
+bl = blocks(WS / "t.list")
+
+
+def net(term, b):
+    return b.get(term, {}).get("in", 0.0) - b.get(term, {}).get("out", 0.0)
+
+
+store_early, store_late = net("STORAGE", bl[1]), net("STORAGE", bl[-1])
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE, UA_GRAY = "#AB0520", "#0C234B", "#49595E"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 13, session 2 of 2
+:::
+
+1. Reading a hydrograph out of the `.hds` file
+2. How fast a confined aquifer gets to steady state
+3. Depletion and capture, from the budget
+4. Evapotranspiration and the extinction depth
+
+# A modelled hydrograph {background-color="#0C234B"}
+
+## Ten years at the wellfield
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.5
+fig, axes = plt.subplots(1, 2, figsize=(11, 3.5))
+axes[0].plot(years, well_head, "o-", color=UA_RED, ms=3.5)
+axes[0].set_xlabel("years since pumping began")
+axes[0].set_ylabel("head at the wellfield (m)")
+axes[0].set_title("Most of it happens immediately")
+axes[0].grid(alpha=0.3)
+
+axes[1].plot(years, pct, "s-", color=UA_BLUE, ms=3.5)
+axes[1].axhline(90, color=UA_GRAY, ls=":", lw=1.2)
+axes[1].text(4.5, 91.5, "90% of final drawdown", fontsize=9, color=UA_GRAY)
+axes[1].set_xlabel("years since pumping began")
+axes[1].set_ylabel("% of final drawdown")
+axes[1].set_title("Approach to steady state")
+axes[1].grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+Total drawdown **{python} f"{drawdown[-1]:.1f}"** m over ten years, and
+**{python} f"{np.interp(1.0, years, pct):.0f}%"** of it in the first year.
+:::
+
+## How to get that series
+
+```python
+hds = flopy.utils.HeadFile(ws / "t.hds")
+times = np.array(hds.get_times())
+
+well_head = np.array([
+    hds.get_data(totim=t)[0, WELL_ROW, WELL_COL] for t in times
+])
+```
+
+::: {.fragment}
+One `get_data` call per output time, indexing the cell you care about. `get_times()`
+tells you what is in the file — **which is only what `OC` was told to save**.
+:::
+
+## Your turn: convert to years
+
+The steady-state period occupies day 0 to day 1, so pumping starts at day 1.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_years
+import numpy as np
+times = np.array([1.0, 2.0, 3.0, 31.0, 122.25, 3681.0])
+```
+
+```{pyodide}
+#| exercise: ex_years
+years = ______
+for t, y in zip(times, years):
+    print(f"day {t:8.2f}  ->  {y:7.3f} years since pumping began")
+```
+
+::: {.hint exercise="ex_years"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Subtract the day pumping started, then divide by the days in a year. Numpy does
+both elementwise.
+:::
+:::
+
+::: {.solution exercise="ex_years"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+years = (times - 1.0) / 365.0
+```
+
+The first output lands at exactly 0 years — the end of the steady-state period,
+before any pumping. **That is your baseline**, and forgetting to subtract it is how
+you end up reporting a drawdown that includes a year of nothing happening.
+:::
+:::
+
+# Depletion and capture {background-color="#AB0520"}
+
+## Where the water comes from, over time
+
+```{python}
+#| echo: false
+print(f"{'':28s}{'m3/d':>12s}{'% of pumping':>14s}")
+for label, v in [("end of the first month", store_early),
+                 ("end of year 10", store_late)]:
+    print(f"net storage, {label:26s}{v:9,.1f}{100 * v / PUMP:13.1f}%")
+```
+
+::: {.fragment}
+After one month, **about a quarter** of the well's yield is water taken out of
+storage. By year ten, storage contributes essentially nothing.
+:::
+
+## The distinction regulation is built on
+
+::: {.columns}
+::: {.column width="50%"}
+**Depletion**
+
+Water out of storage. A one-off withdrawal from the aquifer's stock.
+:::
+
+::: {.column width="50%"}
+**Capture**
+
+Recharge or throughflow diverted to the well. Renewable — but it was going
+somewhere.
+:::
+:::
+
+::: {.fragment .due-notice}
+**The source changes over time**, and only the budget shows it. That is the most
+policy-relevant output a transient model produces.
+:::
+
+## One detail about budget blocks
+
+MODFLOW writes **one budget block per stress period**, at the end of it — not one
+per time step.
+
+::: {.fragment}
+So 12 periods gives 12 blocks, even with 71 head snapshots saved.
+:::
+
+::: {.fragment}
+If you want a budget time series at finer resolution, you read the **cell budget
+file** (`.cbc`), not the `.list`. The listing is a summary.
+:::
+
+## Your turn: classify the sources
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_source
+budget = {
+    "STORAGE":       {"in": 5190.6, "out": 0.0},
+    "RECHARGE":      {"in": 17400.0, "out": 0.0},
+    "CONSTANT HEAD": {"in": 131774.6, "out": 129174.6},
+    "WELLS":         {"in": 0.0, "out": 20000.0},
+}
+```
+
+```{pyodide}
+#| exercise: ex_source
+def net(term):
+    return budget[term]["in"] - budget[term]["out"]
+
+depletion = ______
+capture = ______
+print(f"depletion (from storage) {depletion:9,.1f} m3/d")
+print(f"capture (everything else){capture:9,.1f} m3/d")
+print(f"total                    {depletion + capture:9,.1f} m3/d")
+```
+
+::: {.hint exercise="ex_source"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Depletion is the storage term alone. Capture is recharge plus the *net* constant-head
+contribution. They should sum to the pumping rate.
+:::
+:::
+
+::: {.solution exercise="ex_source"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+depletion = net("STORAGE")
+capture = net("RECHARGE") + net("CONSTANT HEAD")
+```
+
+5,191 plus 20,000 — which sums to 25,191, not 20,000.
+
+**That is not an error in your arithmetic**; it means the aquifer is still adjusting
+and heads are still falling, so more is entering than the well removes. Steady
+state is where these balance, and this snapshot is a month into a ten-year
+approach.
+:::
+:::
+
+# Evapotranspiration {background-color="#0C234B"}
+
+## ET depends on how deep the water is
+
+`EVT` removes water at a rate that falls with depth to water.
+
+| Argument | Meaning |
+|---|---|
+| `surf` | elevation at which ET is at its maximum |
+| `evtr` | that maximum rate, m/d |
+| `exdp` | **extinction depth** — where ET reaches zero |
+
+::: {.fragment}
+Between `surf` and `surf − exdp`, MODFLOW interpolates linearly. Below, ET stops.
+:::
+
+## Your turn: the ET rate at depth
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_et
+surf = 700.0        # m
+evtr = 3.0e-3       # m/d at maximum
+exdp = 8.0          # m extinction depth
+heads = [700.0, 696.0, 692.0, 685.0]
+```
+
+```{pyodide}
+#| exercise: ex_et
+for h in heads:
+    depth = surf - h
+    rate = ______
+    print(f"head {h:6.1f} m  depth {depth:5.1f} m  ET {rate:.5f} m/d")
+```
+
+::: {.hint exercise="ex_et"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Linear from `evtr` at zero depth to zero at `exdp`, and it stays at zero beyond.
+`max(0.0, ...)` handles the last case.
+:::
+:::
+
+::: {.solution exercise="ex_et"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+rate = max(0.0, evtr * (1 - depth / exdp))
+```
+
+3.0e-3 at the surface, half that at 4 m, a quarter at 6 m, and **zero** at 8 m
+and beyond.
+
+The `max(0.0, ...)` matters: without it, a water table 15 m down would give a
+*negative* ET rate, which MODFLOW would read as water being added.
+:::
+:::
+
+## The feedback that matters
+
+::: {.incremental}
+1. Pumping lowers the water table
+2. A lower water table means less ET
+3. Less ET means more water left in the aquifer
+:::
+
+::: {.fragment .due-notice}
+So **a fraction of what a well produces is not new water at all** — it is water
+that would otherwise have been transpired by the vegetation along the river.
+:::
+
+::: {.fragment}
+That is not an accounting curiosity. It is the mechanism behind riparian habitat
+loss along the Santa Cruz, and a model without an `EVT` package cannot represent
+it.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Pull a hydrograph out of `.hds` with `get_times()` and `get_data(totim=...)`
+- A confined aquifer reaches most of its drawdown in the first year
+- Depletion versus capture, and that the mix changes over time
+- Budget blocks are per stress period, not per time step
+- ET falls linearly to zero at the extinction depth, and pumping reduces it
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 11 — 2D steady-state model**, Wednesday 11/25 at 11:59pm
+- **Project 3 analysis, part 1**
+
+::: {.kicker}
+Next week
+:::
+
+Layers, rivers, and loading a model somebody else built. **Tuesday only** —
+Thursday is Thanksgiving.

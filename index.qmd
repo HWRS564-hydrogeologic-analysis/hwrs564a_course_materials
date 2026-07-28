@@ -1,0 +1,60 @@
+---
+title: "HWRS 564a — Hydrogeologic Analysis Tools & Methods I"
+subtitle: "Fall 2026 · Tu/Th 2:00–3:15 · Harshbarger 203"
+---
+
+## About this site
+
+Slides, lab notebooks, and reference material for HWRS 564a. Slides are
+interactive: the code blocks run in your browser, so you can edit an example and
+see what changes without leaving the page.
+
+Graded work is submitted through D2L. This site holds the material; D2L holds the
+gradebook.
+
+::: {.due-notice}
+**Getting started:** open the [course repository](https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials),
+click *Code → Codespaces → Create codespace*, and wait for it to build. Do this
+before the first class of Week 2.
+:::
+
+## Schedule
+
+| Week | Dates | Topic | Due |
+|------|-------|-------|-----|
+| 1 | 8/24 | Program field trip — no class | |
+| **Module 1 · Python Foundations** | | | |
+| 2 | 8/31 | [Getting started with Python](slides/week02_tue_getting_started.qmd) · [Data types & sequences](slides/week02_thu_data_types.qmd) | |
+| 3 | 9/7 | [Control flow](slides/week03_tue_control_flow.qmd) · [Functions and modules](slides/week03_thu_functions.qmd) | HW 1 |
+| 4 | 9/14 | [Arrays with numpy](slides/week04_tue_arrays.qmd) · [Iterative solutions](slides/week04_thu_iteration.qmd) | HW 2 |
+| 5 | 9/21 | [Introduction to pandas](slides/week05_tue_pandas.qmd) · [Filtering and first plots](slides/week05_thu_filtering.qmd) | HW 3 · Project 1 |
+| **Module 2 · Data Analysis & Visualization** | | | |
+| 6 | 9/28 | [Where data comes from](slides/week06_tue_apis.qmd) · [Gaps, duplicates, outliers](slides/week06_thu_cleaning.qmd) | HW 4 |
+| 7 | 10/5 | [Dates and resampling](slides/week07_tue_datetime.qmd) · [Rolling and reshaping](slides/week07_thu_grouping.qmd) | HW 5 |
+| 8 | 10/12 | [Figures worth showing](slides/week08_tue_figures.qmd) · [Annotation and maps](slides/week08_thu_annotation_maps.qmd) | HW 6 · Project 2 pt 1 |
+| 9 | 10/19 | [Regression](slides/week09_tue_regression.qmd) · [Major-ion chemistry](slides/week09_thu_chemistry.qmd) | HW 7 |
+| **Module 3 · Introduction to MODFLOW & FloPy** | | | |
+| 10 | 10/26 | [What MODFLOW is](slides/week10_tue_what_is_modflow.qmd) · [Running it](slides/week10_thu_running_it.qmd) | HW 8 · Project 2 pt 2 |
+| 11 | 11/2 | [Inputs, outputs, hitting go](slides/week11_tue_inputs_outputs.qmd) · [Budgets](slides/week11_thu_budgets.qmd) | HW 9 |
+| 12 | 11/9 | [Discretization](slides/week12_tue_discretization.qmd) · [Unconfined flow](slides/week12_thu_unconfined.qmd) | HW 10 |
+| 13 | 11/16 | [Time and storage](slides/week13_tue_time.qmd) · [Capture and ET](slides/week13_thu_capture_et.qmd) | HW 11 · Project 3 pt 1 |
+| 14 | 11/23 | [Layers, rivers, loading](slides/week14_tue_layers_rivers.qmd) *(Tue only)* | |
+| **Module 4 · Reproducible Workflows** | | | |
+| 15 | 11/30 | Debugging and coding practices | HW 12 · Project 3 pt 2 |
+| 16 | 12/7 | Project 3 presentations *(Tue only)* | |
+
+## How class works
+
+Each week has two sessions. Most sessions mix short lecture segments with coding
+exercises you work through in the slides. Most weeks open with a five-minute
+quiz on the previous week's material — ten over the semester, two lowest dropped.
+
+Homework is assigned Mondays and due the following Wednesday at 11:59pm through
+D2L. No late work is accepted, and your two lowest assignment grades are dropped
+automatically.
+
+## Getting help
+
+- **Office hours:** Tuesdays 1:00–2:00pm, Harshbarger 322B
+- **Email:** [andrbenn@arizona.edu](mailto:andrbenn@arizona.edu)
+- **Found a bug in the material?** [Open an issue](https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues) — genuinely welcome

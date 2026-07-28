@@ -1,0 +1,433 @@
+---
+title: "Layers, rivers, and inheriting a model"
+subtitle: "HWRS 564a · Week 14 · Tuesday, November 24"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+ROOT = Path.cwd().parent
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh."
+
+NROW, NCOL, DELR = 40, 60, 250.0
+BOTM = [520.0, 480.0, 400.0]
+RIVER_COL, WELL_LAY, WELL_ROW, WELL_COL = 30, 2, 20, 35
+PUMP = -20000.0
+
+
+def layered(vka_mult, name):
+    ws = ROOT / "_run" / f"week14_slides_{name}"
+    ws.mkdir(parents=True, exist_ok=True)
+    mf = flopy.modflow.Modflow("L", model_ws=str(ws), exe_name=str(MF_EXE))
+    flopy.modflow.ModflowDis(mf, 3, NROW, NCOL, delr=DELR, delc=DELR,
+                             top=600.0, botm=BOTM, nper=1, steady=True)
+    ib = np.ones((3, NROW, NCOL), dtype=int)
+    ib[:, :, 0] = -1
+    ib[:, :, -1] = -1
+    strt = np.full((3, NROW, NCOL), 660.0)
+    strt[:, :, 0] = 620.0
+    strt[:, :, -1] = 700.0
+    flopy.modflow.ModflowBas(mf, ibound=ib, strt=strt)
+    hk = np.zeros((3, NROW, NCOL))
+    hk[0], hk[1], hk[2] = 15.0, 0.05, 25.0
+    vka = hk * 0.1
+    vka[1] *= vka_mult
+    flopy.modflow.ModflowLpf(mf, hk=hk, vka=vka, laytyp=0, ipakcb=53)
+    flopy.modflow.ModflowRiv(
+        mf, stress_period_data={0: [[0, r, RIVER_COL, 665.0, 500.0, 660.0]
+                                    for r in range(NROW)]}, ipakcb=53)
+    flopy.modflow.ModflowWel(
+        mf, stress_period_data={0: [[WELL_LAY, WELL_ROW, WELL_COL, PUMP]]}, ipakcb=53)
+    flopy.modflow.ModflowPcg(mf)
+    flopy.modflow.ModflowOc(mf, stress_period_data={(0, 0): ["save head", "save budget"]})
+    mf.write_input()
+    ok, buff = mf.run_model(silent=True, report=True)
+    assert ok, "\n".join(buff[-15:])
+    h = flopy.utils.HeadFile(str(ws / "L.hds")).get_data()
+
+    lines = (ws / "L.list").read_text().splitlines()
+    s = max(i for i, l in enumerate(lines) if "VOLUMETRIC BUDGET" in l)
+    half, terms = "in", {}
+    for line in lines[s:s + 32]:
+        t = line.strip()
+        if t.startswith("OUT:"):
+            half = "out"
+        if "=" not in t or t.startswith(("TOTAL", "IN - OUT", "PERCENT")):
+            continue
+        terms.setdefault(t.split("=")[0].strip(), {})[half] = float(t.split()[-1])
+    riv = terms["RIVER LEAKAGE"].get("in", 0.0) - terms["RIVER LEAKAGE"].get("out", 0.0)
+    return h, riv
+
+
+head, riv_base = layered(1.0, "base")
+head_leaky, riv_leaky = layered(20.0, "leaky")
+
+vdiff = float(head[0, WELL_ROW, WELL_COL] - head[2, WELL_ROW, WELL_COL])
+vdiff_leaky = float(head_leaky[0, WELL_ROW, WELL_COL] - head_leaky[2, WELL_ROW, WELL_COL])
+riv_change = 100 * (riv_leaky - riv_base) / abs(riv_base)
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE, UA_SKY = "#AB0520", "#0C234B", "#81D3EB"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 14, one session only — Thanksgiving is Thursday
+:::
+
+1. Multiple layers, and why `vka` is a separate argument
+2. Rivers, and why they are not constant heads
+3. Loading a model somebody else built
+4. Changing one thing, and comparing
+
+The last two are how groundwater modelling actually starts in practice.
+
+# Layers {background-color="#0C234B"}
+
+## Aquifers are not one thing
+
+| Layer | Elevation | Material | `hk` (m/d) |
+|---|---|---|---|
+| 1 | 600 – 520 m | upper basin fill | 15 |
+| 2 | 520 – 480 m | **clay** | 0.05 |
+| 3 | 480 – 400 m | lower basin fill | 25 |
+
+```python
+flopy.modflow.ModflowDis(mf, nlay=3, ..., top=600.0, botm=[520.0, 480.0, 400.0])
+```
+
+::: {.fragment}
+`botm` takes a **list** — one bottom per layer. `top` stays a single surface: the
+top of layer 1.
+:::
+
+## `hk` and `vka` are different arguments
+
+::: {.incremental}
+- `hk` is horizontal conductivity
+- `vka` is vertical
+- In layered sediments they differ by 10 to 100 — deposition makes horizontal flow
+  easier
+:::
+
+::: {.fragment}
+That ratio is the **anisotropy**, and it is what makes a confining unit confine.
+:::
+
+## Your turn: vertical resistance
+
+Resistance to vertical flow through a layer is its thickness divided by its
+vertical conductivity.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_resist
+thickness = {"upper sand": 80.0, "clay": 40.0, "lower sand": 80.0}
+vka = {"upper sand": 1.5, "clay": 0.005, "lower sand": 2.5}
+```
+
+```{pyodide}
+#| exercise: ex_resist
+resistance = {name: ______ for name in thickness}
+for name, r in resistance.items():
+    print(f"{name:12s} {r:9,.0f} days")
+print(f"\nclay is {resistance['clay'] / resistance['upper sand']:,.0f}x "
+      f"the resistance of the sand above it")
+```
+
+::: {.hint exercise="ex_resist"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Thickness over vertical conductivity, for each name. Both dictionaries share their
+keys.
+:::
+:::
+
+::: {.solution exercise="ex_resist"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+resistance = {name: thickness[name] / vka[name] for name in thickness}
+```
+
+8,000 days for the clay against 53 for the upper sand — **150 times** the
+resistance, from a layer half the thickness.
+
+**That is what a confining unit is**: not an impermeable barrier, but a layer whose
+resistance dominates the vertical path. Water still crosses it. It just takes a
+long time, and the head difference across it can be large.
+:::
+:::
+
+## Which the model confirms
+
+```{python}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 3.1
+fig, axes = plt.subplots(1, 3, figsize=(12, 3.1))
+names = ["upper sand", "clay", "lower sand"]
+for i, ax in enumerate(axes):
+    im = ax.imshow(head[i], cmap="Blues_r", vmin=620, vmax=700,
+                   extent=[0, 15, 0, 10])
+    ax.axvline(RIVER_COL * DELR / 1000, color=UA_SKY, lw=2.5)
+    ax.set_title(f"layer {i}: {names[i]}")
+    ax.set_xlabel("east (km)")
+axes[0].set_ylabel("north (km)")
+axes[2].plot(WELL_COL * DELR / 1000, (NROW - WELL_ROW) * DELR / 1000,
+             "*", color=UA_RED, ms=15)
+fig.colorbar(im, ax=axes, label="head (m)", shrink=0.85)
+plt.show()
+```
+
+::: {.fragment}
+The well pumps from **layer 2**, under the clay. Head difference across the clay at
+the wellfield: **{python} f"{vdiff:.1f}"** m.
+:::
+
+::: {.fragment}
+A single-layer model would have averaged all three units into one transmissivity
+and had nothing to say about which aquifer the water came from — which is exactly
+what a well-permit application asks.
+:::
+
+# Rivers {background-color="#AB0520"}
+
+## Not a constant head
+
+`RIV` takes `[layer, row, col, stage, cond, rbot]`.
+
+::: {.incremental}
+- head **above** `stage` → the aquifer drains to the river
+- head between `stage` and `rbot` → the river leaks in, proportionally
+- head **below `rbot`** → leakage stops increasing. The river is **disconnected**
+:::
+
+::: {.fragment .due-notice}
+That last case is the point. A constant head at the river would supply unlimited
+water forever — which is why using one makes **any** pumping scenario look
+sustainable.
+:::
+
+## Your turn: connected or not?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_riv
+stage, rbot, cond = 665.0, 660.0, 500.0
+aquifer_heads = [668.0, 663.0, 658.0, 640.0]
+```
+
+```{pyodide}
+#| exercise: ex_riv
+for h in aquifer_heads:
+    if h > stage:
+        flow = cond * (stage - h)          # negative: aquifer -> river
+    elif h > rbot:
+        flow = cond * (stage - h)          # positive: river -> aquifer
+    else:
+        flow = ______                       # disconnected: capped
+    print(f"head {h:6.1f} m  ->  river flow {flow:+9.1f} m3/d")
+```
+
+::: {.hint exercise="ex_riv"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Once the water table drops below the streambed bottom, the driving head stops
+growing — it is fixed at `stage - rbot`.
+:::
+:::
+
+::: {.solution exercise="ex_riv"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+flow = cond * (stage - rbot)
+```
+
+2,500 m³/d, and it stays there whether head is 658 m or 640 m.
+
+**That cap is the whole difference from a constant head.** Pump harder and a
+constant-head river gives you more, without limit. A real river runs out — and
+then the extra water has to come from storage or from somewhere else, which is
+what the budget will show you.
+:::
+:::
+
+# Inheriting a model {background-color="#0C234B"}
+
+## How this usually starts
+
+You will almost never build from nothing. You will be handed a directory of input
+files by a consultant, an agency, or a graduate student who left.
+
+```python
+inherited = flopy.modflow.Modflow.load(
+    "layered.nam", model_ws=ws, exe_name=mf2005,
+    verbose=False, check=False,
+)
+```
+
+::: {.fragment}
+The `.nam` file is the index — one line per package. **That is what you point
+`load()` at.**
+:::
+
+## Two habits that will save you
+
+::: {.fragment}
+**Inspect before you modify.** How many river cells, what rate is the well, what
+is the clay conductivity. You cannot sensibly change what you have not read.
+:::
+
+::: {.fragment}
+**`change_model_ws()` before `write_input()`:**
+
+```python
+alt.change_model_ws(str(NEW_DIR))
+alt.write_input()
+```
+
+Without it you overwrite the original with your modified version, and there is no
+undo.
+:::
+
+## Change one thing
+
+The clay's vertical conductivity was a guess — nobody measured it. So test it:
+**20× leakier**.
+
+```{python}
+#| echo: false
+print(f"{'':34s}{'original':>12s}{'20x leakier':>13s}")
+print(f"{'head difference across the clay':34s}{vdiff:11.2f}m{vdiff_leaky:12.2f}m")
+print(f"{'net river contribution (m3/d)':34s}{riv_base:12,.0f}{riv_leaky:13,.0f}")
+print(f"{'change in river contribution':34s}{'':12s}{riv_change:+12.1f}%")
+```
+
+::: {.fragment}
+Both models converged. Both closed their budgets. **They disagree about how much
+of the well's water comes out of the river.**
+:::
+
+## And the river is where it matters
+
+::: {.incremental}
+- The riparian vegetation is at the river
+- The downstream water right is at the river
+- The clay conductivity is known to maybe a factor of ten
+:::
+
+::: {.fragment .due-notice}
+The honest report is not to pick one. It is: *at a clay conductivity of 0.005 m/d
+the well captures X from the river; at 0.1 m/d it captures Y; we do not know the
+clay conductivity to better than that range.*
+:::
+
+## Your turn: which is the defensible claim?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_claim
+claims = {
+    "a": "the well captures 4,200 m3/d from the river",
+    "b": "the well captures between 4,200 and 5,600 m3/d, depending on clay conductivity",
+    "c": "the model shows the well has no effect on the river",
+    "d": "the model is calibrated, so its answer is correct",
+}
+```
+
+```{pyodide}
+#| exercise: ex_claim
+defensible = ______
+print(claims[defensible])
+```
+
+::: {.hint exercise="ex_claim"}
+::: {.callout-note collapse="false"}
+## Hint
+
+You ran two models that both converged and disagreed. What can you honestly say
+given both results?
+:::
+:::
+
+::: {.solution exercise="ex_claim"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+defensible = "b"
+```
+
+**A single model run is a hypothesis. A pair of runs that bracket what you don't
+know is a result.**
+
+`a` reports one arbitrary member of a range as if it were the answer. `d` is worse:
+calibration produces *one consistent explanation*, and several different parameter
+sets will fit your observations equally well while disagreeing about the future.
+
+That bracketing is what Project 3 asks you to produce, and it is the difference
+between a modelling report that survives review and one that comes back.
+:::
+:::
+
+## A note on scale
+
+The model you just loaded had seven packages and 96 kB of input.
+
+::: {.fragment}
+The **Pinal AMA model** used in Project 3 has around 400 MB: 212 MB of ET arrays,
+100 MB of recharge, 12 MB of well records, and a multi-node-well package for
+individual pumps. Distributed separately — it is too large for the course repo.
+:::
+
+::: {.fragment}
+What does not change: `load()` still reads it, `change_model_ws()` still saves
+you, the `.list` budget is still the first thing to read, and **a run that
+converges is still not a run that is right**.
+:::
+
+::: {.fragment}
+What changes is minutes per run instead of seconds — which makes changing one
+thing at a time stop being good practice and start being the only workable method.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- `botm` is a list; `vka` is separate from `hk` and makes confining units confine
+- A river caps its leakage once disconnected; a constant head never does
+- `load()` from the `.nam`, inspect before modifying, `change_model_ws()` first
+- Two runs that bracket an unknown parameter beat one run that hides it
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 12 — Applying fluxes to a MODFLOW model**, Wednesday 12/2 at 11:59pm
+
+::: {.kicker}
+Next week
+:::
+
+Reading tracebacks and debugging, and getting code out of notebooks — with five
+weeks of MODFLOW behind you to supply the bugs.
+
+Have a good Thanksgiving.

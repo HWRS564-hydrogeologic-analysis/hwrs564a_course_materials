@@ -1,0 +1,373 @@
+---
+title: "Iterative solutions"
+subtitle: "HWRS 564a · Week 4 · Thursday, September 17"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 4, session 2 of 2
+:::
+
+1. Equations you can't rearrange, and what to do about them
+2. Bisection: the method that cannot fail
+3. Stepping through time: explicit vs. implicit
+4. Why explicit schemes blow up, and exactly when
+
+This is the session that explains what MODFLOW is *doing* when you press go in
+Week 11. Everything after this is the same two ideas at scale.
+
+# Guess and improve {background-color="#0C234B"}
+
+## The setup
+
+An unconfined aquifer drains to a stream. Under Dupuit assumptions,
+
+$$q(h) = \frac{K\,(h^{2} - h_{s}^{2})}{2L}$$
+
+At steady state that has to equal the recharge collected upgradient, $RL$:
+
+::: {.fragment}
+$$f(h) = \frac{K\,(h^{2} - h_{s}^{2})}{2L} - RL = 0$$
+:::
+
+::: {.fragment}
+Find the $h$ that makes $f(h)$ zero. This one *is* rearrangeable — it's
+quadratic. The ones in Week 12 are not, and the method is the same either way.
+:::
+
+## Where is the root?
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 8
+K, L, H_S, R = 15.0, 900.0, 8.0, 3.5e-4
+
+def f(h):
+    return K * (h**2 - H_S**2) / (2 * L) - R * L
+
+for h in [8.0, 10.0, 12.0, 15.0, 20.0]:
+    print(f"f({h:5.1f}) = {f(h):8.3f}")
+```
+
+::: {.fragment}
+The sign flips between 10 and 12. A continuous function that changes sign has a
+root in between — that is the **intermediate value theorem**, and it is the only
+thing bisection needs.
+:::
+
+## The algorithm, in four lines
+
+::: {.incremental}
+1. You have `lo` and `hi` with opposite signs
+2. Take `mid`, the midpoint
+3. Whichever half still has a sign change, keep it
+4. Repeat until the interval is smaller than you care about
+:::
+
+::: {.fragment}
+Every step halves the interval. From a 12 m bracket to $10^{-8}$ m takes
+$\log_2(12/10^{-8}) \approx 31$ steps. Slow, and **completely reliable**.
+:::
+
+## Your turn: one step of bisection
+
+Given a bracket, decide which half to keep.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_bisect
+K, L, H_S, R = 15.0, 900.0, 8.0, 3.5e-4
+
+def f(h):
+    return K * (h**2 - H_S**2) / (2 * L) - R * L
+
+lo, hi = 8.0, 20.0
+```
+
+```{pyodide}
+#| exercise: ex_bisect
+mid = ______
+
+if f(lo) * f(mid) < 0:
+    lo, hi = ______
+else:
+    lo, hi = ______
+
+print(f"root is now bracketed by [{lo}, {hi}]")
+```
+
+::: {.hint exercise="ex_bisect"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+`f(lo) * f(mid) < 0` is true when the two have **opposite signs** — so the root
+is in the lower half.
+:::
+:::
+
+::: {.hint exercise="ex_bisect"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+Each branch assigns *both* ends: you keep one of the original endpoints and
+`mid` becomes the other.
+:::
+:::
+
+::: {.solution exercise="ex_bisect"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+mid = (lo + hi) / 2
+if f(lo) * f(mid) < 0:
+    lo, hi = lo, mid
+else:
+    lo, hi = mid, hi
+```
+
+`[8.0, 14.0]`. Multiplying to test the sign is a neat trick, but it overflows on
+very large values — `numpy.sign(a) != numpy.sign(b)` is the safer form in real
+code.
+:::
+:::
+
+## Two things every solver needs
+
+```python
+if func(lo) * func(hi) > 0:
+    raise ValueError("no sign change — that's not a bracket")
+
+for n in range(max_iter):
+    ...
+    if hi - lo < tol:
+        return mid
+raise RuntimeError("did not converge")
+```
+
+::: {.incremental}
+- A **tolerance**, because floats never land exactly on zero
+- A **maximum iteration count**, because a loop that can't finish must still stop
+:::
+
+::: {.fragment .due-notice}
+Both of those messages are what MODFLOW prints at you in Week 12. Now you know
+where they come from.
+:::
+
+## Don't write your own in real work
+
+```python
+from scipy.optimize import brentq
+root = brentq(f, 8.0, 20.0)
+```
+
+::: {.fragment}
+`brentq` mixes bisection with faster methods and gets there in about a quarter
+of the steps, with the same guarantee.
+:::
+
+::: {.fragment}
+Write your own **once**, so the library isn't magic. Then use the library.
+:::
+
+# Marching through time {background-color="#AB0520"}
+
+## A linear reservoir
+
+$$\frac{dS}{dt} = -kS \qquad\Longrightarrow\qquad S(t) = S_0 e^{-kt}$$
+
+::: {.fragment}
+We know the answer, which is exactly why it's worth simulating: you can check
+the method against the truth.
+:::
+
+::: {.fragment}
+**Explicit** (forward Euler) — evaluate the rate where you *are*:
+
+$$S_{n+1} = S_n - k S_n \Delta t$$
+:::
+
+## Your turn: step it forward
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_euler
+import numpy as np
+S0, k, dt, n_steps = 100.0, 10.0, 0.05, 60
+S = np.zeros(n_steps + 1)
+S[0] = S0
+```
+
+```{pyodide}
+#| exercise: ex_euler
+for n in range(n_steps):
+    S[n + 1] = ______
+
+print(f"after {n_steps * dt:.1f} days: {S[-1]:.4f}")
+print(f"analytic:               {S0 * np.exp(-k * n_steps * dt):.4f}")
+```
+
+::: {.hint exercise="ex_euler"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The new storage is the old storage minus what drained during the step. What
+drained is $kS\,\Delta t$, using the storage at the step you're *leaving*.
+:::
+:::
+
+::: {.solution exercise="ex_euler"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+S[n + 1] = S[n] - k * S[n] * dt
+```
+
+`0.4700` against an analytic `0.2479`. Already almost a factor of two off after
+3 days — and that is the *stable* case. Try changing `dt` to `0.15` and running
+it again.
+:::
+:::
+
+## What happens at dt = 0.15
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 10
+import numpy as np
+
+S0, k, dt = 100.0, 10.0, 0.15
+S = np.zeros(9)
+S[0] = S0
+for n in range(8):
+    S[n + 1] = S[n] - k * S[n] * dt
+
+print(np.round(S, 2))
+```
+
+::: {.fragment}
+Storage goes **negative**, then swings further out every step. Not a bug in the
+code — the scheme itself has failed.
+:::
+
+## Why, exactly
+
+$$S_{n+1} = S_n\,(1 - k\Delta t)$$
+
+Every step multiplies by the same factor.
+
+::: {.incremental}
+- $k\Delta t < 1$ → factor in $(0,1)$: decays, correctly
+- $k\Delta t = 1.5$ → factor is $-0.5$: **oscillates**
+- $k\Delta t > 2$ → magnitude above 1: **diverges**
+:::
+
+::: {.fragment}
+Stability needs $\Delta t < 2/k$. With $k = 10$/d that is 0.2 days — and nothing
+in the code warns you when you cross it.
+:::
+
+## Implicit doesn't have this problem
+
+Evaluate the rate where you're *going*:
+
+$$S_{n+1} = S_n - k S_{n+1} \Delta t \qquad\Longrightarrow\qquad S_{n+1} = \frac{S_n}{1 + k\Delta t}$$
+
+::: {.fragment}
+$1/(1 + k\Delta t)$ is between 0 and 1 for **any** positive time step. It cannot
+oscillate and it cannot diverge.
+:::
+
+::: {.fragment}
+The price: at $\Delta t = 0.15$ it gives 40.0 where the truth is 22.3. Stable is
+not the same as accurate.
+:::
+
+## Your turn: the stability limit
+
+At what time step does forward Euler start to *oscillate*, and at what time step
+does it *diverge*, for a reservoir with $k = 10$/day?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_stab
+k = 10.0
+```
+
+```{pyodide}
+#| exercise: ex_stab
+dt_oscillates_above = ______
+dt_diverges_above = ______
+print(f"oscillates above dt = {dt_oscillates_above} d")
+print(f"diverges   above dt = {dt_diverges_above} d")
+```
+
+::: {.hint exercise="ex_stab"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The step factor is $(1 - k\Delta t)$. Oscillation starts when that factor turns
+negative; divergence starts when its *magnitude* passes 1.
+:::
+:::
+
+::: {.solution exercise="ex_stab"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+dt_oscillates_above = 1 / k
+dt_diverges_above = 2 / k
+```
+
+`0.1` and `0.2` days. The dangerous band is between them: the answer oscillates
+but still decays, so it looks like noise in your output rather than a failure,
+and you may not notice at all.
+:::
+:::
+
+## The trade, stated plainly
+
+| | Explicit | Implicit |
+|---|---|---|
+| Accurate at small $\Delta t$ | yes | yes |
+| Stable at large $\Delta t$ | **no** | yes |
+| Cost per step | cheap | needs a solve |
+| Fails how? | loudly | **quietly** |
+
+::: {.fragment .due-notice}
+**MODFLOW is implicit.** It will hand you a converged answer at a time step far
+too coarse to mean anything, and it will not complain. Checking that the answer
+stops changing when you halve $\Delta t$ is your job, not the solver's.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Bisection: guaranteed, slow, needs a real bracket
+- Every solver needs a tolerance and an iteration cap
+- Explicit is accurate until it explodes; implicit never explodes and is damped
+- Stability for forward Euler is $\Delta t < 2/k$
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 2 — Control flow and functions**, Wednesday 9/16 at 11:59pm
+- Finish the Week 4 lab, including the nonlinear reservoir at the end
+
+::: {.kicker}
+Next week
+:::
+
+`pandas` — arrays with labels, and the first real dataset: a century of water
+levels from the Tucson basin.

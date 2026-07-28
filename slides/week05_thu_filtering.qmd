@@ -1,0 +1,352 @@
+---
+title: "Filtering, columns, and a first plot"
+subtitle: "HWRS 564a · Week 5 · Thursday, September 24"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 5, session 2 of 2
+:::
+
+1. Boolean filtering, and combining conditions
+2. What `NaN` quietly does to your filters
+3. Computing new columns
+4. Reading the one Excel file you'll ever read in this course
+5. A first plot, and one axis convention worth getting right
+
+# Filtering {background-color="#0C234B"}
+
+## A mask is a Series of booleans
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 9
+import pandas as pd
+
+wells = pd.DataFrame({
+    "site": ["A-14", "B-07", "C-22", "D-03", "E-11"],
+    "depth_ft": [61.0, 1100.0, 835.0, 397.0, 210.0],
+    "elev_ft": [2675.0, 2698.0, 2701.0, 2662.0, 2540.0],
+})
+
+print(wells["depth_ft"] > 500)
+print()
+print(wells[wells["depth_ft"] > 500])
+```
+
+::: {.fragment}
+Exactly last week's numpy mask, with labels along for the ride.
+:::
+
+## Combining conditions
+
+```python
+deep_and_high = wells[
+    (wells["depth_ft"] > 500) & (wells["elev_ft"] > 2680)
+]
+```
+
+::: {.incremental}
+- `&` for and, `|` for or, `~` for not
+- **Every condition needs its own parentheses**
+- `and` / `or` do *not* work here — they ask for one truth value, and a Series
+  has many
+:::
+
+::: {.fragment}
+Drop the parentheses and `&` binds tighter than `>`, so Python tries
+`500 & wells["elev_ft"]` and the error names neither of the things you wrote.
+:::
+
+## The silent one
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 9
+import pandas as pd
+import numpy as np
+
+s = pd.Series([61.0, np.nan, 835.0])
+
+print(s > 500)          # NaN is neither greater nor less
+print()
+print(f"rows kept: {(s > 500).sum()} of {len(s)}")
+```
+
+::: {.fragment .due-notice}
+A comparison against `NaN` is always `False`, so **missing rows are dropped and
+never mentioned.** In the real inventory that is 184 wells with no depth on
+file. Check `.isna().sum()` before you filter, not after you're confused.
+:::
+
+## Your turn: find the shallow northwest wells
+
+Latitude above 32.3, longitude below −111.0, depth under 200 ft.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_filter
+import pandas as pd
+wells = pd.DataFrame({
+    "site": ["A", "B", "C", "D", "E"],
+    "latitude": [32.35, 32.10, 32.41, 32.38, 32.05],
+    "longitude": [-111.05, -110.90, -111.12, -110.85, -111.20],
+    "depth_ft": [150.0, 90.0, 180.0, 120.0, 60.0],
+})
+```
+
+```{pyodide}
+#| exercise: ex_filter
+nw_shallow = wells[______]
+print(nw_shallow)
+print(f"{len(nw_shallow)} wells")
+```
+
+::: {.hint exercise="ex_filter"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+Three conditions joined by `&`, each wrapped in its own parentheses.
+:::
+:::
+
+::: {.hint exercise="ex_filter"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+Longitudes here are negative, so "west of −111.0" means **less than** −111.0.
+:::
+:::
+
+::: {.solution exercise="ex_filter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+nw_shallow = wells[
+    (wells["latitude"] > 32.3)
+    & (wells["longitude"] < -111.0)
+    & (wells["depth_ft"] < 200)
+]
+```
+
+Wells A and C. Well D is far enough north but too far east; E is west enough but
+too far south. Negative longitudes reverse the direction your intuition expects,
+so say the comparison out loud before you trust it.
+:::
+:::
+
+# New columns {background-color="#AB0520"}
+
+## Assign to a name that doesn't exist
+
+```python
+wells["depth_m"] = wells["depth_ft"] * 0.3048
+wells["screen_bottom_elev"] = wells["elev_ft"] - wells["depth_ft"]
+```
+
+::: {.fragment}
+Elementwise, like numpy. Nothing new — which is the point.
+:::
+
+::: {.fragment}
+The warning you *will* see:
+
+```
+SettingWithCopyWarning: A value is trying to be set on a copy of a slice
+```
+
+Take an explicit `.copy()` when you slice a subset you plan to modify. That is
+the fix, every time.
+:::
+
+## Your turn: decline since the first reading
+
+`depth_to_water_ft` counts **downward**, so a rising number means a falling
+water table. Compute how far the level has dropped since the record began.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_newcol
+import pandas as pd
+one_site = pd.DataFrame({
+    "year": [1948, 1965, 1980, 1995, 2010, 2024],
+    "depth_to_water_ft": [36.5, 58.2, 101.4, 143.8, 149.1, 147.6],
+})
+```
+
+```{pyodide}
+#| exercise: ex_newcol
+one_site["decline_ft"] = ______
+print(one_site)
+```
+
+::: {.hint exercise="ex_newcol"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Subtract the *first* value of the column from the whole column. `.iloc[0]` gets
+the first element regardless of what the index labels are.
+:::
+:::
+
+::: {.solution exercise="ex_newcol"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+one_site["decline_ft"] = (
+    one_site["depth_to_water_ft"] - one_site["depth_to_water_ft"].iloc[0]
+)
+```
+
+111 ft of decline in one well in one lifetime.
+
+These six numbers are made up for the slide. The real well behind them —
+D-15-13 11CBA — declined by that much between 1931 and 1994 without turning
+around; whether *any* Tucson well has recovered is a question the Week 8 lab
+makes you answer from the data rather than take from me.
+:::
+:::
+
+## The one Excel file
+
+```python
+perm = pd.read_excel(DATA / "week04_permeameter.xlsx",
+                     sheet_name="Constant Head")
+```
+
+::: {.fragment}
+That's it. `read_excel` is `read_csv` with a `sheet_name`, and everything
+downstream is identical.
+:::
+
+::: {.fragment}
+You will not use Excel in this course. You will be *sent* Excel files forever by
+people who are not going to stop. Reading one is a Python skill.
+:::
+
+# Plotting {background-color="#0C234B"}
+
+## Enough to see what you have
+
+```python
+fig, ax = plt.subplots(figsize=(9, 4))
+ax.plot(one_site["date"], one_site["depth_to_water_ft"])
+ax.invert_yaxis()
+ax.set_ylabel("depth to water (ft below land surface)")
+```
+
+::: {.fragment}
+This is the plot you make **while** you're working, not the one you show
+people. Week 8 is about the second kind.
+:::
+
+## `invert_yaxis()` is not cosmetic
+
+::: {.columns}
+::: {.column width="50%"}
+Without it, depth increases upward, so a **falling water table draws as a rising
+line**.
+:::
+
+::: {.column width="50%"}
+Someone will read that as recovery. In a committee meeting. About your work.
+:::
+:::
+
+::: {.fragment .due-notice}
+When the quantity counts downward, so should the axis. This costs one line and
+prevents a misreading you cannot take back.
+:::
+
+## Your turn: fix the axis
+
+This plots a *falling* water table as a *rising* line. Add the one call that
+fixes it, and label the axis so nobody has to guess which way is down.
+
+```{pyodide}
+#| exercise: ex_plot
+import matplotlib.pyplot as plt
+
+year = [1948, 1965, 1980, 1995, 2010, 2024]
+depth = [36.5, 58.2, 101.4, 143.8, 149.1, 147.6]
+
+fig, ax = plt.subplots(figsize=(8, 3))
+ax.plot(year, depth, color="#AB0520", lw=2, marker="o")
+ax.______()
+ax.set_ylabel(______)
+plt.show()
+```
+
+::: {.hint exercise="ex_plot"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The method flips the y axis so larger values sit lower. The label needs to say
+both the quantity *and* which direction it counts.
+:::
+:::
+
+::: {.solution exercise="ex_plot"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+ax.invert_yaxis()
+ax.set_ylabel("depth to water (ft below land surface)")
+```
+
+`"depth (ft)"` alone would not be enough. Below land surface, or above a datum?
+Those differ by about 2,600 ft here, and only the label says which you meant.
+:::
+:::
+
+## A century, in one well
+
+```{pyodide}
+#| edit: false
+#| autorun: true
+#| fig-width: 9
+#| fig-height: 3.2
+import matplotlib.pyplot as plt
+
+year = [1948, 1965, 1980, 1995, 2010, 2024]
+depth = [36.5, 58.2, 101.4, 143.8, 149.1, 147.6]
+
+fig, ax = plt.subplots()
+ax.plot(year, depth, color="#AB0520", lw=2, marker="o")
+ax.invert_yaxis()
+ax.set_xlabel("year")
+ax.set_ylabel("depth to water (ft)")
+ax.grid(alpha=0.3)
+plt.show()
+```
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Masks filter rows; `&` and `|`, and every condition in its own parentheses
+- `NaN` fails every comparison, so missing rows leave without saying goodbye
+- Assigning to a new column name creates it; `.copy()` your slices
+- Invert the axis when the quantity counts downward
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 3 — Iterative groundwater solution**, Wednesday 9/23 at 11:59pm
+- **Project 1 analysis component** — brief on D2L
+
+::: {.kicker}
+Next week
+:::
+
+Where the data comes from: pulling records straight from the USGS, and the
+gaps, duplicates, and outliers that arrive with them.

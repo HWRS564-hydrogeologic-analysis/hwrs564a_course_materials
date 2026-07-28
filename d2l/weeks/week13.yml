@@ -1,0 +1,55 @@
+week: 13
+title: "Week 13 — Wells, recharge, ET, and transient flow"
+dates: "November 17 & 19, 2026"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  Every model so far has been steady state, which answers what the aquifer
+  settles down to if nothing changes. Water managers ask *when* — when the water
+  table reaches the pump intake, and how much of what we pump this year comes out
+  of storage rather than out of recharge. This week adds time: stress periods,
+  storage properties, a hydrograph read out of the model, and the distinction
+  between depletion and capture that safe-yield regulation is built on. Plus the
+  ET package, and the feedback that connects pumping to riparian habitat.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 12 lab notebook"
+    url: "labs/week12/week12_lab_discretization_boundaries.html"
+    site_relative: true
+
+class_material:
+  - text: "Tue 11/17 — Slides: Time, storage, and stress periods"
+    url: "slides/week13_tue_time.html"
+    site_relative: true
+  - text: "Thu 11/19 — Slides: Hydrographs, capture, and ET"
+    url: "slides/week13_thu_capture_et.html"
+    site_relative: true
+  - text: "Lab notebook — Stresses that change with time"
+    url: "labs/week13/week13_lab_transient_stresses.html"
+    site_relative: true
+
+assignments:
+  - text: "Quiz 11 — on Week 12 material"
+    quiz: "TBD-week13-quiz"
+    note: "In class, Tuesday 11/17."
+  - text: "Submit: HW 11 — 2D steady-state model"
+    dropbox: "TBD-hw11-dropbox"
+    note: "Due Wednesday 11/25 at 11:59pm."
+  - text: "Submit: Project 3 — analysis component, part 1"
+    dropbox: "TBD-project3a-dropbox"
+
+bonus:
+  - text: "Barlow & Leake, Streamflow depletion by wells (USGS Circular 1376)"
+    url: "https://pubs.usgs.gov/circ/1376/"
+  - text: "Theis (1940), The source of water derived from wells"
+    url: "https://doi.org/10.1061/TACEAT.0006159"
+    note: "Eighty-five years old and still the clearest statement of capture."
+  - text: "Arizona's Assured Water Supply rules — what safe yield means legally"
+    url: "https://www.azwater.gov/aaws"

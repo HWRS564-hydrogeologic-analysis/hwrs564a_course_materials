@@ -1,0 +1,314 @@
+---
+title: "Dates, resampling, and the water year"
+subtitle: "HWRS 564a · Week 7 · Tuesday, October 6"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 7, session 1 of 2
+:::
+
+1. Quiz — five minutes, on real-world data
+2. The `DatetimeIndex`, and what it unlocks
+3. Partial-string selection and the `.dt` accessor
+4. `resample`, and choosing the aggregation
+5. The water year, and why October
+
+# Dates as dates {background-color="#0C234B"}
+
+## Strings are not dates
+
+```python
+df = pd.read_csv("flow.csv")
+df["datetime"].dtype        # object  -> these are strings
+```
+
+::: {.fragment}
+Sorting gives you alphabetical order. `"2015-1-5"` and `"2015-01-05"` are
+different values. You cannot subtract them.
+:::
+
+```python
+df = pd.read_csv("flow.csv", parse_dates=["datetime"])
+df = df.set_index("datetime").sort_index()
+```
+
+::: {.fragment}
+Now you have a `DatetimeIndex`, and an entire API opens up.
+:::
+
+## Partial-string selection
+
+The most useful thing in this deck.
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 10
+import pandas as pd, numpy as np
+
+idx = pd.date_range("2005-01-01", "2024-12-31", freq="D")
+q = pd.Series(np.abs(np.sin(np.arange(len(idx)) / 58)) * 40, index=idx)
+
+print(f'q.loc["2006"]              {len(q.loc["2006"]):5,} rows')
+print(f'q.loc["2006-08"]           {len(q.loc["2006-08"]):5,} rows')
+print(f'q.loc["2006-07":"2006-09"] {len(q.loc["2006-07":"2006-09"]):5,} rows')
+```
+
+::: {.fragment}
+Note the slice is **inclusive of both ends** — the same `.loc` rule from Week 5,
+and here it is exactly what you want.
+:::
+
+## `.dt` for a column that isn't the index
+
+```python
+levels["date"].dt.year
+levels["date"].dt.month
+levels["date"].dt.dayofyear
+levels["date"].dt.quarter
+```
+
+::: {.fragment}
+Use the index API when the dates *are* the index, and `.dt` when they are a
+column you're grouping by. Long-format data — one row per measurement, well in a
+column — usually wants `.dt`.
+:::
+
+## Your turn: select the monsoon
+
+Pull July through September of 2006 out of a daily series.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_slice
+import pandas as pd, numpy as np
+idx = pd.date_range("2005-01-01", "2024-12-31", freq="D")
+q = pd.Series(np.abs(np.sin(np.arange(len(idx)) / 58)) * 40, index=idx)
+```
+
+```{pyodide}
+#| exercise: ex_slice
+monsoon = q.loc[______]
+print(f"{len(monsoon)} days, from {monsoon.index.min():%b %d} to {monsoon.index.max():%b %d}")
+```
+
+::: {.hint exercise="ex_slice"}
+::: {.callout-note collapse="false"}
+## Hint
+
+A slice of two partial strings. You don't need to know that September has 30
+days — pandas works out the end of the month for you.
+:::
+:::
+
+::: {.solution exercise="ex_slice"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+monsoon = q.loc["2006-07":"2006-09"]
+```
+
+92 days. `"2006-09"` as the end of a slice means *the end of September*, not the
+first of September — which is the inclusive rule doing something genuinely
+convenient for once.
+:::
+:::
+
+# Resampling {background-color="#AB0520"}
+
+## `groupby` for time
+
+```python
+q.resample("ME").mean()      # month end
+q.resample("YE").sum()       # year end
+q.resample("W").max()        # weekly
+```
+
+::: {.fragment}
+7,305 daily values become 240 monthly or 20 annual ones.
+:::
+
+::: {.fragment}
+**Frequency strings changed in pandas 2.2.** It is `ME` and `YE` now, not `M`
+and `Y`. Older tutorials use the old ones and you'll get a `FutureWarning` —
+another instance of last week's theme.
+:::
+
+## The aggregation is a hydrology decision
+
+| You want | Use |
+|---|---|
+| average conditions | `.mean()` |
+| total volume | `.sum()` |
+| flood risk | `.max()` |
+| a typical day, ignoring floods | `.median()` |
+
+::: {.fragment}
+Summing cfs over a month gives you **cfs-days**, which is a volume and a
+perfectly good one — as long as the axis label says so.
+:::
+
+::: {.fragment}
+Sabino Creek: the wettest year averaged 24.6 cfs, the driest 2.6. **A factor of
+ten.** Any analysis built on "the average year" describes a year that does not
+occur.
+:::
+
+## The water year
+
+Hydrologists count years from **October 1 to September 30**.
+
+::: {.incremental}
+- A winter snowpack and the melt it feeds belong to the same year
+- A calendar year splits them down the middle
+- October 1 is the driest, least eventful moment in most of the western US
+:::
+
+::: {.fragment}
+```python
+q.resample("YE-SEP").sum()      # years ending 30 September
+```
+:::
+
+::: {.fragment .due-notice}
+Water year 2007 runs from **1 October 2006** to **30 September 2007**. It is
+named for the year it *ends* in. Getting this wrong shifts your entire record by
+three months.
+:::
+
+## Your turn: annual totals, two ways
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_wy
+import pandas as pd, numpy as np
+idx = pd.date_range("2005-01-01", "2024-12-31", freq="D")
+q = pd.Series(np.abs(np.sin(np.arange(len(idx)) / 58)) * 40, index=idx)
+```
+
+```{pyodide}
+#| exercise: ex_wy
+calendar = q.resample(______).sum()
+water_year = q.resample(______).sum()
+
+print(f"calendar years: {len(calendar)}")
+print(f"water years:    {len(water_year)}")
+```
+
+::: {.hint exercise="ex_wy"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Year-end is `"YE"`. To end the year in a different month, append the month's
+three-letter abbreviation with a hyphen.
+:::
+:::
+
+::: {.solution exercise="ex_wy"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+calendar = q.resample("YE").sum()
+water_year = q.resample("YE-SEP").sum()
+```
+
+20 calendar years and 21 water years, from the same data. The extra one is a
+stub: the record starts on 1 January 2005, which is already three months into
+water year 2005, so that first bin is incomplete.
+
+**Watch for that stub.** It will be the lowest bar on your chart, and it is an
+artifact of where the record starts.
+:::
+:::
+
+## Your turn: which water year?
+
+A storm on **12 November 2013**. Which water year does it belong to, and how
+would you compute that from a date?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_wyear
+import pandas as pd
+d = pd.Timestamp("2013-11-12")
+```
+
+```{pyodide}
+#| exercise: ex_wyear
+water_year = d.year + ______
+print(f"{d:%d %B %Y} falls in water year {water_year}")
+```
+
+::: {.hint exercise="ex_wyear"}
+::: {.callout-note collapse="false"}
+## Hint
+
+October, November, and December belong to the *next* water year. Everything
+else belongs to its own calendar year. A comparison returns `True`, and `True`
+is 1.
+:::
+:::
+
+::: {.solution exercise="ex_wyear"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+water_year = d.year + (d.month >= 10)
+```
+
+Water year **2014**. November 2013 is already two months into it.
+
+That one-liner works on a whole column too:
+`df["date"].dt.year + (df["date"].dt.month >= 10)`. Adding a boolean to an
+integer is idiomatic here, not a trick — `True` is 1 and it reads cleanly.
+:::
+:::
+
+## Resample vs. groupby
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 9
+import pandas as pd, numpy as np
+idx = pd.date_range("2005-01-01", "2024-12-31", freq="D")
+q = pd.Series(np.abs(np.sin(np.arange(len(idx)) / 58)) * 40, index=idx)
+
+print("resample('ME')          ->", len(q.resample("ME").mean()), "values (240 separate months)")
+print("groupby(q.index.month)  ->", len(q.groupby(q.index.month).mean()), "values (all Januaries together)")
+```
+
+::: {.fragment}
+**`resample` keeps time moving forward. `groupby` on a month number collapses
+across years.** The second one is a *climatology* — the long-term average
+January — and it is a different object entirely.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- `parse_dates` + `set_index` turns strings into a `DatetimeIndex`
+- Partial-string slices are inclusive, and that is convenient here
+- `resample` bins forward in time; `groupby(month)` collapses across years
+- The water year ends 30 September and is named for the year it ends in
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Parts 1–2 of `labs/week07/week07_lab_timeseries.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Rolling windows, grouping by things you computed, and reshaping between long
+and wide.

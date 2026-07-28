@@ -1,0 +1,422 @@
+---
+title: "Data types & sequences"
+subtitle: "HWRS 564a · Week 2 · Thursday, September 3"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 2, session 2 of 2
+:::
+
+1. The four types you'll use constantly
+2. Division, and floating point reality
+3. Strings and f-strings
+4. Lists: indexing and slicing
+5. Tuples and dictionaries — and when to reach for each
+
+::: {.fragment .due-notice}
+Everything today is machinery for Week 5, when we start indexing real data.
+Indexing rules are the single most common source of silent wrong answers.
+:::
+
+# Four types {background-color="#0C234B"}
+
+## The ones that matter
+
+```{pyodide}
+#| autorun: true
+#| edit: false
+n_layers = 3           # int    — whole numbers
+conductivity = 12.4    # float  — real numbers
+well_id = "A-14"       # str    — text
+is_confined = True     # bool   — True / False
+
+for value in (n_layers, conductivity, well_id, is_confined):
+    print(f"{str(value):>8}  ->  {type(value).__name__}")
+```
+
+::: {.fragment}
+`type()` is your first debugging tool. When something behaves strangely, ask what
+it *is* before you ask why.
+:::
+
+## Types decide what operations mean
+
+The `+` operator does entirely different things depending on what it's given:
+
+```{pyodide}
+#| autorun: false
+print(2 + 3)          # arithmetic
+print("2" + "3")      # concatenation
+print(True + True)    # bool is a subclass of int. Yes, really.
+```
+
+::: {.fragment}
+And sometimes it refuses:
+
+```python
+"2" + 3
+# TypeError: can only concatenate str (not "int") to str
+```
+:::
+
+::: {.fragment}
+This is the most common error you will hit in the next two weeks. It is also one
+of the most useful — Python is telling you your data isn't what you thought.
+:::
+
+## Your turn: fix the type error
+
+The depth was read from a text file, so it's a string. Fix the calculation so it
+produces a number.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_typefix
+depth_text = "45.7"
+```
+
+```{pyodide}
+#| exercise: ex_typefix
+depth_text = "45.7"
+depth_below_datum = ______ + 12.0
+depth_below_datum
+```
+
+::: {.hint exercise="ex_typefix"}
+::: {.callout-note collapse="false"}
+## Hint
+
+There's a builtin that converts a string to a floating point number. It's named
+after the type it produces.
+:::
+:::
+
+::: {.solution exercise="ex_typefix"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+depth_below_datum = float(depth_text) + 12.0
+```
+
+Gives `57.7`. Note `int("45.7")` would *fail* — `int()` won't parse a decimal
+point out of a string. `int(float("45.7"))` works and gives `45`.
+:::
+:::
+
+## Two kinds of division
+
+```{pyodide}
+#| autorun: true
+#| edit: false
+print(f"17 / 5   = {17 / 5}      true division, always a float")
+print(f"17 // 5  = {17 // 5}        floor division, rounds toward -inf")
+print(f"17 % 5   = {17 % 5}        modulo, the remainder")
+print(f"-17 // 5 = {-17 // 5}       floor, not truncation: -3 would be wrong")
+```
+
+::: {.fragment}
+`//` matters when you convert coordinates to grid indices — which you will do
+constantly from Week 10 onward.
+:::
+
+## Floats are approximations
+
+```{pyodide}
+#| autorun: true
+#| edit: false
+print(0.1 + 0.2)
+print(0.1 + 0.2 == 0.3)
+print(abs((0.1 + 0.2) - 0.3) < 1e-9)
+```
+
+::: {.fragment}
+Not a bug. `0.1` has no exact binary representation, exactly as $\tfrac{1}{3}$
+has no exact decimal one.
+:::
+
+::: {.fragment}
+**Never test floats with `==`.** Test whether the difference is small enough:
+
+$$|a - b| < \epsilon$$
+
+This is precisely how you'll decide an iterative solver has converged in Week 4.
+:::
+
+# Strings {background-color="#0C234B"}
+
+## Quotes and f-strings
+
+```{pyodide}
+#| autorun: false
+site = "USGS-09484000"
+head = 412.4567
+
+# f-strings: the f prefix lets {} interpolate expressions
+print(f"Site {site} head is {head} m")
+print(f"Site {site} head is {head:.2f} m")     # 2 decimal places
+print(f"Site {site} head is {head:>12.2f} m")  # right-aligned, width 12
+```
+
+::: {.fragment}
+Format specs matter more than they look: `:.2f` on a table of results is the
+difference between a figure caption and a wall of digits.
+:::
+
+## Useful string methods
+
+```{pyodide}
+#| autorun: false
+raw = "  A-14, Santa Cruz Basin , confined  "
+
+print(repr(raw.strip()))
+print(raw.strip().split(","))
+print([part.strip() for part in raw.strip().split(",")])
+print("A-14".lower(), "a-14".upper())
+print("A-14_deep".replace("_", "-"))
+```
+
+::: {.fragment}
+Messy real data is mostly whitespace and inconsistent case. `.strip()`,
+`.split()`, and `.lower()` will carry you a long way in Week 6.
+:::
+
+# Sequences {background-color="#AB0520"}
+
+## Lists
+
+An ordered, changeable collection. Square brackets.
+
+```{pyodide}
+#| autorun: true
+#| edit: false
+water_levels = [412.5, 411.8, 410.9, 409.4, 408.2]
+
+print(f"length:  {len(water_levels)}")
+print(f"first:   {water_levels[0]}")
+print(f"last:    {water_levels[-1]}")
+print(f"minimum: {min(water_levels)}")
+```
+
+::: {.fragment}
+**Indexing starts at zero.** `[0]` is the first element. `[-1]` is the last,
+which is genuinely useful — no `len(x) - 1` arithmetic.
+:::
+
+## Slicing
+
+`sequence[start:stop]` — includes `start`, **excludes** `stop`.
+
+```{pyodide}
+#| autorun: true
+#| edit: false
+water_levels = [412.5, 411.8, 410.9, 409.4, 408.2]
+
+print(water_levels[0:3])   # first three
+print(water_levels[:3])    # same thing
+print(water_levels[2:])    # from index 2 to the end
+print(water_levels[-2:])   # last two
+```
+
+::: {.fragment}
+Half-open intervals feel wrong for about a week, then feel right forever:
+`a[:n]` and `a[n:]` split a sequence with no overlap and no gap, and
+`stop - start` is always the length.
+:::
+
+## Your turn: slice a timeseries
+
+`monthly_head` holds one head measurement per month for a year, January first.
+Pull out the **summer monsoon months** — July, August, September.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_slice
+monthly_head = [
+    415.2, 414.8, 414.1, 413.2, 412.0, 410.6,
+    409.1, 411.7, 413.9, 414.6, 415.0, 415.3,
+]
+```
+
+```{pyodide}
+#| exercise: ex_slice
+monsoon = ______
+monsoon
+```
+
+::: {.hint exercise="ex_slice"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+January is index 0, so what index is July?
+:::
+:::
+
+::: {.hint exercise="ex_slice"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+You want three elements starting at index 6. Remember the `stop` index is
+excluded, so it needs to be one past the last element you want.
+:::
+:::
+
+::: {.solution exercise="ex_slice"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+monsoon = monthly_head[6:9]
+```
+
+`[409.1, 411.7, 413.9]` — the recovery after the June low, which is what
+monsoon recharge looks like in a hydrograph.
+:::
+:::
+
+## Lists change, tuples don't
+
+```{pyodide}
+#| autorun: false
+levels = [412.5, 411.8]
+levels.append(410.9)      # lists are mutable
+print(levels)
+
+grid_shape = (3, 40, 60)  # tuples are immutable
+print(grid_shape[1])
+```
+
+::: {.fragment}
+```python
+grid_shape[0] = 5
+# TypeError: 'tuple' object does not support item assignment
+```
+:::
+
+::: {.fragment}
+Use a **tuple** when the collection *is* one thing — a coordinate, a grid shape,
+a row. Use a **list** when it's a growing pile of things. MODFLOW grid shapes
+come back as tuples, and that's not an accident.
+:::
+
+## Dictionaries
+
+Look things up by name instead of position.
+
+```{pyodide}
+#| autorun: true
+#| edit: false
+aquifer = {
+    "name": "Santa Cruz",
+    "conductivity": 12.4,
+    "porosity": 0.28,
+    "confined": False,
+}
+
+print(aquifer["conductivity"])
+print(aquifer.get("storativity", "not measured"))  # no KeyError
+print(list(aquifer.keys()))
+```
+
+::: {.fragment}
+`aquifer["storativity"]` would raise `KeyError`. `.get()` with a default is how
+you handle data that might be missing — a Week 6 problem you'll meet a lot.
+:::
+
+## Your turn: build a lookup
+
+Build a dictionary mapping each well ID to its hydraulic conductivity, then look
+up well `"B-07"`.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_dict
+well_ids = ["A-14", "B-07", "C-22"]
+conductivities = [12.4, 3.8, 41.0]
+```
+
+```{pyodide}
+#| exercise: ex_dict
+k_by_well = ______
+k_by_well["B-07"]
+```
+
+::: {.hint exercise="ex_dict"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+You could type the dictionary out by hand — `{"A-14": 12.4, ...}` — and that is
+a perfectly good answer.
+:::
+:::
+
+::: {.hint exercise="ex_dict"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+For the slicker version: `zip()` pairs up two sequences, and `dict()` turns a
+sequence of pairs into a dictionary.
+:::
+:::
+
+::: {.solution exercise="ex_dict"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+By hand:
+
+```python
+k_by_well = {"A-14": 12.4, "B-07": 3.8, "C-22": 41.0}
+```
+
+Or built from the two lists:
+
+```python
+k_by_well = dict(zip(well_ids, conductivities))
+```
+
+Both give `3.8`. The second scales to 3000 wells; the first doesn't. We come
+back to `zip()` next week.
+:::
+:::
+
+## Choosing a container {.smaller}
+
+| You have | Use | Why |
+|---|---|---|
+| An ordered pile that grows | `list` | append, sort, slice |
+| One fixed thing with parts | `tuple` | can't be modified by accident |
+| Values you look up by name | `dict` | no index bookkeeping |
+| Numbers you'll do math on | `numpy` array | **Week 4** — element-wise math |
+
+::: {.fragment}
+Lists are the wrong tool for arithmetic: `[1, 2] * 2` gives `[1, 2, 1, 2]`, not
+`[2, 4]`. That's what numpy is for, and it's where we go next week.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- `int`, `float`, `str`, `bool` — and used `type()` to check
+- Learned why `0.1 + 0.2 != 0.3`, and what to do instead
+- Indexed and sliced with zero-based, half-open conventions
+- Chose between list, tuple, and dict
+
+::: {.kicker}
+Due Wednesday 9/9, 11:59pm
+:::
+
+**HW 1: My first Jupyter notebook** — submit through D2L.
+
+::: {.kicker}
+Next Tuesday
+:::
+
+Control flow and functions. There's a **quiz** at the start of class on this
+week's material — five minutes, five questions.

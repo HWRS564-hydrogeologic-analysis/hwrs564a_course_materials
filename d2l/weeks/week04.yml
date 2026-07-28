@@ -1,0 +1,61 @@
+# D2L content page — Week 4
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week04.yml
+
+week: 4
+title: "Week 4 — Arrays and iterative solutions"
+dates: "September 15 & 17, 2026"
+
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  Two ideas that belong together. numpy gives you a container for numbers that
+  lets you operate on all of them at once — which is both shorter to write and
+  dramatically faster, and is how every model grid you touch from Week 10 is
+  represented. Iteration is how you solve equations you cannot rearrange by
+  hand. By Thursday you will have written a bisection solver and found out
+  first-hand what happens to an explicit time-stepping scheme when the time
+  step gets too big.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 3 lab notebook"
+    url: "labs/week03/week03_lab_control_flow.html"
+    site_relative: true
+    note: "The bisection solver on Thursday is a while loop with a guard — exactly Part 3."
+
+class_material:
+  - text: "Tue 9/15 — Slides: Arrays with numpy"
+    url: "slides/week04_tue_arrays.html"
+    site_relative: true
+  - text: "Thu 9/17 — Slides: Iterative solutions"
+    url: "slides/week04_thu_iteration.html"
+    site_relative: true
+  - text: "Lab notebook — Arrays and iterative solutions"
+    url: "labs/week04/week04_lab_arrays_iteration.html"
+    site_relative: true
+    note: "Includes the nonlinear reservoir stretch exercise at the end."
+  - text: "Cheat sheet — numpy"
+    course_file: "numpy-cheat-sheet.pdf"
+
+assignments:
+  - text: "Quiz 2 — on Week 3 material"
+    quiz: "TBD-week04-quiz"
+    note: "In class, Tuesday 9/15."
+  - text: "Submit: HW 2 — Control flow and functions"
+    dropbox: "TBD-hw02-dropbox"
+    note: "Due Wednesday 9/16 at 11:59pm."
+
+bonus:
+  - text: "NumPy — the absolute basics for beginners"
+    url: "https://numpy.org/doc/stable/user/absolute_beginners.html"
+  - text: "scipy.optimize.brentq — the solver you should use in real work"
+    url: "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html"
+  - text: "Why explicit schemes go unstable (CFL condition)"
+    url: "https://en.wikipedia.org/wiki/Courant%E2%80%93Friedrichs%E2%80%93Lewy_condition"

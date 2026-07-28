@@ -1,0 +1,396 @@
+---
+title: "Discretization"
+subtitle: "HWRS 564a · Week 12 · Tuesday, November 10"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+ROOT = Path.cwd().parent
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh."
+land = np.loadtxt(ROOT / "data" / "tucson_grid_top.csv", delimiter=",")
+
+
+def run_at(cell_size):
+    ncol, nrow = int(15000 / cell_size), int(10000 / cell_size)
+    ws = ROOT / "_run" / f"week12_slides_{int(cell_size)}"
+    ws.mkdir(parents=True, exist_ok=True)
+    mf = flopy.modflow.Modflow("b", model_ws=str(ws), exe_name=str(MF_EXE))
+    flopy.modflow.ModflowDis(mf, 1, nrow, ncol, delr=cell_size, delc=cell_size,
+                             top=600.0, botm=400.0, nper=1, steady=True)
+    ib = np.ones((1, nrow, ncol), dtype=int)
+    ib[:, :, 0] = -1
+    ib[:, :, -1] = -1
+    strt = np.full((1, nrow, ncol), 660.0)
+    strt[:, :, 0] = 620.0
+    strt[:, :, -1] = 700.0
+    flopy.modflow.ModflowBas(mf, ibound=ib, strt=strt)
+    flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=0, ipakcb=53)
+    wr, wc = int(5000 / cell_size), int(7500 / cell_size)
+    flopy.modflow.ModflowWel(mf, stress_period_data={0: [[0, wr, wc, -20000.0]]},
+                             ipakcb=53)
+    flopy.modflow.ModflowRch(mf, rech=1.2e-4, ipakcb=53)
+    flopy.modflow.ModflowPcg(mf)
+    flopy.modflow.ModflowOc(mf, stress_period_data={(0, 0): ["save head", "save budget"]})
+    mf.write_input()
+    ok, buff = mf.run_model(silent=True, report=True)
+    assert ok, "\n".join(buff[-15:])
+    h = flopy.utils.HeadFile(str(ws / "b.hds")).get_data()
+    return {"n": h[0].size, "well": float(h[0, wr, wc]), "min": float(h[0].min())}
+
+
+grid = {s: run_at(s) for s in [500.0, 250.0, 125.0]}
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE = "#AB0520", "#0C234B"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 12, session 1 of 2
+:::
+
+1. Quiz — five minutes, on MODFLOW basics
+2. Choosing a cell size, and testing whether it mattered
+3. The one number that never converges
+4. `ibound`, and domains that aren't rectangles
+5. Connectivity, which nothing checks for you
+
+# Grid convergence {background-color="#0C234B"}
+
+## You picked 250 m because I said so
+
+**A number that changes when you refine the grid is a number about your grid, not
+about the aquifer.**
+
+::: {.fragment}
+The test: run the same physical problem at two resolutions and see whether the
+answer moves.
+:::
+
+::: {.fragment}
+Note *physical* problem. The well goes at the same **location**, not the same cell
+index — 7,500 m east and 5,000 m south, whatever that is in cells.
+:::
+
+## Three resolutions
+
+```{python}
+#| echo: false
+print(f"{'cell size':>10s} {'cells':>9s} {'well head':>11s} {'min head':>10s}")
+for s in sorted(grid, reverse=True):
+    g = grid[s]
+    print(f"{s:9.0f}m {g['n']:9,d} {g['well']:10.3f}m {g['min']:9.2f}m")
+```
+
+::: {.fragment}
+The minimum head does not move at all — it is a boundary condition. The **well
+head keeps falling**.
+:::
+
+## Which is expected
+
+```{python}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 3.2
+sizes = sorted(grid, reverse=True)
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.2))
+axes[0].plot([grid[s]["n"] for s in sizes], [grid[s]["well"] for s in sizes],
+             "o-", color=UA_RED, ms=7)
+axes[0].set_xscale("log")
+axes[0].set_xlabel("number of cells")
+axes[0].set_ylabel("head in the well cell (m)")
+axes[0].set_title("The pumping cell keeps deepening")
+axes[0].grid(alpha=0.3)
+
+axes[1].plot([grid[s]["n"] for s in sizes], [grid[s]["min"] for s in sizes],
+             "s-", color=UA_BLUE, ms=7)
+axes[1].set_xscale("log")
+axes[1].set_xlabel("number of cells")
+axes[1].set_ylabel("minimum head (m)")
+axes[1].set_title("The boundary does not move")
+axes[1].grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+## Why it never converges
+
+Head near a well varies **logarithmically** with distance:
+
+$$h(r) = h_0 + \frac{Q}{2\pi T}\ln\frac{r}{r_0}$$
+
+::: {.fragment}
+So the *average* head over a cell containing a well depends on how big that cell
+is — forever. Halve the cell and the average goes deeper.
+:::
+
+::: {.fragment .due-notice}
+**The head in a pumping cell is not a water level in a well.** Reporting it as one
+is among the most common errors in groundwater modelling reports.
+:::
+
+## What does converge
+
+::: {.incremental}
+- Regional heads away from the well
+- The **water budget** — every term
+- The shape and extent of the cone
+:::
+
+::: {.fragment}
+Those are the numbers you report. If you need a pumping water level you apply an
+analytical correction, refine locally, or say you can't.
+:::
+
+## Your turn: is this converging?
+
+Three runs of the same problem. Decide whether the grid is fine enough.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_converge
+heads = {500.0: 653.093, 250.0: 654.360, 125.0: 654.987}
+```
+
+```{pyodide}
+#| exercise: ex_converge
+change_1 = heads[250.0] - heads[500.0]
+change_2 = ______
+converging = ______
+print(f"500 -> 250 m : {change_1:+.3f} m")
+print(f"250 -> 125 m : {change_2:+.3f} m")
+print(f"changes shrinking? {converging}")
+```
+
+::: {.hint exercise="ex_converge"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Converging means each successive change is smaller in magnitude than the last.
+`abs()` both of them before comparing.
+:::
+:::
+
+::: {.solution exercise="ex_converge"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+change_2 = heads[125.0] - heads[250.0]
+converging = abs(change_2) < abs(change_1)
+```
+
+`+1.267` then `+0.627` — halving each time, so yes, the sequence is converging,
+just to a value it never quite reaches.
+
+**Had the second change been larger than the first**, the grid would be too coarse
+to be saying anything at all, and the right response is to refine until the
+changes shrink — not to pick whichever answer you like.
+:::
+:::
+
+# `ibound` {background-color="#AB0520"}
+
+## Three values, three meanings
+
+| Value | Meaning | Head is |
+|---|---|---|
+| `1` | active | solved for |
+| `0` | **inactive** — not in the model | never computed |
+| `-1` | constant head | fixed at `strt`, forever |
+
+::: {.fragment}
+**`ibound = 0` is not the same as `hk = 0`.** An inactive cell is removed from the
+equations. A zero-conductivity cell is still solved for, still has a head, and
+still makes your solver miserable.
+:::
+
+## Cutting the basin out of the rectangle
+
+```python
+ibound = np.ones((1, NROW, NCOL), dtype=int)
+ibound[0][land_surface > 850.0] = 0     # bedrock, not basin fill
+ibound[:, :, 0] = -1
+ibound[:, :, -1] = -1
+```
+
+::: {.fragment}
+387 cells inactive — 16% of the grid. The domain is now basin-shaped.
+:::
+
+## And the problem that creates
+
+```{python}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 3.9
+ib = np.ones((40, 60), dtype=int)
+ib[land > 850.0] = 0
+ib[:, 0] = -1
+ib[:, -1] = -1
+apr = (ib == 1).sum(axis=1)
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.9),
+                         gridspec_kw={"width_ratios": [1.6, 1]})
+cmap = plt.matplotlib.colors.ListedColormap([UA_RED, "#E2E9EB", "#1E5288"])
+im = axes[0].imshow(ib, cmap=cmap, vmin=-1.5, vmax=1.5,
+                    extent=[0, 15, 0, 10])
+cb = fig.colorbar(im, ax=axes[0], ticks=[-1, 0, 1], shrink=0.9)
+cb.ax.set_yticklabels(["-1 CHD", "0 inactive", "1 active"])
+axes[0].set_xlabel("distance east (km)")
+axes[0].set_ylabel("distance north (km)")
+
+axes[1].barh(np.arange(40), apr, color=UA_BLUE, alpha=0.8)
+axes[1].axvline(0, color="k", lw=1)
+axes[1].set_xlabel("active cells in the row")
+axes[1].set_ylabel("row")
+axes[1].invert_yaxis()
+axes[1].set_title("Rows 37-39 have none")
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+The southern three rows became a wall with nothing behind it.
+:::
+
+## MODFLOW would not tell you
+
+::: {.incremental}
+- It runs
+- It solves the remaining domain
+- It computes nothing for rows 37–39
+- It reports a **closed budget** — because a region exchanging no water is
+  trivially in balance
+:::
+
+::: {.fragment .due-notice}
+**Checking connectivity is your job.** Nothing in the software does it for you,
+and a zero discrepancy will not warn you.
+:::
+
+## Your turn: find the blocked rows
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_connect
+import numpy as np
+# active-cell counts for a 10-row toy domain
+active_per_row = np.array([12, 14, 15, 15, 15, 13, 8, 0, 0, 0])
+```
+
+```{pyodide}
+#| exercise: ex_connect
+blocked = ______
+which = ______
+print(f"{blocked} rows are fully inactive: rows {which}")
+```
+
+::: {.hint exercise="ex_connect"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Summing a boolean array counts the `True`s. `np.where(condition)[0]` gives the
+indices where it holds.
+:::
+:::
+
+::: {.solution exercise="ex_connect"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+blocked = int((active_per_row == 0).sum())
+which = np.where(active_per_row == 0)[0].tolist()
+```
+
+Three rows, 7 through 9.
+
+The fix in the lab is to raise the bedrock cutoff until every row reaches a
+boundary. Note what that means: **you changed a geological decision because of a
+numerical problem.** Sometimes right, sometimes the start of a model answering a
+different question — but either way it goes in the report, not in your head.
+:::
+:::
+
+## Your turn: pick a cell size
+
+You need to resolve a cone of depression about 2 km across, and the domain is
+15 km by 10 km. Cells must be square.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_cellsize
+cone_width_m = 2000.0
+domain_x, domain_y = 15000.0, 10000.0
+cells_across_cone = 8        # a rule of thumb: at least 8 cells across a feature
+```
+
+```{pyodide}
+#| exercise: ex_cellsize
+max_cell_size = ______
+n_cells = ______
+print(f"cell size no larger than {max_cell_size:.0f} m")
+print(f"that is {n_cells:,.0f} cells in one layer")
+```
+
+::: {.hint exercise="ex_cellsize"}
+::: {.callout-note collapse="false"}
+## Hint
+
+If you need 8 cells across a 2 km feature, each cell can be at most 2000/8 across.
+Then count how many fit in the domain.
+:::
+:::
+
+::: {.solution exercise="ex_cellsize"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+max_cell_size = cone_width_m / cells_across_cone
+n_cells = (domain_x / max_cell_size) * (domain_y / max_cell_size)
+```
+
+250 m cells, 2,400 of them — which is where the number I handed you in Week 11
+came from.
+
+**Resolve the feature you came to look at.** Same argument as choosing a time step,
+and the same argument as choosing a rolling window in Week 7: the discretization
+has to be finer than the thing you are trying to see.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Test the answer against cell size; a number that moves is about your grid
+- The pumping-cell head never converges, and is not a well water level
+- `ibound`: 1 active, 0 inactive, −1 constant head — and 0 is not `hk = 0`
+- A disconnected region still reports a closed budget
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Parts 1–3 of `labs/week12/week12_lab_discretization_boundaries.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Taking the confining layer off, and the model that stops converging.

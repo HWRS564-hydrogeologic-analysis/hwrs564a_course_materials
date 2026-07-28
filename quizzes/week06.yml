@@ -1,0 +1,128 @@
+# Week 6 quiz — covers Week 5 (pandas: reading, selecting, filtering, columns).
+#
+#     python quizzes/build_d2l_csv.py quizzes/week06.yml
+
+quiz:
+  week: 6
+  title: "Week 6 Quiz"
+  covers: "Week 5 — DataFrames, .loc vs .iloc, boolean filtering, new columns"
+  given: "Tuesday, September 29, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  # ------------------------------------------------------------ 1. concept ---
+  - type: mc
+    title: "Series or DataFrame"
+    text: |
+      `wells` is a DataFrame. Which expression returns a **DataFrame** rather
+      than a Series?
+    difficulty: 1
+    feedback: >
+      `wells[["well_depth_ft"]]`. One name in brackets gives a Series; a *list*
+      of names — even a list of one — gives a DataFrame back. That is the whole
+      reason for the double brackets you see everywhere.
+    options:
+      - text: "`wells[[\"well_depth_ft\"]]`"
+        correct: true
+        feedback: "Correct — a list of column names always gives a DataFrame."
+      - text: "`wells[\"well_depth_ft\"]`"
+        feedback: "A single name gives a Series — one column, no frame around it."
+      - text: "`wells.well_depth_ft`"
+        feedback: >
+          Attribute access is another way to get a Series. It also breaks on any
+          column name with a space in it, which is why bracket access is safer.
+      - text: "`wells.loc[3, \"well_depth_ft\"]`"
+        feedback: "One row and one column gives a single scalar value."
+
+  # ------------------------------------------------- 2. predict the output ---
+  - type: mc
+    title: "loc slices are inclusive"
+    text: |
+      `df` has a default integer index and six rows. How many rows does
+      `df.loc[2:5]` return?
+    difficulty: 3
+    feedback: >
+      Four — rows 2, 3, 4, **and 5**. `.loc` slices are inclusive of the
+      endpoint, unlike every other slice in Python. `df.iloc[2:5]` gives three.
+    options:
+      - text: "4"
+        correct: true
+        feedback: "Correct — `.loc` includes the endpoint."
+      - text: "3"
+        feedback: >
+          That's `.iloc[2:5]`. The label-based accessor is the inconsistent one,
+          and it catches everybody once.
+      - text: "5"
+        feedback: "It starts at 2, not at 0."
+      - text: "6"
+        feedback: "The slice does restrict the rows."
+
+  # ------------------------------------------------------- 3. spot the error -
+  - type: mc
+    title: "Filtering syntax"
+    text: |
+      Which line correctly selects wells deeper than 500 ft **and** above
+      2,600 ft elevation?
+    difficulty: 2
+    feedback: >
+      Each condition needs its own parentheses, and the operator is `&`, not
+      `and`. `&` binds more tightly than `>`, so without parentheses Python
+      evaluates the wrong thing and the error names neither column.
+    options:
+      - text: "`wells[(wells[\"depth\"] > 500) & (wells[\"elev\"] > 2600)]`"
+        correct: true
+        feedback: "Correct — `&` between two fully parenthesised conditions."
+      - text: "`wells[wells[\"depth\"] > 500 & wells[\"elev\"] > 2600]`"
+        feedback: >
+          Missing parentheses. `&` binds tighter than `>`, so this tries
+          `500 & wells[\"elev\"]` first.
+      - text: "`wells[(wells[\"depth\"] > 500) and (wells[\"elev\"] > 2600)]`"
+        feedback: >
+          `and` wants a single true/false value and a Series has many, so this
+          raises `ValueError: The truth value of a Series is ambiguous`.
+      - text: "`wells[wells[\"depth\"] > 500, wells[\"elev\"] > 2600]`"
+        feedback: "A comma isn't an operator here; that reads as a tuple key."
+
+  # ---------------------------------------------------------- 4. concept -----
+  - type: tf
+    title: "NaN and filters"
+    text: >
+      A row whose `well_depth_ft` is missing (`NaN`) will be **kept** by the
+      filter `wells[wells["well_depth_ft"] < 200]`.
+    difficulty: 3
+    answer: false
+    feedback: >
+      It is dropped. Every comparison against `NaN` evaluates to `False`, so
+      missing rows silently leave your analysis without any warning. In the
+      Tucson inventory that is 184 of 1,693 wells. Check `.isna().sum()` before
+      you filter.
+    true_feedback: >
+      Not quite — `NaN < 200` is `False`, not `True`, so the row is excluded.
+    false_feedback: >
+      Correct. And nothing tells you it happened, which is what makes it worth
+      knowing.
+
+  # ---------------------------------------------------------- 5. concept -----
+  - type: mc
+    title: "Reading site numbers"
+    text: >
+      Why does the Week 5 lab pass `dtype={"site_no": str}` to `pd.read_csv`?
+    difficulty: 2
+    feedback: >
+      Site numbers are identifiers, not quantities. Read as integers they lose
+      any leading zeros and stop matching the same IDs in another file — a join
+      that then returns nothing, or worse, returns partial results.
+    options:
+      - text: "So leading zeros are preserved and joins still match"
+        correct: true
+        feedback: "Correct — an identifier is text that happens to be made of digits."
+      - text: "Because pandas cannot read 15-digit numbers"
+        feedback: >
+          It can. The problem isn't magnitude, it's that arithmetic types
+          normalise away information an identifier needs to keep.
+      - text: "To make the column sort alphabetically"
+        feedback: "A side effect, not the reason."
+      - text: "To save memory"
+        feedback: "Strings use more memory here, not less."

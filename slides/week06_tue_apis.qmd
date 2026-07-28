@@ -1,0 +1,369 @@
+---
+title: "Where data comes from"
+subtitle: "HWRS 564a · Week 6 · Tuesday, September 29"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 6, session 1 of 2
+:::
+
+1. Quiz — five minutes, on pandas
+2. What an API is, and why you want one
+3. `dataretrieval`, and the fact that it moved
+4. Writing a fetch that survives the API being down
+5. What arrives, and why it isn't what you asked for
+
+By the end you will have pulled a real record from the USGS and written the
+fallback that keeps it working when they're offline.
+
+# APIs {background-color="#0C234B"}
+
+## A URL that returns data
+
+You already know how to read a CSV someone sent you. An **API** is a URL you can
+construct that hands back the data directly:
+
+```
+https://waterservices.usgs.gov/nwis/dv/?sites=09484000&format=json
+```
+
+::: {.fragment}
+Three things that buys you:
+
+- **it is current** — no waiting for someone to re-export
+- **it is reproducible** — the request is in your code, not in your downloads folder
+- **it scales** — one site or four hundred, same three lines
+:::
+
+## Why use a wrapper
+
+You could build those URLs yourself. `dataretrieval` builds them for you, and
+more importantly parses what comes back into a DataFrame.
+
+```python
+import dataretrieval.nwis as nwis
+
+df = nwis.get_record(sites="09484000", service="dv",
+                     start="2005-01-01", end="2024-12-31")
+```
+
+::: {.fragment}
+7,305 rows of daily discharge, indexed by date, in one call.
+:::
+
+## The library moved {.smaller}
+
+::: {.fragment}
+Every tutorial you will find uses `dataretrieval.nwis`. As of version 1.2.0:
+
+| Old | Status |
+|---|---|
+| `nwis.get_record()` | deprecated, still works |
+| `nwis.get_gwlevels()` | **gone** — raises `NameError` |
+| `nwis.get_info()` | still fine |
+| — | new: `dataretrieval.waterdata.*` |
+:::
+
+::: {.fragment .due-notice}
+This is not a trap I set. It is what using other people's code is like, and the
+skill is **noticing that the tutorial is older than your library** — usually
+because the error message names a function that doesn't exist.
+:::
+
+## Reading a deprecation warning
+
+```
+DeprecationWarning: `nwis.get_record` is deprecated and will be removed
+from `dataretrieval` on or after 2027-05-06; use the appropriate
+`waterdata.get_*()` for the service you need instead.
+```
+
+::: {.incremental}
+- It tells you **what** is going away
+- It tells you **when**
+- It tells you **what to use instead**
+:::
+
+::: {.fragment}
+A warning is not an error. Your code still runs. But a warning you ignore for
+two years becomes an error on a deadline.
+:::
+
+## Your turn: which function?
+
+You need **groundwater levels** for a list of well IDs. `nwis.get_gwlevels` is
+gone. Pick the replacement.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_api
+available = [
+    "waterdata.get_daily",
+    "waterdata.get_continuous",
+    "waterdata.get_field_measurements",
+    "waterdata.get_samples",
+]
+descriptions = {
+    "waterdata.get_daily": "daily summary values from a continuous sensor",
+    "waterdata.get_continuous": "15-minute sensor readings",
+    "waterdata.get_field_measurements": "discrete readings taken by hand in the field",
+    "waterdata.get_samples": "laboratory water-quality analyses",
+}
+```
+
+```{pyodide}
+#| exercise: ex_api
+choice = ______
+print(f"{choice}: {descriptions[choice]}")
+```
+
+::: {.hint exercise="ex_api"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Most water-level readings in a basin monitoring network are made by somebody
+driving out with a steel tape a few times a year — not by a logger.
+:::
+:::
+
+::: {.solution exercise="ex_api"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+choice = "waterdata.get_field_measurements"
+```
+
+Discrete, manual readings. `get_continuous` and `get_daily` would return
+almost nothing — very few wells in the Tucson basin are instrumented, and the
+ones that are have short records.
+
+Choosing the wrong one here doesn't error. It returns an empty DataFrame, and
+you spend twenty minutes wondering why the basin has no data.
+:::
+:::
+
+# Not depending on uptime {background-color="#AB0520"}
+
+## The problem, concretely
+
+Twelve people. One room. One API. One class period.
+
+::: {.incremental}
+- NWIS rate-limits by IP, and the whole room shares one
+- The samples endpoint times out on large queries even when it's healthy
+- Conference wifi exists
+:::
+
+::: {.fragment .due-notice}
+**A lab that depends on someone else's uptime is a lab that fails in class.**
+Every notebook in this course that touches an API ships a cached copy.
+:::
+
+## The pattern
+
+```python
+def load_sabino():
+    """Daily discharge at Sabino Creek. Live if possible, cached if not."""
+    try:
+        df = nwis.get_record(sites=SABINO, service="dv", ...)
+        print(f"live from NWIS: {len(df):,} rows")
+        return tidy(df)
+    except Exception as exc:
+        print(f"live fetch failed ({type(exc).__name__}); using the cached copy")
+        return pd.read_csv(DATA / "cache" / f"nwis_{SABINO}_dv.csv",
+                           parse_dates=["datetime"])
+```
+
+::: {.fragment}
+Three properties worth copying: both paths return **the same columns**, the
+function **says which one ran**, and the failure is **not silent**.
+:::
+
+## Your turn: complete the fallback
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_fallback
+def fetch_live(site):
+    raise ConnectionError("NWIS is not answering")   # pretend the API is down
+
+def read_cache(site):
+    return f"cached data for {site}"
+```
+
+```{pyodide}
+#| exercise: ex_fallback
+def load(site):
+    try:
+        return ______
+    except Exception as exc:
+        print(f"live fetch failed ({type(exc).__name__}); using cache")
+        return ______
+
+load("09484000")
+```
+
+::: {.hint exercise="ex_fallback"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Try the live one first. If anything at all goes wrong, fall back to the cache.
+Both branches have to `return`.
+:::
+:::
+
+::: {.solution exercise="ex_fallback"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+try:
+    return fetch_live(site)
+except Exception as exc:
+    print(...)
+    return read_cache(site)
+```
+
+Catching bare `Exception` is usually bad practice — it hides bugs in your own
+code. Here it is right, because **every** failure mode should end the same way:
+you cannot enumerate all the ways a network call can fail, and the student needs
+the lab to keep going regardless.
+:::
+:::
+
+## Where the cache comes from
+
+Committed data with no provenance rots into magic numbers nobody dares change.
+So the cache is *generated*:
+
+```bash
+python scripts/fetch_data.py --list    # what gets built
+python scripts/fetch_data.py           # rebuild it
+```
+
+::: {.fragment}
+Every dataset in `data/` came from that script, and the script is in the repo.
+If you want to know where a number came from, you can read it.
+:::
+
+::: {.fragment}
+The rule for size: **over about 10 MB, fetch it with a hash instead of
+committing it.** Nothing in this course is close, but your thesis will be.
+:::
+
+# What actually arrives {background-color="#0C234B"}
+
+## Column names are not for you
+
+```
+['00060_Mean', '00060_Mean_cd', 'site_no']
+```
+
+::: {.fragment}
+`00060` is the USGS parameter code for discharge in cubic feet per second.
+`_cd` is the qualifier column — `A` for approved, `P` for provisional.
+:::
+
+::: {.fragment}
+**Rename on the way in.** Every line you write afterward reads better, and you
+only have to look up the parameter code once.
+
+```python
+df = df.rename(columns={"00060_Mean": "discharge_cfs"})
+```
+:::
+
+## Your turn: rename on the way in
+
+Give these columns names a human can read.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_rename
+import pandas as pd
+raw = pd.DataFrame({
+    "00060_Mean": [64.2, 55.3, 220.0],
+    "00060_Mean_cd": ["A", "A", "P"],
+    "site_no": ["09484000"] * 3,
+})
+```
+
+```{pyodide}
+#| exercise: ex_rename
+tidy = raw.rename(columns=______)
+print(list(tidy.columns))
+tidy
+```
+
+::: {.hint exercise="ex_rename"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`.rename(columns=...)` takes a dictionary mapping old name to new. You only have
+to list the ones you're changing.
+:::
+:::
+
+::: {.solution exercise="ex_rename"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+tidy = raw.rename(columns={
+    "00060_Mean": "discharge_cfs",
+    "00060_Mean_cd": "qualifier",
+})
+```
+
+Note the unit is in the name. `discharge` alone invites somebody to assume m³/s
+six months from now, and the conversion factor between them is 35.3 — big enough
+that the mistake shows up, small enough that it might not.
+:::
+:::
+
+## Provisional means provisional
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+qualifiers = {"A": 3908, "A, e": 512, "P": 216}
+
+for code, n in qualifiers.items():
+    meaning = {"A": "approved", "A, e": "approved, estimated",
+               "P": "provisional — may change"}[code]
+    print(f"{code:6s} {n:5d}  {meaning}")
+```
+
+::: {.fragment}
+Recent data is provisional and **will** be revised. If your figure needs to be
+reproducible, record the date you pulled it — or better, pin to a cached copy
+and say so.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- An API is a URL that returns data; a wrapper turns it into a DataFrame
+- `dataretrieval` moved to `waterdata`, and tutorials haven't caught up
+- Every API call gets a fallback, and the fallback announces itself
+- Rename cryptic columns at the point of import, not later
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Parts 1–2 of `labs/week06/week06_lab_real_world_data.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+What's wrong with the data once you have it: gaps, duplicates, and the
+difference between an outlier and a flood.

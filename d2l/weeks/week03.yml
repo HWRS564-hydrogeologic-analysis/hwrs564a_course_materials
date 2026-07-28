@@ -1,0 +1,58 @@
+# D2L content page — Week 3
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week03.yml
+
+week: 3
+title: "Week 3 — Control flow and functions"
+dates: "September 8 & 10, 2026"
+
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  Last week you wrote single expressions. This week your code starts making
+  decisions and repeating itself. We cover conditionals, for and while loops,
+  and how to package work into a function you can call twice — including how to
+  make a function refuse input that cannot be right. By Thursday you will have
+  written the functions you will reuse in Week 4 without opening the slides
+  again.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 2 lab notebook"
+    url: "labs/week02/week02_lab_python_basics.html"
+    site_relative: true
+    note: "Especially Parts 5 and 6 — this week builds directly on lists and dictionaries."
+
+class_material:
+  - text: "Tue 9/8 — Slides: Control flow"
+    url: "slides/week03_tue_control_flow.html"
+    site_relative: true
+  - text: "Thu 9/10 — Slides: Functions and modules"
+    url: "slides/week03_thu_functions.html"
+    site_relative: true
+  - text: "Lab notebook — Control flow and functions"
+    url: "labs/week03/week03_lab_control_flow.html"
+    site_relative: true
+    note: "Work through this in class; finish it before Tuesday."
+  - text: "Cheat sheet — Python control flow"
+    course_file: "python_conditionals.pdf"
+
+assignments:
+  - text: "Quiz 1 — on Week 2 material"
+    quiz: "TBD-week03-quiz"
+    note: "In class, Tuesday 9/8. Five minutes, at the start of the session."
+  - text: "Submit: HW 1 — My first Jupyter notebook"
+    dropbox: "Arizona-13531601"
+    note: "Due Wednesday 9/9 at 11:59pm."
+
+bonus:
+  - text: "Python documentation — control flow tools"
+    url: "https://docs.python.org/3/tutorial/controlflow.html"
+  - text: "PEP 8 — the Python style guide (skim the naming section)"
+    url: "https://peps.python.org/pep-0008/"

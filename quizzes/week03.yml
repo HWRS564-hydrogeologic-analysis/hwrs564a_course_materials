@@ -1,0 +1,122 @@
+# Week 3 quiz — covers Week 2 material (types, conversion, indexing, slicing).
+#
+# Questions live here, in the repo, not in D2L's editor. Version-controlled,
+# reviewable, and reusable next year. Generate the D2L import file with:
+#
+#     python quizzes/build_d2l_csv.py quizzes/week03.yml
+#
+# Backticked `code` is converted to <code> automatically and the HTML flag is
+# set, so code renders monospaced in D2L. LaTeX between $...$ also renders.
+
+quiz:
+  week: 3
+  title: "Week 3 Quiz"
+  covers: "Week 2 — data types, type conversion, indexing and slicing"
+  given: "Tuesday, September 8, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  # ------------------------------------------------ 1. predict the output ----
+  - type: mc
+    title: "Floor division"
+    text: "What does the expression `17 // 5` evaluate to?"
+    difficulty: 1
+    feedback: >
+      `//` is floor division: it divides and then rounds down to the nearest
+      whole number. `17 / 5` would give `3.4`.
+    options:
+      - text: "`3`"
+        correct: true
+        feedback: "Correct — floor division discards the remainder."
+      - text: "`3.4`"
+        feedback: "That's `17 / 5`, true division. `//` rounds down."
+      - text: "`4`"
+        feedback: "Floor division rounds *down*, not to nearest."
+      - text: "`2`"
+        feedback: "That's `17 % 5`, the remainder."
+
+  # ----------------------------------------------------- 2. spot the error ----
+  - type: mc
+    title: "Spot the TypeError"
+    text: |
+      This code raises `TypeError: can only concatenate str (not "float") to str`.
+      Which line causes it?
+      <pre>1  depth_text = "45.7"
+      2  offset = 12.0
+      3  total = depth_text + offset
+      4  print(total)</pre>
+    html: true
+    difficulty: 2
+    feedback: >
+      Line 3. `depth_text` is a string, so `+` means concatenation, and Python
+      refuses to concatenate a float onto a string. The fix is
+      `float(depth_text) + offset`.
+    options:
+      - text: "Line 3"
+        correct: true
+        feedback: "Correct — `+` between a `str` and a `float` is undefined."
+      - text: "Line 1"
+        feedback: "Line 1 is a valid string assignment. Quoting a number is legal."
+      - text: "Line 2"
+        feedback: "Line 2 assigns a float. Nothing wrong there."
+      - text: "Line 4"
+        feedback: >
+          The traceback points at line 3; execution never reaches the print.
+
+  # -------------------------------------------------------- 3. true/false ----
+  - type: tf
+    title: "Float equality"
+    text: "In Python, `0.1 + 0.2 == 0.3` evaluates to `True`."
+    difficulty: 1
+    answer: false
+    feedback: >
+      It evaluates to `False`. `0.1` and `0.2` have no exact binary
+      representation, so the sum is `0.30000000000000004`. Compare floats with a
+      tolerance: `abs(a - b) < 1e-9`.
+    true_feedback: "Not quite — try running it. Binary floats are approximations."
+    false_feedback: "Correct. Never test floats with `==`."
+
+  # ------------------------------------------------------- 4. multiselect ----
+  - type: ms
+    title: "Which types are mutable"
+    text: "Select **every** type below that can be modified after it is created."
+    difficulty: 3
+    scoring: RightAnswers
+    feedback: >
+      Lists and dictionaries are mutable — you can append, reassign, or delete
+      elements. Tuples and strings are immutable; operations that look like they
+      modify them actually build a new object.
+    options:
+      - text: "`list`"
+        correct: true
+        feedback: "Correct — `.append()` modifies in place."
+      - text: "`dict`"
+        correct: true
+        feedback: "Correct — you can add and reassign keys."
+      - text: "`tuple`"
+        feedback: "Tuples are immutable; item assignment raises `TypeError`."
+      - text: "`str`"
+        feedback: >
+          Strings are immutable. `.replace()` returns a *new* string rather than
+          changing the original.
+
+  # ------------------------------------------------------- 5. numeric (SA) ----
+  - type: sa
+    title: "Hydraulic gradient"
+    text: |
+      Two wells 850 m apart have heads of 412.5 m and 408.2 m.
+      What is the hydraulic gradient between them, $i = \Delta h / \Delta l$?
+      Give your answer to **four decimal places**, e.g. `0.0123`.
+    difficulty: 3
+    input_rows: 1
+    input_width: 20
+    answers:
+      - "0.0051"
+      - "0.005059"
+      - ".0051"
+    case_sensitivity: insensitive
+    feedback: >
+      $(412.5 - 408.2) / 850 = 0.005059$, which rounds to `0.0051`. The gradient
+      is dimensionless — metres divided by metres.

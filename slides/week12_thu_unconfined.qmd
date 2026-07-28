@@ -1,0 +1,411 @@
+---
+title: "Boundaries, unconfined flow, and dry cells"
+subtitle: "HWRS 564a · Week 12 · Thursday, November 12"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+ROOT = Path.cwd().parent
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh."
+NROW, NCOL, DELR = 40, 60, 250.0
+
+
+def dry_run():
+    ws = ROOT / "_run" / "week12_slides_dry"
+    ws.mkdir(parents=True, exist_ok=True)
+    mf = flopy.modflow.Modflow("dry", model_ws=str(ws), exe_name=str(MF_EXE))
+    flopy.modflow.ModflowDis(mf, 1, NROW, NCOL, delr=DELR, delc=DELR,
+                             top=700.0, botm=640.0, nper=1, steady=True)
+    ib = np.ones((1, NROW, NCOL), dtype=int)
+    ib[:, :, 0] = -1
+    ib[:, :, -1] = -1
+    strt = np.full((1, NROW, NCOL), 670.0)
+    strt[:, :, 0] = 660.0
+    strt[:, :, -1] = 680.0
+    flopy.modflow.ModflowBas(mf, ibound=ib, strt=strt, hnoflo=-1e30)
+    flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=1, ipakcb=53)
+    flopy.modflow.ModflowWel(mf, stress_period_data={0: [[0, 20, 30, -160000.0]]},
+                             ipakcb=53)
+    flopy.modflow.ModflowRch(mf, rech=1.2e-4, ipakcb=53)
+    flopy.modflow.ModflowPcg(mf, mxiter=200, iter1=50, hclose=1e-2, rclose=1e2,
+                             relax=0.98)
+    flopy.modflow.ModflowOc(mf, stress_period_data={(0, 0): ["save head", "save budget"]})
+    mf.write_input()
+    mf.run_model(silent=True, report=True)
+    return flopy.utils.HeadFile(str(ws / "dry.hds")).get_data()
+
+
+head_dry = dry_run()
+dry_mask = head_dry[0] < -1e29
+head_masked = np.where(dry_mask, np.nan, head_dry[0])
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE = "#AB0520", "#0C234B"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 12, session 2 of 2
+:::
+
+1. `laytyp`: confined and convertible
+2. Why the nonlinear problem stops converging
+3. The solver settings worth adjusting
+4. Dry cells, and why they are a failure rather than a result
+
+# Confined or not {background-color="#0C234B"}
+
+## The difference is one argument
+
+::: {.columns}
+::: {.column width="50%"}
+**`laytyp=0` — confined**
+
+$$T = Kb$$
+
+$b$ is fixed. The equations are **linear**. One pass of the solver.
+:::
+
+::: {.column width="50%"}
+**`laytyp=1` — convertible**
+
+$$T = K(h - z_{bot})$$
+
+$T$ depends on the head you are solving for. **Nonlinear**. Iterate.
+:::
+:::
+
+::: {.fragment .due-notice}
+This is a **statement about the aquifer**, not a numerical convenience. Convertible
+is right when the water table *is* the top of the saturated zone.
+:::
+
+## Which is why pumping is worse unconfined
+
+::: {.incremental}
+- Pumping lowers head
+- Lower head means less saturated thickness
+- Less thickness means lower transmissivity
+- Lower transmissivity means **more** drawdown for the same rate
+:::
+
+::: {.fragment}
+A feedback loop, and the reason unconfined cones are deeper and narrower than
+confined ones for the same well.
+:::
+
+## Your turn: transmissivity as head falls
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_transmissivity
+hk = 12.0
+z_bot = 400.0
+heads = [660.0, 640.0, 620.0, 600.0]
+```
+
+```{pyodide}
+#| exercise: ex_transmissivity
+for h in heads:
+    T = ______
+    print(f"head {h:6.0f} m  ->  saturated thickness {h - z_bot:5.0f} m  ->  T = {T:7.0f} m2/d")
+```
+
+::: {.hint exercise="ex_transmissivity"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Transmissivity is conductivity times saturated thickness, and the saturated
+thickness is head minus the layer bottom.
+:::
+:::
+
+::: {.solution exercise="ex_transmissivity"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+T = hk * (h - z_bot)
+```
+
+3,120 down to 2,400 m²/d — a 23% loss of transmissivity for 60 m of decline.
+
+**And that is the whole difficulty.** MODFLOW cannot compute $T$ until it knows
+$h$, and it cannot compute $h$ without $T$. So it guesses, solves, recomputes,
+and solves again — which is Week 4's iteration material, on 2,400 coupled
+equations.
+:::
+:::
+
+# When it won't converge {background-color="#AB0520"}
+
+## Same basin, one argument different
+
+```python
+flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=1, ipakcb=53)
+```
+
+```
+FAILED TO MEET SOLVER CONVERGENCE CRITERIA            1  TIME(S)
+```
+
+::: {.fragment}
+Exactly the model that converged last week, now failing. **This is the normal
+condition of groundwater modelling**, not a sign you did something wrong.
+:::
+
+## The two causes
+
+::: {.columns}
+::: {.column width="50%"}
+**A bad starting guess**
+
+`strt` was a flat 660 m against boundaries of 620 and 680.
+
+So the first transmissivity estimate is wrong everywhere.
+:::
+
+::: {.column width="50%"}
+**A solver that gives up**
+
+`mxiter=20` by default — twenty chances to settle a transmissivity that keeps
+moving.
+:::
+:::
+
+::: {.fragment}
+In the lab you try the first on its own. **It is not enough.** Debugging a solver
+is a search over several settings, not a sequence of fixes that each help.
+:::
+
+## The four arguments worth adjusting
+
+| Argument | Default | What it does |
+|---|---|---|
+| `mxiter` | 20 | **outer** iterations — recomputes transmissivity |
+| `iter1` | 30 | inner iterations per outer one |
+| `hclose` | 1e-3 | head-change tolerance for "converged" |
+| `relax` | 1.0 | damps oscillation between iterations |
+
+::: {.fragment}
+For a nonlinear problem, **`mxiter` is usually the one**.
+:::
+
+```python
+flopy.modflow.ModflowPcg(mf, mxiter=200, iter1=50,
+                         hclose=1e-3, rclose=1e2, relax=0.98)
+```
+
+## Your turn: which knob?
+
+A convertible-layer model fails with the message above. You have one change to
+try first.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_knob
+choices = {
+    "a": "raise mxiter from 20 to 200",
+    "b": "lower hclose from 1e-3 to 1e-9",
+    "c": "reduce the pumping rate until it converges",
+    "d": "switch laytyp back to 0",
+}
+```
+
+```{pyodide}
+#| exercise: ex_knob
+first_try = ______
+print(choices[first_try])
+```
+
+::: {.hint exercise="ex_knob"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The problem is that transmissivity keeps changing between outer iterations. Which
+setting controls how many outer iterations it gets?
+:::
+:::
+
+::: {.solution exercise="ex_knob"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+first_try = "a"
+```
+
+`mxiter` controls the outer loop, which is exactly what a nonlinear problem needs
+more of.
+
+**`b` makes it worse** — a tighter tolerance is harder to reach, not easier.
+**`c` changes the question** you were asked, which is sometimes necessary but is
+not a fix. **`d` changes the physics** to something you have reason to believe is
+wrong.
+
+Only `a` leaves the problem alone and gives the solver a fair chance at it.
+:::
+:::
+
+## Converged is not correct
+
+::: {.fragment}
+All you have established is that the solver found a **self-consistent** answer.
+:::
+
+::: {.fragment}
+Whether it is the *right* answer depends on the boundary conditions, the
+conductivity field, and the recharge — none of which the solver knows anything
+about.
+:::
+
+::: {.fragment .due-notice}
+Check the budget discrepancy too. And then check whether the answer is physically
+sensible, which no number can do for you.
+:::
+
+# Dry cells {background-color="#0C234B"}
+
+## What happens when a cell empties
+
+If head in a convertible cell falls below the layer bottom, there is no saturated
+thickness left. MODFLOW marks the cell **dry**, sets its head to `-1e30`, and
+removes it from the solution.
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.5
+fig, axes = plt.subplots(1, 2, figsize=(11, 3.5))
+im0 = axes[0].imshow(head_dry[0], cmap="Blues_r", extent=[0, 15, 0, 10])
+fig.colorbar(im0, ax=axes[0], label="head (m)")
+axes[0].set_title("Raw output")
+axes[0].set_xlabel("distance east (km)")
+axes[0].set_ylabel("distance north (km)")
+
+im1 = axes[1].imshow(head_masked, cmap="Blues_r", extent=[0, 15, 0, 10])
+axes[1].contourf(np.flipud(dry_mask.astype(float)), levels=[0.5, 1.5],
+                 colors=[UA_RED], alpha=0.85, extent=[0, 15, 0, 10])
+fig.colorbar(im1, ax=axes[1], label="head (m)")
+axes[1].set_title("Masked, dry cells in red")
+axes[1].set_xlabel("distance east (km)")
+plt.tight_layout()
+plt.show()
+```
+
+## The sentinel value problem, again
+
+One `-1e30` destroys the entire colour scale.
+
+::: {.fragment}
+Exactly what `-999` did to the water-level series in **Week 6**. Same lesson,
+different decade of software.
+:::
+
+```python
+dry_mask = head[0] < -1e29
+head_masked = np.where(dry_mask, np.nan, head[0])
+```
+
+::: {.fragment}
+And note: `1e30` **positive** means *inactive* (`ibound = 0`). `-1e30` means
+*dry*. Different problems, similar-looking numbers.
+:::
+
+## Your turn: mask them
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_dry
+import numpy as np
+head = np.array([[665.2, 664.1, -1e30, -1e30, 661.0],
+                 [664.8, 663.2, -1e30, 660.4, 659.9]])
+```
+
+```{pyodide}
+#| exercise: ex_dry
+dry = ______
+masked = ______
+print(f"{dry.sum()} of {head.size} cells dry")
+print(f"wet-cell range: {np.nanmin(masked):.1f} to {np.nanmax(masked):.1f} m")
+```
+
+::: {.hint exercise="ex_dry"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Compare against a threshold near the sentinel rather than to `-1e30` exactly —
+never test a float with `==`. Then `np.where` to substitute `np.nan`.
+:::
+:::
+
+::: {.solution exercise="ex_dry"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+dry = head < -1e29
+masked = np.where(dry, np.nan, head)
+```
+
+Three dry cells; the wet ones run 659.9 to 665.2 m.
+
+Note `< -1e29` rather than `== -1e30`. Same rule as Week 2: **never test a float
+for equality.** MODFLOW's sentinel is configurable via `hnoflo`, so the exact
+value is not something to rely on either.
+:::
+:::
+
+## A dry cell is a failure
+
+::: {.incremental}
+- Once dry, a cell stops conducting — so its neighbours dry too
+- MODFLOW-2005 **cannot rewet** a dry cell unless you enable the wetting
+  capability, which is itself unstable
+- The failure propagates, and the budget goes with it
+:::
+
+::: {.fragment .due-notice}
+If you find dry cells, the honest reading is: the pumping is unphysical, the layer
+bottom is too shallow, you needed more layers, or you should be using
+**MODFLOW-NWT**, which handles dewatering properly.
+:::
+
+::: {.fragment}
+"Report the heads with the dry cells masked out" is not on that list.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- `laytyp` is a claim about the aquifer, and `1` makes the problem nonlinear
+- Unconfined pumping feeds back on itself through transmissivity
+- `mxiter` first; a better initial condition helps but rarely suffices
+- Converged is not correct
+- A dry cell is a modelling failure, not a result
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 10 — First MODFLOW model**, Wednesday 11/18 at 11:59pm
+- Finish the Week 12 lab before Tuesday
+
+::: {.kicker}
+Next week
+:::
+
+Time: stress periods, storage, and stresses that switch on.

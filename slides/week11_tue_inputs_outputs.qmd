@@ -1,0 +1,413 @@
+---
+title: "Inputs, outputs, and hitting go"
+subtitle: "HWRS 564a · Week 11 · Tuesday, November 3"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+# ---------------------------------------------------------------------------
+# This block builds and runs a real MODFLOW model on the machine doing the
+# `quarto render`. It does NOT run in the student's browser — Pyodide cannot
+# execute a compiled Fortran binary, which is the whole constraint that shapes
+# Weeks 10-14 (playbook §2.4).
+#
+# Everything below is set up once here and reused by the figure slides, so the
+# model runs a single time per render rather than once per figure.
+# ---------------------------------------------------------------------------
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Quarto executes a .qmd with the document's own directory as the working
+# directory, so the repo root is one level up. Never hardcode an absolute path.
+ROOT = Path.cwd().parent
+WS = ROOT / "_run" / "week11_steady"
+WS.mkdir(parents=True, exist_ok=True)
+
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), (
+    f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh — the slides for "
+    "Weeks 10-14 execute a model at render time and cannot be built without it."
+)
+
+NLAY, NROW, NCOL = 1, 40, 60
+DELR = DELC = 250.0          # m — a 15 km x 10 km domain
+WELL_ROW, WELL_COL = 20, 30
+WELL_Q = -4000.0             # m3/d, negative = extraction
+
+mf = flopy.modflow.Modflow("scbasin", model_ws=str(WS), exe_name=str(MF_EXE))
+flopy.modflow.ModflowDis(
+    mf, NLAY, NROW, NCOL, delr=DELR, delc=DELC,
+    top=420.0, botm=340.0, nper=1, steady=True,
+)
+
+ibound = np.ones((NLAY, NROW, NCOL), dtype=int)
+ibound[:, :, 0] = -1          # constant head, upgradient
+ibound[:, :, -1] = -1         # constant head, downgradient
+strt = np.full((NLAY, NROW, NCOL), 412.0)
+strt[:, :, -1] = 402.0
+flopy.modflow.ModflowBas(mf, ibound=ibound, strt=strt)
+
+flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=1, ipakcb=53)
+flopy.modflow.ModflowWel(
+    mf, stress_period_data={0: [[0, WELL_ROW, WELL_COL, WELL_Q]]}, ipakcb=53
+)
+flopy.modflow.ModflowRch(mf, rech=1.4e-4, ipakcb=53)
+flopy.modflow.ModflowPcg(mf)
+flopy.modflow.ModflowOc(
+    mf, stress_period_data={(0, 0): ["save head", "save budget"]}
+)
+
+mf.write_input()
+# `report=True` is not optional: with silent=True alone, FloPy returns an EMPTY
+# buff, so the assertion message below would carry no diagnostic at all.
+success, buff = mf.run_model(silent=True, report=True)
+assert success, "MODFLOW did not converge:\n" + "\n".join(buff[-20:])
+
+head = flopy.utils.HeadFile(str(WS / "scbasin.hds")).get_data()
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE, UA_SKY = "#AB0520", "#0C234B", "#81D3EB"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 11, session 1 of 2
+:::
+
+1. The six questions every MODFLOW model has to answer
+2. Writing them down as FloPy packages
+3. Running the model — and checking that it actually ran
+4. Reading heads back out and looking at them
+
+By the end you will have built, run, and mapped a 2D steady-state model of a
+basin with a pumping well in it.
+
+# What a model needs {background-color="#0C234B"}
+
+## Six questions, six packages
+
+MODFLOW does not have a "model file." It has a **package per question**.
+
+| Question | Package |
+|---|---|
+| What shape is the domain, and in what units? | `DIS` |
+| Which cells are active, and where do we start? | `BAS` |
+| How permeable is it? | `LPF` |
+| Who is pumping? | `WEL` |
+| What comes in from above? | `RCH` |
+| How do we solve, and what do we save? | `PCG`, `OC` |
+
+::: {.fragment}
+That table *is* the mental model. Every model you build for the rest of the
+semester is these six answers, occasionally plus a seventh.
+:::
+
+## Your turn: size the grid
+
+Our basin is discretized at 250 m cells, 40 rows by 60 columns, one layer.
+Work out how big the domain actually is, in kilometres.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_grid
+nlay, nrow, ncol = 1, 40, 60
+delr = delc = 250.0     # cell size, metres
+```
+
+```{pyodide}
+#| exercise: ex_grid
+width_km = ______
+height_km = ______
+print(f"{width_km} km east-west by {height_km} km north-south")
+```
+
+::: {.hint exercise="ex_grid"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`delr` is the width of a column, so the east-west extent is set by `ncol`.
+Metres to kilometres is a factor of 1000.
+:::
+:::
+
+::: {.solution exercise="ex_grid"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+width_km = ncol * delr / 1000
+height_km = nrow * delc / 1000
+```
+
+15 km by 10 km, in 2400 cells. Worth doing this arithmetic *before* you run
+anything — a grid that turns out to be 15 m across is a mistake you want to
+catch now, not after a twenty-minute solve.
+:::
+:::
+
+# Writing it down {background-color="#AB0520"}
+
+## Discretization
+
+```python
+mf = flopy.modflow.Modflow("scbasin", model_ws=ws, exe_name=mf2005)
+
+flopy.modflow.ModflowDis(
+    mf, nlay=1, nrow=40, ncol=60,
+    delr=250.0, delc=250.0,      # cell size
+    top=420.0, botm=340.0,       # elevations, not thicknesses
+    nper=1, steady=True,         # one steady-state stress period
+)
+```
+
+::: {.fragment}
+`top` and `botm` are **elevations**, not thicknesses. Getting this backwards
+produces a model with negative thickness that fails in a way the error message
+does not explain.
+:::
+
+## Boundaries and starting heads
+
+```python
+ibound = np.ones((1, 40, 60), dtype=int)
+ibound[:, :, 0] = -1        # constant head upgradient
+ibound[:, :, -1] = -1       # constant head downgradient
+
+strt = np.full((1, 40, 60), 412.0)
+strt[:, :, -1] = 402.0
+
+flopy.modflow.ModflowBas(mf, ibound=ibound, strt=strt)
+```
+
+::: {.fragment}
+`ibound`: `1` active, `0` inactive, **`-1` constant head**. In a steady-state
+run `strt` is only a starting guess *except* in the `-1` cells, where it is the
+boundary condition itself.
+:::
+
+## Stresses
+
+```python
+flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=1, ipakcb=53)
+flopy.modflow.ModflowWel(
+    mf, stress_period_data={0: [[0, 20, 30, -4000.0]]}, ipakcb=53
+)
+flopy.modflow.ModflowRch(mf, rech=1.4e-4, ipakcb=53)
+```
+
+::: {.fragment}
+The well entry is `[layer, row, column, rate]`, zero-indexed, and **negative is
+extraction**. A sign error here is the single most common way to end up
+presenting a mound where you meant a cone.
+:::
+
+## Your turn: the pumping rate
+
+A water provider reports the well pumps **730 acre-feet per year**. MODFLOW
+wants m³/day, negative for extraction.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_rate
+acre_feet_per_year = 730.0
+M3_PER_ACRE_FOOT = 1233.48
+DAYS_PER_YEAR = 365.0
+```
+
+```{pyodide}
+#| exercise: ex_rate
+rate_m3_per_day = ______
+print(f"WEL rate: {rate_m3_per_day:.1f} m3/d")
+```
+
+::: {.hint exercise="ex_rate"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+Convert the volume first, then divide by the number of days.
+:::
+:::
+
+::: {.hint exercise="ex_rate"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+Don't forget the sign. MODFLOW reads a positive `WEL` rate as *injection*.
+:::
+:::
+
+::: {.solution exercise="ex_rate"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+rate_m3_per_day = -acre_feet_per_year * M3_PER_ACRE_FOOT / DAYS_PER_YEAR
+```
+
+About `-2466.9` m³/d. Roughly 60% of the 4000 m³/d we are about to simulate —
+so expect a correspondingly shallower cone.
+:::
+:::
+
+# Hitting go {background-color="#0C234B"}
+
+## Run it, then check that it ran
+
+```python
+mf.write_input()
+success, buff = mf.run_model(silent=True, report=True)
+
+assert success, "MODFLOW did not converge:\n" + "\n".join(buff[-20:])
+```
+
+::: {.fragment}
+**FloPy does not raise when a model fails to converge.** It returns
+`(success, buff)` and carries on. If you ignore `success`, you will happily plot
+the last thing that landed in the `.hds` file and present it as a result.
+:::
+
+::: {.fragment .due-notice}
+Every model you run in this course, from here to Week 15, gets that `assert`.
+:::
+
+::: {.fragment}
+**`report=True` is not optional.** With `silent=True` alone FloPy hands back an
+empty `buff`, so the assertion fires with no diagnostic in it — the one moment
+you needed one.
+:::
+
+## Head distribution
+
+```{python}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4.2
+fig, ax = plt.subplots(figsize=(10, 4.2))
+mv = flopy.plot.PlotMapView(model=mf, ax=ax)
+band = mv.plot_array(head[0], cmap="Blues_r")
+cs = mv.contour_array(head[0], levels=np.arange(402, 414, 1.0),
+                      colors="k", linewidths=0.7)
+ax.clabel(cs, fmt="%.0f", fontsize=9)
+mv.plot_bc("WEL", color=UA_RED)
+ax.set_xlabel("easting (m)")
+ax.set_ylabel("northing (m)")
+fig.colorbar(band, ax=ax, label="head (m)", shrink=0.9)
+plt.tight_layout()
+plt.show()
+```
+
+Contours in metres; the red cell is the well.
+
+## The cone, in cross-section
+
+```{python}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 3.8
+x = (np.arange(NCOL) + 0.5) * DELR
+fig, ax = plt.subplots(figsize=(10, 3.8))
+ax.plot(x, head[0, 5, :], color=UA_BLUE, lw=2.0, ls="--",
+        label="row 5 — away from the well")
+ax.plot(x, head[0, WELL_ROW, :], color=UA_RED, lw=2.5,
+        label=f"row {WELL_ROW} — through the well")
+ax.fill_between(x, head[0, WELL_ROW, :], head[0, 5, :],
+                color=UA_SKY, alpha=0.35)
+ax.axvline((WELL_COL + 0.5) * DELR, color=UA_RED, lw=0.8, alpha=0.5)
+ax.set_xlabel("distance east (m)")
+ax.set_ylabel("head (m)")
+ax.legend(frameon=False, loc="lower left")
+plt.tight_layout()
+plt.show()
+```
+
+Solid vs. dashed, not just red vs. blue — about one student per cohort has a
+colour vision deficiency.
+
+## What the numbers say
+
+```{python}
+#| echo: false
+drawdown = float(head[0, 5, WELL_COL] - head[0, WELL_ROW, WELL_COL])
+print(f"head at the well cell      {head[0, WELL_ROW, WELL_COL]:8.2f} m")
+print(f"head at the same column,   {head[0, 5, WELL_COL]:8.2f} m")
+print(f"  five rows north")
+print(f"drawdown at the well       {drawdown:8.2f} m")
+print(f"domain head range          {head.min():8.2f} - {head.max():.2f} m")
+```
+
+::: {.fragment}
+Always read the numbers before you trust the picture. A colourmap will make
+*any* array look like a plausible aquifer.
+:::
+
+## Your turn: is that drawdown a lot?
+
+The aquifer is 80 m thick and the well cell sits at the head printed above.
+Express the drawdown as a percentage of saturated thickness.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_dd
+head_at_well = 407.25
+head_undisturbed = 410.42
+aquifer_bottom = 340.0
+```
+
+```{pyodide}
+#| exercise: ex_dd
+drawdown = ______
+percent_of_thickness = ______
+print(f"{drawdown:.2f} m, {percent_of_thickness:.1f}% of saturated thickness")
+```
+
+::: {.hint exercise="ex_dd"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Saturated thickness is the undisturbed head minus the aquifer bottom, not the
+80 m you were told — that is the *geologic* thickness.
+:::
+:::
+
+::: {.solution exercise="ex_dd"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+drawdown = head_undisturbed - head_at_well
+percent_of_thickness = 100 * drawdown / (head_undisturbed - aquifer_bottom)
+```
+
+3.17 m, about 4.5% — small enough that the confined approximation holds. Above
+roughly 25% you should be asking whether `laytyp=1` is doing real work.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Named the six questions a MODFLOW model answers, and the package for each
+- Built a 2D steady-state model and ran it from Python
+- Checked `success` before believing a single number
+- Read heads out of the `.hds` file and mapped them
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 9 — MODFLOW structure diagram**, Wednesday 11/11 at 11:59pm
+
+::: {.kicker}
+Thursday
+:::
+
+Reading the budget file, and what to do when the model *doesn't* converge.

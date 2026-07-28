@@ -1,0 +1,65 @@
+# D2L content page — Week 2
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week02.yml
+#
+# Every section below is required. If a section has nothing in it this week,
+# write `items: []` and the generator emits "Nothing required this week."
+# An empty section is information; a missing section looks like a mistake.
+
+week: 2
+title: "Week 2 — Getting started with Python"
+dates: "September 1 & 3, 2026"
+
+# Optional banner image. Must already be uploaded to D2L Manage Files.
+banner: snakes.png
+banner_alt: "Two pythons, because of course"
+
+overview: >
+  This week we start writing Python. We cover what Python is and the three
+  different ways you can run it, how a Jupyter notebook actually works (and the
+  one thing about notebooks that trips up everybody), how your course
+  environment is put together, and the core data types you will use for the rest
+  of the semester. By Thursday you will have written code that computes a Darcy
+  flux.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Confirm your GitHub Codespace builds"
+    url: "https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials"
+    note: "Do this before Tuesday. If it fails, email me rather than waiting for class."
+  - text: "What is a Jupyter notebook? (6 min video)"
+    url: "https://www.youtube.com/watch?v=HW29067qVWk"
+
+class_material:
+  - text: "Tue 9/1 — Slides: Getting started with Python"
+    url: "slides/week02_tue_getting_started.html"
+    site_relative: true
+  - text: "Thu 9/3 — Slides: Data types & sequences"
+    url: "slides/week02_thu_data_types.html"
+    site_relative: true
+  - text: "Lab notebook — Python basics"
+    url: "labs/week02/week02_lab_python_basics.html"
+    site_relative: true
+    note: "Work through this in class; finish it before Thursday."
+  - text: "Cheat sheet — Python basics"
+    course_file: "python_basics.pdf"
+  - text: "Cheat sheet — Python control flow"
+    course_file: "python_conditionals.pdf"
+
+assignments:
+  - text: "Submit: HW 1 — My first Jupyter notebook"
+    dropbox: "Arizona-13531601"
+    note: "Due Wednesday 9/9 at 11:59pm."
+
+bonus:
+  - text: "Scientific Programming course materials (University of Innsbruck)"
+    url: "https://fabienmaussion.info/scientific_programming/welcome.html"
+  - text: "Python documentation — the official tutorial"
+    url: "https://docs.python.org/3/tutorial/"
+  - text: "Why 0.1 + 0.2 != 0.3 (floating point, explained properly)"
+    url: "https://docs.python.org/3/tutorial/floatingpoint.html"

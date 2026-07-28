@@ -1,0 +1,148 @@
+# Week 4 quiz — covers Week 3 (control flow, loops, functions, comprehensions).
+#
+#     python quizzes/build_d2l_csv.py quizzes/week04.yml
+
+quiz:
+  week: 4
+  title: "Week 4 Quiz"
+  covers: "Week 3 — conditionals, loops, functions, comprehensions"
+  given: "Tuesday, September 15, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  # ------------------------------------------------ 1. predict the output ----
+  - type: mc
+    title: "elif order"
+    text: |
+      What is the value of `status` after this runs?
+      <pre>decline = 40
+      if decline > 0:
+          status = "mild"
+      elif decline > 10:
+          status = "moderate"
+      elif decline > 30:
+          status = "severe"</pre>
+    html: true
+    difficulty: 2
+    feedback: >
+      `"mild"`. Python takes the *first* branch that is true and skips the rest,
+      so the later branches are unreachable for any positive decline. Order your
+      conditions from most specific to least.
+    options:
+      - text: "`mild`"
+        correct: true
+        feedback: "Correct — the first true branch wins and the rest never run."
+      - text: "`severe`"
+        feedback: >
+          That would be right if Python picked the *best* match. It doesn't — it
+          takes the first true one.
+      - text: "`moderate`"
+        feedback: "The `> 0` branch is checked first, and 40 satisfies it."
+      - text: "Nothing — `status` is never assigned"
+        feedback: "One branch does run; the question is which."
+
+  # ------------------------------------------------------ 2. spot the error --
+  - type: mc
+    title: "Accumulator reset"
+    text: |
+      This should print the sum of the list, but prints `67.3`. Which line is wrong?
+      <pre>1  depths = [31.2, 45.8, 67.3]
+      2  for d in depths:
+      3      total = 0.0
+      4      total = total + d
+      5  print(total)</pre>
+    html: true
+    difficulty: 2
+    feedback: >
+      Line 3. Initializing inside the loop resets the accumulator on every pass,
+      so you get the last value back. Move `total = 0.0` above the `for`.
+    options:
+      - text: "Line 3"
+        correct: true
+        feedback: "Correct — initialize before the loop, not inside it."
+      - text: "Line 4"
+        feedback: "Line 4 is the right accumulation; the problem is what it accumulates into."
+      - text: "Line 2"
+        feedback: "The loop header is fine — it does visit all three values."
+      - text: "Line 5"
+        feedback: >
+          The print is correct. It faithfully reports a `total` that was
+          clobbered on the last pass.
+
+  # ----------------------------------------------------------- 3. concept ----
+  - type: mc
+    title: "print vs return"
+    text: |
+      What does `result` hold after this runs?
+      <pre>def double(x):
+          print(x * 2)
+
+      result = double(21)</pre>
+    html: true
+    difficulty: 2
+    feedback: >
+      `None`. The function prints and returns nothing, so `42` appears on screen
+      but never reaches `result`. A function with no `return` returns `None`.
+    options:
+      - text: "`None`"
+        correct: true
+        feedback: "Correct — no `return` means `None`, even though you saw the number."
+      - text: "`42`"
+        feedback: >
+          `42` is printed, not returned. Those are different, and this is the
+          most common version of the mistake.
+      - text: "`21`"
+        feedback: "The argument isn't handed back either."
+      - text: "It raises a `TypeError`"
+        feedback: >
+          Nothing raises. That is what makes this bug expensive — it surfaces
+          later, somewhere else.
+
+  # ------------------------------------------------------ 4. multiselect -----
+  - type: ms
+    title: "Infinite loop risks"
+    text: >
+      Select **every** statement below that is true about `while` loops.
+    difficulty: 3
+    scoring: RightAnswers
+    feedback: >
+      A `while` loop needs something in its body that eventually makes the
+      condition false, plus a maximum-iteration guard so a loop that cannot
+      finish still stops. It does not need to know the number of steps in
+      advance — that is the reason to prefer it over `for`.
+    options:
+      - text: "Something inside the body must eventually make the condition false"
+        correct: true
+        feedback: "Correct — otherwise it runs until you interrupt the kernel."
+      - text: "A maximum-iteration guard is worth adding even when you think it can't loop forever"
+        correct: true
+        feedback: >
+          Correct. This is the same guard MODFLOW uses, and why it can tell you
+          it failed to converge instead of hanging.
+      - text: "You must know how many iterations it will take before you start"
+        feedback: >
+          That's a `for` loop. Not knowing the count is the reason `while`
+          exists.
+      - text: "`while` is faster than `for` for the same work"
+        feedback: "Speed is not the distinction; the stopping condition is."
+
+  # --------------------------------------------------------- 5. numeric ------
+  - type: sa
+    title: "Comprehension result"
+    text: |
+      How many elements are in the list produced by this expression?
+      <pre>depths = [31.2, 45.8, 88.4, 12.0, 67.3]
+      [d for d in depths if d > 40]</pre>
+    html: true
+    difficulty: 2
+    input_rows: 1
+    input_width: 10
+    answers:
+      - "3"
+      - "three"
+    case_sensitivity: insensitive
+    feedback: >
+      Three: 45.8, 88.4, and 67.3. The `if` at the end of a comprehension filters
+      which items are kept, so the result is usually shorter than the input.

@@ -1,0 +1,62 @@
+# D2L content page — Week 5
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week05.yml
+
+week: 5
+title: "Week 5 — Introduction to pandas"
+dates: "September 22 & 24, 2026"
+
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  pandas is numpy with labels on it, and labels are what stop you from
+  remembering that column 3 is the water level. This week we read our first
+  real dataset — every USGS monitoring well in the Tucson basin, and a century
+  of water levels from the best-monitored of them — and learn to select, filter,
+  and compute new columns from it. You will also read the one Excel file this
+  course will ask you to read, because collaborators will send you them forever.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 4 lab notebook"
+    url: "labs/week04/week04_lab_arrays_iteration.html"
+    site_relative: true
+    note: "Boolean masks come back this week with labels attached."
+
+class_material:
+  - text: "Tue 9/22 — Slides: Introduction to pandas"
+    url: "slides/week05_tue_pandas.html"
+    site_relative: true
+  - text: "Thu 9/24 — Slides: Filtering, columns, and a first plot"
+    url: "slides/week05_thu_filtering.html"
+    site_relative: true
+  - text: "Lab notebook — Introduction to pandas"
+    url: "labs/week05/week05_lab_pandas.html"
+    site_relative: true
+  - text: "Cheat sheet — pandas"
+    course_file: "pandas-cheat-sheet.pdf"
+
+assignments:
+  - text: "Quiz 3 — on Week 4 material"
+    quiz: "TBD-week05-quiz"
+    note: "In class, Tuesday 9/22."
+  - text: "Submit: HW 3 — Iterative groundwater solution"
+    dropbox: "TBD-hw03-dropbox"
+    note: "Due Wednesday 9/23 at 11:59pm."
+  - text: "Submit: Project 1 — analysis component"
+    dropbox: "TBD-project1-dropbox"
+    note: "See the project brief for the full requirements."
+
+bonus:
+  - text: "pandas — 10 minutes to pandas"
+    url: "https://pandas.pydata.org/docs/user_guide/10min.html"
+  - text: "USGS Water Data for the Nation — where this week's data came from"
+    url: "https://waterdata.usgs.gov/nwis"
+  - text: "Arizona Department of Water Resources — Tucson AMA groundwater"
+    url: "https://www.azwater.gov/ama/tucson-ama"

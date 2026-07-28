@@ -1,0 +1,360 @@
+---
+title: "Functions and modules"
+subtitle: "HWRS 564a · Week 3 · Thursday, September 10"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 3, session 2 of 2
+:::
+
+1. Why functions, and what goes in one
+2. Arguments, defaults, and `return`
+3. Failing loudly on bad input
+4. Comprehensions
+5. `import`: your code, and other people's
+
+By the end you will have written functions you'll reuse in Week 4 without
+opening this deck again.
+
+# Why bother {background-color="#0C234B"}
+
+## The problem functions solve
+
+```python
+q_well_a = 12.0 * (412.5 - 408.2) / 850
+q_well_b = 12.0 * (409.1 - 404.8) / 620
+q_well_c = 8.5 * (405.0 - 401.9) / 740
+```
+
+::: {.fragment}
+Three copies of one idea. Now the conductivity for well B turns out to be wrong,
+or you realise Darcy's law needs a minus sign.
+:::
+
+::: {.fragment}
+You have to find and fix **every** copy, and you will miss one. That is not a
+discipline problem — it is a structural one, and the structure is the fix.
+:::
+
+## The same thing, once
+
+```python
+def specific_discharge(hydraulic_conductivity, head_drop, distance):
+    """Darcy specific discharge q = K * dh/dl, in m/d."""
+    return hydraulic_conductivity * head_drop / distance
+```
+
+```python
+q_a = specific_discharge(12.0, 412.5 - 408.2, 850)
+q_b = specific_discharge(12.0, 409.1 - 404.8, 620)
+```
+
+::: {.fragment}
+One place to fix. One place to test. And the call site now *says what it means*
+instead of making the reader decode arithmetic.
+:::
+
+## Anatomy
+
+```python
+def transmissivity(hydraulic_conductivity, thickness):   # <- header
+    """Transmissivity T = K * b, in m2/d.                # <- docstring
+
+    Parameters
+    ----------
+    hydraulic_conductivity : float
+        K, in m/d.
+    thickness : float
+        Saturated thickness b, in m.
+    """
+    return hydraulic_conductivity * thickness            # <- return
+```
+
+::: {.fragment}
+The **docstring** is not optional politeness. It is where the units live, and
+units are what you will actually forget. `help(transmissivity)` prints it.
+:::
+
+## `print` is not `return`
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 8
+def bad(x):
+    print(x * 2)        # shows a number
+
+def good(x):
+    return x * 2        # hands one back
+
+a = bad(21)
+b = good(21)
+print(f"bad gave {a!r}, good gave {b!r}")
+```
+
+::: {.fragment}
+A function with no `return` returns `None`. It looks like it worked, because you
+saw the number — and then `None` propagates three cells downstream and errors
+somewhere unrelated.
+:::
+
+# Arguments {background-color="#0C234B"}
+
+## Defaults make the common case short
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 7
+def volumetric_flow(K, gradient, area, porosity=1.0):
+    """Q = q * A. Pass porosity to get pore-water flow instead."""
+    return K * gradient * area / porosity
+
+print(volumetric_flow(12.0, 0.00506, 45000))
+print(volumetric_flow(12.0, 0.00506, 45000, porosity=0.28))
+```
+
+::: {.fragment}
+Arguments with defaults come **after** those without. Passing them by name at
+the call site — `porosity=0.28` — costs nothing and makes the line readable a
+year later.
+:::
+
+## Your turn: write one
+
+Write `hydraulic_gradient(head_upstream, head_downstream, distance)` returning
+the dimensionless gradient.
+
+```{pyodide}
+#| exercise: ex_func
+def hydraulic_gradient(head_upstream, head_downstream, distance):
+    """Hydraulic gradient i = dh / dl, dimensionless."""
+    ______
+
+hydraulic_gradient(412.5, 408.2, 850)
+```
+
+::: {.hint exercise="ex_func"}
+::: {.callout-note collapse="false"}
+## Hint
+
+One line. The head *drop* divided by the distance — and it has to be `return`,
+not `print`.
+:::
+:::
+
+::: {.solution exercise="ex_func"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+return (head_upstream - head_downstream) / distance
+```
+
+`0.00506`. Keep this one — you will call it again in Week 4 and again in
+Week 11 when you set up a MODFLOW boundary condition.
+:::
+:::
+
+## Refuse input that makes no sense
+
+```python
+def safe_transmissivity(hydraulic_conductivity, thickness):
+    if thickness < 0:
+        raise ValueError(f"thickness must be positive, got {thickness}")
+    return hydraulic_conductivity * thickness
+```
+
+::: {.fragment}
+A negative thickness is not a thin aquifer. It is a mistake somewhere upstream,
+and a function that quietly returns a negative transmissivity lets that mistake
+travel into a figure.
+:::
+
+::: {.fragment .due-notice}
+**Fail loudly, near the mistake.** A model that stops with a clear message costs
+you two minutes. One that returns a plausible wrong answer costs you a week.
+:::
+
+## Your turn: add the guard
+
+A porosity below 0 or above 1 is not a porosity. Add the check.
+
+```{pyodide}
+#| exercise: ex_guard
+def pore_velocity(specific_discharge, porosity):
+    """Seepage velocity v = q / n, in m/d."""
+    if ______:
+        raise ValueError(f"porosity must be between 0 and 1, got {porosity}")
+    return specific_discharge / porosity
+
+pore_velocity(0.0607, 1.4)
+```
+
+::: {.hint exercise="ex_guard"}
+::: {.callout-note collapse="false"}
+## Hint
+
+You want to raise when the value is *outside* the range — so `or`, not `and`.
+Python also lets you write `not (0 < porosity <= 1)`.
+:::
+:::
+
+::: {.solution exercise="ex_guard"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+if porosity <= 0 or porosity > 1:
+```
+
+The call raises, which is the point — a porosity of 1.4 would have given you a
+seepage velocity *slower* than the specific discharge, which is physically
+backwards and would have looked merely surprising rather than wrong.
+
+Note `<= 0` rather than `< 0`: a porosity of exactly zero divides by zero.
+:::
+:::
+
+# Comprehensions {background-color="#AB0520"}
+
+## A loop that builds a list, in one line
+
+```python
+# the long way
+depths_ft = []
+for d in depths_m:
+    depths_ft.append(d * 3.28084)
+
+# the comprehension
+depths_ft = [d * 3.28084 for d in depths_m]
+```
+
+::: {.fragment}
+Read it right-to-left: *for each `d` in `depths_m`, give me `d * 3.28084`.*
+:::
+
+::: {.fragment}
+Filter by putting an `if` at the end:
+
+```python
+deep = [d for d in depths_m if d > 40]
+```
+:::
+
+## Your turn: names of the deep wells
+
+Build a list of the **IDs** of wells deeper than 40 m — one comprehension, no
+loop.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_comp
+wells = ["A-14", "B-07", "C-22", "D-03", "E-11"]
+depths = [31.2, 45.8, 88.4, 12.0, 67.3]
+```
+
+```{pyodide}
+#| exercise: ex_comp
+deep_wells = ______
+deep_wells
+```
+
+::: {.hint exercise="ex_comp"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+`zip(wells, depths)` works inside a comprehension exactly as it does in a `for`
+loop.
+:::
+:::
+
+::: {.hint exercise="ex_comp"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+The shape is `[<what to keep> for w, d in zip(...) if <condition>]`. You want to
+keep `w` but test `d`.
+:::
+:::
+
+::: {.solution exercise="ex_comp"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+deep_wells = [w for w, d in zip(wells, depths) if d > 40]
+```
+
+`['B-07', 'C-22', 'E-11']`.
+
+Use a comprehension when it fits on a line and reads like a sentence. When it
+needs two conditions and a nested loop, write the `for` loop — clever is not
+the goal.
+:::
+:::
+
+# Modules {background-color="#0C234B"}
+
+## Other people's functions
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+import math
+
+print(math.sqrt(2))
+print(math.log10(1000))
+print(math.pi)
+```
+
+::: {.fragment}
+The `math.` prefix is not noise — it tells the reader where `sqrt` came from.
+When you see `sqrt(2)` bare, you have to go hunting for which of five imports
+supplied it.
+:::
+
+## Your own functions are a module too
+
+Put functions in `wells.py`, and from a notebook in the same folder:
+
+```python
+import wells
+wells.transmissivity(12.0, 25.0)
+```
+
+::: {.fragment}
+This is how a notebook stops being a wall of code: the *reasoning* stays in the
+notebook, the *machinery* moves to a `.py` file next to it.
+:::
+
+::: {.fragment}
+We come back to this properly in **Week 15**, once you have written enough code
+to have something worth moving.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Wrote functions with docstrings, defaults, and a real `return`
+- Learned that `print` and `return` are different, and why it bites
+- Raised `ValueError` on input that can't be right
+- Wrote a comprehension, and know when *not* to
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 1 — My first Jupyter notebook**, Wednesday 9/9 at 11:59pm
+- Finish the Week 3 lab before Tuesday
+
+::: {.kicker}
+Next week
+:::
+
+`numpy`, and using it to solve equations you can't rearrange by hand. There is a
+quiz at the start of Tuesday's class on this week's material.

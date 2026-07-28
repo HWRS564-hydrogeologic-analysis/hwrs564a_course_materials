@@ -1,0 +1,288 @@
+---
+title: "Time, storage, and stress periods"
+subtitle: "HWRS 564a · Week 13 · Tuesday, November 17"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 13, session 1 of 2
+:::
+
+1. Quiz — five minutes, on discretization and boundaries
+2. The question steady state cannot answer
+3. Stress periods and time steps
+4. `sy` and `ss`, and why they differ by a factor of a thousand
+5. Why every transient run starts with a steady-state period
+
+# What steady state misses {background-color="#0C234B"}
+
+## Two different questions
+
+::: {.columns}
+::: {.column width="50%"}
+**Steady state**
+
+*What does the aquifer settle down to if this pumping never changes?*
+
+Useful. Not what anyone asks.
+:::
+
+::: {.column width="50%"}
+**Transient**
+
+*When does the water table reach the pump intake?*
+
+*How much of what we pump this year is coming out of storage?*
+:::
+:::
+
+::: {.fragment .due-notice}
+The second set needs time in the model — and storage properties, which a
+steady-state run does not even require you to supply.
+:::
+
+## Stress periods and time steps
+
+::: {.incremental}
+- A **stress period** is an interval over which every stress is constant.
+  Change the pumping rate, you need a new period.
+- A **time step** is a solver interval *within* a period. More steps means a
+  better transient response and a slower run.
+:::
+
+```python
+perlen = [1.0, 30.0] + [365.0] * 10     # length of each period
+nstp   = [1,   30]   + [4] * 10         # steps within each
+steady = [True] + [False] * 11          # one flag per period
+```
+
+## Your turn: read the discretization
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_time
+perlen = [1.0, 30.0] + [365.0] * 10
+nstp = [1, 30] + [4] * 10
+steady = [True] + [False] * 11
+```
+
+```{pyodide}
+#| exercise: ex_time
+n_periods = ______
+n_steps = ______
+simulated_days = ______
+print(f"{n_periods} stress periods, {n_steps} time steps")
+print(f"{simulated_days:,.0f} transient days = {simulated_days / 365:.1f} years")
+```
+
+::: {.hint exercise="ex_time"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The transient days are the `perlen` values whose `steady` flag is `False`.
+`zip` pairs them up.
+:::
+:::
+
+::: {.solution exercise="ex_time"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+n_periods = len(perlen)
+n_steps = sum(nstp)
+simulated_days = sum(p for p, s in zip(perlen, steady) if not s)
+```
+
+12 periods, 71 steps, 3,680 days — just over ten years.
+
+**Note the odd 30-day period with daily steps.** The interesting part of a
+transient response happens at the start, and a quarterly time step walks straight
+over it. Fine early steps cost almost nothing.
+:::
+:::
+
+## Resolve what you came to see
+
+::: {.fragment}
+Choosing time steps is the same problem as choosing cell size, and it has the same
+answer: **finer than the feature you are trying to observe.**
+:::
+
+::: {.fragment}
+A well switching on produces most of its head change in days. Sample it quarterly
+and your hydrograph starts at the answer.
+:::
+
+# Storage {background-color="#AB0520"}
+
+## Two properties, three orders of magnitude apart
+
+| Property | Symbol | Applies when | Typical | Units |
+|---|---|---|---|---|
+| **Specific yield** | `sy` | unconfined — pores drain | 0.05 – 0.30 | — |
+| **Specific storage** | `ss` | confined — water expands, matrix compresses | 1e-6 – 1e-4 | 1/m |
+
+::: {.fragment}
+A confined aquifer releases almost no water per metre of decline. That is why
+confined drawdown propagates so far, so fast.
+:::
+
+## Your turn: how much water is in there?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_storage
+sy, ss = 0.15, 1e-5
+cell_area = 250.0 * 250.0
+thickness = 200.0
+```
+
+```{pyodide}
+#| exercise: ex_storage
+unconfined = ______
+confined = ______
+print(f"released by 1 m of decline in one cell:")
+print(f"  unconfined {unconfined:9,.1f} m3")
+print(f"  confined   {confined:9,.1f} m3")
+print(f"  ratio      {unconfined / confined:9,.0f}x")
+```
+
+::: {.hint exercise="ex_storage"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Specific yield is dimensionless — multiply by area alone. Specific *storage* is per
+metre of aquifer, so it needs the thickness too.
+:::
+:::
+
+::: {.solution exercise="ex_storage"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+unconfined = sy * cell_area
+confined = ss * cell_area * thickness
+```
+
+9,375 m³ against 125 m³ — a factor of **75**.
+
+The ratio is `sy / (ss × b)`, so it depends on thickness: a thin confined aquifer
+is even more extreme. What it means is that **the same well drains an unconfined
+aquifer over years and a confined one over days**, before either has to start
+capturing flow from elsewhere.
+:::
+:::
+
+## An upper bound worth computing
+
+Across all 2,400 cells, 1 m of decline in our confined aquifer releases
+**300,000 m³**.
+
+::: {.fragment}
+At 20,000 m³/d, that is **15 days** of pumping.
+:::
+
+::: {.fragment}
+And that is an upper bound, because nothing like the whole aquifer drops a metre —
+drawdown is concentrated near the well.
+:::
+
+::: {.fragment .due-notice}
+So a confined aquifer reaches something close to steady state quickly. **The
+Week 11 steady-state model was answering a question about the near future**, which
+is worth knowing before you dismiss it.
+:::
+
+# The steady-state warm-up {background-color="#0C234B"}
+
+## Why period 0 has no pumping
+
+A transient model needs an initial head field. Any field you invent is **out of
+equilibrium with the boundaries**.
+
+::: {.incremental}
+- So the model spends its first years relaxing toward balance
+- And you cannot tell that artificial drift from the response you came to measure
+:::
+
+::: {.fragment}
+Run one steady-state period first, with no pumping. Its heads are *already* in
+equilibrium. Everything after that is the response to the stress you added.
+:::
+
+## Your turn: build the well schedule
+
+The well is off in period 0 and pumps 20,000 m³/d from period 1 onward.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_schedule
+NPER = 12
+PUMP_RATE = 20000.0
+WELL_LAY, WELL_ROW, WELL_COL = 0, 20, 30
+```
+
+```{pyodide}
+#| exercise: ex_schedule
+wel_spd = {
+    p: [[WELL_LAY, WELL_ROW, WELL_COL, ______]]
+    for p in range(NPER)
+}
+print(f"period 0 rate: {wel_spd[0][0][3]:,.0f} m3/d")
+print(f"period 1 rate: {wel_spd[1][0][3]:,.0f} m3/d")
+print(f"periods defined: {len(wel_spd)}")
+```
+
+::: {.hint exercise="ex_schedule"}
+::: {.callout-note collapse="false"}
+## Hint
+
+A conditional expression: zero if it's period 0, otherwise the negative pumping
+rate. Remember negative means extraction.
+:::
+:::
+
+::: {.solution exercise="ex_schedule"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+0.0 if p == 0 else -PUMP_RATE
+```
+
+Note that the dictionary has an entry for **every** period. If you skip one,
+FloPy silently reuses the previous period's data — which is convenient when you
+mean it and a very quiet bug when you don't.
+
+Build these with a comprehension over `range(NPER)` and you cannot get it wrong.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Steady state answers "what settles down to"; transient answers "when"
+- Stress periods hold stresses constant; time steps subdivide them
+- `sy` and `ss` differ by a factor of `sy / (ss·b)` — about 75 here
+- 15 days of storage in a confined aquifer, as an upper bound
+- Start every transient run with a no-pumping steady-state period
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Parts 1–3 of `labs/week13/week13_lab_transient_stresses.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Reading a hydrograph out of the model, depletion versus capture, and
+evapotranspiration.

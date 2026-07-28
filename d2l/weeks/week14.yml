@@ -1,0 +1,50 @@
+week: 14
+title: "Week 14 — Layered models, rivers, and loading existing models"
+dates: "November 24, 2026 (Tuesday only)"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  One session this week; Thanksgiving is Thursday. Two topics, and they are the
+  two you are most likely to need in practice. Layers, because aquifers are not
+  one thing and a confining unit changes where the water comes from. And loading
+  a model somebody else built, because that is how most groundwater modelling
+  starts — you will rarely build from nothing. We finish by changing one
+  unmeasured parameter and comparing two runs, which is the difference between a
+  hypothesis and a result.
+
+time_budget:
+  - "1.5 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**5.5 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 13 lab notebook"
+    url: "labs/week13/week13_lab_transient_stresses.html"
+    site_relative: true
+
+class_material:
+  - text: "Tue 11/24 — Slides: Layers, rivers, and inheriting a model"
+    url: "slides/week14_tue_layers_rivers.html"
+    site_relative: true
+  - text: "Lab notebook — Layers, rivers, and inheriting a model"
+    url: "labs/week14/week14_lab_layers_rivers_loading.html"
+    site_relative: true
+    note: "No Thursday session, so plan to finish this on your own time."
+
+assignments:
+  # A bare string renders as plain text with no link — which is right here,
+  # because there is nothing to link to.
+  - "*No quiz this week* — there is no Thursday session. Week 12 and 13 material is covered by the Week 15 quiz."
+  - text: "Submit: HW 12 — Applying fluxes to a MODFLOW model"
+    dropbox: "TBD-hw12-dropbox"
+    note: "Due Wednesday 12/2 at 11:59pm."
+
+bonus:
+  - text: "FloPy — loading and modifying existing models"
+    url: "https://flopy.readthedocs.io/en/stable/Notebooks/mf_load_example.html"
+  - text: "MODFLOW RIV package documentation"
+    url: "https://water.usgs.gov/nrp/gwsoftware/modflow2005/MODFLOW-2005-Guide.html"
+  - text: "ADWR — Pinal Active Management Area model documentation"
+    url: "https://www.azwater.gov/hydrology/groundwater-modeling"

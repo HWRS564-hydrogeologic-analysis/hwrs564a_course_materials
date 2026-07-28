@@ -1,0 +1,360 @@
+---
+title: "Figures worth showing people"
+subtitle: "HWRS 564a · Week 8 · Tuesday, October 13"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 8, session 1 of 2
+:::
+
+1. Quiz — five minutes, on time series
+2. Figure, axes, and why `plt.plot` is a trap
+3. Multi-panel layouts, and what sharing an axis claims
+4. Colour: three kinds of colormap, and one to never use
+5. Why colour can never be the only signal
+
+The theme: most of what separates a working figure from a bad one is
+**correctness**, not taste.
+
+# Figure and axes {background-color="#0C234B"}
+
+## Two objects
+
+::: {.columns}
+::: {.column width="50%"}
+**`fig`** — the page.
+
+Size, resolution, saving.
+:::
+
+::: {.column width="50%"}
+**`ax`** — one set of axes on it.
+
+Lines, labels, limits.
+:::
+:::
+
+```python
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(x, y)
+ax.set_ylabel("head (m)")
+fig.savefig("out.png", dpi=300)
+```
+
+::: {.fragment}
+Almost everything you want is a method on one or the other. Knowing which is
+half of learning matplotlib.
+:::
+
+## `plt.plot` draws somewhere
+
+```python
+plt.plot(x, y)        # ...on whatever axes matplotlib touched last
+ax.plot(x, y)         # ...here
+```
+
+::: {.fragment}
+With one plot per cell, they behave identically. With two figures, a loop, or a
+function that makes a plot, the `plt.` version starts drawing on the wrong axes
+and the bug is invisible in the code.
+:::
+
+::: {.fragment .due-notice}
+**Always `fig, ax = plt.subplots()` first, then `ax.something()`.** It is one
+extra line and it removes an entire category of confusion.
+:::
+
+## Panels
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 8
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(2, 2, figsize=(7, 4))
+print(type(axes), axes.shape)
+
+for i, ax in enumerate(axes.flat):
+    ax.set_title(f"axes.flat[{i}]", fontsize=9)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+`subplots(2, 2)` returns a 2 × 2 **array**. `axes.flat` iterates it in reading
+order, which is usually what you want in a loop.
+:::
+
+## Sharing an axis is a claim
+
+```python
+fig, axes = plt.subplots(1, 3, sharey=True)
+```
+
+::: {.incremental}
+- **`sharey=True`** puts every panel on the same scale, so the panels are
+  comparable
+- **`sharey=False`** lets each panel fill its own range
+:::
+
+::: {.fragment}
+Three wells with 6 ft, 110 ft, and 30 ft of decline look **identical** on
+independent axes. Sharing the axis is what makes the comparison honest.
+:::
+
+::: {.fragment}
+And don't share when the quantities aren't comparable — that makes one panel
+look flat for no reason.
+:::
+
+## Your turn: two stacked panels
+
+Discharge on top, its 7-day mean below, sharing the x axis so they line up.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_panels
+import matplotlib.pyplot as plt, numpy as np, pandas as pd
+idx = pd.date_range("2006-01-01", periods=365, freq="D")
+rng = np.random.default_rng(8)
+q = pd.Series(np.abs(np.sin(np.arange(365) / 58)) * 40 + rng.gamma(1, 3, 365), index=idx)
+```
+
+```{pyodide}
+#| exercise: ex_panels
+fig, axes = plt.subplots(2, 1, figsize=(8, 4), sharex=______)
+axes[0].plot(q.index, q, color="#AB0520", lw=0.8)
+axes[0].set_ylabel(______)
+axes[1].plot(q.index, q.rolling(7, center=True).mean(), color="#0C234B", lw=1.6)
+axes[1].set_ylabel("7-day mean (cfs)")
+plt.tight_layout()
+plt.show()
+```
+
+::: {.hint exercise="ex_panels"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Sharing takes a boolean. The label needs the quantity *and* its unit.
+:::
+:::
+
+::: {.solution exercise="ex_panels"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+fig, axes = plt.subplots(2, 1, figsize=(8, 4), sharex=True)
+axes[0].set_ylabel("daily discharge (cfs)")
+```
+
+With `sharex=True` the top panel's tick labels disappear automatically, which is
+what you want — one set of dates for both panels, and more room for the data.
+:::
+:::
+
+# Colour {background-color="#AB0520"}
+
+## Three kinds, three jobs
+
+| Data | Colormap |
+|---|---|
+| runs one way, low to high | **sequential** — `viridis`, `Blues` |
+| has a meaningful middle | **diverging** — `RdBu`, `coolwarm` |
+| unordered categories | **qualitative** — `tab10` |
+
+::: {.fragment}
+Using a diverging map on sequential data puts a false boundary in the middle of
+your range. Using a sequential map on diverging data hides the zero crossing.
+:::
+
+## Don't use `jet`
+
+```{pyodide}
+#| edit: false
+#| autorun: true
+#| fig-width: 8
+#| fig-height: 2.2
+import matplotlib.pyplot as plt, numpy as np
+
+g = np.linspace(0, 1, 256).reshape(1, -1)
+fig, axes = plt.subplots(2, 1, figsize=(8, 1.8))
+for ax, name in zip(axes, ["viridis", "jet"]):
+    ax.imshow(g, aspect="auto", cmap=name)
+    ax.set_xticks([]); ax.set_yticks([])
+    ax.set_ylabel(name, rotation=0, ha="right", va="center")
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+`jet` has bright bands at cyan and yellow and dark ends, so **equal steps in the
+data are not equal steps in apparent brightness**. It invents boundaries that
+aren't there and hides ones that are.
+:::
+
+## Centre a diverging map on zero
+
+```python
+limit = change["ft"].abs().max()
+ax.scatter(..., cmap="RdBu_r", vmin=-limit, vmax=limit)
+```
+
+::: {.fragment}
+Leave `vmin`/`vmax` off and matplotlib centres on the **midpoint of your data**.
+With changes from −6 to +111 ft, the neutral colour lands at +52 — so wells that
+dropped fifty feet render as "unchanged".
+:::
+
+::: {.fragment .due-notice}
+A diverging colormap that isn't centred on zero says the opposite of what you
+mean, in a way that looks completely normal.
+:::
+
+## Your turn: centre the colormap
+
+These changes run from −6 to +111 ft. Make zero the neutral colour.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_diverge
+import matplotlib.pyplot as plt, numpy as np
+rng = np.random.default_rng(88)
+lon = -111.2 + rng.random(60) * 0.45
+lat = 32.0 + rng.random(60) * 0.45
+change = np.concatenate([rng.uniform(-6, 0, 7), rng.uniform(0, 111, 53)])
+```
+
+```{pyodide}
+#| exercise: ex_diverge
+limit = ______
+
+fig, ax = plt.subplots(figsize=(5.5, 4.5))
+sc = ax.scatter(lon, lat, c=change, cmap="RdBu_r", vmin=______, vmax=______, s=40)
+fig.colorbar(sc, ax=ax, label="change in depth to water (ft)")
+plt.show()
+```
+
+::: {.hint exercise="ex_diverge"}
+::: {.callout-note collapse="false"}
+## Hint
+
+You want the limits symmetric about zero, so both come from the *largest
+absolute* value in the data.
+:::
+:::
+
+::: {.solution exercise="ex_diverge"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+limit = np.abs(change).max()
+sc = ax.scatter(..., vmin=-limit, vmax=limit, ...)
+```
+
+Now white means zero and the seven recovering wells are visibly on the other
+side of it. Without the limits, matplotlib centres on the data midpoint of about
++52 ft — so a well that dropped fifty feet renders white and reads as unchanged.
+
+The cost is that most of the blue half of the colorbar goes unused. That is
+fine: an unused range is honest, a mislabelled midpoint is not.
+:::
+:::
+
+## Colour cannot be the only signal
+
+::: {.incremental}
+- About one reader in twelve has a colour vision deficiency
+- Deuteranopia makes red and green nearly identical
+- Projectors and photocopiers do their own damage
+:::
+
+::: {.fragment}
+**Encode every distinction at least twice.**
+
+```python
+ax.plot(x, a, color="#AB0520", ls="-",  marker="o", label="pumped")
+ax.plot(x, b, color="#0C234B", ls="--", marker="s", label="control")
+```
+:::
+
+::: {.fragment}
+Two extra keyword arguments. The figure now works in greyscale, on a bad
+projector, and for everyone in the room.
+:::
+
+## Your turn: make it readable
+
+This uses red and green, and nothing else, to tell two series apart.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_color
+import matplotlib.pyplot as plt, numpy as np
+years = np.arange(2005, 2025)
+rng = np.random.default_rng(564)
+a = 40 + np.cumsum(rng.normal(1.2, 2.0, 20))
+b = 40 + np.cumsum(rng.normal(0.3, 2.0, 20))
+```
+
+```{pyodide}
+#| exercise: ex_color
+fig, ax = plt.subplots(figsize=(8, 3.2))
+ax.plot(years, a, color="#AB0520", ls="-",  ______, label="heavily pumped")
+ax.plot(years, b, color="#0C234B", ls=______, marker="s", label="lightly pumped")
+ax.legend(frameon=False)
+ax.set_ylabel("depth to water (ft)")
+plt.show()
+```
+
+::: {.hint exercise="ex_color"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The first line needs a marker; the second needs a dash pattern that differs from
+the first. `"--"`, `"-."`, and `":"` are all available.
+:::
+:::
+
+::: {.solution exercise="ex_color"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+ax.plot(years, a, color="#AB0520", ls="-",  marker="o", label="heavily pumped")
+ax.plot(years, b, color="#0C234B", ls="--", marker="s", label="lightly pumped")
+```
+
+Note the colours also changed — UA red and blue differ in *lightness*, not just
+hue, so they survive a greyscale print. Red and green are nearly the same
+lightness, which is why that pair fails twice over.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- `fig, ax = plt.subplots()` first, always
+- Sharing an axis is a claim that the panels are comparable
+- Sequential, diverging, qualitative — and never `jet`
+- Centre a diverging map on zero, or it lies
+- Encode every distinction twice
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Parts 1–2 of `labs/week08/week08_lab_matplotlib.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Annotation, maps, and saving a figure that survives a journal.

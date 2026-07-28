@@ -1,0 +1,58 @@
+week: 10
+title: "Week 10 — Introduction to MODFLOW and FloPy"
+dates: "October 27 & 29, 2026"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  For nine weeks you inferred what the aquifer was doing from patterns in
+  observations. From this week you build something that has to obey conservation
+  of mass. We cover what MODFLOW is and why it is organised as a package per
+  question, how FloPy writes its input files so you never have to, and — most
+  importantly — the three checks that go on every model run you will ever do:
+  that it converged, that its water budget closes, and that it reproduces a case
+  whose answer you already knew.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Confirm your codespace has the MODFLOW binaries"
+    url: "https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials"
+    note: "Open a terminal and run `ls modflow`. If it is empty, run ./postbuild.sh before Tuesday."
+  - text: "Finish the Week 9 lab notebook"
+    url: "labs/week09/week09_lab_regression_chemistry.html"
+    site_relative: true
+
+class_material:
+  - text: "Tue 10/27 — Slides: What MODFLOW is, and why"
+    url: "slides/week10_tue_what_is_modflow.html"
+    site_relative: true
+  - text: "Thu 10/29 — Slides: Running it, and believing it"
+    url: "slides/week10_thu_running_it.html"
+    site_relative: true
+  - text: "Lab notebook — Meeting MODFLOW"
+    url: "labs/week10/week10_lab_meeting_modflow.html"
+    site_relative: true
+    note: "Builds and runs your first model, and deliberately breaks one."
+
+assignments:
+  - text: "Quiz 8 — on Week 9 material"
+    quiz: "TBD-week10-quiz"
+    note: "In class, Tuesday 10/27."
+  - text: "Submit: HW 8 — Regression analysis"
+    dropbox: "TBD-hw08-dropbox"
+    note: "Due Wednesday 10/28 at 11:59pm."
+  - text: "Submit: Project 2 — analysis component, part 2"
+    dropbox: "TBD-project2b-dropbox"
+
+bonus:
+  - text: "MODFLOW-2005 online guide — the package reference"
+    url: "https://water.usgs.gov/nrp/gwsoftware/modflow2005/MODFLOW-2005-Guide.html"
+  - text: "FloPy documentation"
+    url: "https://flopy.readthedocs.io/"
+  - text: "Applied Groundwater Modeling (Anderson, Woessner & Hunt) — the standard text"
+    url: "https://doi.org/10.1016/C2009-0-21563-7"

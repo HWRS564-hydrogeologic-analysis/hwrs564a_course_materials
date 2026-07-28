@@ -1,0 +1,404 @@
+---
+title: "Control flow"
+subtitle: "HWRS 564a · Week 3 · Tuesday, September 8"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 3, session 1 of 2
+:::
+
+1. Quiz — five minutes, on last week's material
+2. Booleans: the values your code branches on
+3. `if` / `elif` / `else`
+4. `for` loops, and accumulating a result
+5. `while` loops, and how not to hang your kernel
+
+By the end you will have written code that makes a decision and code that
+repeats — which is everything a program does that a calculator can't.
+
+# Booleans {background-color="#0C234B"}
+
+## Comparison produces a value
+
+`>` isn't a question you ask. It is an operator that returns a `bool`.
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 5
+water_level = 88.4
+screen_bottom = 92.0
+
+print(water_level > screen_bottom)
+print(type(water_level > screen_bottom))
+```
+
+::: {.fragment}
+That distinction matters because you can store the result, pass it to a
+function, or put it in a list. It is a value like any other.
+:::
+
+## The operators
+
+| | |
+|---|---|
+| `==` `!=` | equal, not equal |
+| `<` `>` `<=` `>=` | ordering |
+| `and` `or` `not` | combining |
+| `in` | membership |
+
+::: {.fragment}
+**`=` assigns. `==` compares.** Writing `if x = 5:` is a `SyntaxError`, which is
+the good outcome — in C it silently assigns and the bug lives for years.
+:::
+
+::: {.fragment}
+And from Week 2: **never `==` on floats.** `0.1 + 0.2 == 0.3` is `False`.
+:::
+
+## Combining them
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+depth = 88.4
+screen_bottom = 92.0
+is_monitoring = True
+
+print(depth < screen_bottom and is_monitoring)
+print(depth > 100 or is_monitoring)
+print(not is_monitoring)
+```
+
+::: {.fragment}
+Python reads left to right and **stops as soon as the answer is settled**. In
+`a and b`, if `a` is false, `b` never runs. That is how you write
+`if n > 0 and total / n > 5` without dividing by zero.
+:::
+
+# Branching {background-color="#0C234B"}
+
+## `if` and `else`
+
+```python
+if water_level > screen_bottom:
+    print("Dry — the water table is below the screen.")
+else:
+    print("Wet.")
+```
+
+::: {.incremental}
+- The `:` is required
+- The **indented block** is the body — four spaces
+- Python uses indentation where other languages use braces
+:::
+
+::: {.fragment}
+`IndentationError` is not Python being fussy. Indentation is the syntax.
+:::
+
+## More than two outcomes
+
+```python
+if decline_m > 30:
+    status = "severe"
+elif decline_m > 10:
+    status = "moderate"
+elif decline_m > 0:
+    status = "mild"
+else:
+    status = "stable or recovering"
+```
+
+::: {.fragment}
+Python takes the **first** true branch and skips the rest.
+
+Put `> 0` first and every declining well is "mild" — the other branches become
+unreachable. Order your conditions from most specific to least.
+:::
+
+## Your turn: classify a well
+
+Set `category` to `"deep"` if the well is deeper than 500 ft, `"moderate"` if
+deeper than 150 ft, and `"shallow"` otherwise.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_branch
+well_depth_ft = 310.0
+```
+
+```{pyodide}
+#| exercise: ex_branch
+if ______:
+    category = "deep"
+elif ______:
+    category = "moderate"
+else:
+    category = "shallow"
+
+category
+```
+
+::: {.hint exercise="ex_branch"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Test the *most restrictive* condition first, or the deep wells get caught by the
+moderate branch.
+:::
+:::
+
+::: {.solution exercise="ex_branch"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+if well_depth_ft > 500:
+    category = "deep"
+elif well_depth_ft > 150:
+    category = "moderate"
+else:
+    category = "shallow"
+```
+
+`"moderate"`. Note there is no `and well_depth_ft <= 500` on the second branch —
+you only reach it when the first one was false, so it is already implied.
+:::
+:::
+
+# Repeating {background-color="#AB0520"}
+
+## `for` walks a sequence
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 5
+depths = [31.2, 45.8, 88.4, 12.0, 67.3]
+
+for depth in depths:
+    print(f"water at {depth} m")
+```
+
+::: {.fragment}
+`depth` is a name that takes each value in turn. It is not special, and it still
+exists after the loop finishes — holding the last value.
+:::
+
+## The point of a loop is to accumulate
+
+```python
+total = 0.0                  # start empty
+for depth in depths:
+    total = total + depth    # add to it
+print(total / len(depths))   # use it
+```
+
+::: {.fragment}
+Same shape for building a list:
+
+```python
+depths_ft = []
+for depth in depths:
+    depths_ft.append(depth * 3.28084)
+```
+:::
+
+::: {.fragment .due-notice}
+Initialize **before** the loop, not inside it. Putting `total = 0.0` inside the
+body resets it every pass and you get the last value back.
+:::
+
+## `enumerate` and `zip`
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+wells = ["A-14", "B-07", "C-22"]
+depths = [31.2, 45.8, 88.4]
+
+for i, (well, depth) in enumerate(zip(wells, depths)):
+    print(f"{i}: {well} at {depth} m")
+```
+
+::: {.fragment}
+Reach for these before `range(len(...))`. `zip` stops at the **shortest**
+sequence — silently — so two lists of different lengths lose data without
+complaint.
+:::
+
+## Your turn: count the dry wells
+
+A well is dry when its water level is *below* its screen bottom — that is, when
+the depth number is **larger**.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_loop
+depths = [31.2, 45.8, 88.4, 12.0, 67.3]
+screen_bottoms = [40.0, 52.0, 80.0, 35.0, 70.0]
+```
+
+```{pyodide}
+#| exercise: ex_loop
+n_dry = 0
+for depth, bottom in zip(depths, screen_bottoms):
+    if ______:
+        n_dry = ______
+
+n_dry
+```
+
+::: {.hint exercise="ex_loop"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+Depth counts *downward* from the land surface. Deeper means a bigger number.
+:::
+:::
+
+::: {.hint exercise="ex_loop"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+`n_dry = n_dry + 1`, or the shorthand `n_dry += 1`.
+:::
+:::
+
+::: {.solution exercise="ex_loop"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+if depth > bottom:
+    n_dry = n_dry + 1
+```
+
+`1` — only C-22, at 88.4 m against an 80.0 m screen bottom.
+
+Half the sign errors in groundwater work come from mixing *depth below surface*
+with *elevation above datum*. They run in opposite directions.
+:::
+:::
+
+# `while` {background-color="#AB0520"}
+
+## Loop until something is true
+
+Use `while` when you don't know how many steps it takes.
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 8
+storage = 100.0
+k = 0.15
+day = 0
+
+while storage > 50.0:
+    storage = storage * (1 - k)
+    day += 1
+
+print(f"half gone after {day} days")
+```
+
+::: {.fragment}
+**The one rule:** something in the body must eventually make the condition
+false. If not, the cell runs forever and you interrupt the kernel (■).
+:::
+
+## Always carry a guard
+
+```python
+day = 0
+MAX_DAYS = 1000
+
+while storage > 50.0 and day < MAX_DAYS:
+    storage = storage * (1 - k)
+    day += 1
+
+if day == MAX_DAYS:
+    print("gave up — did not converge")
+```
+
+::: {.fragment}
+You will write this exact pattern twice more: in Week 4 when your bisection
+solver needs a stopping rule, and in Week 12 when MODFLOW hits its iteration
+limit and tells you so.
+:::
+
+::: {.fragment}
+A solver without a maximum iteration count isn't a solver. It's a hang.
+:::
+
+## Your turn: how many years?
+
+A well's water level is 62 m down and falling 0.8 m per year. The pump intake
+is at 95 m. How many whole years until the pump is above the water?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_while
+depth = 62.0
+rate = 0.8
+intake = 95.0
+```
+
+```{pyodide}
+#| exercise: ex_while
+years = 0
+while ______:
+    depth = ______
+    years += 1
+
+years
+```
+
+::: {.hint exercise="ex_while"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Keep going *while* the water is still above the intake — that is, while `depth`
+is still less than `intake`.
+:::
+:::
+
+::: {.solution exercise="ex_while"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+while depth < intake:
+    depth = depth + rate
+    years += 1
+```
+
+`42` years. Worth sanity-checking by hand: 33 m to fall at 0.8 m/yr is 41.25,
+which rounds up to 42 whole years. Always do that check — a loop that is off by
+one looks exactly like a loop that is right.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Comparisons produce values you can store, not just questions you ask
+- `if` / `elif` / `else` takes the first true branch — so order matters
+- `for` accumulates; initialize before the loop
+- `while` needs something that changes, and a guard that stops it
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Work through Parts 1–3 of the lab: `labs/week03/week03_lab_control_flow.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Functions — how to name a piece of work so you only write it once.

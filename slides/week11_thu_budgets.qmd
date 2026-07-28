@@ -1,0 +1,392 @@
+---
+title: "Budgets, and what a model is worth"
+subtitle: "HWRS 564a · Week 11 · Thursday, November 5"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+ROOT = Path.cwd().parent
+WS = ROOT / "_run" / "week11_slides"
+WS.mkdir(parents=True, exist_ok=True)
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh."
+
+land = np.loadtxt(ROOT / "data" / "tucson_grid_top.csv", delimiter=",")
+NROW, NCOL, DELR = 40, 60, 250.0
+mf = flopy.modflow.Modflow("basin", model_ws=str(WS), exe_name=str(MF_EXE))
+flopy.modflow.ModflowDis(mf, 1, NROW, NCOL, delr=DELR, delc=DELR,
+                         top=600.0, botm=400.0, nper=1, steady=True)
+ib = np.ones((1, NROW, NCOL), dtype=int)
+ib[:, :, 0] = -1
+ib[:, :, -1] = -1
+strt = np.full((1, NROW, NCOL), 660.0)
+strt[:, :, 0] = 620.0
+strt[:, :, -1] = 700.0
+flopy.modflow.ModflowBas(mf, ibound=ib, strt=strt)
+flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=0, ipakcb=53)
+flopy.modflow.ModflowWel(mf, stress_period_data={0: [[0, 20, 30, -20000.0]]}, ipakcb=53)
+flopy.modflow.ModflowRch(mf, rech=1.2e-4, ipakcb=53)
+flopy.modflow.ModflowPcg(mf)
+flopy.modflow.ModflowOc(mf, stress_period_data={(0, 0): ["save head", "save budget"]})
+mf.write_input()
+ok, buff = mf.run_model(silent=True, report=True)
+assert ok, "\n".join(buff[-20:])
+head = flopy.utils.HeadFile(str(WS / "basin.hds")).get_data()
+dtw_model = land - head[0]
+
+levels = pd.read_csv(ROOT / "data" / "tucson_water_levels.csv",
+                     dtype={"site_no": str}, parse_dates=["date"])
+observed = levels.groupby("site_no")["depth_to_water_m"].mean().dropna()
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE, UA_SKY, UA_GRAY = "#AB0520", "#0C234B", "#81D3EB", "#49595E"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 11, session 2 of 2
+:::
+
+1. The water budget, term by term
+2. Depletion and capture — the distinction that regulation is built on
+3. Comparing your model with real measurements
+4. Why it doesn't match, and why that is the useful part
+
+# The budget {background-color="#0C234B"}
+
+## Four terms, one basin
+
+Tuesday's model: 20,000 m³/d wellfield, uniform recharge, constant heads on the
+east and west edges.
+
+| Term | m³/d |
+|---|---|
+| recharge in | +17,400 |
+| net constant-head in | +2,600 |
+| **wells out** | **−20,000** |
+| discrepancy | 0.00 % |
+
+::: {.fragment}
+And here is the sentence that took a model to write: *of the 20,000 m³/d pumped,
+17,400 comes from recharge and 2,600 is captured from flow that would otherwise
+have left the basin.*
+:::
+
+## You predicted that number
+
+Before running anything, in Tuesday's lab:
+
+```python
+n_active_cells = (ibound > 0).sum()            # 2320, not 2400
+total_recharge = RECHARGE * n_active_cells * DELR * DELC
+deficit = -WELL_Q - total_recharge             # 2600
+```
+
+::: {.fragment}
+**Recharge landing on a constant-head cell is discarded** — MODFLOW applies `RCH`
+only where `ibound > 0`. That is 80 cells and 600 m³/d.
+:::
+
+::: {.fragment .due-notice}
+Predicting the budget before you run is how you find out that your model is doing
+something you did not intend. The 600 m³/d is small; the *habit* is not.
+:::
+
+## Your turn: close a budget
+
+A model reports these terms. One is missing — work out what it must be.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_close
+recharge_in = 17400.0
+constant_head_in = 131774.6
+constant_head_out = 129174.6
+wells_out = 20000.0
+```
+
+```{pyodide}
+#| exercise: ex_close
+total_in = ______
+total_out = ______
+discrepancy_pct = 100 * (total_in - total_out) / ((total_in + total_out) / 2)
+print(f"in {total_in:,.1f}  out {total_out:,.1f}  discrepancy {discrepancy_pct:+.4f} %")
+```
+
+::: {.hint exercise="ex_close"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Every `_in` term goes on one side, every `_out` term on the other. There are two
+of each.
+:::
+:::
+
+::: {.solution exercise="ex_close"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+total_in = recharge_in + constant_head_in
+total_out = constant_head_out + wells_out
+```
+
+149,174.6 both ways, discrepancy zero.
+
+Notice how **large the constant-head terms are** — 131,000 m³/d flowing through
+the domain, against 20,000 pumped. The regional throughflow dwarfs the well, and
+the budget is the only place you see that. It is also a warning: if your boundary
+conditions are wrong, they are wrong about the biggest number in the model.
+:::
+:::
+
+# Depletion vs capture {background-color="#AB0520"}
+
+## Two ways to produce water
+
+::: {.columns}
+::: {.column width="50%"}
+**Depletion**
+
+Water taken out of storage.
+
+A one-off withdrawal from the aquifer's stock. Not renewable.
+:::
+
+::: {.column width="50%"}
+**Capture**
+
+Recharge or throughflow diverted to the well.
+
+Renewable — but it was going somewhere, and now it isn't.
+:::
+:::
+
+::: {.fragment .due-notice}
+**Neither is free.** "Safe yield" regulation is an argument about how much capture
+is acceptable and whose water it was.
+:::
+
+## In this model
+
+::: {.incremental}
+- Storage is zero — it is steady state, nothing is changing
+- So 100% of the well's yield is **capture**
+- 17,400 m³/d of captured recharge
+- 2,600 m³/d of throughflow that no longer leaves to the north-west
+:::
+
+::: {.fragment}
+Downstream of this basin, somebody is 2,600 m³/d short and has no way to measure
+why. Week 13 adds storage and the picture gets more interesting.
+:::
+
+## Your turn: whose water is it?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_capture
+scenarios = {
+    "a": "storage — a one-off withdrawal from the aquifer's stock",
+    "b": "capture — recharge that would have flowed to the river",
+    "c": "capture — throughflow that would have left the basin",
+}
+```
+
+```{pyodide}
+#| exercise: ex_capture
+# A new well starts pumping. After 50 years the aquifer has re-equilibrated
+# and heads are steady again. Where is its water coming from?
+answer = ______
+print(scenarios[answer])
+```
+
+::: {.hint exercise="ex_capture"}
+::: {.callout-note collapse="false"}
+## Hint
+
+At steady state, by definition, storage is not changing. So the water cannot be
+coming out of storage.
+:::
+:::
+
+::: {.solution exercise="ex_capture"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+`"b"` or `"c"` — either is right; the point is that it is **not** `"a"`.
+
+Once heads are steady, storage contributes exactly zero by definition. Every
+litre the well produces is being taken from somewhere else in the budget: a
+river, a spring, a wetland, a neighbour's throughflow, or evapotranspiration that
+no longer happens.
+
+**A well at steady state is not "using up" an aquifer. It is redirecting a flux.**
+Which flux, and to whose cost, is what the budget tells you and nothing else
+does.
+:::
+:::
+
+# Comparing with reality {background-color="#0C234B"}
+
+## Head is not depth to water
+
+MODFLOW reports head as an **elevation**. A well measures **depth below land
+surface**.
+
+$$\text{depth to water} = \text{land surface} - \text{head}$$
+
+::: {.fragment}
+Which means every comparison with a real measurement depends on a land-surface
+array MODFLOW knows nothing about.
+:::
+
+## The comparison
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.6
+fig, axes = plt.subplots(1, 2, figsize=(11, 3.6))
+
+im = axes[0].imshow(dtw_model, cmap="viridis_r",
+                    extent=[0, NCOL * DELR / 1000, 0, NROW * DELR / 1000])
+fig.colorbar(im, ax=axes[0], label="depth to water (m)")
+axes[0].set_xlabel("distance east (km)")
+axes[0].set_ylabel("distance north (km)")
+axes[0].set_title("Modelled")
+
+axes[1].hist(dtw_model.ravel(), bins=30, density=True, alpha=0.75,
+             color=UA_RED, label=f"modelled ({dtw_model.size:,} cells)")
+axes[1].hist(observed, bins=20, density=True, alpha=0.6,
+             color=UA_BLUE, label=f"observed ({len(observed)} wells)")
+axes[1].axvline(np.median(dtw_model), color=UA_RED, ls="--", lw=1.5)
+axes[1].axvline(observed.median(), color=UA_BLUE, ls="--", lw=1.5)
+axes[1].set_xlabel("depth to water (m)")
+axes[1].set_ylabel("density")
+axes[1].set_title("Modelled vs. observed")
+axes[1].legend(frameon=False, fontsize=9)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+Medians: modelled **{python} f"{np.median(dtw_model):.0f}"** m, observed
+**{python} f"{observed.median():.0f}"** m. The model is biased deep by well over a
+hundred metres.
+:::
+
+## Your turn: convert head to depth
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_dtw
+land_surface_m = 745.0     # at this well's location
+modelled_head_m = 661.6
+observed_depth_m = 58.0
+```
+
+```{pyodide}
+#| exercise: ex_dtw
+modelled_depth = ______
+residual = ______
+print(f"modelled depth to water {modelled_depth:.1f} m")
+print(f"observed                {observed_depth_m:.1f} m")
+print(f"residual (model - obs)  {residual:+.1f} m")
+```
+
+::: {.hint exercise="ex_dtw"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Depth counts downward from the land surface, so it is the land surface *minus*
+the head. The residual convention is modelled minus observed, as in Week 9.
+:::
+:::
+
+::: {.solution exercise="ex_dtw"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+modelled_depth = land_surface_m - modelled_head_m
+residual = modelled_depth - observed_depth_m
+```
+
+83.4 m modelled against 58.0 m observed — the model puts the water table **25 m
+too deep** at this well.
+
+Note that a 25 m head residual is only 0.3% of the elevations involved, which is
+why you must never assess a groundwater model by comparing *heads* as numbers.
+Compare **residuals**, and compare them against the head *range* across the
+domain — 80 m here, so 25 m is over a quarter of the signal.
+:::
+:::
+
+## Three reasons, none of them bugs
+
+::: {.incremental}
+1. **The boundary heads were invented.** 620 m and 700 m, chosen to give a
+   plausible gradient. They set the entire head field.
+2. **The monitored wells are not a random sample.** They cluster where people
+   pump — the valley floor — which is where water is shallowest.
+3. **Uniform `K` and uniform recharge.** The real basin has neither.
+:::
+
+::: {.fragment}
+Reason 2 is the subtle one, and it is the Week 8 sampling problem again. You are
+comparing a whole-domain distribution with a biased sample of it.
+:::
+
+## What to do about it
+
+::: {.fragment}
+**Calibration**: adjust the things you guessed until the model reproduces what you
+measured — at the *locations you measured it*, not across the whole domain.
+:::
+
+::: {.fragment}
+And then be honest about what that gets you. A calibrated model is **one
+consistent explanation** of the observations, not the truth. Several different
+parameter sets will fit equally well and disagree about the future.
+:::
+
+::: {.fragment .due-notice}
+That is what Project 3 is about, and why it asks for a comparison of scenarios
+rather than a single prediction.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Read a budget term by term, and predicted it before running
+- Distinguished depletion from capture, and why regulation cares
+- Compared modelled depth to water with 80 real wells
+- Found a large bias, and named three reasons for it
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 9 — MODFLOW structure diagram**, Wednesday 11/11 at 11:59pm
+- Finish the Week 11 lab before Tuesday
+
+::: {.kicker}
+Next week
+:::
+
+Discretization and boundary conditions — and what happens when you take the
+confining layer off this model.

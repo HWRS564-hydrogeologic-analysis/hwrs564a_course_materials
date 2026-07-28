@@ -1,0 +1,365 @@
+---
+title: "Regression, and how much to believe it"
+subtitle: "HWRS 564a · Week 9 · Tuesday, October 20"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 9, session 1 of 2
+:::
+
+1. Quiz — five minutes, on matplotlib
+2. Fitting a line, and what every returned number means
+3. Residuals, which is where the information is
+4. Why $R^2$ is not a measure of model quality
+5. scikit-learn, and splitting train from test *correctly*
+
+Fitting is one function call. Everything worth learning is in what you do next.
+
+# Fitting {background-color="#0C234B"}
+
+## One call
+
+```python
+from scipy import stats
+
+one["years_elapsed"] = (one["date"] - one["date"].min()).dt.days / 365.25
+fit = stats.linregress(one["years_elapsed"], one["depth_to_water_ft"])
+```
+
+::: {.fragment}
+**You cannot regress against a datetime.** Convert to years since the start
+first — then the slope comes out in feet per year, which is the number you
+actually want to report.
+:::
+
+## What comes back
+
+```
+slope       2.081 ft/yr
+intercept  34.79  ft
+r           0.948
+r-squared   0.899
+p-value     1.6e-189
+std error   0.0353 ft/yr
+```
+
+::: {.incremental}
+- **slope** — the answer
+- **r-squared** — the fraction of variance the line absorbs
+- **p-value** — probability of a slope this steep if the truth were zero
+- **stderr** — uncertainty *on the slope*
+:::
+
+::: {.fragment}
+Report `2.081 ± 0.035 ft/yr`. A slope without its uncertainty is half an answer.
+:::
+
+## On p-values
+
+$10^{-189}$ is not a meaningful number. It is a statement that the question was
+never in doubt.
+
+::: {.fragment}
+With 379 measurements, almost **any** real trend is "significant".
+:::
+
+::: {.fragment .due-notice}
+Significance answers *"is it distinguishable from zero?"* It does not answer
+*"is it large enough to matter?"* — and the second one is the question water
+managers ask.
+:::
+
+## Your turn: report it properly
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_report
+slope = 2.0814
+stderr = 0.0353
+r_squared = 0.8993
+```
+
+```{pyodide}
+#| exercise: ex_report
+summary = f"decline of {slope:.2f} ______ {______:.2f} ft/yr (R2 = {r_squared:.2f})"
+print(summary)
+```
+
+::: {.hint exercise="ex_report"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The uncertainty on the slope is the standard error, not the $R^2$. A plus-minus
+sign is just a character you can type into the string.
+:::
+:::
+
+::: {.solution exercise="ex_report"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+summary = f"decline of {slope:.2f} ± {stderr:.2f} ft/yr (R2 = {r_squared:.2f})"
+```
+
+`decline of 2.08 ± 0.04 ft/yr (R2 = 0.90)`.
+
+Two decimal places, because the third is not supported by the standard error.
+Reporting `2.0814` claims a precision you do not have.
+:::
+:::
+
+# Residuals {background-color="#AB0520"}
+
+## Where the information is
+
+$$\text{residual} = \text{measured} - \text{predicted}$$
+
+::: {.fragment}
+If the model is right, residuals are **patternless noise** around zero.
+:::
+
+::: {.fragment}
+If they have structure, the model is missing something — and the structure tells
+you what.
+:::
+
+## The well that looks well-fitted
+
+$R^2 = 0.90$. Mean residual by decade:
+
+```
+1930    +1.9
+1940    -9.6
+1950   -14.6
+1960   -12.5
+1970    +9.4
+1980    -0.9
+1990    -7.8
+```
+
+::: {.fragment}
+Below zero for thirty years, well above it in the 1970s, below again after.
+**That is not noise.**
+:::
+
+## What the pattern means
+
+::: {.incremental}
+- Slow decline while the basin was lightly pumped
+- Sharp acceleration through the mid-century agricultural era
+- Easing as pumping shifted from irrigation to municipal supply
+:::
+
+::: {.fragment}
+Three regimes. One straight line averages them and reports a rate describing
+none of them.
+:::
+
+::: {.fragment .due-notice}
+**A high $R^2$ with structured residuals means you have fitted the wrong model
+well.** Plot the residuals. Every time.
+:::
+
+## $R^2$ is not model quality {.smaller}
+
+Fit the same well over 1950–1990 — the period where the line fits best by eye:
+
+| Window | slope | $R^2$ |
+|---|---|---|
+| full record, 1931–1994 | 2.08 ft/yr | **0.90** |
+| 1950–1990 only | 2.36 ft/yr | **0.67** |
+
+::: {.fragment}
+$R^2$ went *down* on the better-fitting window.
+:::
+
+::: {.fragment}
+It is the fraction of **this sample's variance** the line absorbs. The full
+record spans a century of decline — enormous variance, easy to explain. A
+40-year window has less range, so the same quality of fit accounts for less of it.
+:::
+
+::: {.fragment}
+**You can raise $R^2$ by widening your window.** That should tell you what it is
+worth as evidence.
+:::
+
+## Your turn: diagnose the fit
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_diag
+diagnoses = {
+    "a": "the model is good — R2 is 0.90",
+    "b": "the model is wrong in a structured way, despite the high R2",
+    "c": "there is not enough data to tell",
+    "d": "the data are too noisy to fit",
+}
+```
+
+```{pyodide}
+#| exercise: ex_diag
+verdict = ______
+print(diagnoses[verdict])
+```
+
+::: {.hint exercise="ex_diag"}
+::: {.callout-note collapse="false"}
+## Hint
+
+379 measurements is plenty, and the residuals are large but not random — they
+run in decade-long streaks on one side of zero.
+:::
+:::
+
+::: {.solution exercise="ex_diag"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+verdict = "b"
+```
+
+The fix is not more data or a fancier fit. It is **fitting the regimes
+separately**, or admitting that a single rate is not the right summary of this
+well.
+
+That is a modelling decision, and it comes from the residual plot rather than
+from any single number.
+:::
+:::
+
+# scikit-learn {background-color="#0C234B"}
+
+## Same fit, general interface
+
+```python
+from sklearn.linear_model import LinearRegression
+
+X = one[["years_elapsed"]].values   # 2D: (n_samples, n_features)
+y = one["depth_to_water_ft"].values # 1D
+
+model = LinearRegression().fit(X, y)
+model.coef_[0], model.intercept_
+```
+
+::: {.fragment}
+Identical to `linregress` — same least-squares problem. Worth learning because
+every other model in the library shares this interface.
+:::
+
+::: {.fragment}
+**`X` must be 2D**, even with one feature. `df[["col"]]` gives you that;
+`df["col"]` does not. `ValueError: Expected 2D array, got 1D array instead` is
+the most common scikit-learn error and this is why.
+:::
+
+## The split that lies
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+```
+
+::: {.fragment}
+`train_test_split` **shuffles**. For a time series that scatters the test set
+*through* the training period, so predicting it means interpolating between
+neighbours you already fitted.
+:::
+
+::: {.fragment}
+Test MAE on the shuffled split: about **2 ft**. Looks excellent.
+:::
+
+## The split that doesn't
+
+Train on 1931–1974, test on 1975–1994:
+
+::: {.incremental}
+- train slope: **1.92 ft/yr**
+- full-record slope: **2.08 ft/yr**
+- test MAE: **15.4 ft**
+:::
+
+::: {.fragment}
+Seven times worse, on the same data and the same model.
+:::
+
+::: {.fragment .due-notice}
+**A validation scheme that doesn't match how the model will be used will tell
+you it works.** For time series, split by time.
+:::
+
+## Your turn: pick the split
+
+You want to know whether a trend model can forecast the next decade.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_split
+strategies = {
+    "a": "train_test_split with test_size=0.25 and shuffle=True",
+    "b": "train on everything before a cutoff year, test on everything after",
+    "c": "fit on all the data and report the R2",
+    "d": "k-fold cross-validation with random folds",
+}
+```
+
+```{pyodide}
+#| exercise: ex_split
+choice = ______
+print(strategies[choice])
+```
+
+::: {.hint exercise="ex_split"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Forecasting means predicting data the model has never seen *and that comes
+after* everything it has seen. Which of these reproduces that situation?
+:::
+:::
+
+::: {.solution exercise="ex_split"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+choice = "b"
+```
+
+Both **a** and **d** shuffle, so the test set is interleaved with training data
+and the model is interpolating, not forecasting. **c** doesn't hold anything
+back at all.
+
+Only **b** reproduces the actual task. Scikit-learn ships `TimeSeriesSplit` for
+the k-fold version of this.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Convert dates to elapsed years before fitting, so the slope has units
+- Report the slope with its standard error
+- Plot the residuals — structure there means the model is wrong
+- $R^2$ measures variance absorbed in *this sample*, not model quality
+- Split time series by time, never at random
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Parts 1–3 of `labs/week09/week09_lab_regression_chemistry.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Water chemistry: checking that an analysis balances, and reading a Piper diagram.

@@ -1,0 +1,54 @@
+week: 12
+title: "Week 12 — Discretization and boundary conditions"
+dates: "November 10 & 12, 2026"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  Last week's model converged on the first try because the aquifer was confined,
+  which makes the equations linear. This week you take the confining layer off,
+  the physics gets more realistic, and the model stops converging — and dealing
+  with that is most of what a modeller actually does. On the way we test whether
+  the answer depends on the cell size you chose, use `ibound` to cut a
+  basin-shaped domain out of a rectangle, and meet dry cells, which are a
+  modelling failure rather than a result.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 11 lab notebook"
+    url: "labs/week11/week11_lab_basin_model.html"
+    site_relative: true
+    note: "This week rebuilds that model at three resolutions, so know how it fits together."
+
+class_material:
+  - text: "Tue 11/10 — Slides: Discretization"
+    url: "slides/week12_tue_discretization.html"
+    site_relative: true
+  - text: "Thu 11/12 — Slides: Boundaries, unconfined flow, and dry cells"
+    url: "slides/week12_thu_unconfined.html"
+    site_relative: true
+  - text: "Lab notebook — Discretization, boundaries, and unconfined flow"
+    url: "labs/week12/week12_lab_discretization_boundaries.html"
+    site_relative: true
+    note: "Runs eight models. Some cells take a few seconds — that is expected."
+
+assignments:
+  - text: "Quiz 10 — on Week 11 material"
+    quiz: "TBD-week12-quiz"
+    note: "In class, Tuesday 11/10."
+  - text: "Submit: HW 10 — First MODFLOW model"
+    dropbox: "TBD-hw10-dropbox"
+    note: "Due Wednesday 11/18 at 11:59pm."
+
+bonus:
+  - text: "MODFLOW-NWT — the version that handles dewatering properly"
+    url: "https://www.usgs.gov/software/modflow-nwt-newton-formulation-modflow-2005"
+  - text: "Hill & Tiedeman on model calibration and observation-parameter sensitivity"
+    url: "https://doi.org/10.1002/0470041080"
+  - text: "Reilly & Harbaugh, Guidelines for evaluating ground-water flow models"
+    url: "https://pubs.usgs.gov/sir/2004/5038/"

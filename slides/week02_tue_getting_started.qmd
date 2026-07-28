@@ -1,0 +1,463 @@
+---
+title: "Getting started with Python"
+subtitle: "HWRS 564a · Week 2 · Tuesday, September 1"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 2, session 1 of 2
+:::
+
+1. Why Python, for *this* kind of work
+2. Three ways to run Python — and which one we use when
+3. Notebooks: cells, the kernel, and the trap everyone falls into
+4. Your environment: Codespaces and `uv`
+5. Packages and `import`
+
+By the end you will have run code, made a variable, and computed a Darcy flux.
+
+# Why Python {background-color="#0C234B"}
+
+## The honest answer
+
+Python is not the fastest language, and it is not the prettiest.
+
+It wins because **the tools you need already exist in it**:
+
+| Task | Package |
+|---|---|
+| Tabular data, timeseries | `pandas` |
+| Arrays, math | `numpy` |
+| Figures | `matplotlib` |
+| USGS streamflow & groundwater data | `dataretrieval` |
+| **MODFLOW** | `flopy` |
+
+::: {.fragment}
+That last row is why this course exists. By week 10 you will be building
+MODFLOW models from Python — and `flopy` is *the* way that's done now.
+:::
+
+## What this replaces
+
+Last year this course started in Excel. This year it doesn't.
+
+::: {.incremental}
+- A spreadsheet hides its logic in cells you have to click to read
+- A spreadsheet can't be diffed, reviewed, or re-run on new data
+- A spreadsheet does not scale to a 500,000-cell model grid
+- **Nothing you do in this course will be un-reproducible**
+:::
+
+::: {.fragment}
+You will still read Excel files — collaborators will send them to you forever.
+Reading one is a Python skill. We'll do it in Week 5.
+:::
+
+# Three ways to run Python {background-color="#0C234B"}
+
+## 1. The interpreter (REPL)
+
+Type a line, get an answer, line is gone.
+
+```bash
+$ python
+>>> 2 + 2
+4
+>>> exit()
+```
+
+**Good for:** "what does this function return again?"
+
+**Bad for:** anything you want to keep.
+
+## 2. A script
+
+A plain text file, run start to finish.
+
+```bash
+$ python analyze_wells.py
+```
+
+**Good for:** work that is finished, repeated, or automated. Pipelines.
+
+**Bad for:** exploring, when you want to see each step.
+
+::: {.fragment}
+We come back to scripts in Week 15, once you have something worth automating.
+:::
+
+## 3. A notebook
+
+Cells you run in any order, output kept inline next to the code.
+
+**Good for:** exploration, teaching, showing your reasoning.
+
+**Bad for:** anything that must run the same way twice — *unless you are careful.*
+
+::: {.fragment .due-notice}
+This course lives in notebooks for Weeks 2–14, then deliberately moves out of
+them in Week 15. Both halves matter.
+:::
+
+## The notebook mental model
+
+A notebook has two separate things:
+
+::: {.columns}
+::: {.column width="50%"}
+**The document**
+
+The cells you see, top to bottom. Just a file.
+:::
+
+::: {.column width="50%"}
+**The kernel**
+
+A Python process holding every variable you've defined. Invisible.
+:::
+:::
+
+::: {.fragment}
+The document has an order. **The kernel has a history.** These are not the same,
+and confusing them will cost you an afternoon at some point this semester.
+:::
+
+## The trap
+
+```python
+# cell 1
+depth = 50
+```
+
+```python
+# cell 2
+depth = depth * 2
+```
+
+```python
+# cell 3
+print(depth)
+```
+
+::: {.fragment}
+Run 1 → 2 → 3, you get `100`. Run 1 → 2 → 2 → 3, you get `200`.
+The notebook looks identical either way.
+:::
+
+::: {.fragment}
+**The fix:** *Restart Kernel and Run All Cells* before you submit anything.
+If it doesn't survive that, it isn't finished.
+:::
+
+# Your first code {background-color="#AB0520"}
+
+## Run a cell
+
+The block below is real Python running in your browser. Edit it, then press
+**Run Code**.
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 3
+2 + 2
+```
+
+::: {.fragment}
+Try changing it to `2 ** 10`, or `17 / 5`, or `17 // 5`. Note what `//` does.
+:::
+
+## Your turn: an aquifer volume
+
+A confined aquifer is 4200 m long, 1800 m wide, and 25 m thick, with a porosity
+of 0.28. Fill in the blank to compute the **volume of water** it holds, in m³.
+
+```{pyodide}
+#| exercise: ex_volume
+length = 4200
+width = 1800
+thickness = 25
+porosity = 0.28
+
+volume_of_water = ______
+volume_of_water
+```
+
+::: {.hint exercise="ex_volume"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The bulk volume is length × width × thickness. Porosity is the *fraction* of
+that bulk volume which is void space.
+:::
+:::
+
+::: {.solution exercise="ex_volume"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+volume_of_water = length * width * thickness * porosity
+```
+
+That's 52,920,000 m³ — about 43,000 acre-feet. Units are your problem, not
+Python's; it will happily multiply nonsense together.
+:::
+:::
+
+## Variables are names, not boxes
+
+```python
+head_upstream = 412.5
+head_downstream = 408.2
+```
+
+A name on the left, an expression on the right. The `=` is **assignment**, not
+equality.
+
+::: {.fragment}
+Rules that will save you grief:
+
+- Names are case sensitive: `Head` and `head` are different
+- Use `snake_case`, not `camelCase` — that's the Python convention
+- Never name something `list`, `sum`, `type`, or `dict`; you'll break the builtin
+:::
+
+## Your turn: hydraulic gradient
+
+Two wells are 850 m apart. Compute the hydraulic gradient
+$i = \dfrac{\Delta h}{\Delta l}$ between them.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_gradient
+head_upstream = 412.5
+head_downstream = 408.2
+distance = 850
+```
+
+```{pyodide}
+#| exercise: ex_gradient
+gradient = ______
+gradient
+```
+
+::: {.hint exercise="ex_gradient"}
+::: {.callout-note collapse="false"}
+## Hint
+
+$\Delta h$ is the head *drop* between the two wells. The variables
+`head_upstream`, `head_downstream`, and `distance` are already defined.
+:::
+:::
+
+::: {.solution exercise="ex_gradient"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+gradient = (head_upstream - head_downstream) / distance
+```
+
+`0.00506` — dimensionless, and small, as gradients usually are.
+:::
+:::
+
+# Environments {background-color="#0C234B"}
+
+## The problem
+
+Your code needs `numpy`. Which `numpy`?
+
+::: {.incremental}
+- Your laptop has one version
+- My laptop has another
+- The version that existed when a 2019 tutorial was written is a third
+- Half of "it works on my machine" is really "I have different packages"
+:::
+
+::: {.fragment}
+An **environment** is a pinned set of packages that belongs to one project.
+:::
+
+## Our setup
+
+We use **GitHub Codespaces**: a Linux machine in the browser, with the
+environment already built.
+
+::: {.incremental}
+- Open the course repo → *Code* → *Codespaces* → *Create codespace*
+- Wait ~2 minutes the first time
+- Python, Jupyter, and every package are already installed
+- The MODFLOW binaries are already downloaded
+:::
+
+::: {.fragment .due-notice}
+Nothing to install on your own machine. Nothing to break. If your codespace
+gets into a bad state, delete it and make a new one — that is the *point*.
+:::
+
+## What defines the environment
+
+`pyproject.toml`, in the repo root:
+
+```toml
+[project]
+requires-python = ">=3.11"
+dependencies = [
+    "flopy>=3.9.3",
+    "matplotlib>=3.10.5",
+    "numpy>=2.3.2",
+    "pandas>=2.3.1",
+]
+```
+
+::: {.fragment}
+`uv sync` reads that file and builds exactly those packages. One command, same
+result on every machine. We'll revisit this properly in Week 15.
+:::
+
+# Packages {background-color="#0C234B"}
+
+## `import` brings tools into reach
+
+Python starts small on purpose. Even `sqrt` isn't there until you ask.
+
+```{pyodide}
+#| autorun: false
+import math
+
+math.sqrt(2)
+```
+
+::: {.fragment}
+`import math` gives you the *module*. `math.sqrt` reaches inside it.
+The `math.` prefix is not noise — it tells the reader where `sqrt` came from.
+:::
+
+## Three forms you'll see
+
+```python
+import numpy                    # numpy.mean(...)
+import numpy as np              # np.mean(...)      ← use this
+from numpy import mean          # mean(...)         ← avoid
+```
+
+::: {.fragment}
+The aliases are conventions, not rules — but they are *universal* conventions.
+`np`, `pd`, `plt`. Write them any other way and every example on the internet
+stops matching your code.
+:::
+
+::: {.fragment}
+`from x import *` imports everything into your namespace and makes it impossible
+to tell where a name came from. Don't.
+:::
+
+## Your turn: Darcy's law
+
+Darcy's law for one-dimensional flow:
+
+$$q = -K \frac{dh}{dl}$$
+
+where $q$ is specific discharge (m/d) and $K$ is hydraulic conductivity (m/d).
+
+Compute $Q = qA$, the volumetric flow, through a 25 m × 1800 m cross-section
+with $K = 12$ m/d and the gradient you found earlier.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_darcy
+K = 12.0
+gradient = (412.5 - 408.2) / 850   # unrounded — don't round intermediates
+area = 25 * 1800
+```
+
+```{pyodide}
+#| exercise: ex_darcy
+q = ______
+Q = ______
+print(f"specific discharge: {q:.4f} m/d")
+print(f"volumetric flow:    {Q:.1f} m3/d")
+```
+
+::: {.hint exercise="ex_darcy"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+`q` is $K$ times the gradient. Ignore the minus sign — it only encodes that
+flow runs downhill, and we already know which way that is.
+:::
+:::
+
+::: {.hint exercise="ex_darcy"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+Once you have `q`, the volumetric flow is just `q * area`.
+:::
+:::
+
+::: {.solution exercise="ex_darcy"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+q = K * gradient
+Q = q * area
+```
+
+About 0.0607 m/d and 2731.8 m³/d. Those `f"{q:.4f}"` bits are **f-strings** —
+Thursday's session covers them.
+
+Note the setup cell kept the gradient unrounded. Had we used `0.00506` we'd get
+2732.4 — a small difference here, but rounding intermediates is how you end up
+off by a factor of two in a Week 12 water budget.
+:::
+:::
+
+## Where this goes {.smaller}
+
+By Week 8 the same numbers become a figure:
+
+```{pyodide}
+#| edit: false
+#| autorun: true
+#| fig-width: 9
+#| fig-height: 2.6
+import numpy as np, matplotlib.pyplot as plt
+
+distance = np.linspace(0, 850, 100)
+head = 412.5 - 0.00506 * distance
+
+fig, ax = plt.subplots()
+ax.plot(distance, head, color="#AB0520", linewidth=2.5)
+ax.fill_between(distance, 405, head, color="#81D3EB", alpha=0.35)
+ax.set(xlabel="distance downgradient (m)", ylabel="head (m)", ylim=(405, 414))
+plt.show()
+```
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Ran Python three different ways, and know when each is right
+- Know that a notebook's kernel has a history the document doesn't show
+- Made variables, imported a module, computed a Darcy flux
+
+::: {.kicker}
+Before Thursday
+:::
+
+- Open your codespace and confirm it builds — do this **before** Thursday, not during
+- Skim the lab notebook: `labs/week02/week02_lab_python_basics.ipynb`
+
+::: {.kicker}
+Thursday
+:::
+
+Data types, strings, and sequences — the things you'll index and slice all
+semester.

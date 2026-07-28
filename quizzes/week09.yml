@@ -1,0 +1,123 @@
+# Week 9 quiz — covers Week 8 (matplotlib: panels, colour, annotation, saving).
+
+quiz:
+  week: 9
+  title: "Week 9 Quiz"
+  covers: "Week 8 — subplots, colormaps, annotation, maps, saving"
+  given: "Tuesday, October 20, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "Centring a diverging colormap"
+    text: >
+      You map change in water level, which runs from −6 to +111 ft, using
+      `cmap="RdBu_r"` and no `vmin`/`vmax`. What goes wrong?
+    difficulty: 3
+    feedback: >
+      Matplotlib centres the colormap on the midpoint of the **data**, about
+      +52 ft. So the neutral colour marks a fifty-foot decline, and those wells
+      read as unchanged. Pass `vmin=-limit, vmax=+limit` with
+      `limit = abs(change).max()`.
+    options:
+      - text: "The neutral colour lands at +52 ft, so declining wells look unchanged"
+        correct: true
+        feedback: "Correct — and it looks completely normal, which is what makes it dangerous."
+      - text: "The colormap is reversed"
+        feedback: >
+          `_r` does reverse it, but that is deliberate here — it puts red on
+          decline.
+      - text: "Nothing; matplotlib centres diverging maps on zero automatically"
+        feedback: "It does not. It centres on the data range."
+      - text: "The negative values are clipped out"
+        feedback: "They are drawn, just in the wrong part of the colour range."
+
+  - type: mc
+    title: "Why not jet"
+    text: >
+      What is the main problem with the `jet` colormap?
+    difficulty: 2
+    feedback: >
+      It is not perceptually uniform: bright bands at cyan and yellow and dark
+      regions at both ends mean equal steps in the data are not equal steps in
+      apparent brightness. It invents boundaries that aren't in the data and
+      hides ones that are.
+    options:
+      - text: "Equal steps in the data are not equal steps in apparent brightness"
+        correct: true
+        feedback: "Correct — it manufactures structure that isn't there."
+      - text: "It has too few colours"
+        feedback: "It has plenty; the problem is how they're ordered in lightness."
+      - text: "It is not available in current matplotlib"
+        feedback: "It is still there. It just stopped being the default in 2015."
+      - text: "It only works for categorical data"
+        feedback: "It is a continuous map, and a poor one."
+
+  - type: ms
+    title: "Making a figure colourblind-safe"
+    text: >
+      Select **every** change that makes a two-line figure readable to someone
+      with deuteranopia.
+    difficulty: 2
+    scoring: RightAnswers
+    feedback: >
+      Encode every distinction at least twice. Different dash patterns and
+      different markers both work without relying on hue, and colours that
+      differ in *lightness* survive greyscale. Making the lines thicker doesn't
+      distinguish them from each other.
+    options:
+      - text: "Give the two lines different dash patterns"
+        correct: true
+        feedback: "Correct — readable in greyscale and with any colour vision."
+      - text: "Give the two lines different markers"
+        correct: true
+        feedback: "Correct — another redundant channel."
+      - text: "Choose colours that differ in lightness, not just hue"
+        correct: true
+        feedback: >
+          Correct. UA red and blue differ in lightness; red and green do not,
+          which is why that pair fails twice over.
+      - text: "Increase the line width of both lines"
+        feedback: "Makes both more visible, but no easier to tell apart."
+
+  - type: mc
+    title: "Saving for print"
+    text: >
+      You make a figure at `figsize=(12, 8)`, save it at `dpi=300`, then scale
+      it to 3.5 inches wide in your manuscript. What happens?
+    difficulty: 3
+    feedback: >
+      Every font scales down with the figure, so a 10-point label becomes about
+      3 points and is unreadable. Set `figsize` to the **final printed width** —
+      a single journal column is roughly 3.5 inches — so the sizes you specify
+      are the sizes on the page.
+    options:
+      - text: "The text becomes unreadably small"
+        correct: true
+        feedback: "Correct — this is the most common reason a figure looks amateurish."
+      - text: "The image becomes pixelated"
+        feedback: "Scaling *down* a 300 dpi raster increases effective resolution."
+      - text: "Nothing — matplotlib rescales fonts on save"
+        feedback: "It does not. Font size is fixed relative to the figure."
+      - text: "The aspect ratio is distorted"
+        feedback: "Uniform scaling preserves aspect ratio."
+
+  - type: sa
+    title: "Map aspect ratio"
+    text: |
+      At latitude 32°N, one degree of longitude is what fraction of the length
+      of one degree of latitude? Give two decimal places, e.g. `0.71`.
+    difficulty: 3
+    input_rows: 1
+    input_width: 12
+    answers:
+      - "0.85"
+      - ".85"
+    case_sensitivity: insensitive
+    feedback: >
+      $\cos(32°) = 0.85$. Plotting latitude and longitude 1:1 stretches the
+      basin east–west by about 18%, which is enough to change what a reader
+      thinks its shape is. Fix it with
+      `ax.set_aspect(1 / np.cos(np.deg2rad(lat.mean())))`.

@@ -1,0 +1,60 @@
+week: 8
+title: "Week 8 — More on matplotlib"
+dates: "October 13 & 15, 2026"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  Up to now you have made plots to find out what the data says. This week you
+  make plots to tell someone else, which is a different job with different
+  rules. Most of the difference is not aesthetic: a figure that encodes its
+  meaning in colour alone is unreadable to about one reader in twelve, and a
+  diverging colormap that isn't centred on zero says the opposite of what you
+  meant. Those are correctness problems, and they are what we spend the week on.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 7 lab notebook"
+    url: "labs/week07/week07_lab_timeseries.html"
+    site_relative: true
+  - text: "Look at a figure you have made before and ask what its title says"
+    url: "https://www.data-to-viz.com/caveats.html"
+    note: "If the title could be generated from the axis labels, it is doing no work."
+
+class_material:
+  - text: "Tue 10/13 — Slides: Figures worth showing people"
+    url: "slides/week08_tue_figures.html"
+    site_relative: true
+  - text: "Thu 10/15 — Slides: Annotation, maps, and saving"
+    url: "slides/week08_thu_annotation_maps.html"
+    site_relative: true
+  - text: "Lab notebook — Figures worth showing people"
+    url: "labs/week08/week08_lab_matplotlib.html"
+    site_relative: true
+  - text: "Cheat sheet — matplotlib commands"
+    course_file: "matplotlib_commands.png"
+  - text: "Cheat sheet — matplotlib, part 2"
+    course_file: "matplotlib_commands2.png"
+
+assignments:
+  - text: "Quiz 6 — on Week 7 material"
+    quiz: "TBD-week08-quiz"
+    note: "In class, Tuesday 10/13."
+  - text: "Submit: HW 6 — Timeseries aggregation"
+    dropbox: "TBD-hw06-dropbox"
+    note: "Due Wednesday 10/14 at 11:59pm."
+  - text: "Submit: Project 2 — analysis component, part 1"
+    dropbox: "TBD-project2a-dropbox"
+
+bonus:
+  - text: "matplotlib — choosing colormaps"
+    url: "https://matplotlib.org/stable/users/explain/colors/colormaps.html"
+  - text: "Why we use perceptually uniform colormaps (the viridis talk)"
+    url: "https://www.youtube.com/watch?v=xAoljeRJ3lU"
+  - text: "Coblis — check your figure with simulated colour vision deficiency"
+    url: "https://www.color-blindness.com/coblis-color-blindness-simulator/"

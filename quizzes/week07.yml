@@ -1,0 +1,132 @@
+# Week 7 quiz — covers Week 6 (APIs, missing data, duplicates, outliers).
+
+quiz:
+  week: 7
+  title: "Week 7 Quiz"
+  covers: "Week 6 — APIs, missing vs zero, duplicates, outliers"
+  given: "Tuesday, October 6, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "Zero is not missing"
+    text: >
+      Sabino Creek's 20-year daily record has 2,569 days with a discharge of
+      exactly `0.0`. What should you do with them?
+    difficulty: 2
+    feedback: >
+      Keep them. The creek is ephemeral — those zeros are measurements, not
+      gaps. `NaN` means "we don't know"; `0` means "we know, and it was zero".
+      Dropping them turns the mean flow into the mean *flowing-day* flow, which
+      is a different and much larger number.
+    options:
+      - text: "Keep them — they are real measurements"
+        correct: true
+        feedback: "Correct. A third of this record is genuinely dry."
+      - text: "Replace them with `NaN`, since a creek can't have zero flow"
+        feedback: >
+          Ephemeral creeks absolutely have zero flow, and this one is dry about
+          half the year.
+      - text: "Drop them before computing any statistic"
+        feedback: >
+          That silently changes every mean you compute afterwards, without
+          changing the label on it.
+      - text: "Interpolate across them"
+        feedback: "There is nothing to interpolate — the values are known."
+
+  - type: mc
+    title: "Choosing a fill strategy"
+    text: >
+      A daily streamflow record is missing nine consecutive days in August, the
+      middle of the monsoon. What is the best treatment?
+    difficulty: 3
+    feedback: >
+      Leave them as `NaN` and say so. Those nine days could contain the largest
+      flood of the year or nothing at all, and the two neighbouring values
+      cannot distinguish those cases. Interpolating commits you to "nothing
+      happened".
+    options:
+      - text: "Leave them missing and note it"
+        correct: true
+        feedback: "Correct — `NaN` is a perfectly good answer and it propagates."
+      - text: "Linearly interpolate between the neighbours"
+        feedback: >
+          That draws a smooth ramp through the monsoon, which is the one shape
+          the real data almost certainly did not have.
+      - text: "Fill with the August mean"
+        feedback: >
+          Better than a straight line, but still invents nine days of data and
+          hides the gap from anything downstream.
+      - text: "Fill with zero"
+        feedback: "That claims the creek was dry during monsoon season."
+
+  - type: mc
+    title: "Finding the duplicates that matter"
+    text: |
+      Two rows record the same well on the same date, but with slightly
+      different depths. Which call finds them?
+    difficulty: 3
+    feedback: >
+      `duplicated(subset=["site_no", "date"])`. A plain `.duplicated()` only
+      flags rows identical in **every** column, so differing depths hide the
+      duplicate — and that is exactly the case worth catching, because one well
+      cannot have two water levels on one day.
+    options:
+      - text: "`df.duplicated(subset=[\"site_no\", \"date\"])`"
+        correct: true
+        feedback: "Correct — name the columns that ought to identify a row."
+      - text: "`df.duplicated()`"
+        feedback: "Finds nothing here: the rows differ in the depth column."
+      - text: "`df.drop_duplicates()`"
+        feedback: "Same blind spot, and it removes rows rather than reporting them."
+      - text: "`df.isna().sum()`"
+        feedback: "That counts missing values, not repeated ones."
+
+  - type: ms
+    title: "Which values do you delete"
+    text: >
+      Select **every** observation below that you should remove from a
+      water-level dataset.
+    difficulty: 3
+    scoring: RightAnswers
+    feedback: >
+      Delete only what is physically impossible. Statistics finds values to
+      *look at*; physics finds values to *remove*. Deleting a real observation
+      is worse than keeping a suspect one, because a kept outlier stays visible
+      in the figure and a deleted one is gone.
+    options:
+      - text: "A depth to water of `-999`"
+        correct: true
+        feedback: "Correct — a sentinel value, not a measurement."
+      - text: "A pH of 12.4 in a basin-fill aquifer"
+        correct: true
+        feedback: "Correct — caustic, not groundwater. A calibration or transcription error."
+      - text: "A discharge 2,000 times the median, on one August day"
+        feedback: >
+          That is a monsoon flood, and the single most valuable day in the
+          record for anyone sizing a culvert.
+      - text: "A depth to water of 0.0 ft after a wet winter"
+        feedback: >
+          Unusual near a stream, but not impossible. Flag it and check the
+          field notes; don't delete it because it surprised you.
+
+  - type: tf
+    title: "The dataretrieval move"
+    text: >
+      Code written against a tutorial that calls `nwis.get_gwlevels()` will
+      still run with `dataretrieval` 1.2.0, though it prints a deprecation
+      warning.
+    difficulty: 2
+    answer: false
+    feedback: >
+      `nwis.get_gwlevels` has been **removed**, not deprecated — it raises
+      `NameError`. Groundwater levels now come from
+      `dataretrieval.waterdata.get_field_measurements`. `nwis.get_record` is
+      the one that still works with a warning.
+    true_feedback: >
+      Not quite — that is `get_record`. `get_gwlevels` is gone entirely.
+    false_feedback: >
+      Correct. The error names a function that doesn't exist, which is your
+      clue that the tutorial is older than the library.

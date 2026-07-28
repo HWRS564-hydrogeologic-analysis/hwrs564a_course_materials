@@ -1,0 +1,240 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - slides/*.qmd
+    - labs/**/*.ipynb
+  resources:
+    - data/**
+    - assets/**
+
+website:
+  title: "HWRS 564a"
+  description: "Hydrogeologic Analysis Tools & Methods I — University of Arizona"
+  site-url: https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/
+  repo-url: https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials
+  repo-actions: [issue]
+  page-navigation: true
+  navbar:
+    background: "#0C234B"
+    left:
+      - href: index.qmd
+        text: Home
+      - text: "Slides"
+        menu:
+          - href: slides/week02_tue_getting_started.qmd
+            text: "Wk 2 · Getting started with Python"
+          - href: slides/week02_thu_data_types.qmd
+            text: "Wk 2 · Data types & sequences"
+          - href: slides/week03_tue_control_flow.qmd
+            text: "Wk 3 · Control flow"
+          - href: slides/week03_thu_functions.qmd
+            text: "Wk 3 · Functions and modules"
+          - href: slides/week04_tue_arrays.qmd
+            text: "Wk 4 · Arrays with numpy"
+          - href: slides/week04_thu_iteration.qmd
+            text: "Wk 4 · Iterative solutions"
+          - href: slides/week05_tue_pandas.qmd
+            text: "Wk 5 · Introduction to pandas"
+          - href: slides/week05_thu_filtering.qmd
+            text: "Wk 5 · Filtering and first plots"
+          - href: slides/week06_tue_apis.qmd
+            text: "Wk 6 · Where data comes from"
+          - href: slides/week06_thu_cleaning.qmd
+            text: "Wk 6 · Gaps, duplicates, outliers"
+          - href: slides/week07_tue_datetime.qmd
+            text: "Wk 7 · Dates and resampling"
+          - href: slides/week07_thu_grouping.qmd
+            text: "Wk 7 · Rolling and reshaping"
+          - href: slides/week08_tue_figures.qmd
+            text: "Wk 8 · Figures worth showing"
+          - href: slides/week08_thu_annotation_maps.qmd
+            text: "Wk 8 · Annotation and maps"
+          - href: slides/week09_tue_regression.qmd
+            text: "Wk 9 · Regression"
+          - href: slides/week09_thu_chemistry.qmd
+            text: "Wk 9 · Major-ion chemistry"
+          - href: slides/week10_tue_what_is_modflow.qmd
+            text: "Wk 10 · What MODFLOW is"
+          - href: slides/week10_thu_running_it.qmd
+            text: "Wk 10 · Running it"
+          - href: slides/week11_tue_inputs_outputs.qmd
+            text: "Wk 11 · Inputs, outputs, hitting go"
+          - href: slides/week11_thu_budgets.qmd
+            text: "Wk 11 · Budgets"
+          - href: slides/week12_tue_discretization.qmd
+            text: "Wk 12 · Discretization"
+          - href: slides/week12_thu_unconfined.qmd
+            text: "Wk 12 · Unconfined flow"
+          - href: slides/week13_tue_time.qmd
+            text: "Wk 13 · Time and storage"
+          - href: slides/week13_thu_capture_et.qmd
+            text: "Wk 13 · Capture and ET"
+          - href: slides/week14_tue_layers_rivers.qmd
+            text: "Wk 14 · Layers and rivers"
+      - text: "Labs"
+        menu:
+          - href: labs/week02/week02_lab_python_basics.ipynb
+            text: "Wk 2 · Python basics"
+          - href: labs/week03/week03_lab_control_flow.ipynb
+            text: "Wk 3 · Control flow and functions"
+          - href: labs/week04/week04_lab_arrays_iteration.ipynb
+            text: "Wk 4 · Arrays and iteration"
+          - href: labs/week05/week05_lab_pandas.ipynb
+            text: "Wk 5 · Introduction to pandas"
+          - href: labs/week06/week06_lab_real_world_data.ipynb
+            text: "Wk 6 · Real-world data"
+          - href: labs/week07/week07_lab_timeseries.ipynb
+            text: "Wk 7 · Time series"
+          - href: labs/week08/week08_lab_matplotlib.ipynb
+            text: "Wk 8 · Figures"
+          - href: labs/week09/week09_lab_regression_chemistry.ipynb
+            text: "Wk 9 · Regression and chemistry"
+          - href: labs/week10/week10_lab_meeting_modflow.ipynb
+            text: "Wk 10 · Meeting MODFLOW"
+          - href: labs/week11/week11_lab_basin_model.ipynb
+            text: "Wk 11 · Tucson basin model"
+          - href: labs/week12/week12_lab_discretization_boundaries.ipynb
+            text: "Wk 12 · Discretization"
+          - href: labs/week13/week13_lab_transient_stresses.ipynb
+            text: "Wk 13 · Transient stresses"
+          - href: labs/week14/week14_lab_layers_rivers_loading.ipynb
+            text: "Wk 14 · Layers and rivers"
+  sidebar:
+    style: docked
+    collapse-level: 2
+    contents:
+      - section: "Module 1 · Python Foundations"
+        contents:
+          - section: "Week 2 — Getting started"
+            contents:
+              - href: slides/week02_tue_getting_started.qmd
+                text: "Tue 9/1 · Slides"
+              - href: slides/week02_thu_data_types.qmd
+                text: "Thu 9/3 · Slides"
+              - href: labs/week02/week02_lab_python_basics.ipynb
+                text: "Lab · Python basics"
+          - section: "Week 3 — Control flow and functions"
+            contents:
+              - href: slides/week03_tue_control_flow.qmd
+                text: "Tue 9/8 · Slides"
+              - href: slides/week03_thu_functions.qmd
+                text: "Thu 9/10 · Slides"
+              - href: labs/week03/week03_lab_control_flow.ipynb
+                text: "Lab · Control flow and functions"
+          - section: "Week 4 — Arrays and iteration"
+            contents:
+              - href: slides/week04_tue_arrays.qmd
+                text: "Tue 9/15 · Slides"
+              - href: slides/week04_thu_iteration.qmd
+                text: "Thu 9/17 · Slides"
+              - href: labs/week04/week04_lab_arrays_iteration.ipynb
+                text: "Lab · Arrays and iterative solutions"
+          - section: "Week 5 — Introduction to pandas"
+            contents:
+              - href: slides/week05_tue_pandas.qmd
+                text: "Tue 9/22 · Slides"
+              - href: slides/week05_thu_filtering.qmd
+                text: "Thu 9/24 · Slides"
+              - href: labs/week05/week05_lab_pandas.ipynb
+                text: "Lab · Introduction to pandas"
+      - section: "Module 2 · Data Analysis & Visualization"
+        contents:
+          - section: "Week 6 — Real-world data"
+            contents:
+              - href: slides/week06_tue_apis.qmd
+                text: "Tue 9/29 · Slides"
+              - href: slides/week06_thu_cleaning.qmd
+                text: "Thu 10/1 · Slides"
+              - href: labs/week06/week06_lab_real_world_data.ipynb
+                text: "Lab · Working with real-world data"
+          - section: "Week 7 — Time series"
+            contents:
+              - href: slides/week07_tue_datetime.qmd
+                text: "Tue 10/6 · Slides"
+              - href: slides/week07_thu_grouping.qmd
+                text: "Thu 10/8 · Slides"
+              - href: labs/week07/week07_lab_timeseries.ipynb
+                text: "Lab · Time series with pandas"
+          - section: "Week 8 — Figures"
+            contents:
+              - href: slides/week08_tue_figures.qmd
+                text: "Tue 10/13 · Slides"
+              - href: slides/week08_thu_annotation_maps.qmd
+                text: "Thu 10/15 · Slides"
+              - href: labs/week08/week08_lab_matplotlib.ipynb
+                text: "Lab · Figures worth showing people"
+          - section: "Week 9 — Regression and chemistry"
+            contents:
+              - href: slides/week09_tue_regression.qmd
+                text: "Tue 10/20 · Slides"
+              - href: slides/week09_thu_chemistry.qmd
+                text: "Thu 10/22 · Slides"
+              - href: labs/week09/week09_lab_regression_chemistry.ipynb
+                text: "Lab · Regression and water chemistry"
+      - section: "Module 3 · MODFLOW & FloPy"
+        contents:
+          - section: "Week 10 — Meeting MODFLOW"
+            contents:
+              - href: slides/week10_tue_what_is_modflow.qmd
+                text: "Tue 10/27 · Slides"
+              - href: slides/week10_thu_running_it.qmd
+                text: "Thu 10/29 · Slides"
+              - href: labs/week10/week10_lab_meeting_modflow.ipynb
+                text: "Lab · Meeting MODFLOW"
+          - section: "Week 11 — Inputs, outputs, hitting go"
+            contents:
+              - href: slides/week11_tue_inputs_outputs.qmd
+                text: "Tue 11/3 · Slides"
+              - href: slides/week11_thu_budgets.qmd
+                text: "Thu 11/5 · Slides"
+              - href: labs/week11/week11_lab_basin_model.ipynb
+                text: "Lab · A model of the Tucson basin"
+          - section: "Week 12 — Discretization and boundaries"
+            contents:
+              - href: slides/week12_tue_discretization.qmd
+                text: "Tue 11/10 · Slides"
+              - href: slides/week12_thu_unconfined.qmd
+                text: "Thu 11/12 · Slides"
+              - href: labs/week12/week12_lab_discretization_boundaries.ipynb
+                text: "Lab · Discretization and unconfined flow"
+          - section: "Week 13 — Transient stresses"
+            contents:
+              - href: slides/week13_tue_time.qmd
+                text: "Tue 11/17 · Slides"
+              - href: slides/week13_thu_capture_et.qmd
+                text: "Thu 11/19 · Slides"
+              - href: labs/week13/week13_lab_transient_stresses.ipynb
+                text: "Lab · Stresses that change with time"
+          - section: "Week 14 — Layers, rivers, loading"
+            contents:
+              - href: slides/week14_tue_layers_rivers.qmd
+                text: "Tue 11/24 · Slides"
+              - href: labs/week14/week14_lab_layers_rivers_loading.ipynb
+                text: "Lab · Layers, rivers, and inheriting a model"
+  page-footer:
+    left: "HWRS 564a · Fall 2026 · Dr. Andrew Bennett"
+    right: "Built with [Quarto](https://quarto.org)"
+
+# NOTE: quarto-live's `pyodide` / `webr` / `live` keys must be nested under the
+# `live-*` format key in a project file, not at the top level. Quarto's
+# project metadata merging only reaches them there.
+# Slide-only settings live in slides/_metadata.yml.
+format:
+  live-html:
+    theme:
+      - cosmo
+      - theme/ua.scss
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+    html-math-method: mathjax
+    pyodide:
+      packages:
+        - numpy
+        - matplotlib
+        - pandas
+    live:
+      show-hints: true
+      show-solutions: true

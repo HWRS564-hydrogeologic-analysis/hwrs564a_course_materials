@@ -1,0 +1,131 @@
+# Week 11 quiz — covers Week 10 (what MODFLOW is, running it, budgets).
+
+quiz:
+  week: 11
+  title: "Week 11 Quiz"
+  covers: "Week 10 — MODFLOW packages, running a model, the .list file budget"
+  given: "Tuesday, November 3, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "top and botm"
+    text: >
+      An aquifer's top is at 600 m elevation and it is 200 m thick. What should
+      you pass as `botm` to `ModflowDis`?
+    difficulty: 1
+    feedback: >
+      `400.0`. Both `top` and `botm` are **elevations above datum**, not
+      thicknesses. Passing 200 gives a 400 m thick layer; putting the thickness
+      in `top` gives a negative thickness and an error message that mentions
+      neither argument.
+    options:
+      - text: "`400.0`"
+        correct: true
+        feedback: "Correct — 600 minus the thickness."
+      - text: "`200.0`"
+        feedback: >
+          That is the thickness. MODFLOW would build a layer from 600 m down to
+          200 m — twice as thick as you meant.
+      - text: "`800.0`"
+        feedback: "Elevations decrease downward, so the bottom is below the top."
+      - text: "`-200.0`"
+        feedback: "Only if the datum were the land surface, which it isn't here."
+
+  - type: mc
+    title: "The argument everyone omits"
+    text: |
+      This looks correct and has a bug that only shows up when the model fails:
+      <pre>success, buff = mf.run_model(silent=True)
+      assert success, "did not converge:\n" + "\n".join(buff[-20:])</pre>
+    html: true
+    difficulty: 3
+    feedback: >
+      `run_model` needs `report=True`. With `silent=True` alone FloPy returns an
+      **empty** `buff`, so the assertion fires with no diagnostic in the message
+      — at exactly the moment you needed one.
+    options:
+      - text: "`run_model` is missing `report=True`, so `buff` will be empty"
+        correct: true
+        feedback: "Correct. You will see tutorials that omit it."
+      - text: "`silent=True` suppresses the `.list` file"
+        feedback: >
+          It does not. The `.list` file is always written, and it is where the
+          real diagnosis lives.
+      - text: "`write_input()` should be called after `run_model()`"
+        feedback: "The other way round — the input files have to exist before the run."
+      - text: "There is no bug"
+        feedback: >
+          The message will be empty. That is the worst kind of bug: invisible
+          until something else has already gone wrong.
+
+  - type: mc
+    title: "Constant heads and cell centres"
+    text: >
+      A model is 20 columns of 100 m cells, with constant heads of 95 m and 85 m
+      in the first and last columns. Over what distance does the head drop?
+    difficulty: 3
+    feedback: >
+      1,900 m. **A constant head is specified at the cell centre**, not at the
+      model edge, so the flow path runs from the middle of column 0 to the middle
+      of column 19 — 19 cells, not 20. Using 2,000 m gives a flow 5% too low.
+    options:
+      - text: "1,900 m"
+        correct: true
+        feedback: "Correct — centre to centre, one cell shorter than the domain."
+      - text: "2,000 m"
+        feedback: >
+          That is the domain width. There is half a cell of aquifer outside each
+          boundary head that is not part of the flow path.
+      - text: "2,100 m"
+        feedback: "The domain is 2,000 m wide; the flow path cannot be longer."
+      - text: "1,800 m"
+        feedback: "That would be 18 cells — one half-cell too many removed."
+
+  - type: ms
+    title: "The three checks"
+    text: >
+      Select **every** check that should happen on each MODFLOW run.
+    difficulty: 2
+    scoring: RightAnswers
+    feedback: >
+      Check `success` (with `report=True` so the message is useful), check the
+      percent discrepancy in the `.list` file, and — before trusting a problem
+      you can't solve by hand — validate against one you can. Plot appearance is
+      not a check; a colourmap will make any array look plausible.
+    options:
+      - text: "`assert success` after `run_model`"
+        correct: true
+        feedback: "Correct — FloPy does not raise on failure."
+      - text: "The percent discrepancy in the `.list` file is near zero"
+        correct: true
+        feedback: >
+          Correct. A converged model with a 3% discrepancy has an unexplained
+          flux in it.
+      - text: "The model reproduces a case whose answer you already know"
+        correct: true
+        feedback: >
+          Correct — then a later surprise is about the physics you added, not the
+          setup.
+      - text: "The head map looks like a plausible aquifer"
+        feedback: >
+          Not a check. A colourmap makes any array look like a plausible
+          aquifer — that is the point of Week 8.
+
+  - type: tf
+    title: "Recharge on constant-head cells"
+    text: >
+      Recharge applied to a cell with `ibound = -1` contributes to the model's
+      `RECHARGE` budget term.
+    difficulty: 3
+    answer: false
+    feedback: >
+      It is discarded. MODFLOW applies `RCH` only where `ibound > 0`. In the
+      Week 11 model that is 80 of 2,400 cells and 600 m³/d — enough that a
+      budget prediction based on the full domain area will not match.
+    true_feedback: >
+      Not quite — recharge on a constant-head cell is dropped, not counted.
+    false_feedback: >
+      Correct. Predict recharge from the *active* cell count, not the domain area.

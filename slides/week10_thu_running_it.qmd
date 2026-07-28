@@ -1,0 +1,397 @@
+---
+title: "Running it, and believing it"
+subtitle: "HWRS 564a · Week 10 · Thursday, October 29"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+# Builds and runs the Week 10 model at render time. Pyodide cannot execute a
+# compiled Fortran binary, so Weeks 10-14 use the static-figure path (§2.4).
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+ROOT = Path.cwd().parent
+WS = ROOT / "_run" / "week10_slides"
+WS.mkdir(parents=True, exist_ok=True)
+
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), (
+    f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh — the Week 10-14 "
+    "decks execute a model at render time."
+)
+
+NROW, NCOL, DELR = 10, 20, 100.0
+mf = flopy.modflow.Modflow("first", model_ws=str(WS), exe_name=str(MF_EXE))
+flopy.modflow.ModflowDis(mf, 1, NROW, NCOL, delr=DELR, delc=DELR,
+                         top=100.0, botm=0.0, nper=1, steady=True)
+ibound = np.ones((1, NROW, NCOL), dtype=int)
+ibound[:, :, 0] = -1
+ibound[:, :, -1] = -1
+strt = np.full((1, NROW, NCOL), 95.0)
+strt[:, :, -1] = 85.0
+flopy.modflow.ModflowBas(mf, ibound=ibound, strt=strt)
+flopy.modflow.ModflowLpf(mf, hk=10.0, laytyp=0, ipakcb=53)
+flopy.modflow.ModflowPcg(mf)
+flopy.modflow.ModflowOc(mf, stress_period_data={(0, 0): ["save head", "save budget"]})
+mf.write_input()
+success, buff = mf.run_model(silent=True, report=True)
+assert success, "\n".join(buff[-20:])
+head = flopy.utils.HeadFile(str(WS / "first.hds")).get_data()
+profile = head[0, 5, :]
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE = "#AB0520", "#0C234B"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 10, session 2 of 2
+:::
+
+1. `write_input`, `run_model`, and the argument everyone omits
+2. Testing against a solution you already know
+3. The `.list` file, and the number that tells you it went wrong
+4. The water budget
+
+By the end you will know the three checks that go on every model run you ever
+do.
+
+# Running it {background-color="#0C234B"}
+
+## Two lines
+
+```python
+mf.write_input()
+success, buff = mf.run_model(silent=True, report=True)
+```
+
+::: {.fragment}
+`write_input()` turns the FloPy objects into a dozen text files.
+`run_model()` shells out to the compiled binary and captures its output.
+:::
+
+## The three details
+
+::: {.incremental}
+1. **FloPy does not raise when a model fails.** It returns
+   `(success, buff)` and carries on
+2. **`report=True` is not optional** — with `silent=True` alone, `buff` comes
+   back **empty**
+3. `silent=True` only suppresses the console echo; the full log always goes to
+   the `.list` file
+:::
+
+::: {.fragment .due-notice}
+```python
+assert success, "MODFLOW did not converge:\n" + "\n".join(buff[-20:])
+```
+Every run. Every time. Without `report=True` that message is blank.
+:::
+
+## Your turn: spot what's missing
+
+This code runs a model and reports success — and it has a bug that will cost
+somebody a day.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_bug
+options = {
+    "a": "run_model is missing report=True, so buff will be empty",
+    "b": "write_input should come after run_model",
+    "c": "silent=True suppresses the .list file",
+    "d": "there is no bug",
+}
+```
+
+```{pyodide}
+#| exercise: ex_bug
+# mf.write_input()
+# success, buff = mf.run_model(silent=True)
+# assert success, "did not converge:\n" + "\n".join(buff[-20:])
+
+answer = ______
+print(options[answer])
+```
+
+::: {.hint exercise="ex_bug"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The assertion is correct in shape. Think about what will actually be *in* the
+message when it fires.
+:::
+:::
+
+::: {.solution exercise="ex_bug"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+answer = "a"
+```
+
+The code is right in every visible way and the failure message will be empty.
+That is the worst kind of bug: it only shows up when something else has already
+gone wrong, at which point you have no diagnostic and no idea why.
+
+`silent=True` does **not** suppress the `.list` file — that is always written, and
+it is where the real diagnosis lives.
+:::
+:::
+
+# Test what you can predict {background-color="#AB0520"}
+
+## The most important habit in the module
+
+Before you trust a model on a problem you cannot solve by hand, **run it on one
+you can.**
+
+::: {.fragment}
+One layer, two constant heads, no stresses. The solution is a straight line.
+:::
+
+## Does it hold?
+
+```{python}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 3.4
+x = (np.arange(NCOL) + 0.5) * DELR
+straight = np.linspace(profile[0], profile[-1], NCOL)
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.4))
+axes[0].plot(x, profile, "o", color=UA_RED, ms=5, label="MODFLOW")
+axes[0].plot(x, straight, "--", color=UA_BLUE, lw=1.8, label="analytic")
+axes[0].set_xlabel("distance east (m)")
+axes[0].set_ylabel("head (m)")
+axes[0].legend(frameon=False)
+axes[0].grid(alpha=0.3)
+
+axes[1].plot(x, (profile - straight) * 1e12, "s-", color=UA_RED, ms=4)
+axes[1].set_xlabel("distance east (m)")
+axes[1].set_ylabel("difference (picometres)")
+axes[1].set_title("MODFLOW minus analytic")
+axes[1].grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+Agreement to within floating-point noise — the right panel is in **picometres**.
+Grid, units, boundary handling and solver are all confirmed.
+:::
+
+## Why that matters
+
+::: {.incremental}
+- Now, when a later result surprises you, the surprise is about the **physics you
+  added**
+- Not about whether you set the model up correctly
+- Which are very different debugging problems
+:::
+
+::: {.fragment .due-notice}
+This is the same argument as Week 9's: validate against something you already
+know before you trust the thing you don't.
+:::
+
+## But check the arithmetic too
+
+Darcy's law over the 2,000 m domain says **5,000 m³/d**. MODFLOW's budget says
+**5,263 m³/d**.
+
+::: {.fragment}
+A 5% gap. Small enough to look like rounding, large enough to matter.
+:::
+
+::: {.fragment}
+**A constant head is specified at the cell *centre*, not at the model edge.** The
+flow path is 19 cells, not 20 — 1,900 m, not 2,000.
+:::
+
+::: {.fragment}
+$10 \times \dfrac{10}{1900} \times 100{,}000 = 5263$ m³/d. Exact.
+:::
+
+## Your turn: the half-cell
+
+Same idea on a different grid: 250 m cells, 60 columns, heads of 700 m and 620 m
+at the two boundary columns.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_halfcell
+ncol = 60
+delr = 250.0
+east_head, west_head = 700.0, 620.0
+```
+
+```{pyodide}
+#| exercise: ex_halfcell
+naive_distance = ______
+true_distance = ______
+print(f"naive gradient {(east_head - west_head) / naive_distance:.6f}")
+print(f"true gradient  {(east_head - west_head) / true_distance:.6f}")
+print(f"error          {100 * (naive_distance / true_distance - 1):.2f} %")
+```
+
+::: {.hint exercise="ex_halfcell"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The naive distance is the full domain width. The true one is centre-to-centre —
+one cell shorter.
+:::
+:::
+
+::: {.solution exercise="ex_halfcell"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+naive_distance = ncol * delr
+true_distance = (ncol - 1) * delr
+```
+
+15,000 m versus 14,750 m — a 1.7% error. Smaller than the 10-column case, because
+the half-cell at each end is a smaller share of a longer domain.
+
+**The practical rule: a boundary condition sits half a cell inside the edge you
+drew.** On a 250 m grid that is 125 m of slop, and it is the first thing to check
+when a modelled gradient won't match an observed one.
+:::
+:::
+
+# The `.list` file {background-color="#0C234B"}
+
+## Where a failure explains itself
+
+```
+FAILED TO MEET SOLVER CONVERGENCE CRITERIA            1  TIME(S)
+BUDGET PERCENT DISCREPANCY IS -162.7401
+STOPPING SIMULATION
+```
+
+::: {.fragment}
+Two separate facts. The solver gave up, **and** water is not being conserved by a
+factor of more than two.
+:::
+
+::: {.fragment}
+The second number is the one to look at first. A converged model with a 5%
+discrepancy is also broken — it just didn't say so.
+:::
+
+## Reading the budget
+
+```
+           IN:                          OUT:
+     STORAGE =      0.0000        STORAGE =      0.0000
+CONSTANT HEAD =   5263.1582  CONSTANT HEAD =   5263.1582
+    TOTAL IN =   5263.1582      TOTAL OUT =   5263.1582
+    IN - OUT =      0.0000
+PERCENT DISCREPANCY =   0.00
+```
+
+::: {.fragment}
+Every term, in and out, and the discrepancy at the bottom. **Read this every
+time** — it is the only place the model tells you where the water went.
+:::
+
+## Your turn: is this budget acceptable?
+
+Four models converged. Which of their budgets would you report?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_budget
+runs = {
+    "A": 0.00,
+    "B": -0.04,
+    "C": 3.10,
+    "D": -162.74,
+}
+```
+
+```{pyodide}
+#| exercise: ex_budget
+acceptable = [name for name, pct in runs.items() if ______]
+print(f"acceptable: {acceptable}")
+print(f"rejected:   {[n for n in runs if n not in acceptable]}")
+```
+
+::: {.hint exercise="ex_budget"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The convention is well under 1% in absolute value. `abs()` matters — the sign
+tells you which way it is off, not whether it is acceptable.
+:::
+:::
+
+::: {.solution exercise="ex_budget"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+acceptable = [name for name, pct in runs.items() if abs(pct) < 1.0]
+```
+
+`A` and `B`. `C` at 3.1% has converged and is still losing water somewhere —
+usually a boundary condition doing something you did not intend. `D` did not
+converge at all.
+
+**A converged model with a 3% discrepancy is not a slightly worse answer than one
+at 0.04% — it is an answer with an unexplained flux in it**, and until you find
+that flux you do not know which of your budget terms is wrong.
+:::
+:::
+
+## Two formats for the same number
+
+```
+ PERCENT DISCREPANCY =   -162.74   PERCENT DISCREPANCY =   -162.74
+ BUDGET PERCENT DISCREPANCY IS -162.7401
+```
+
+::: {.fragment}
+One uses `=` and repeats itself in two columns; the other uses `IS`.
+:::
+
+::: {.fragment}
+Splitting on `"="` works on the first and crashes on the second. **Take the last
+whitespace-separated token** and both work — the kind of thing real file formats
+always do to you.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+The three checks, on every run
+:::
+
+1. **`success`** — with `report=True`, or the message is empty
+2. **Percent discrepancy** — near zero, or the answer is not conserving mass
+3. **A case you can predict** — before trusting one you can't
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 8 — Regression analysis**, Wednesday 10/28 at 11:59pm
+- **Project 2 analysis, part 2**
+- Finish the Week 10 lab before Tuesday
+
+::: {.kicker}
+Next week
+:::
+
+The real basin: a wellfield, recharge, and a head field you cannot work out by
+hand.

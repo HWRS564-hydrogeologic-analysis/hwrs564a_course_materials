@@ -1,0 +1,55 @@
+week: 7
+title: "Week 7 — Timeseries analysis with pandas"
+dates: "October 6 & 8, 2026"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  Almost everything in hydrology is a time series, and pandas has a whole second
+  personality for them. Give a DataFrame a DatetimeIndex and you can ask for
+  "2015", "every August", "a 30-day average", or "annual totals by water year"
+  without writing a single loop over dates. This week covers resampling and
+  choosing the right aggregation, the water year and why it starts in October,
+  rolling windows and what centring one costs you, and reshaping between long
+  and wide format.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 6 lab notebook"
+    url: "labs/week06/week06_lab_real_world_data.html"
+    site_relative: true
+    note: "Especially Part 5 — we redo that monsoon question properly this week."
+
+class_material:
+  - text: "Tue 10/6 — Slides: Dates, resampling, and the water year"
+    url: "slides/week07_tue_datetime.html"
+    site_relative: true
+  - text: "Thu 10/8 — Slides: Rolling windows, grouping, and reshaping"
+    url: "slides/week07_thu_grouping.html"
+    site_relative: true
+  - text: "Lab notebook — Time series with pandas"
+    url: "labs/week07/week07_lab_timeseries.html"
+    site_relative: true
+  - text: "Cheat sheet — pandas"
+    course_file: "pandas-cheat-sheet.pdf"
+
+assignments:
+  - text: "Quiz 5 — on Week 6 material"
+    quiz: "TBD-week07-quiz"
+    note: "In class, Tuesday 10/6."
+  - text: "Submit: HW 5 — Data retrieval and cleaning"
+    dropbox: "TBD-hw05-dropbox"
+    note: "Due Wednesday 10/7 at 11:59pm."
+
+bonus:
+  - text: "pandas — time series and date functionality"
+    url: "https://pandas.pydata.org/docs/user_guide/timeseries.html"
+  - text: "USGS — what is a water year, and why"
+    url: "https://www.usgs.gov/special-topics/water-science-school/science/water-year"
+  - text: "The North American Monsoon (NOAA)"
+    url: "https://www.weather.gov/twc/monsoon"

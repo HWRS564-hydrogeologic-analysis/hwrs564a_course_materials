@@ -1,0 +1,178 @@
+/*-- scss:defaults --*/
+
+// University of Arizona brand palette
+// https://brand.arizona.edu/applying-the-brand/colors
+$ua-red:        #AB0520;  // Arizona Red
+$ua-blue:       #0C234B;  // Arizona Blue
+$ua-azurite:    #1E5288;
+$ua-oasis:      #378DBD;
+$ua-river:      #007D84;  // the teal already used on the D2L pages
+$ua-sky:        #81D3EB;
+$ua-leaf:       #70B865;
+$ua-bloom:      #EF4056;
+$ua-warm-gray:  #F4EDE5;
+$ua-cool-gray:  #E2E9EB;
+$ua-gray:       #49595E;
+
+$body-color:        #1a1a1a;
+$body-bg:           #ffffff;
+$link-color:        $ua-azurite;
+$code-color:        $ua-red;
+
+$presentation-heading-color:       $ua-blue;
+$presentation-heading-font-weight: 600;
+$presentation-font-size-root:      32px;
+
+// Monospace stack for the code editors — 0/O and 1/l must be distinguishable
+$font-family-monospace: "JetBrains Mono", "Fira Code", "SF Mono", Menlo,
+                        Consolas, monospace;
+
+/*-- scss:rules --*/
+
+// ---------------------------------------------------------------- slides ----
+.reveal .slide-title,
+.reveal h1,
+.reveal h2 {
+  color: $ua-blue;
+}
+
+.reveal h2 {
+  border-bottom: 3px solid $ua-red;
+  padding-bottom: 0.25em;
+  margin-bottom: 0.6em;
+}
+
+.reveal .slide-number {
+  background-color: transparent;
+  color: $ua-gray;
+}
+
+// Inline code should read as code without shouting.
+// The :not() guard keeps UA red off the dark section-break slides, where it
+// would be unreadable — our specificity otherwise beats Quarto's own rule.
+.reveal section:not(.has-dark-background) code:not(.sourceCode) {
+  background-color: $ua-cool-gray;
+  color: $ua-red;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+// Small-caps kicker used for the "Today" / roadmap slides
+.reveal .kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.55em;
+  color: $ua-gray;
+}
+
+// ==========================================================================
+//  quarto-live interactive cells
+//
+//  IMPORTANT: these are quarto-LIVE class names. The similarly-named
+//  `qwebr-*` classes belong to the different quarto-webr extension and do
+//  nothing here. quarto-live emits:
+//
+//    div.exercise-cell                       wrapper for an interactive cell
+//    div.card.exercise-editor                the editor card
+//      .card-header.exercise-editor-header
+//      .card-body.exercise-editor-body
+//        .cm-editor                          the CodeMirror instance
+//    a.btn-exercise-editor.exercise-editor-btn-run-code    "Run Code"
+//    .webr-ojs-exercise.exercise-hint        hint reveal   (both engines
+//    .webr-ojs-exercise.exercise-solution    solution      use webr- here)
+// ==========================================================================
+
+// --- Bootstrap shims ------------------------------------------------------
+// quarto-live styles its widgets with Bootstrap utility classes, but revealjs
+// output does NOT load Bootstrap (format-reveal.ts sets quartoBase: false).
+// Without these, `.d-none` does nothing and every hint and solution is
+// visible on the slide from the moment it loads.
+.reveal {
+  .d-none { display: none !important; }
+  .d-flex { display: flex !important; }
+  .gap-2 { gap: 0.5rem !important; }
+
+  .card {
+    background-color: #fff;
+    border: 1px solid $ua-cool-gray;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background-color: $ua-cool-gray;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.65em;
+    border-bottom: 1px solid mix($ua-cool-gray, #000, 88%);
+  }
+
+  .card-body { padding: 0.4rem 0.6rem; }
+
+  .btn {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 0.6em;
+    line-height: 1.4;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .alert {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid $ua-cool-gray;
+    font-size: 0.7em;
+  }
+}
+
+// --- our styling on top ---------------------------------------------------
+
+// A visible left rail so "your turn" is unmistakable at a glance. Scoped to
+// .exercise-cell so it doesn't also land on hints, solutions, and the loader.
+.reveal .exercise-cell {
+  border-left: 4px solid $ua-red;
+  padding-left: 0.75em;
+}
+
+.reveal .exercise-editor .cm-editor {
+  font-family: $font-family-monospace;
+  font-size: 0.62em;
+}
+
+// The Run Code control is an <a role="button">, not a <button>.
+.reveal a.btn-exercise-editor.exercise-editor-btn-run-code {
+  background-color: $ua-red;
+  border-color: $ua-red;
+  color: #fff;
+
+  &:hover {
+    // mix() rather than darken() — darken() is deprecated in Dart Sass >= 1.79
+    // and removed in 2.0, and a Quarto SCSS layer can't @use "sass:color".
+    background-color: mix($ua-red, #000, 88%);
+    color: #fff;
+  }
+}
+
+.reveal .exercise-hint,
+.reveal .exercise-solution {
+  font-size: 0.85em;
+}
+
+// Hint and solution callouts — note blue, tip teal
+.callout-note { border-left-color: $ua-azurite; }
+.callout-tip  { border-left-color: $ua-river; }
+
+// ------------------------------------------------------------- web pages ----
+.navbar-brand { font-weight: 600; }
+
+h1, h2, h3, h4 { color: $ua-blue; }
+
+// Callout used on the site for "due this week" notices
+.due-notice {
+  background-color: $ua-warm-gray;
+  border-left: 4px solid $ua-red;
+  padding: 0.75em 1em;
+  margin: 1em 0;
+}

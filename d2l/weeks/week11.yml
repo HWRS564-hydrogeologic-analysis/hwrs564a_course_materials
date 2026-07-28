@@ -1,0 +1,53 @@
+week: 11
+title: "Week 11 — Inputs, outputs, and hitting go"
+dates: "November 3 & 5, 2026"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  This week you build a model of the actual Tucson basin: 15 km by 10 km at 250 m
+  resolution, on land-surface elevations fitted to the 1,693 USGS wells you have
+  been working with since Week 5. Add a wellfield and recharge, run it, and map
+  the result. Then read the water budget, which is the only place a model tells
+  you where the pumped water came from — and compare modelled depth to water
+  against 80 real monitoring wells, which is where you find out what your invented
+  boundary conditions cost you.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 10 lab notebook"
+    url: "labs/week10/week10_lab_meeting_modflow.html"
+    site_relative: true
+    note: "Especially Parts 3 and 5 — this week assumes you can run a model and read its budget."
+
+class_material:
+  - text: "Tue 11/3 — Slides: Inputs, outputs, and hitting go"
+    url: "slides/week11_tue_inputs_outputs.html"
+    site_relative: true
+  - text: "Thu 11/5 — Slides: Budgets, and what a model is worth"
+    url: "slides/week11_thu_budgets.html"
+    site_relative: true
+  - text: "Lab notebook — A model of the Tucson basin"
+    url: "labs/week11/week11_lab_basin_model.html"
+    site_relative: true
+
+assignments:
+  - text: "Quiz 9 — on Week 10 material"
+    quiz: "TBD-week11-quiz"
+    note: "In class, Tuesday 11/3."
+  - text: "Submit: HW 9 — MODFLOW structure diagram"
+    dropbox: "TBD-hw09-dropbox"
+    note: "Due Wednesday 11/11 at 11:59pm."
+
+bonus:
+  - text: "FloPy plotting — PlotMapView and PlotCrossSection"
+    url: "https://flopy.readthedocs.io/en/stable/Notebooks/plot_map_view_example.html"
+  - text: "USGS — understanding a groundwater budget"
+    url: "https://www.usgs.gov/special-topics/water-science-school/science/groundwater-storage-and-budget"
+  - text: "Bredehoeft (2002), The Water Budget Myth Revisited"
+    url: "https://doi.org/10.1111/j.1745-6584.2002.tb02511.x"

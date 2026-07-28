@@ -1,0 +1,125 @@
+# Week 10 quiz — covers Week 9 (regression diagnostics, water chemistry).
+
+quiz:
+  week: 10
+  title: "Week 10 Quiz"
+  covers: "Week 9 — regression, residuals, validation, meq/L, charge balance"
+  given: "Tuesday, October 27, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "R-squared and window width"
+    text: >
+      Fitting a well's whole 63-year record gives $R^2 = 0.90$. Refitting the
+      1950–1990 window — where the line visibly fits better — gives
+      $R^2 = 0.67$. Why did it go down?
+    difficulty: 3
+    feedback: >
+      $R^2$ is the fraction of **this sample's** variance the line absorbs. The
+      full record spans a century of decline, so there is enormous variance and
+      it is easy to explain. The 40-year window has less range, so the same
+      quality of fit accounts for a smaller share of it.
+    options:
+      - text: "The shorter window has less variance for the line to explain"
+        correct: true
+        feedback: "Correct — you can raise R-squared just by widening the window."
+      - text: "The shorter fit has fewer data points, so it is less reliable"
+        feedback: >
+          270 points is plenty. Sample size affects the standard error, not
+          this.
+      - text: "The 1950–1990 slope is wrong"
+        feedback: "It is steeper and closer to the truth for that period."
+      - text: "R-squared always decreases when you subset data"
+        feedback: "Not always — it depends on how the range changes."
+
+  - type: mc
+    title: "Reading residuals"
+    text: >
+      A trend fit has $R^2 = 0.90$, but the mean residual by decade runs
+      −9.6, −14.6, −12.5, +9.4, −0.9, −7.8. What does that tell you?
+    difficulty: 3
+    feedback: >
+      The residuals change sign in long runs rather than scattering around
+      zero, which means the straight line is systematically wrong in different
+      eras — the underlying decline curves. A high $R^2$ with structured
+      residuals means you have fitted the wrong model well.
+    options:
+      - text: "The model is structurally wrong despite the high R-squared"
+        correct: true
+        feedback: "Correct — plot residuals every time; the number alone hides this."
+      - text: "The model is fine; residuals always have some pattern"
+        feedback: >
+          Patternless scatter is the expectation. Decade-long runs on one side
+          of zero are not that.
+      - text: "There is too much measurement noise to fit anything"
+        feedback: "Noise would scatter, not run in streaks."
+      - text: "There are outliers that should be removed"
+        feedback: >
+          This is a whole-decade bias, not a few stray points. Removing points
+          would not fix it.
+
+  - type: mc
+    title: "Validating a time series model"
+    text: >
+      You want to know whether a trend model can forecast the next decade.
+      Which validation scheme tells you?
+    difficulty: 3
+    feedback: >
+      Train on everything before a cutoff and test on everything after. Both
+      `train_test_split` with shuffling and random k-fold scatter the test set
+      *through* the training period, so the model is interpolating between
+      points it already fitted rather than forecasting.
+    options:
+      - text: "Train on data before a cutoff year, test on data after it"
+        correct: true
+        feedback: "Correct — this is what `TimeSeriesSplit` automates."
+      - text: "`train_test_split` with `test_size=0.25`"
+        feedback: >
+          It shuffles by default, which makes the test set trivially
+          predictable — MAE of 2 ft instead of the honest 15 ft.
+      - text: "k-fold cross-validation with random folds"
+        feedback: "Same problem as shuffling, repeated k times."
+      - text: "Fit on everything and report R-squared"
+        feedback: "That holds nothing back at all."
+
+  - type: sa
+    title: "Charge balance error"
+    text: |
+      An analysis totals **10.42 meq/L** of cations and **9.93 meq/L** of
+      anions. What is the charge balance error, as a percentage? Give one
+      decimal place and include the sign, e.g. `+3.1`.
+    difficulty: 3
+    input_rows: 1
+    input_width: 15
+    answers:
+      - "+2.4"
+      - "2.4"
+      - "+2.4%"
+      - "2.4%"
+    case_sensitivity: insensitive
+    feedback: >
+      $100 \times (10.42 - 9.93) / (10.42 + 9.93) = +2.4\%$. Comfortably inside
+      the ±5% that counts as acceptable. The positive sign means slightly more
+      cation charge, which is the usual direction when a minor anion goes
+      unmeasured.
+
+  - type: tf
+    title: "What a Piper diagram shows"
+    text: >
+      Two water samples with very different total dissolved solids can plot at
+      exactly the same point on a Piper diagram.
+    difficulty: 2
+    answer: true
+    feedback: >
+      Yes. A Piper diagram plots the *proportions* of major cations and anions,
+      so concentration is invisible — a dilute and a briny water with the same
+      ion ratios land in the same place. That is the point: it groups samples by
+      **water type** rather than by strength.
+    true_feedback: >
+      Correct. If you need concentration too, colour the points by TDS.
+    false_feedback: >
+      They can. Everything on a Piper diagram is a percentage of total charge,
+      so the totals cancel out.

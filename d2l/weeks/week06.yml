@@ -1,0 +1,58 @@
+week: 6
+title: "Week 6 — Working with real-world data"
+dates: "September 29 & October 1, 2026"
+banner: snakes.png
+banner_alt: "Two pythons"
+
+overview: >
+  Last week's dataset was already tidy, because I tidied it. This week you get
+  data the way it actually arrives: from an API, with gaps in it, duplicate
+  rows, and values that look impossible but aren't. We cover pulling records
+  from the USGS, writing a fetch that survives the service being down, and the
+  judgement calls involved in deciding what is missing, what is zero, and which
+  outliers are errors rather than floods. None of those decisions come from the
+  data — they come from knowing what the number means.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 5 lab notebook"
+    url: "labs/week05/week05_lab_pandas.html"
+    site_relative: true
+    note: "Boolean filtering comes back immediately this week."
+  - text: "USGS Water Data for the Nation — browse the Sabino Creek gauge"
+    url: "https://waterdata.usgs.gov/monitoring-location/09484000/"
+    note: "Ten minutes clicking around. You'll pull this record in class."
+
+class_material:
+  - text: "Tue 9/29 — Slides: Where data comes from"
+    url: "slides/week06_tue_apis.html"
+    site_relative: true
+  - text: "Thu 10/1 — Slides: Gaps, duplicates, and outliers"
+    url: "slides/week06_thu_cleaning.html"
+    site_relative: true
+  - text: "Lab notebook — Working with real-world data"
+    url: "labs/week06/week06_lab_real_world_data.html"
+    site_relative: true
+  - text: "Cheat sheet — pandas"
+    course_file: "pandas-cheat-sheet.pdf"
+
+assignments:
+  - text: "Quiz 4 — on Week 5 material"
+    quiz: "TBD-week06-quiz"
+    note: "In class, Tuesday 9/29."
+  - text: "Submit: HW 4 — pandas fundamentals"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Due Wednesday 9/30 at 11:59pm."
+
+bonus:
+  - text: "dataretrieval-python documentation"
+    url: "https://doi-usgs.github.io/dataretrieval-python/"
+  - text: "USGS parameter codes — what 00060 and 72019 mean"
+    url: "https://help.waterdata.usgs.gov/parameter_cd"
+  - text: "Tidy Data (Wickham 2014) — why long format keeps winning"
+    url: "https://vita.had.co.nz/papers/tidy-data.pdf"

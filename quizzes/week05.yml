@@ -1,0 +1,141 @@
+# Week 5 quiz — covers Week 4 (numpy arrays, axis, bisection, time stepping).
+#
+#     python quizzes/build_d2l_csv.py quizzes/week05.yml
+
+quiz:
+  week: 5
+  title: "Week 5 Quiz"
+  covers: "Week 4 — numpy arrays, aggregation, bisection, explicit vs implicit"
+  given: "Tuesday, September 22, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  # ------------------------------------------------------------ 1. concept ---
+  - type: mc
+    title: "What axis collapses"
+    text: |
+      `heads` has shape `(4, 6)`. What is the shape of `heads.mean(axis=0)`?
+    difficulty: 2
+    feedback: >
+      `(6,)`. `axis=` names the dimension that gets **collapsed**. Collapsing
+      axis 0 — the four rows — leaves one value per column, so six of them.
+    options:
+      - text: "`(6,)`"
+        correct: true
+        feedback: "Correct — the rows disappear, leaving one value per column."
+      - text: "`(4,)`"
+        feedback: >
+          That's `axis=1`. The axis you name is the one that goes away, not the
+          one you keep.
+      - text: "`(4, 6)`"
+        feedback: "An aggregation always removes a dimension unless you ask it not to."
+      - text: "`()` — a single number"
+        feedback: "That's `heads.mean()` with no axis at all."
+
+  # ------------------------------------------------- 2. predict the output ---
+  - type: mc
+    title: "Boolean mask sum"
+    text: |
+      What does this print?
+      <pre>import numpy as np
+      heads = np.array([412.1, 405.7, 402.6, 408.9])
+      print((heads &lt; 406.0).sum())</pre>
+    html: true
+    difficulty: 2
+    feedback: >
+      `2` — the values 405.7 and 402.6. Summing a boolean array counts the
+      `True`s, because `True` is 1. This is how you count cells meeting a
+      condition without a loop.
+    options:
+      - text: "`2`"
+        correct: true
+        feedback: "Correct — two values are below 406, and `True` sums as 1."
+      - text: "`808.3`"
+        feedback: >
+          That's the sum of the *values* that pass. The mask itself holds
+          booleans, not the numbers.
+      - text: "`True`"
+        feedback: "`.sum()` on a boolean array gives a count, not a single boolean."
+      - text: "`[False, True, True, False]`"
+        feedback: "That's the mask before `.sum()` is applied to it."
+
+  # ------------------------------------------------------- 3. concept --------
+  - type: mc
+    title: "Bisection prerequisite"
+    text: >
+      Bisection is guaranteed to find a root. What does it require of the two
+      starting points you hand it?
+    difficulty: 2
+    feedback: >
+      The function must have **opposite signs** at the two endpoints. That is
+      what guarantees a root lies between them. Bisection cannot start without
+      a genuine bracket, which is why a good implementation raises rather than
+      returning nonsense.
+    options:
+      - text: "`f` must have opposite signs at the two points"
+        correct: true
+        feedback: "Correct — a sign change is the whole guarantee."
+      - text: "They must be within one tolerance of each other"
+        feedback: >
+          Backwards — that is the *stopping* condition, not the starting one.
+      - text: "One of them must be close to the root"
+        feedback: >
+          No. Bisection is indifferent to how good your guesses are; it only
+          needs the root to be between them.
+      - text: "`f` must be differentiable"
+        feedback: >
+          Newton's method needs a derivative. Bisection needs only continuity
+          and a sign change — which is why it works where Newton fails.
+
+  # ---------------------------------------------------------- 4. numeric -----
+  - type: sa
+    title: "Stability limit"
+    text: |
+      A linear reservoir has $k = 8$ day$^{-1}$. Above what time step, in days,
+      does the explicit (forward Euler) scheme **diverge**?
+      Give your answer as a decimal, e.g. `0.35`.
+    difficulty: 3
+    input_rows: 1
+    input_width: 15
+    answers:
+      - "0.25"
+      - ".25"
+    case_sensitivity: insensitive
+    feedback: >
+      $\Delta t > 2/k = 2/8 = 0.25$ days. The step factor is
+      $(1 - k\Delta t)$; once its magnitude passes 1 the solution grows every
+      step. Between $1/k$ and $2/k$ it oscillates but still decays, which is
+      the more dangerous band because it looks like noise rather than failure.
+
+  # ------------------------------------------------------- 5. multiselect ----
+  - type: ms
+    title: "Explicit vs implicit"
+    text: >
+      Select **every** statement that is true of the implicit (backward Euler)
+      scheme compared with the explicit one.
+    difficulty: 3
+    scoring: RightAnswers
+    feedback: >
+      Implicit is unconditionally stable and requires a solve at each step, but
+      it is not more accurate — it is damped, and at a large time step it
+      returns a smooth, plausible, wrong answer without complaint. That is
+      precisely why MODFLOW can hand you a converged result at a time step far
+      too coarse to mean anything.
+    options:
+      - text: "It is stable for any positive time step"
+        correct: true
+        feedback: "Correct — the factor $1/(1 + k\\Delta t)$ is always between 0 and 1."
+      - text: "It costs more per step, because the new value appears on both sides"
+        correct: true
+        feedback: "Correct — you have to solve for it rather than just evaluate."
+      - text: "It fails quietly rather than loudly when the time step is too big"
+        correct: true
+        feedback: >
+          Correct, and this is the one that matters. Checking that the answer
+          stops changing when you halve the time step is your job.
+      - text: "It is more accurate than explicit at the same time step"
+        feedback: >
+          No — it is damped. At $k\\Delta t = 1.5$ implicit gives 40.0 where the
+          true answer is 22.3. Stable is not the same as accurate.

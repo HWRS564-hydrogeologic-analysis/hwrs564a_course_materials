@@ -1,0 +1,368 @@
+---
+title: "Gaps, duplicates, and outliers"
+subtitle: "HWRS 564a · Week 6 · Thursday, October 1"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 6, session 2 of 2
+:::
+
+1. Missing, zero, and not-measured — three different things
+2. Drop, fill, or interpolate, and how to choose
+3. Duplicates, and the ones `.duplicated()` won't find
+4. Outliers: which are errors and which are floods
+
+The theme: **none of these decisions come from the data.** They come from
+knowing what the number means.
+
+# Three kinds of nothing {background-color="#0C234B"}
+
+## They are not the same
+
+| Value | Means |
+|---|---|
+| `NaN` | we don't know |
+| `0.0` | we know, and it was zero |
+| row absent | nobody measured that day |
+
+::: {.fragment}
+Sabino Creek, 2005–2024: **7,305 days, 2,569 of them at exactly zero.**
+:::
+
+::: {.fragment}
+That is a third of the record, and it is not an error. The creek is ephemeral.
+:::
+
+## What conflating them costs
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 10
+import numpy as np, pandas as pd
+
+# a toy month: dry for three weeks, then a monsoon storm
+q = pd.Series([0.0]*21 + [12.4, 88.0, 210.0, 45.0, 8.2, 1.1, 0.0, 0.0, 0.0])
+
+print(f"mean, all days       {q.mean():8.2f} cfs")
+print(f"mean, flowing days   {q[q > 0].mean():8.2f} cfs")
+print(f"median, all days     {q.median():8.2f} cfs")
+```
+
+::: {.fragment}
+Three defensible numbers, three different questions. If you `dropna()` your way
+to a "clean" series and take a mean, you have silently answered the second
+question while appearing to answer the first.
+:::
+
+## Your turn: which is it?
+
+The water-level record has a 4.2-year gap. Decide what that gap *is*.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_gap
+options = {
+    "a": "missing data — fill it in",
+    "b": "a period nobody measured — leave it",
+    "c": "the well was dry — record zeros",
+}
+```
+
+```{pyodide}
+#| exercise: ex_gap
+answer = ______
+print(options[answer])
+```
+
+::: {.hint exercise="ex_gap"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Manual water-level readings are made by somebody driving out with a steel tape.
+What does a four-year gap in that record most likely mean about the aquifer?
+:::
+:::
+
+::: {.solution exercise="ex_gap"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+answer = "b"
+```
+
+Nothing happened to the aquifer. Somebody stopped visiting — funding, staff
+turnover, a locked gate. The water table went on doing whatever it was doing and
+nobody wrote it down.
+
+Filling that gap invents four years of observations. Recording zeros would claim
+the well went dry, which is a completely different and much more alarming
+statement.
+:::
+:::
+
+# Drop, fill, interpolate {background-color="#AB0520"}
+
+## Three strategies, one series
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 9
+import numpy as np, pandas as pd
+
+s = pd.Series([36.5, np.nan, 41.2, np.nan, np.nan, 52.8, 55.1])
+
+print("original    ", s.tolist())
+print("dropna      ", s.dropna().round(2).tolist())
+print("fillna(mean)", s.fillna(s.mean()).round(2).tolist())
+print("interpolate ", s.interpolate().round(2).tolist())
+```
+
+::: {.fragment}
+Look at position 1. `fillna(mean)` put **46.4** between 36.5 and 41.2 — a rise
+that never happened. Mean-filling a trending series invents reversals.
+:::
+
+## How to choose
+
+| Situation | Do |
+|---|---|
+| a few scattered gaps in a smooth quantity | interpolate |
+| a long gap, or a variable that jumps | leave it |
+| you need every row and the gap is short | interpolate, and say so |
+| you are about to take a mean | nothing — `.mean()` skips `NaN` already |
+
+::: {.fragment .due-notice}
+**The method depends on the physics, not on the shape of the DataFrame.** A
+water table moves smoothly and interpolates fine. A week missing during a
+monsoon does not — a straight line through it draws a flood that may not have
+happened.
+:::
+
+## Your turn: pick the strategy
+
+Daily streamflow, and the gauge failed for nine days in August.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_strategy
+choices = {
+    "interpolate": "draw a straight line across the nine days",
+    "leave": "leave them as NaN and say so in the caption",
+    "zero": "assume no flow",
+}
+```
+
+```{pyodide}
+#| exercise: ex_strategy
+plan = ______
+print(choices[plan])
+```
+
+::: {.hint exercise="ex_strategy"}
+::: {.callout-note collapse="false"}
+## Hint
+
+August is the monsoon. What is the chance that the nine missing days were a
+smooth ramp between their neighbours?
+:::
+:::
+
+::: {.solution exercise="ex_strategy"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+plan = "leave"
+```
+
+A nine-day gap in the monsoon could contain the largest flood of the year or
+nothing at all, and the two neighbours cannot tell you which. Interpolating
+commits you to "nothing happened"; zeros commit you to it even harder.
+
+Leaving the gap costs you nine days of record and keeps every downstream
+statistic honest. **`NaN` is a perfectly good answer** — it propagates, and that
+is a feature.
+:::
+:::
+
+# Duplicates {background-color="#0C234B"}
+
+## The ones you'll miss
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 10
+import pandas as pd
+
+df = pd.DataFrame({
+    "site_no": ["A-14", "A-14", "B-07"],
+    "date":    ["2019-04-02", "2019-04-02", "2019-04-02"],
+    "depth_ft": [86.4, 86.9, 41.2],      # same well, same day, different numbers
+})
+
+print("exact duplicates:      ", df.duplicated().sum())
+print("duplicate site+date:   ", df.duplicated(subset=["site_no", "date"]).sum())
+```
+
+::: {.fragment}
+A plain `.duplicated()` finds **nothing**, because the depths differ. But one
+well cannot have two water levels on one day — and that pair is exactly the
+problem worth finding.
+:::
+
+::: {.fragment}
+**Always pass `subset=`** with the columns that ought to identify a row.
+:::
+
+# Outliers {background-color="#AB0520"}
+
+## The standard test, and what it says here
+
+The interquartile rule: flag anything beyond $Q_1 - 1.5\,\text{IQR}$ or
+$Q_3 + 1.5\,\text{IQR}$.
+
+::: {.fragment}
+Applied to twenty years of Sabino Creek: **20% of the record is an outlier.**
+:::
+
+::: {.fragment}
+The method hasn't failed. It assumes roughly symmetric data, and a creek that is
+dry half the year is nothing of the sort. On that record, *any flow at all* is
+far from the median.
+:::
+
+## Two questions, not one
+
+::: {.columns}
+::: {.column width="50%"}
+**Is it unusual?**
+
+A statistical question. IQR, z-score, whatever you like.
+
+Answer: 2,450 cfs is very unusual.
+:::
+
+::: {.column width="50%"}
+**Is it wrong?**
+
+A physical question. Statistics cannot answer it.
+
+Answer: no. It was a monsoon flood on 2 August 2006.
+:::
+:::
+
+::: {.fragment .due-notice}
+Drop that day as an outlier and you have deleted the single most important
+observation in the record for anyone sizing a culvert.
+:::
+
+## What a real error looks like
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 8
+import pandas as pd
+
+depths = pd.Series([31.2, 45.8, -999.0, 52.1, 48.9])
+
+print("physically impossible:", depths[depths < 0].tolist())
+```
+
+::: {.fragment}
+`-999` is a **sentinel** — a fixed-width-file convention for "no data" that
+pandas has no way to recognise. It arrives as a number and behaves like one.
+:::
+
+::: {.fragment}
+A depth to water cannot be negative. That test comes from knowing what the
+number *means*, and it is the only one that justifies deleting anything.
+:::
+
+## Your turn: which of these do you delete?
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_outlier
+observations = {
+    1: "discharge of 2450 cfs on 2 Aug 2006, 2000x the median",
+    2: "depth to water of -9999 ft",
+    3: "pH of 12.4 in a basin-fill aquifer",
+    4: "depth to water of 0.0 ft after a wet winter",
+}
+```
+
+```{pyodide}
+#| exercise: ex_outlier
+delete = ______            # a list of the numbers you would remove
+keep = [k for k in observations if k not in delete]
+print("delete:", [observations[k] for k in delete])
+print("keep:  ", [observations[k] for k in keep])
+```
+
+::: {.hint exercise="ex_outlier"}
+::: {.callout-note collapse="false"}
+## Hint 1
+
+Two of these are physically impossible or near enough. Two are extreme but
+possible.
+:::
+:::
+
+::: {.hint exercise="ex_outlier"}
+::: {.callout-note collapse="false"}
+## Hint 2
+
+A depth to water of zero means the water table is at the land surface. Unusual
+in Tucson — but is it *impossible*?
+:::
+:::
+
+::: {.solution exercise="ex_outlier"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+delete = [2, 3]
+```
+
+- **2** is a sentinel, not a measurement.
+- **3** — pH 12.4 is caustic. Not groundwater; a calibration or transcription error.
+- **1** is a real flood, and the most valuable day in the record.
+- **4** is a real possibility near a stream after a wet winter. Flag it, go and
+  look at the field notes, but do not delete it because it surprised you.
+
+The asymmetry matters: **deleting a real observation is worse than keeping a
+suspect one**, because a kept outlier is visible in the figure and a deleted one
+is gone forever.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- `NaN`, `0`, and an absent row mean three different things
+- Interpolate a smooth quantity; leave a gap that might hide an event
+- `duplicated(subset=...)`, or you'll miss the duplicates that matter
+- Statistics finds values to *look at*; physics finds values to *remove*
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 4 — pandas fundamentals**, Wednesday 9/30 at 11:59pm
+- Finish the Week 6 lab before Tuesday
+
+::: {.kicker}
+Next week
+:::
+
+Time series properly: resampling, the water year, and rolling windows.

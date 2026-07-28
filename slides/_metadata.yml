@@ -1,0 +1,60 @@
+# Directory-level metadata: applies to every .qmd in slides/
+# Keeps per-deck front matter down to title / subtitle / date.
+
+format:
+  live-revealjs:
+    theme:
+      - default
+      - ../theme/ua.scss
+    slide-number: c/t
+    show-slide-number: all
+    progress: true
+    history: true
+    hash-type: number
+    incremental: false
+    code-line-numbers: true
+    code-copy: true
+    highlight-style: github
+    html-math-method: mathjax
+    width: 1280
+    height: 800
+    margin: 0.06
+    center-title-slide: true
+    footer: "HWRS 564a · Fall 2026"
+    # Drop a UA logo at assets/ua_logo.png and uncomment to brand every deck.
+    # logo: ../assets/ua_logo.png
+    pyodide:
+      # Preloaded into the browser runtime, so the first Run Code of a session
+      # doesn't stall on a wheel download. Keep this to what live cells
+      # actually import — every entry is added to the startup cost of EVERY
+      # deck, and Pyodide can still resolve an unlisted import on demand.
+      #   check with:
+      #   grep -A99 '{pyodide}' slides/*.qmd | grep -oE 'import (numpy|pandas|scipy)' 
+      packages:
+        - numpy
+        - matplotlib
+        - pandas
+      cell-options:
+        autorun: false
+        timelimit: 45
+        min-lines: 4
+        # Deliberately NOT set:
+        #   completion  — pyodide registers no completion source, so it's a no-op
+        #   persist     — keys localStorage on the cell's sequential index, so
+        #                 adding a cell restores students' old code into the
+        #                 wrong cells. Not worth the bug.
+    live:
+      show-hints: true
+      show-solutions: true
+
+# Weeks 10-14 execute a MODFLOW model at render time, which is slow. Freezing
+# means a deck only re-executes when its own source changes, so editing Week 3
+# doesn't re-solve Week 11's model. The `_freeze/` directory MUST be committed
+# — otherwise CI starts from a cold cache and the saving is lost.
+execute:
+  freeze: auto
+
+# `engine: jupyter` is Quarto's default for Python. Declared explicitly so it
+# is obvious that non-live ```{python} blocks execute at render time while
+# ```{pyodide} blocks execute in the student's browser.
+engine: jupyter

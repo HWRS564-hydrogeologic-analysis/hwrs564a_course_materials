@@ -1,0 +1,131 @@
+# Week 13 quiz — covers Week 12 (discretization, ibound, unconfined, dry cells).
+
+quiz:
+  week: 13
+  title: "Week 13 Quiz"
+  covers: "Week 12 — grid convergence, ibound, laytyp, dry cells"
+  given: "Tuesday, November 17, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "The number that never converges"
+    text: >
+      You halve the cell size twice and the head in the pumping cell keeps
+      falling. What does that mean?
+    difficulty: 3
+    feedback: >
+      It is expected. Head near a well varies logarithmically with distance, so
+      the *average* head over a cell containing a well depends on the cell size
+      forever. Regional heads and the water budget do converge — the pumping-cell
+      head does not, and **it is not a well water level**.
+    options:
+      - text: "Nothing is wrong — a pumping-cell head never fully converges"
+        correct: true
+        feedback: >
+          Correct, and reporting it as a predicted well water level is a common
+          error in modelling reports.
+      - text: "The grid is still too coarse; keep refining until it stabilises"
+        feedback: "It will never stabilise. Refining forever makes it deeper forever."
+      - text: "The model is diverging and the solver has failed"
+        feedback: "All three runs converged and closed their budgets."
+      - text: "The pumping rate is too high"
+        feedback: >
+          The behaviour is the same at any rate — it comes from the logarithmic
+          head distribution, not the magnitude.
+
+  - type: mc
+    title: "ibound = 0 versus hk = 0"
+    text: >
+      What is the difference between setting a cell's `ibound` to 0 and setting
+      its `hk` to 0?
+    difficulty: 3
+    feedback: >
+      `ibound = 0` removes the cell from the equations entirely — no head is
+      computed and it appears as `1e30` in output. A cell with `hk = 0` is still
+      solved for, still has a head, and still contributes a row to the matrix.
+      The first is a statement about the domain, the second about the geology.
+    options:
+      - text: "`ibound = 0` removes the cell from the equations; `hk = 0` does not"
+        correct: true
+        feedback: "Correct — and `hk = 0` will make your solver miserable."
+      - text: "They are equivalent"
+        feedback: >
+          They produce very different matrices and very different solver
+          behaviour.
+      - text: "`hk = 0` removes the cell; `ibound = 0` just makes it impermeable"
+        feedback: "Backwards."
+      - text: "`ibound = 0` fixes the head at `strt`"
+        feedback: "That is `ibound = -1`, constant head."
+
+  - type: ms
+    title: "A model that won't converge"
+    text: >
+      A convertible-layer (`laytyp=1`) model fails to converge. Select **every**
+      response that is a reasonable *first* thing to try.
+    difficulty: 3
+    scoring: RightAnswers
+    feedback: >
+      Raise `mxiter` — the outer iterations are what recompute transmissivity,
+      and 20 is rarely enough for a nonlinear problem. A starting head closer to
+      the expected answer also helps. Tightening `hclose` makes convergence
+      *harder*, and switching to `laytyp=0` changes the physics to something you
+      have reason to believe is wrong.
+    options:
+      - text: "Raise `mxiter` from 20 to 200"
+        correct: true
+        feedback: "Correct — usually the one that matters for a nonlinear solve."
+      - text: "Set the initial heads closer to the expected answer"
+        correct: true
+        feedback: >
+          Correct, and worth doing — though in the lab it is not sufficient on
+          its own.
+      - text: "Lower `hclose` from 1e-3 to 1e-9"
+        feedback: >
+          That makes convergence harder to achieve, not easier.
+      - text: "Switch `laytyp` back to 0"
+        feedback: >
+          That changes the aquifer from unconfined to confined — a physical claim,
+          not a solver fix.
+
+  - type: mc
+    title: "Reading a sentinel"
+    text: >
+      A head array contains values of `-1e+30` and `1e+30`. What are they?
+    difficulty: 2
+    feedback: >
+      `-1e30` marks **dry** cells (head fell below the layer bottom, `laytyp=1`);
+      `+1e30` marks **inactive** cells (`ibound = 0`). Similar-looking numbers,
+      different problems, and neither is a head.
+    options:
+      - text: "`-1e30` is dry; `+1e30` is inactive"
+        correct: true
+        feedback: "Correct. Mask both before plotting or computing statistics."
+      - text: "`-1e30` is inactive; `+1e30` is dry"
+        feedback: "The other way round."
+      - text: "Both mean the cell went dry"
+        feedback: "Only the negative one does."
+      - text: "Both are solver failures"
+        feedback: >
+          Inactive cells are perfectly normal — you asked for them with
+          `ibound = 0`.
+
+  - type: tf
+    title: "Masking dry cells"
+    text: >
+      Once you have masked the dry cells to `NaN`, it is acceptable to report the
+      remaining heads as the model result.
+    difficulty: 3
+    answer: false
+    feedback: >
+      A dry cell is almost always a **modelling failure**, not a result. A dry
+      cell stops conducting, so its neighbours dry too, and MODFLOW-2005 cannot
+      rewet it. The honest readings are: the pumping is unphysical, the layer
+      bottom is too shallow, you needed more layers, or you should be using
+      MODFLOW-NWT.
+    true_feedback: >
+      Masking makes the figure readable; it does not make the answer valid.
+    false_feedback: >
+      Correct. Mask them so you can *see* the problem, then fix the problem.

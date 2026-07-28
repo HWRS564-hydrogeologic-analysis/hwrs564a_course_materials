@@ -1,0 +1,345 @@
+---
+title: "Major-ion chemistry"
+subtitle: "HWRS 564a · Week 9 · Thursday, October 22"
+author: "Dr. Andrew Bennett"
+---
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 9, session 2 of 2
+:::
+
+1. Why mg/L is the wrong unit for chemistry
+2. Charge balance — the check to run before anything else
+3. The Piper diagram, and what a trend across it means
+4. Reading the Tucson basin's flow path out of 42 analyses
+
+# Units {background-color="#0C234B"}
+
+## mg/L is a reporting convention
+
+A lab reports **mg/L** because that is what it weighed. Chemistry happens in
+**moles of charge**.
+
+$$\text{meq/L} = \frac{\text{mg/L}}{\text{molar mass} / |\text{charge}|}$$
+
+::: {.fragment}
+The denominator is the **equivalent weight**. For Ca²⁺ it is
+$40.08 / 2 = 20.04$; for Na⁺ it is $22.99 / 1 = 22.99$.
+:::
+
+## Why it matters
+
+::: {.fragment}
+100 mg/L of Ca²⁺ and 100 mg/L of Na⁺ are **not** comparable amounts.
+:::
+
+```{pyodide}
+#| autorun: false
+#| min-lines: 6
+ca_mg_per_l = 100.0
+na_mg_per_l = 100.0
+
+print(f"Ca: {ca_mg_per_l / 20.04:.2f} meq/L")
+print(f"Na: {na_mg_per_l / 22.99:.2f} meq/L")
+```
+
+::: {.fragment}
+Calcium carries about 15% more charge for the same mass, because it is divalent
+and lighter per unit charge. Compare the mg/L numbers and you will misjudge
+every ratio in the analysis.
+:::
+
+## Your turn: convert an analysis
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_meq
+import pandas as pd
+
+EQ_WEIGHT = {"Ca": 20.04, "Mg": 12.15, "Na": 22.99, "K": 39.10,
+             "Cl": 35.45, "SO4": 48.03, "HCO3": 61.02}
+
+sample = pd.Series({"Ca": 120.0, "Mg": 57.0, "Na": 83.0, "K": 5.1,
+                    "Cl": 38.0, "SO4": 490.0, "HCO3": 162.0})
+```
+
+```{pyodide}
+#| exercise: ex_meq
+meq = ______
+print(meq.round(3))
+print(f"\ndominant cation: {meq[['Ca', 'Mg', 'Na', 'K']].idxmax()}")
+```
+
+::: {.hint exercise="ex_meq"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`EQ_WEIGHT` is a dict and `sample` is a Series with the same keys. Making a
+Series from the dict lets you divide the two elementwise, matching on index.
+:::
+:::
+
+::: {.solution exercise="ex_meq"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+meq = sample / pd.Series(EQ_WEIGHT)
+```
+
+Calcium dominates at 5.99 meq/L. In mg/L, sulfate looked like the biggest number
+in the analysis at 490 — but that is an anion, and it is heavy. **Never rank ions
+by their mg/L values.**
+:::
+:::
+
+# Charge balance {background-color="#AB0520"}
+
+## Water is electrically neutral
+
+So the analysis has to be, too:
+
+$$\text{CBE} = 100 \times \frac{\sum\text{cations} - \sum\text{anions}}{\sum\text{cations} + \sum\text{anions}}$$
+
+::: {.incremental}
+- within **±5%** — acceptable
+- **±5–10%** — look closely
+- beyond **±10%** — do not plot it
+:::
+
+::: {.fragment}
+It never balances exactly. Measurement error is real and there are always
+unmeasured species — nitrate, fluoride, iron.
+:::
+
+## What a bad balance is telling you
+
+::: {.incremental}
+- An ion was mismeasured
+- An ion you *didn't* measure is important
+- A unit is wrong — µg/L instead of mg/L is the classic
+- A transcription error
+:::
+
+::: {.fragment .due-notice}
+None of those are fixed by plotting anyway. A sample that doesn't balance lands
+somewhere wrong on the Piper diagram, and looks exactly as confident as the
+samples that do.
+:::
+
+## Your turn: check the analysis
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_cbe
+import pandas as pd
+meq = pd.Series({"Ca": 5.988, "Mg": 4.691, "Na": 3.610, "K": 0.130,
+                 "Cl": 1.072, "SO4": 10.202, "HCO3": 2.655})
+```
+
+```{pyodide}
+#| exercise: ex_cbe
+cations = meq[["Ca", "Mg", "Na", "K"]].sum()
+anions = ______
+cbe = ______
+print(f"cations {cations:.2f}  anions {anions:.2f}  CBE {cbe:+.1f}%")
+```
+
+::: {.hint exercise="ex_cbe"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Anions are Cl, SO₄ and HCO₃. The formula is the difference over the sum, times
+100 — and it keeps its sign.
+:::
+:::
+
+::: {.solution exercise="ex_cbe"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+anions = meq[["Cl", "SO4", "HCO3"]].sum()
+cbe = 100 * (cations - anions) / (cations + anions)
+```
+
+`+1.2%` — a good analysis. The positive sign means slightly more cation charge
+than anion charge, which is the usual direction when a minor anion goes
+unmeasured.
+
+Across all 42 Tucson analyses the median is **1.7%** and 40 of 42 are inside
+±5%. These are careful data.
+:::
+:::
+
+# The Piper diagram {background-color="#0C234B"}
+
+## What it shows
+
+Three panels: **cations** bottom-left, **anions** bottom-right, and a diamond
+above projecting both together.
+
+::: {.incremental}
+- Everything is a **percentage** of total cation or anion charge
+- So concentration is invisible — a dilute and a briny water plot together if
+  their *proportions* match
+- Which means it groups samples by **water type**, not by strength
+:::
+
+## Tucson basin, 42 analyses {.smaller}
+
+```{python}
+#| echo: false
+#| fig-align: center
+# Executes at `quarto render`, not in the browser — Pyodide cannot run
+# wqchartpy (playbook §2.4). The cell must *display* the image rather than
+# merely write it: `freeze` caches cell outputs, not side-effect files, so a
+# markdown link to a generated PNG breaks on the first cached CI render.
+import contextlib
+import io
+import tempfile
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
+from IPython.display import Image
+from wqchartpy import triangle_piper
+
+ROOT = Path.cwd().parent
+EQ_WEIGHT = {"Ca": 20.04, "Mg": 12.15, "Na": 22.99, "K": 39.10,
+             "Cl": 35.45, "SO4": 48.03, "HCO3": 61.02}
+
+chem = pd.read_csv(ROOT / "data" / "tucson_chemistry.csv", dtype={"site_no": str})
+piper_input = chem.assign(
+    Sample=chem["site_no"], Label="Tucson basin", Color="#AB0520",
+    Marker="o", Size=34, Alpha=0.65, CO3=0.0,
+    TDS=chem[list(EQ_WEIGHT)].sum(axis=1),
+)
+piper_input["pH"] = piper_input["pH"].fillna(7.5)
+
+tmp = Path(tempfile.mkdtemp()) / "piper"
+
+# wqchartpy prints the absolute path it saved to, which would land on the
+# slide and leak whoever's home directory built it. Swallow stdout.
+with contextlib.redirect_stdout(io.StringIO()):
+    triangle_piper.plot(piper_input, unit="mg/L", figname=str(tmp), figformat="png")
+
+plt.close("all")   # it also leaves its figure open; without this the inline
+                   # backend renders it a second time and the slide shows two
+Image(filename=str(tmp) + ".png", width=620)
+```
+
+*42 complete major-ion analyses, USGS wells in the Tucson basin, 1964–1992.
+Most cluster near the Ca and HCO₃ corners, with a tail toward Na and SO₄+Cl.*
+
+## Reading it
+
+::: {.columns}
+::: {.column width="50%"}
+**Cations (left)**
+
+Cluster toward the Ca corner, tail running to Na.
+
+25–63% Ca; 24–61% Na.
+:::
+
+::: {.column width="50%"}
+**Anions (right)**
+
+Tight at the HCO₃ corner, tail toward SO₄ and Cl.
+
+10–86% HCO₃.
+:::
+:::
+
+::: {.fragment}
+Ca-HCO₃ grading into Na-SO₄-Cl. **That pairing is a textbook evolution trend.**
+:::
+
+## Why that trend exists
+
+::: {.incremental}
+1. Recharge enters at the mountain front and dissolves carbonate → **Ca-HCO₃**
+2. Moving down-basin, Ca exchanges for Na on clay surfaces → **Na rises**
+3. Evaporative concentration and evaporite dissolution add SO₄ and Cl
+:::
+
+::: {.fragment .due-notice}
+The diagram is showing you the **flow path**. Samples arrange themselves along
+the direction groundwater moves, which is why a Piper diagram is a hydrogeology
+tool and not just a plotting style.
+:::
+
+## Your turn: classify a sample
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_type
+import pandas as pd
+meq = pd.Series({"Ca": 1.20, "Mg": 0.45, "Na": 6.80, "K": 0.15,
+                 "Cl": 4.90, "SO4": 3.10, "HCO3": 0.55})
+```
+
+```{pyodide}
+#| exercise: ex_type
+cation_pct = meq[["Ca", "Mg", "Na", "K"]] / meq[["Ca", "Mg", "Na", "K"]].sum() * 100
+anion_pct = ______
+
+water_type = f"{cation_pct.idxmax()}-{anion_pct.idxmax()}"
+print(f"{water_type} water")
+print(f"  cations: {cation_pct.round(0).to_dict()}")
+print(f"  anions:  {anion_pct.round(0).to_dict()}")
+```
+
+::: {.hint exercise="ex_type"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Same shape as the cation line, with the three anions instead.
+:::
+:::
+
+::: {.solution exercise="ex_type"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+anion_pct = meq[["Cl", "SO4", "HCO3"]] / meq[["Cl", "SO4", "HCO3"]].sum() * 100
+```
+
+**Na-Cl water** — 79% sodium, 57% chloride. That is the far end of the evolution
+trend: a sample that has travelled a long way, or one that has been affected by
+evaporite dissolution or return flow.
+
+Nothing in the percentages tells you *which*. For that you need the
+concentration, the location, and the depth — which is why a Piper diagram is the
+start of an interpretation, not the end of one.
+:::
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Convert mg/L to meq/L before comparing anything
+- Charge balance first; a sample that doesn't close doesn't get plotted
+- A Piper diagram shows proportions, so it groups by water type not strength
+- The Tucson basin's samples line up along its flow path
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 7 — Figure portfolio**, Wednesday 10/21 at 11:59pm
+- Finish the Week 9 lab before Tuesday
+
+::: {.kicker}
+Next week
+:::
+
+MODFLOW. We stop inferring what the aquifer is doing from patterns in
+observations, and start building a model of it.

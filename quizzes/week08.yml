@@ -1,0 +1,110 @@
+# Week 8 quiz — covers Week 7 (datetime, resample, rolling, reshaping).
+
+quiz:
+  week: 8
+  title: "Week 8 Quiz"
+  covers: "Week 7 — DatetimeIndex, resample, water year, rolling, long vs wide"
+  given: "Tuesday, October 13, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "Water year membership"
+    text: >
+      A storm falls on **12 November 2013**. Which water year does it belong to?
+    difficulty: 2
+    feedback: >
+      Water year 2014. Water years run 1 October to 30 September and are named
+      for the year they **end** in, so October, November and December belong to
+      the following water year.
+    options:
+      - text: "2014"
+        correct: true
+        feedback: "Correct — November 2013 is two months into water year 2014."
+      - text: "2013"
+        feedback: >
+          That is the calendar year. Getting this wrong shifts your whole
+          record by three months.
+      - text: "It depends on the basin"
+        feedback: "The 1 October convention is standard across the US."
+      - text: "2015"
+        feedback: "Off by one in the other direction."
+
+  - type: mc
+    title: "resample or groupby"
+    text: >
+      You want the long-term average January flow — all twenty Januaries
+      averaged into a single number. Which do you use?
+    difficulty: 3
+    feedback: >
+      `q.groupby(q.index.month).mean()`. That collapses across years and gives
+      12 values — a climatology. `resample("ME")` keeps time moving forward and
+      would give you 240 separate months.
+    options:
+      - text: "`q.groupby(q.index.month).mean()`"
+        correct: true
+        feedback: "Correct — grouping on the month number collapses across years."
+      - text: "`q.resample(\"ME\").mean()`"
+        feedback: "That gives 240 individual months, not 12 long-term averages."
+      - text: "`q.resample(\"YE\").mean()`"
+        feedback: "That gives one value per year, losing the seasonality entirely."
+      - text: "`q.rolling(30).mean()`"
+        feedback: "A rolling window smooths along the record; it doesn't collapse it."
+
+  - type: mc
+    title: "What center=True costs"
+    text: >
+      You compute `q.rolling(365, center=True).mean()` on a 20-year daily
+      record. How many values come back as `NaN`?
+    difficulty: 3
+    feedback: >
+      About 364 — roughly 182 at each end, because half the window falls
+      outside the data. That is honest. The alternative, `center=False`, labels
+      each average with the *last* day of its window and shifts every feature
+      later by half a window.
+    options:
+      - text: "About 364, split between the two ends"
+        correct: true
+        feedback: "Correct — half a window at each end."
+      - text: "None — pandas pads the ends"
+        feedback: "It does not pad. It returns `NaN` where the window is incomplete."
+      - text: "About 182, all at the start"
+        feedback: >
+          That is what `center=False` does. Centring costs you both ends.
+      - text: "365, all at the start"
+        feedback: "Close to the `center=False` behaviour, but centring splits the loss."
+
+  - type: sa
+    title: "Reshaping sparsity"
+    text: |
+      9,046 measurements from 80 wells pivot into a table of 4,731 dates by 80
+      wells. What **percentage** of the cells in that wide table are empty?
+      Round to the nearest whole percent.
+    difficulty: 3
+    input_rows: 1
+    input_width: 12
+    answers:
+      - "98"
+      - "98%"
+    case_sensitivity: insensitive
+    feedback: >
+      $4731 \times 80 = 378{,}480$ cells for 9,046 measurements, so 97.6% —
+      98% — are empty. No two wells were visited on the same days. That
+      sparsity is why irregular field data should stay in long format as long
+      as possible.
+
+  - type: tf
+    title: "Frequency strings"
+    text: >
+      In current pandas, `q.resample("M").mean()` is the correct way to
+      resample to monthly means.
+    difficulty: 1
+    answer: false
+    feedback: >
+      It is `"ME"` (month end) since pandas 2.2. The bare `"M"` raises a
+      `FutureWarning` and will eventually stop working. Older tutorials all use
+      the old spelling.
+    true_feedback: "That was right before pandas 2.2; it is now `\"ME\"`."
+    false_feedback: "Correct — `\"ME\"` and `\"YE\"` are the current spellings."

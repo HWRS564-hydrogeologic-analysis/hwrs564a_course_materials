@@ -1,0 +1,123 @@
+# Week 12 quiz — covers Week 11 (building a real model, budgets, comparison).
+
+quiz:
+  week: 12
+  title: "Week 12 Quiz"
+  covers: "Week 11 — a real basin model, water budgets, depletion vs capture"
+  given: "Tuesday, November 10, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "Head is not depth to water"
+    text: >
+      MODFLOW reports a head of 661.6 m in a cell where the land surface is at
+      745 m. What is the modelled depth to water?
+    difficulty: 1
+    feedback: >
+      83.4 m. MODFLOW works in head as an **elevation**; a well measures depth
+      **below land surface**. Converting between them needs a land-surface array
+      that MODFLOW knows nothing about.
+    options:
+      - text: "83.4 m"
+        correct: true
+        feedback: "Correct — land surface minus head."
+      - text: "661.6 m"
+        feedback: "That is the head elevation, not a depth."
+      - text: "1,406.6 m"
+        feedback: "You added them. Depth counts downward from the surface."
+      - text: "It cannot be determined from head alone"
+        feedback: >
+          True in general — but here you were given the land surface, which is
+          the only extra thing needed.
+
+  - type: mc
+    title: "Steady state and storage"
+    text: >
+      A well has pumped for 50 years and heads are now steady. Where is its water
+      coming from?
+    difficulty: 3
+    feedback: >
+      Capture — recharge or throughflow diverted to the well. At steady state
+      storage contributes exactly **zero** by definition, so every litre is being
+      taken from somewhere else in the budget: a river, a spring, ET, or a
+      neighbour's throughflow.
+    options:
+      - text: "Capture — flow that was going somewhere else"
+        correct: true
+        feedback: >
+          Correct. A well at steady state is not using up an aquifer; it is
+          redirecting a flux.
+      - text: "Storage — a withdrawal from the aquifer's stock"
+        feedback: >
+          Storage is zero at steady state, by definition of steady state.
+      - text: "Both equally"
+        feedback: "Storage contributes nothing once heads stop changing."
+      - text: "Nowhere — the model is unphysical"
+        feedback: "It is entirely physical; the budget will show you the sources."
+
+  - type: sa
+    title: "Predicting the budget"
+    text: |
+      A well pumps 20,000 m³/d. Recharge over the active cells supplies
+      17,400 m³/d. At steady state, how much must come from the constant-head
+      boundaries, in m³/d?
+    difficulty: 2
+    input_rows: 1
+    input_width: 15
+    answers:
+      - "2600"
+      - "2,600"
+      - "2600 m3/d"
+    case_sensitivity: insensitive
+    feedback: >
+      2,600 m³/d. At steady state the terms have to sum to zero, so whatever the
+      well takes beyond recharge is captured from flow that would otherwise have
+      left the basin. Predicting this before running the model is how you find
+      out it is doing something you did not intend.
+
+  - type: mc
+    title: "Why the model doesn't match"
+    text: >
+      A model's median depth to water is 150 m; the median across 80 monitored
+      wells is 45 m. Which explanation is *least* likely?
+    difficulty: 3
+    feedback: >
+      A coding error is least likely — the model converged and closed its budget.
+      The other three are all real and all present: invented boundary heads,
+      wells that cluster where water is shallow, and uniform properties standing
+      in for a heterogeneous basin.
+    options:
+      - text: "There is a bug in the FloPy code"
+        correct: true
+        feedback: >
+          Correct — least likely. The model ran and balanced; the problem is what
+          you told it, not whether it did what you said.
+      - text: "The boundary heads were invented rather than fitted"
+        feedback: >
+          Very likely — those two numbers set the entire head field.
+      - text: "The monitored wells cluster where water is shallowest"
+        feedback: >
+          Very likely. This is the Week 8 sampling problem again.
+      - text: "Uniform K and uniform recharge over a heterogeneous basin"
+        feedback: "Very likely, and the usual first target for calibration."
+
+  - type: tf
+    title: "What calibration buys you"
+    text: >
+      A model calibrated to reproduce observed heads can be relied on to predict
+      the aquifer's future response to new pumping.
+    difficulty: 3
+    answer: false
+    feedback: >
+      A calibrated model is **one consistent explanation** of the observations,
+      not the truth. Several different parameter sets typically fit the same
+      observations equally well and disagree about the future — which is why a
+      defensible report brackets the range rather than reporting one run.
+    true_feedback: >
+      Calibration constrains the model; it does not make it unique. Different
+      parameter sets can fit equally well and predict differently.
+    false_feedback: >
+      Correct, and this is why Project 3 asks for a comparison of scenarios.
