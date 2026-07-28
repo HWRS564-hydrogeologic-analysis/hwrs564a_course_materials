@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Week 13 Lab — Stresses that change with time – HWRS 564a</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../slides/week14_tue_layers_rivers.html" rel="next">
+<link href="../../slides/week13_thu_capture_et.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8e547040071cf592dc7cfc6331f26ef2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-59c257db3cfdf6564f03842988c1a639.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">HWRS 564a</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-slides" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Slides</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-slides">    
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_tue_getting_started.html">
+ <span class="dropdown-text">Wk 2 · Getting started with Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_thu_data_types.html">
+ <span class="dropdown-text">Wk 2 · Data types &amp; sequences</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_tue_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_thu_functions.html">
+ <span class="dropdown-text">Wk 3 · Functions and modules</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_tue_arrays.html">
+ <span class="dropdown-text">Wk 4 · Arrays with numpy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_thu_iteration.html">
+ <span class="dropdown-text">Wk 4 · Iterative solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_tue_pandas.html">
+ <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_thu_filtering.html">
+ <span class="dropdown-text">Wk 5 · Filtering and first plots</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_tue_apis.html">
+ <span class="dropdown-text">Wk 6 · Where data comes from</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_thu_cleaning.html">
+ <span class="dropdown-text">Wk 6 · Gaps, duplicates, outliers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_tue_datetime.html">
+ <span class="dropdown-text">Wk 7 · Dates and resampling</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_thu_grouping.html">
+ <span class="dropdown-text">Wk 7 · Rolling and reshaping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_tue_figures.html">
+ <span class="dropdown-text">Wk 8 · Figures worth showing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_thu_annotation_maps.html">
+ <span class="dropdown-text">Wk 8 · Annotation and maps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_tue_regression.html">
+ <span class="dropdown-text">Wk 9 · Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_thu_chemistry.html">
+ <span class="dropdown-text">Wk 9 · Major-ion chemistry</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week10_tue_what_is_modflow.html">
+ <span class="dropdown-text">Wk 10 · What MODFLOW is</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week10_thu_running_it.html">
+ <span class="dropdown-text">Wk 10 · Running it</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week11_tue_inputs_outputs.html">
+ <span class="dropdown-text">Wk 11 · Inputs, outputs, hitting go</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week11_thu_budgets.html">
+ <span class="dropdown-text">Wk 11 · Budgets</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week12_tue_discretization.html">
+ <span class="dropdown-text">Wk 12 · Discretization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week12_thu_unconfined.html">
+ <span class="dropdown-text">Wk 12 · Unconfined flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_tue_time.html">
+ <span class="dropdown-text">Wk 13 · Time and storage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_thu_capture_et.html">
+ <span class="dropdown-text">Wk 13 · Capture and ET</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week14_tue_layers_rivers.html">
+ <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/week02/week02_lab_python_basics.html">
+ <span class="dropdown-text">Wk 2 · Python basics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week03/week03_lab_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow and functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week04/week04_lab_arrays_iteration.html">
+ <span class="dropdown-text">Wk 4 · Arrays and iteration</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week05/week05_lab_pandas.html">
+ <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week06/week06_lab_real_world_data.html">
+ <span class="dropdown-text">Wk 6 · Real-world data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week07/week07_lab_timeseries.html">
+ <span class="dropdown-text">Wk 7 · Time series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_lab_matplotlib.html">
+ <span class="dropdown-text">Wk 8 · Figures</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week09/week09_lab_regression_chemistry.html">
+ <span class="dropdown-text">Wk 9 · Regression and chemistry</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week10/week10_lab_meeting_modflow.html">
+ <span class="dropdown-text">Wk 10 · Meeting MODFLOW</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week11/week11_lab_basin_model.html">
+ <span class="dropdown-text">Wk 11 · Tucson basin model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week12/week12_lab_discretization_boundaries.html">
+ <span class="dropdown-text">Wk 12 · Discretization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week13/week13_lab_transient_stresses.html">
+ <span class="dropdown-text">Wk 13 · Transient stresses</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week14/week14_lab_layers_rivers_loading.html">
+ <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 3 · MODFLOW &amp; FloPy</li><li class="breadcrumb-item"><a href="../../slides/week13_tue_time.html">Week 13 — Transient stresses</a></li><li class="breadcrumb-item"><a href="../../labs/week13/week13_lab_transient_stresses.html">Lab · Stresses that change with time</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 1 · Python Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 — Getting started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_tue_getting_started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_thu_data_types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/3 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week02/week02_lab_python_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Python basics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 — Control flow and functions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_tue_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_thu_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week03/week03_lab_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Control flow and functions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 — Arrays and iteration</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_tue_arrays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_thu_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/17 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week04/week04_lab_arrays_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Arrays and iterative solutions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 5 — Introduction to pandas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_tue_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_thu_filtering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/24 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Introduction to pandas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 2 · Data Analysis &amp; Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 6 — Real-world data</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_tue_apis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/29 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_thu_cleaning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week06/week06_lab_real_world_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Working with real-world data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 7 — Time series</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_tue_datetime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/6 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_thu_grouping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week07/week07_lab_timeseries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Time series with pandas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 8 — Figures</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_tue_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/13 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_thu_annotation_maps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_lab_matplotlib.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Figures worth showing people</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 9 — Regression and chemistry</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_tue_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/20 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_thu_chemistry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week09/week09_lab_regression_chemistry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Regression and water chemistry</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 3 · MODFLOW &amp; FloPy</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 10 — Meeting MODFLOW</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_tue_what_is_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/27 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_thu_running_it.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/29 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week10/week10_lab_meeting_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Meeting MODFLOW</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 11 — Inputs, outputs, hitting go</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week11_tue_inputs_outputs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/3 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week11_thu_budgets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/5 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week11/week11_lab_basin_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · A model of the Tucson basin</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 12 — Discretization and boundaries</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week12_tue_discretization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week12_thu_unconfined.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/12 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week12/week12_lab_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Discretization and unconfined flow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 13 — Transient stresses</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_tue_time.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/17 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_thu_capture_et.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/19 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week13/week13_lab_transient_stresses.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab · Stresses that change with time</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 14 — Layers, rivers, loading</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week14_tue_layers_rivers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/24 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week14/week14_lab_layers_rivers_loading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Layers, rivers, and inheriting a model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link active" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#part-1-setup" id="toc-part-1-setup" class="nav-link" data-scroll-target="#part-1-setup">Part 1 — Setup</a></li>
+  <li><a href="#part-2-time-in-modflow" id="toc-part-2-time-in-modflow" class="nav-link" data-scroll-target="#part-2-time-in-modflow">Part 2 — Time in MODFLOW</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
+  </ul></li>
+  <li><a href="#part-3-storage-sy-and-ss" id="toc-part-3-storage-sy-and-ss" class="nav-link" data-scroll-target="#part-3-storage-sy-and-ss">Part 3 — Storage: <code>sy</code> and <code>ss</code></a>
+  <ul class="collapse">
+  <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">YOUR TURN 2</a></li>
+  </ul></li>
+  <li><a href="#part-4-a-transient-run" id="toc-part-4-a-transient-run" class="nav-link" data-scroll-target="#part-4-a-transient-run">Part 4 — A transient run</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
+  <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
+  </ul></li>
+  <li><a href="#part-5-where-transient-water-comes-from" id="toc-part-5-where-transient-water-comes-from" class="nav-link" data-scroll-target="#part-5-where-transient-water-comes-from">Part 5 — Where transient water comes from</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">YOUR TURN 5</a></li>
+  </ul></li>
+  <li><a href="#part-6-evapotranspiration" id="toc-part-6-evapotranspiration" class="nav-link" data-scroll-target="#part-6-evapotranspiration">Part 6 — Evapotranspiration</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-6" id="toc-your-turn-6" class="nav-link" data-scroll-target="#your-turn-6">YOUR TURN 6</a></li>
+  </ul></li>
+  <li><a href="#before-you-leave" id="toc-before-you-leave" class="nav-link" data-scroll-target="#before-you-leave">Before you leave</a></li>
+  <li><a href="#whats-due" id="toc-whats-due" class="nav-link" data-scroll-target="#whats-due">What’s due</a></li>
+  <li><a href="#next-week" id="toc-next-week" class="nav-link" data-scroll-target="#next-week">Next week</a></li>
+  <li><a href="#stuck" id="toc-stuck" class="nav-link" data-scroll-target="#stuck">Stuck?</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 3 · MODFLOW &amp; FloPy</li><li class="breadcrumb-item"><a href="../../slides/week13_tue_time.html">Week 13 — Transient stresses</a></li><li class="breadcrumb-item"><a href="../../labs/week13/week13_lab_transient_stresses.html">Lab · Stresses that change with time</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Week 13 Lab — Stresses that change with time</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>HWRS 564a · Fall 2026</strong></p>
+<p>Every model so far has been <strong>steady state</strong>: the answer is what the aquifer settles down to if the stresses never change. That is a useful question and it is not the one water managers ask.</p>
+<p>They ask <em>when</em>. When does the water table reach the pump intake? How long until the cone reaches the county line? How much of what we pump this year comes out of storage rather than out of recharge?</p>
+<p>Answering those needs a <strong>transient</strong> model, which means time steps, storage properties, and stresses that vary — and one new package, <code>EVT</code>, for evapotranspiration.</p>
+<section id="how-to-use-this-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
+<p>Run each cell with <strong>Shift+Enter</strong>. Cells marked <strong><code># YOUR TURN</code></strong> have something for you to write. Cells marked <strong><code># CHECK</code></strong> verify your answer — if they run without complaint, you’re right.</p>
+<blockquote class="blockquote">
+<p><strong>Before you submit anything all semester:</strong> <em>Kernel → Restart Kernel and Run All Cells</em>. A notebook that only works when run out of order is not finished.</p>
+</blockquote>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this notebook you can:</p>
+<ol type="1">
+<li>Set up multiple stress periods with <code>perlen</code>, <code>nstp</code>, and <code>steady</code></li>
+<li>Explain what <code>sy</code> and <code>ss</code> are and when each one applies</li>
+<li>Vary a well’s rate between stress periods</li>
+<li>Read a time series of heads out of the <code>.hds</code> file</li>
+<li>Use the budget to say how much pumped water came out of storage</li>
+<li>Add <code>EVT</code> and explain what the extinction depth does</li>
+</ol>
+<hr>
+</section>
+<section id="part-1-setup" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-setup">Part 1 — Setup</h2>
+<div id="c002" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> flopy</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(p <span class="cf">for</span> p <span class="kw">in</span> Path.cwd().parents <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists())</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>DATA <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"data"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>MF_EXE <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"modflow"</span> <span class="op">/</span> <span class="st">"mf2005"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> MF_EXE.exists(), (</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"MODFLOW binary not found at </span><span class="sc">{</span>MF_EXE<span class="sc">}</span><span class="ss">. Run ./postbuild.sh from a terminal."</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>RUN <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"_run"</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>land_surface <span class="op">=</span> np.loadtxt(DATA <span class="op">/</span> <span class="st">"tucson_grid_top.csv"</span>, delimiter<span class="op">=</span><span class="st">","</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>NROW, NCOL, DELR <span class="op">=</span> <span class="dv">40</span>, <span class="dv">60</span>, <span class="fl">250.0</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>AQ_TOP, AQ_BOT <span class="op">=</span> <span class="fl">600.0</span>, <span class="fl">400.0</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>WELL_ROW, WELL_COL <span class="op">=</span> <span class="dv">20</span>, <span class="dv">30</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>UA_RED, UA_BLUE, UA_SKY <span class="op">=</span> <span class="st">"#AB0520"</span>, <span class="st">"#0C234B"</span>, <span class="st">"#81D3EB"</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"ready"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="part-2-time-in-modflow" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-time-in-modflow">Part 2 — Time in MODFLOW</h2>
+<p>MODFLOW splits a simulation into <strong>stress periods</strong>, and each stress period into <strong>time steps</strong>.</p>
+<ul>
+<li>A <strong>stress period</strong> is an interval over which every stress is constant. Change the pumping rate and you need a new stress period.</li>
+<li>A <strong>time step</strong> is a solver interval within a stress period. More steps means a more accurate transient response and a slower run.</li>
+</ul>
+<p>Three arrays in <code>DIS</code> control it:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>perlen</code></td>
+<td>length of each stress period, in the model’s time units</td>
+</tr>
+<tr class="even">
+<td><code>nstp</code></td>
+<td>number of time steps within each stress period</td>
+</tr>
+<tr class="odd">
+<td><code>steady</code></td>
+<td>one flag per period: steady state or transient</td>
+</tr>
+</tbody>
+</table>
+<div id="c004" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># steady state, then a 30-day period with DAILY steps, then ten annual periods</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>perlen <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fl">30.0</span>] <span class="op">+</span> [<span class="fl">365.0</span>] <span class="op">*</span> <span class="dv">10</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>nstp <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">30</span>] <span class="op">+</span> [<span class="dv">4</span>] <span class="op">*</span> <span class="dv">10</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>steady <span class="op">=</span> [<span class="va">True</span>] <span class="op">+</span> [<span class="va">False</span>] <span class="op">*</span> <span class="dv">11</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>NPER <span class="op">=</span> <span class="bu">len</span>(perlen)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>total_days <span class="op">=</span> <span class="bu">sum</span>(p <span class="cf">for</span> p, s <span class="kw">in</span> <span class="bu">zip</span>(perlen, steady) <span class="cf">if</span> <span class="kw">not</span> s)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>NPER<span class="sc">}</span><span class="ss"> stress periods, </span><span class="sc">{</span><span class="bu">sum</span>(nstp)<span class="sc">}</span><span class="ss"> time steps"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"transient simulation covers </span><span class="sc">{</span>total_days<span class="sc">:,.0f}</span><span class="ss"> days = </span><span class="sc">{</span>total_days <span class="op">/</span> <span class="dv">365</span><span class="sc">:.1f}</span><span class="ss"> years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Why the odd 30-day period with daily steps?</strong> Because the interesting part of a transient response happens at the start, and a quarterly time step steps straight over it. Fine early steps cost almost nothing — the whole run is a few seconds — and without them Part 5 of this notebook has nothing to show.</p>
+<p>Choosing time steps is like choosing cell size: <strong>resolve the thing you came to look at.</strong></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Why start with a steady-state period?</strong> A transient model needs an initial head field, and any field you invent will be out of equilibrium with the boundaries — so the model spends its first years relaxing towards balance and you cannot tell that artificial drift apart from the response you are trying to measure.</p>
+<p>Running one steady-state period first, with no pumping, produces heads that are <em>already</em> in equilibrium. Everything after that is the response to the stress you added. <strong>This is standard practice and skipping it is a common error.</strong></p>
+</blockquote>
+<section id="your-turn-1" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-1">YOUR TURN 1</h3>
+<p>Confirm the time discretization is what you think it is.</p>
+<ul>
+<li><code>n_transient_periods</code> — how many periods are transient</li>
+<li><code>days_per_annual_step</code> — length of one time step in the <em>annual</em> periods</li>
+<li><code>total_output_times</code> — how many head snapshots a run will produce, if you save every time step</li>
+</ul>
+<div id="c007" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n_transient_periods <span class="op">=</span> ...</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>days_per_annual_step <span class="op">=</span> ...</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>total_output_times <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c008" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_transient_periods <span class="op">==</span> <span class="dv">11</span>, <span class="ss">f"got </span><span class="sc">{</span>n_transient_periods<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(days_per_annual_step <span class="op">-</span> <span class="fl">91.25</span>) <span class="op">&lt;</span> <span class="fl">0.01</span>, <span class="ss">f"got </span><span class="sc">{</span>days_per_annual_step<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> total_output_times <span class="op">==</span> <span class="dv">71</span>, <span class="ss">f"got </span><span class="sc">{</span>total_output_times<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_transient_periods<span class="sc">}</span><span class="ss"> transient periods"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>days_per_annual_step<span class="sc">:.2f}</span><span class="ss"> days per step in the annual periods"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>total_output_times<span class="sc">}</span><span class="ss"> head snapshots"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-3-storage-sy-and-ss" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-storage-sy-and-ss">Part 3 — Storage: <code>sy</code> and <code>ss</code></h2>
+<p>A steady-state model needs no storage properties — nothing is changing. A transient one does, because water has to come from somewhere while heads fall.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Symbol</th>
+<th>Applies when</th>
+<th>Typical value</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Specific yield</strong></td>
+<td><code>sy</code></td>
+<td>unconfined — pores actually drain</td>
+<td>0.05 – 0.30</td>
+<td>dimensionless</td>
+</tr>
+<tr class="even">
+<td><strong>Specific storage</strong></td>
+<td><code>ss</code></td>
+<td>confined — water expands, matrix compresses</td>
+<td>1e-6 – 1e-4</td>
+<td>1/m</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Those differ by three to four orders of magnitude.</strong> A confined aquifer releases almost no water per metre of head decline, which is why confined drawdown propagates so fast and so far.</p>
+<div id="c010" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>SY, SS <span class="op">=</span> <span class="fl">0.15</span>, <span class="fl">1e-5</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cell_area <span class="op">=</span> DELR <span class="op">*</span> DELR</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>thickness <span class="op">=</span> AQ_TOP <span class="op">-</span> AQ_BOT</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>unconfined_release <span class="op">=</span> SY <span class="op">*</span> cell_area <span class="op">*</span> <span class="fl">1.0</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>confined_release <span class="op">=</span> SS <span class="op">*</span> cell_area <span class="op">*</span> thickness <span class="op">*</span> <span class="fl">1.0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"water released by 1 m of decline in one </span><span class="sc">{</span>DELR<span class="sc">:.0f}</span><span class="ss"> m cell:"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  unconfined (sy = </span><span class="sc">{</span>SY<span class="sc">}</span><span class="ss">)      </span><span class="sc">{</span>unconfined_release<span class="sc">:10,.1f}</span><span class="ss"> m3"</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  confined   (ss = </span><span class="sc">{</span>SS<span class="sc">:.0e}</span><span class="ss">)  </span><span class="sc">{</span>confined_release<span class="sc">:10,.1f}</span><span class="ss"> m3"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  ratio                      </span><span class="sc">{</span>unconfined_release <span class="op">/</span> confined_release<span class="sc">:10,.0f}</span><span class="ss">x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="your-turn-2" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-2">YOUR TURN 2</h3>
+<p>Our model is confined (<code>laytyp=0</code>), so <code>ss</code> is what governs it. Work out how much water the whole aquifer can supply from storage before the answer has to come from somewhere else.</p>
+<ul>
+<li><code>storage_per_metre</code> — water released by 1 m of head decline across all 2,400 cells</li>
+<li><code>days_of_pumping</code> — how many days of 20,000 m³/d that would cover</li>
+</ul>
+<div id="c012" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>PUMP_RATE <span class="op">=</span> <span class="fl">20000.0</span>     <span class="co"># m3/d</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>storage_per_metre <span class="op">=</span> ...</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>days_of_pumping <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c013" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(storage_per_metre <span class="op">-</span> <span class="fl">300_000.0</span>) <span class="op">&lt;</span> <span class="fl">10.0</span>, <span class="ss">f"got </span><span class="sc">{</span>storage_per_metre<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(days_of_pumping <span class="op">-</span> <span class="fl">15.0</span>) <span class="op">&lt;</span> <span class="fl">0.5</span>, <span class="ss">f"got </span><span class="sc">{</span>days_of_pumping<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"storage released per metre of decline: </span><span class="sc">{</span>storage_per_metre<span class="sc">:,.0f}</span><span class="ss"> m3"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"that covers </span><span class="sc">{</span>days_of_pumping<span class="sc">:.1f}</span><span class="ss"> days of pumping at </span><span class="sc">{</span>PUMP_RATE<span class="sc">:,.0f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>About two weeks, as an upper bound.</strong> Even if the entire aquifer dropped a metre, storage could only cover a fortnight of this well. That is why a confined aquifer reaches something close to steady state so quickly: there is very little in storage, so the cone has to keep expanding until it intercepts enough recharge or boundary flow to balance the well.</p>
+<p>Run the same numbers unconfined and storage per metre goes up by a factor of <code>sy / (ss * b)</code> = <code>0.15 / (1e-5 x 200)</code> = <strong>75</strong>. That is over three years of pumping available from storage rather than two weeks. <strong>Same well, same conductivity, completely different timescale</strong> — set by the storage property alone.</p>
+<hr>
+</section>
+</section>
+<section id="part-4-a-transient-run" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-a-transient-run">Part 4 — A transient run</h2>
+<p>The well switches on at the start of year 1 and stays on.</p>
+<div id="c016" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>WS <span class="op">=</span> RUN <span class="op">/</span> <span class="st">"week13_transient"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>WS.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mf <span class="op">=</span> flopy.modflow.Modflow(<span class="st">"trans"</span>, model_ws<span class="op">=</span><span class="bu">str</span>(WS), exe_name<span class="op">=</span><span class="bu">str</span>(MF_EXE))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowDis(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    mf, <span class="dv">1</span>, NROW, NCOL, delr<span class="op">=</span>DELR, delc<span class="op">=</span>DELR,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    top<span class="op">=</span>AQ_TOP, botm<span class="op">=</span>AQ_BOT,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    nper<span class="op">=</span>NPER, perlen<span class="op">=</span>perlen, nstp<span class="op">=</span>nstp, steady<span class="op">=</span>steady,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>ibound <span class="op">=</span> np.ones((<span class="dv">1</span>, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>ibound[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>strt <span class="op">=</span> np.full((<span class="dv">1</span>, NROW, NCOL), <span class="fl">660.0</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>strt[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="fl">620.0</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>strt[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">700.0</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowBas(mf, ibound<span class="op">=</span>ibound, strt<span class="op">=</span>strt)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># storage properties matter now</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowLpf(mf, hk<span class="op">=</span><span class="fl">12.0</span>, laytyp<span class="op">=</span><span class="dv">0</span>, sy<span class="op">=</span>SY, ss<span class="op">=</span>SS, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># stress period 0 is the no-pumping steady state; the well runs from period 1</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>wel_spd <span class="op">=</span> {p: [[<span class="dv">0</span>, WELL_ROW, WELL_COL, <span class="fl">0.0</span> <span class="cf">if</span> p <span class="op">==</span> <span class="dv">0</span> <span class="cf">else</span> <span class="op">-</span>PUMP_RATE]]</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>           <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">range</span>(NPER)}   <span class="co"># period 0 is the no-pumping steady state</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowWel(mf, stress_period_data<span class="op">=</span>wel_spd, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowRch(mf, rech<span class="op">=</span>{p: <span class="fl">1.2e-4</span> <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">range</span>(NPER)}, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowPcg(mf)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowOc(</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    mf,</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    stress_period_data<span class="op">=</span>{(p, s): [<span class="st">"save head"</span>, <span class="st">"save budget"</span>]</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">range</span>(NPER) <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(nstp[p])},</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>mf.write_input()</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>success, buff <span class="op">=</span> mf.run_model(silent<span class="op">=</span><span class="va">True</span>, report<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> success, <span class="st">"MODFLOW did not converge:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(buff[<span class="op">-</span><span class="dv">20</span>:])</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"converged"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note the <code>stress_period_data</code> dictionary: <strong>one entry per stress period</strong>, keyed by period number. That is how any stress varies in time — the well package, the recharge package, all of them take the same shape.</p>
+<div id="c018" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hds <span class="op">=</span> flopy.utils.HeadFile(<span class="bu">str</span>(WS <span class="op">/</span> <span class="st">"trans.hds"</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> np.array(hds.get_times())</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(times)<span class="sc">}</span><span class="ss"> output times, from </span><span class="sc">{</span>times[<span class="dv">0</span>]<span class="sc">:.1f}</span><span class="ss"> to </span><span class="sc">{</span>times[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:,.1f}</span><span class="ss"> days"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"first few: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(times[:<span class="dv">5</span>], <span class="dv">1</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="your-turn-3" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
+<p>Pull the head history at the wellfield out of the file.</p>
+<ul>
+<li><code>well_history</code> — head in the well cell at every output time, as a 1D array</li>
+<li><code>years</code> — the output times converted to years since pumping began (the steady-state period occupies day 0–1, so subtract 1 day then divide by 365)</li>
+<li><code>total_drawdown</code> — head at the first output time minus head at the last</li>
+</ul>
+<div id="c020" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>well_history <span class="op">=</span> ...</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> ...</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>total_drawdown <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c021" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> well_history.shape <span class="op">==</span> times.shape, <span class="ss">f"</span><span class="sc">{</span>well_history<span class="sc">.</span>shape<span class="sc">}</span><span class="ss"> vs </span><span class="sc">{</span>times<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(well_history[<span class="dv">0</span>] <span class="op">-</span> <span class="fl">662.04</span>) <span class="op">&lt;</span> <span class="fl">0.2</span>, <span class="ss">f"first value </span><span class="sc">{</span>well_history[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(total_drawdown <span class="op">-</span> <span class="fl">7.67</span>) <span class="op">&lt;</span> <span class="fl">0.2</span>, <span class="ss">f"got </span><span class="sc">{</span>total_drawdown<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(years[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> <span class="fl">10.08</span>) <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="ss">f"last time should be ~10.1 years, got </span><span class="sc">{</span>years[<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"head before pumping   </span><span class="sc">{</span>well_history[<span class="dv">0</span>]<span class="sc">:8.2f}</span><span class="ss"> m"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"head after 10 years   </span><span class="sc">{</span>well_history[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:8.2f}</span><span class="ss"> m"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"total drawdown        </span><span class="sc">{</span>total_drawdown<span class="sc">:8.2f}</span><span class="ss"> m"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c022" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="fl">11.5</span>, <span class="fl">3.8</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(years, well_history, <span class="st">"o-"</span>, color<span class="op">=</span>UA_RED, ms<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">"years since pumping began"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"head in the wellfield (m)"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Most of the drawdown happens immediately"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># how much of the final drawdown is reached by each time</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>fraction <span class="op">=</span> (well_history[<span class="dv">0</span>] <span class="op">-</span> well_history) <span class="op">/</span> total_drawdown <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(years, fraction, <span class="st">"s-"</span>, color<span class="op">=</span>UA_BLUE, ms<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].axhline(<span class="dv">90</span>, color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">":"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].text(<span class="dv">4</span>, <span class="dv">91</span>, <span class="st">"90</span><span class="sc">% o</span><span class="st">f final drawdown"</span>, fontsize<span class="op">=</span><span class="dv">9</span>, color<span class="op">=</span><span class="st">"grey"</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">"years since pumping began"</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">"</span><span class="sc">% o</span><span class="st">f final drawdown reached"</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"Approach to the steady-state answer"</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="your-turn-4" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
+<p>The right panel says the model reaches most of its final drawdown quickly. Put a number on it.</p>
+<ul>
+<li><code>pct_after_one_year</code> — percentage of the final drawdown reached after 1 year</li>
+<li><code>years_to_90pct</code> — the first time in <code>years</code> at which 90% is reached</li>
+</ul>
+<p><code>np.argmax</code> on a boolean array gives the index of the first <code>True</code>.</p>
+<div id="c024" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pct_after_one_year <span class="op">=</span> ...</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>years_to_90pct <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c025" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> pct_after_one_year <span class="op">&gt;</span> <span class="dv">80</span>, (</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"a confined aquifer should get most of the way in one year: got </span><span class="sc">{</span>pct_after_one_year<span class="sc">:.0f}</span><span class="ss">%"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> years_to_90pct <span class="op">&lt;</span> <span class="fl">3.0</span>, <span class="ss">f"got </span><span class="sc">{</span>years_to_90pct<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"after 1 year:  </span><span class="sc">{</span>pct_after_one_year<span class="sc">:.1f}</span><span class="ss">% of the final drawdown"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"90% reached at </span><span class="sc">{</span>years_to_90pct<span class="sc">:.2f}</span><span class="ss"> years"</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>A confined aquifer is nearly at steady state within a year or two.</strong> So for this system, the steady-state model from Week 11 was answering a question about the near future, not the distant one — which is worth knowing, because it means the transient run added detail rather than changing the conclusion.</p>
+<p>That would not be true of an unconfined aquifer with <code>sy = 0.15</code>. There the approach is slow enough that a steady-state model describes a condition decades away, and a manager asking about the next ten years needs the transient answer.</p>
+<hr>
+</section>
+</section>
+<section id="part-5-where-transient-water-comes-from" class="level2">
+<h2 class="anchored" data-anchor-id="part-5-where-transient-water-comes-from">Part 5 — Where transient water comes from</h2>
+<p>In a steady-state model the budget balances recharge against pumping. In a transient one there is a third source: <strong>storage</strong>.</p>
+<div id="c028" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> budget_by_period(list_path):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Storage, recharge, wells and constant-head terms for each budget block."""</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> Path(list_path).read_text().splitlines()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    starts <span class="op">=</span> [i <span class="cf">for</span> i, l <span class="kw">in</span> <span class="bu">enumerate</span>(lines) <span class="cf">if</span> <span class="st">"VOLUMETRIC BUDGET"</span> <span class="kw">in</span> l]</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    records <span class="op">=</span> []</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> s <span class="kw">in</span> starts:</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        block <span class="op">=</span> lines[s:s <span class="op">+</span> <span class="dv">30</span>]</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        half, terms <span class="op">=</span> <span class="st">"in"</span>, {}</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> line <span class="kw">in</span> block:</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>            t <span class="op">=</span> line.strip()</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> t.startswith(<span class="st">"OUT:"</span>):</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                half <span class="op">=</span> <span class="st">"out"</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="st">"="</span> <span class="kw">not</span> <span class="kw">in</span> t <span class="kw">or</span> t.startswith((<span class="st">"TOTAL"</span>, <span class="st">"IN - OUT"</span>, <span class="st">"PERCENT"</span>)):</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>            name <span class="op">=</span> t.split(<span class="st">"="</span>)[<span class="dv">0</span>].strip()</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>            terms.setdefault(name, {})[half] <span class="op">=</span> <span class="bu">float</span>(t.split()[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        records.append(terms)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> records</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>blocks <span class="op">=</span> budget_by_period(WS <span class="op">/</span> <span class="st">"trans.list"</span>)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(blocks)<span class="sc">}</span><span class="ss"> budget blocks written"</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>final <span class="op">=</span> blocks[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, v <span class="kw">in</span> final.items():</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>name<span class="sc">:16s}</span><span class="ss"> in </span><span class="sc">{</span>v<span class="sc">.</span>get(<span class="st">'in'</span>, <span class="dv">0</span>)<span class="sc">:11,.1f}</span><span class="ss">   out </span><span class="sc">{</span>v<span class="sc">.</span>get(<span class="st">'out'</span>, <span class="dv">0</span>)<span class="sc">:11,.1f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>MODFLOW writes <strong>one budget block per stress period</strong>, at the end of it — not one per time step. So <code>blocks[1]</code> is the end of the 30-day period and <code>blocks[-1]</code> is the end of year 10.</p>
+<section id="your-turn-5" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-5">YOUR TURN 5</h3>
+<p>Compare the end of the first month of pumping with the end of year ten, and show where the water came from in each.</p>
+<ul>
+<li><code>storage_early</code> — net storage contribution in <code>blocks[1]</code> (in minus out)</li>
+<li><code>storage_late</code> — the same for <code>blocks[-1]</code></li>
+<li><code>storage_share_early</code> — storage as a percentage of the pumping rate, early</li>
+</ul>
+<div id="c030" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>storage_early <span class="op">=</span> ...</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>storage_late <span class="op">=</span> ...</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>storage_share_early <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c031" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> storage_early <span class="op">&gt;</span> storage_late, (</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"storage should contribute more early on than after ten years"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> storage_share_early <span class="op">&gt;</span> <span class="fl">10.0</span>, (</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"storage should still be a big share after one month: got </span><span class="sc">{</span>storage_share_early<span class="sc">:.2f}</span><span class="ss">%"</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> storage_share_early <span class="op">&lt;</span> <span class="fl">100.0</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"net storage, end of the first month : </span><span class="sc">{</span>storage_early<span class="sc">:10,.1f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"net storage, end of year 10         : </span><span class="sc">{</span>storage_late<span class="sc">:10,.1f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"storage as a share of pumping, early: </span><span class="sc">{</span>storage_share_early<span class="sc">:9.1f}</span><span class="ss"> %"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>The source of pumped water changes over time</strong>, and that is the single most policy-relevant output of a transient model.</p>
+<p>After one month of pumping, <strong>about a quarter of the well’s yield is water taken out of storage</strong> — a one-off withdrawal from the aquifer’s stock, not a renewable supply. By year ten storage contributes essentially nothing, and the entire yield is <strong>captured</strong>: recharge that would have gone somewhere else, or flow diverted from the boundaries.</p>
+<p>That distinction — <em>depletion</em> versus <em>capture</em> — is the whole basis of safe-yield regulation, and you can only see it in the budget.</p>
+<hr>
+</section>
+</section>
+<section id="part-6-evapotranspiration" class="level2">
+<h2 class="anchored" data-anchor-id="part-6-evapotranspiration">Part 6 — Evapotranspiration</h2>
+<p>Where the water table is shallow, plants and soil reach it. <code>EVT</code> removes water at a rate that depends on how deep the water table is.</p>
+<p>Three arguments:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>surf</code></td>
+<td>the elevation at which ET is at its maximum rate</td>
+</tr>
+<tr class="even">
+<td><code>evtr</code></td>
+<td>that maximum rate, as a flux (m/d)</td>
+</tr>
+<tr class="odd">
+<td><code>exdp</code></td>
+<td><strong>extinction depth</strong> — how far below <code>surf</code> ET reaches zero</td>
+</tr>
+</tbody>
+</table>
+<p>Between <code>surf</code> and <code>surf - exdp</code>, MODFLOW interpolates linearly. Below it, ET stops.</p>
+<div id="c034" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>WS_ET <span class="op">=</span> RUN <span class="op">/</span> <span class="st">"week13_et"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>WS_ET.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A shallow-water-table version, so ET has something to work on</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>mf_et <span class="op">=</span> flopy.modflow.Modflow(<span class="st">"et"</span>, model_ws<span class="op">=</span><span class="bu">str</span>(WS_ET), exe_name<span class="op">=</span><span class="bu">str</span>(MF_EXE))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowDis(mf_et, <span class="dv">1</span>, NROW, NCOL, delr<span class="op">=</span>DELR, delc<span class="op">=</span>DELR,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                         top<span class="op">=</span><span class="fl">700.0</span>, botm<span class="op">=</span><span class="fl">400.0</span>, nper<span class="op">=</span><span class="dv">1</span>, steady<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ib <span class="op">=</span> np.ones((<span class="dv">1</span>, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>ib[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>ib[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>strt_et <span class="op">=</span> np.full((<span class="dv">1</span>, NROW, NCOL), <span class="fl">690.0</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>strt_et[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="fl">685.0</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>strt_et[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">695.0</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowBas(mf_et, ibound<span class="op">=</span>ib, strt<span class="op">=</span>strt_et)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowLpf(mf_et, hk<span class="op">=</span><span class="fl">12.0</span>, laytyp<span class="op">=</span><span class="dv">0</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowRch(mf_et, rech<span class="op">=</span><span class="fl">6.0e-4</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>ET_SURF <span class="op">=</span> <span class="fl">700.0</span>        <span class="co"># ET is at its maximum when head reaches 700 m</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>ET_RATE <span class="op">=</span> <span class="fl">3.0e-3</span>       <span class="co"># m/d, about 1100 mm/yr — riparian vegetation</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>ET_EXDP <span class="op">=</span> <span class="fl">8.0</span>          <span class="co"># m, extinction depth</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowEvt(mf_et, surf<span class="op">=</span>ET_SURF, evtr<span class="op">=</span>ET_RATE, exdp<span class="op">=</span>ET_EXDP,</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>                         nevtop<span class="op">=</span><span class="dv">1</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowPcg(mf_et)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowOc(mf_et, stress_period_data<span class="op">=</span>{(<span class="dv">0</span>, <span class="dv">0</span>): [<span class="st">"save head"</span>, <span class="st">"save budget"</span>]})</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>mf_et.write_input()</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>ok_et, buff_et <span class="op">=</span> mf_et.run_model(silent<span class="op">=</span><span class="va">True</span>, report<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ok_et, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(buff_et[<span class="op">-</span><span class="dv">15</span>:])</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>head_et <span class="op">=</span> flopy.utils.HeadFile(<span class="bu">str</span>(WS_ET <span class="op">/</span> <span class="st">"et.hds"</span>)).get_data()</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"head </span><span class="sc">{</span>head_et<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.2f}</span><span class="ss"> to </span><span class="sc">{</span>head_et<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2f}</span><span class="ss"> m"</span>)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"depth below the ET surface: </span><span class="sc">{</span>ET_SURF <span class="op">-</span> head_et<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2f}</span><span class="ss"> to "</span></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>ET_SURF <span class="op">-</span> head_et<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.2f}</span><span class="ss"> m"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="your-turn-6" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-6">YOUR TURN 6</h3>
+<p>Work out how much ET the model <em>could</em> apply at maximum rate, and compare with what it actually removed.</p>
+<ul>
+<li><code>max_possible_et</code> — <code>ET_RATE</code> times the area of all active cells</li>
+<li><code>actual_et</code> — the <code>ET</code> term from the budget (out side)</li>
+<li><code>et_fraction</code> — actual as a percentage of maximum</li>
+</ul>
+<div id="c036" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>et_terms <span class="op">=</span> budget_by_period(WS_ET <span class="op">/</span> <span class="st">"et.list"</span>)[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"budget terms:"</span>, <span class="bu">sorted</span>(et_terms))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>max_possible_et <span class="op">=</span> ...</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>actual_et <span class="op">=</span> ...</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>et_fraction <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c037" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> actual_et <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">"the ET package should be removing water"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">0</span> <span class="op">&lt;</span> et_fraction <span class="op">&lt;</span> <span class="dv">100</span>, (</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"ET should be somewhere between zero and the maximum: got </span><span class="sc">{</span>et_fraction<span class="sc">:.1f}</span><span class="ss">%"</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"maximum possible ET  </span><span class="sc">{</span>max_possible_et<span class="sc">:10,.0f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"actual ET            </span><span class="sc">{</span>actual_et<span class="sc">:10,.0f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fraction of maximum  </span><span class="sc">{</span>et_fraction<span class="sc">:9.1f}</span><span class="ss"> %"</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>ET comes in below the maximum because the water table sits partway down the extinction interval — so MODFLOW applies a scaled rate, cell by cell.</p>
+<p><strong>Why the extinction depth matters more than it looks.</strong> It creates a feedback: pumping lowers the water table, which reduces ET, which leaves more water in the aquifer. So a fraction of what a well produces is not new water at all — it is water that would otherwise have been transpired by the vegetation along the river.</p>
+<p>That is not an accounting curiosity. It is the mechanism behind riparian habitat loss along the Santa Cruz, and a model without an <code>EVT</code> package cannot represent it at all.</p>
+<hr>
+</section>
+</section>
+<section id="before-you-leave" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-leave">Before you leave</h2>
+<ol type="1">
+<li><em>Kernel → Restart Kernel and Run All Cells</em></li>
+<li>Fix anything that breaks</li>
+<li>Save</li>
+</ol>
+</section>
+<section id="whats-due" class="level2">
+<h2 class="anchored" data-anchor-id="whats-due">What’s due</h2>
+<ul>
+<li><strong>HW 11 — 2D steady-state model</strong>, Wednesday 11/25 at 11:59pm</li>
+<li><strong>Project 3 analysis, part 1</strong></li>
+</ul>
+</section>
+<section id="next-week" class="level2">
+<h2 class="anchored" data-anchor-id="next-week">Next week</h2>
+<p>Layered models, rivers, and loading a model somebody else built. One session only — Thanksgiving is Thursday.</p>
+</section>
+<section id="stuck" class="level2">
+<h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
+<ul>
+<li><code>stress_period_data</code> must have an entry for <strong>every</strong> stress period, or FloPy reuses the previous one silently. Build it with a dict comprehension.</li>
+<li>A transient model that runs but shows no change usually has <code>steady=True</code> in every period — check the <code>DIS</code> flags.</li>
+<li><code>KeyError</code> on a budget term means the package didn’t write to the budget file: add <code>ipakcb=53</code>.</li>
+<li>If the heads barely move over ten years, check <code>ss</code> — a value of 1e-7 makes the aquifer respond almost instantly.</li>
+<li>Office hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.</li>
+</ul>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../labs/week13";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/hwrs564-hydrogeologic-analysis\.github\.io\/hwrs564a_course_materials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../slides/week13_thu_capture_et.html" class="pagination-link" aria-label="Thu 11/19 · Slides">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Thu 11/19 · Slides</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../slides/week14_tue_layers_rivers.html" class="pagination-link" aria-label="Tue 11/24 · Slides">
+        <span class="nav-page-text">Tue 11/24 · Slides</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>HWRS 564a · Fall 2026 · Dr.&nbsp;Andrew Bennett</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

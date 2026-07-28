@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Week 10 Lab — Meeting MODFLOW – HWRS 564a</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../slides/week11_tue_inputs_outputs.html" rel="next">
+<link href="../../slides/week10_thu_running_it.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8e547040071cf592dc7cfc6331f26ef2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-59c257db3cfdf6564f03842988c1a639.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">HWRS 564a</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-slides" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Slides</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-slides">    
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_tue_getting_started.html">
+ <span class="dropdown-text">Wk 2 · Getting started with Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_thu_data_types.html">
+ <span class="dropdown-text">Wk 2 · Data types &amp; sequences</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_tue_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_thu_functions.html">
+ <span class="dropdown-text">Wk 3 · Functions and modules</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_tue_arrays.html">
+ <span class="dropdown-text">Wk 4 · Arrays with numpy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_thu_iteration.html">
+ <span class="dropdown-text">Wk 4 · Iterative solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_tue_pandas.html">
+ <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_thu_filtering.html">
+ <span class="dropdown-text">Wk 5 · Filtering and first plots</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_tue_apis.html">
+ <span class="dropdown-text">Wk 6 · Where data comes from</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_thu_cleaning.html">
+ <span class="dropdown-text">Wk 6 · Gaps, duplicates, outliers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_tue_datetime.html">
+ <span class="dropdown-text">Wk 7 · Dates and resampling</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_thu_grouping.html">
+ <span class="dropdown-text">Wk 7 · Rolling and reshaping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_tue_figures.html">
+ <span class="dropdown-text">Wk 8 · Figures worth showing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_thu_annotation_maps.html">
+ <span class="dropdown-text">Wk 8 · Annotation and maps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_tue_regression.html">
+ <span class="dropdown-text">Wk 9 · Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_thu_chemistry.html">
+ <span class="dropdown-text">Wk 9 · Major-ion chemistry</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week10_tue_what_is_modflow.html">
+ <span class="dropdown-text">Wk 10 · What MODFLOW is</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week10_thu_running_it.html">
+ <span class="dropdown-text">Wk 10 · Running it</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week11_tue_inputs_outputs.html">
+ <span class="dropdown-text">Wk 11 · Inputs, outputs, hitting go</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week11_thu_budgets.html">
+ <span class="dropdown-text">Wk 11 · Budgets</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week12_tue_discretization.html">
+ <span class="dropdown-text">Wk 12 · Discretization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week12_thu_unconfined.html">
+ <span class="dropdown-text">Wk 12 · Unconfined flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_tue_time.html">
+ <span class="dropdown-text">Wk 13 · Time and storage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_thu_capture_et.html">
+ <span class="dropdown-text">Wk 13 · Capture and ET</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week14_tue_layers_rivers.html">
+ <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/week02/week02_lab_python_basics.html">
+ <span class="dropdown-text">Wk 2 · Python basics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week03/week03_lab_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow and functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week04/week04_lab_arrays_iteration.html">
+ <span class="dropdown-text">Wk 4 · Arrays and iteration</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week05/week05_lab_pandas.html">
+ <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week06/week06_lab_real_world_data.html">
+ <span class="dropdown-text">Wk 6 · Real-world data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week07/week07_lab_timeseries.html">
+ <span class="dropdown-text">Wk 7 · Time series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_lab_matplotlib.html">
+ <span class="dropdown-text">Wk 8 · Figures</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week09/week09_lab_regression_chemistry.html">
+ <span class="dropdown-text">Wk 9 · Regression and chemistry</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week10/week10_lab_meeting_modflow.html">
+ <span class="dropdown-text">Wk 10 · Meeting MODFLOW</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week11/week11_lab_basin_model.html">
+ <span class="dropdown-text">Wk 11 · Tucson basin model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week12/week12_lab_discretization_boundaries.html">
+ <span class="dropdown-text">Wk 12 · Discretization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week13/week13_lab_transient_stresses.html">
+ <span class="dropdown-text">Wk 13 · Transient stresses</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week14/week14_lab_layers_rivers_loading.html">
+ <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 3 · MODFLOW &amp; FloPy</li><li class="breadcrumb-item"><a href="../../slides/week10_tue_what_is_modflow.html">Week 10 — Meeting MODFLOW</a></li><li class="breadcrumb-item"><a href="../../labs/week10/week10_lab_meeting_modflow.html">Lab · Meeting MODFLOW</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 1 · Python Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 — Getting started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_tue_getting_started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_thu_data_types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/3 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week02/week02_lab_python_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Python basics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 — Control flow and functions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_tue_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_thu_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week03/week03_lab_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Control flow and functions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 — Arrays and iteration</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_tue_arrays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_thu_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/17 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week04/week04_lab_arrays_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Arrays and iterative solutions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 5 — Introduction to pandas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_tue_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_thu_filtering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/24 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Introduction to pandas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 2 · Data Analysis &amp; Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 6 — Real-world data</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_tue_apis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/29 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_thu_cleaning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week06/week06_lab_real_world_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Working with real-world data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 7 — Time series</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_tue_datetime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/6 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_thu_grouping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week07/week07_lab_timeseries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Time series with pandas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 8 — Figures</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_tue_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/13 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_thu_annotation_maps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_lab_matplotlib.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Figures worth showing people</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 9 — Regression and chemistry</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_tue_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/20 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_thu_chemistry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week09/week09_lab_regression_chemistry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Regression and water chemistry</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 3 · MODFLOW &amp; FloPy</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 10 — Meeting MODFLOW</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_tue_what_is_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/27 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_thu_running_it.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/29 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week10/week10_lab_meeting_modflow.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab · Meeting MODFLOW</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 11 — Inputs, outputs, hitting go</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week11_tue_inputs_outputs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/3 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week11_thu_budgets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/5 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week11/week11_lab_basin_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · A model of the Tucson basin</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 12 — Discretization and boundaries</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week12_tue_discretization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week12_thu_unconfined.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/12 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week12/week12_lab_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Discretization and unconfined flow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 13 — Transient stresses</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_tue_time.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/17 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_thu_capture_et.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/19 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week13/week13_lab_transient_stresses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Stresses that change with time</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 14 — Layers, rivers, loading</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week14_tue_layers_rivers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/24 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week14/week14_lab_layers_rivers_loading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Layers, rivers, and inheriting a model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link active" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#part-1-is-modflow-even-here" id="toc-part-1-is-modflow-even-here" class="nav-link" data-scroll-target="#part-1-is-modflow-even-here">Part 1 — Is MODFLOW even here?</a>
+  <ul class="collapse">
+  <li><a href="#where-the-model-files-go" id="toc-where-the-model-files-go" class="nav-link" data-scroll-target="#where-the-model-files-go">Where the model files go</a></li>
+  </ul></li>
+  <li><a href="#part-2-six-questions-six-packages" id="toc-part-2-six-questions-six-packages" class="nav-link" data-scroll-target="#part-2-six-questions-six-packages">Part 2 — Six questions, six packages</a>
+  <ul class="collapse">
+  <li><a href="#the-simplest-useful-model" id="toc-the-simplest-useful-model" class="nav-link" data-scroll-target="#the-simplest-useful-model">The simplest useful model</a></li>
+  <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
+  </ul></li>
+  <li><a href="#part-3-running-it-and-checking-that-it-ran" id="toc-part-3-running-it-and-checking-that-it-ran" class="nav-link" data-scroll-target="#part-3-running-it-and-checking-that-it-ran">Part 3 — Running it, and checking that it ran</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-2-break-it-on-purpose" id="toc-your-turn-2-break-it-on-purpose" class="nav-link" data-scroll-target="#your-turn-2-break-it-on-purpose">YOUR TURN 2 — break it on purpose</a></li>
+  </ul></li>
+  <li><a href="#part-4-reading-the-heads-back" id="toc-part-4-reading-the-heads-back" class="nav-link" data-scroll-target="#part-4-reading-the-heads-back">Part 4 — Reading the heads back</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
+  </ul></li>
+  <li><a href="#part-5-the-water-budget" id="toc-part-5-the-water-budget" class="nav-link" data-scroll-target="#part-5-the-water-budget">Part 5 — The water budget</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
+  <li><a href="#your-turn-5-how-much-water-is-actually-moving" id="toc-your-turn-5-how-much-water-is-actually-moving" class="nav-link" data-scroll-target="#your-turn-5-how-much-water-is-actually-moving">YOUR TURN 5 — how much water is actually moving?</a></li>
+  <li><a href="#where-the-5-went" id="toc-where-the-5-went" class="nav-link" data-scroll-target="#where-the-5-went">Where the 5% went</a></li>
+  <li><a href="#your-turn-6" id="toc-your-turn-6" class="nav-link" data-scroll-target="#your-turn-6">YOUR TURN 6</a></li>
+  </ul></li>
+  <li><a href="#before-you-leave" id="toc-before-you-leave" class="nav-link" data-scroll-target="#before-you-leave">Before you leave</a></li>
+  <li><a href="#whats-due" id="toc-whats-due" class="nav-link" data-scroll-target="#whats-due">What’s due</a></li>
+  <li><a href="#next-week" id="toc-next-week" class="nav-link" data-scroll-target="#next-week">Next week</a></li>
+  <li><a href="#stuck" id="toc-stuck" class="nav-link" data-scroll-target="#stuck">Stuck?</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 3 · MODFLOW &amp; FloPy</li><li class="breadcrumb-item"><a href="../../slides/week10_tue_what_is_modflow.html">Week 10 — Meeting MODFLOW</a></li><li class="breadcrumb-item"><a href="../../labs/week10/week10_lab_meeting_modflow.html">Lab · Meeting MODFLOW</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Week 10 Lab — Meeting MODFLOW</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>HWRS 564a · Fall 2026</strong></p>
+<p>For nine weeks you have been inferring what an aquifer is doing from patterns in observations. Now you build a model of it.</p>
+<p>MODFLOW is a Fortran program that solves the groundwater flow equation on a grid. FloPy is the Python library that writes its input files, runs it, and reads its output back. <strong>You will never edit a MODFLOW input file by hand in this course</strong> — but you will read a few, because knowing what FloPy is writing is what lets you debug it.</p>
+<p>This week is orientation: what the pieces are, how to run one, and how to tell whether the answer means anything.</p>
+<section id="how-to-use-this-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
+<p>Run each cell with <strong>Shift+Enter</strong>. Cells marked <strong><code># YOUR TURN</code></strong> have something for you to write. Cells marked <strong><code># CHECK</code></strong> verify your answer — if they run without complaint, you’re right.</p>
+<blockquote class="blockquote">
+<p><strong>Before you submit anything all semester:</strong> <em>Kernel → Restart Kernel and Run All Cells</em>. A notebook that only works when run out of order is not finished.</p>
+</blockquote>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this notebook you can:</p>
+<ol type="1">
+<li>Say what each of the six core MODFLOW packages answers</li>
+<li>Confirm the MODFLOW binary exists before trying to use it</li>
+<li>Build, write, and run the simplest possible model from FloPy</li>
+<li>Check <code>success</code> properly, and get a useful message when it fails</li>
+<li>Read heads out of the binary <code>.hds</code> file</li>
+<li>Find the water budget in the <code>.list</code> file and check that it closes</li>
+</ol>
+<hr>
+</section>
+<section id="part-1-is-modflow-even-here" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-is-modflow-even-here">Part 1 — Is MODFLOW even here?</h2>
+<p>MODFLOW is a compiled binary, not a Python package. <code>postbuild.sh</code> downloaded it when your codespace was created. <strong>Check for it before anything else</strong> — a missing binary produces a failure much later and much less clearly.</p>
+<div id="c002" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> flopy</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(p <span class="cf">for</span> p <span class="kw">in</span> Path.cwd().parents <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists())</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>MF_EXE <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"modflow"</span> <span class="op">/</span> <span class="st">"mf2005"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> MF_EXE.exists(), (</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"MODFLOW binary not found at </span><span class="sc">{</span>MF_EXE<span class="sc">}</span><span class="ss">. Your codespace may not have "</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"finished building — run ./postbuild.sh from a terminal."</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"flopy </span><span class="sc">{</span>flopy<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MODFLOW at </span><span class="sc">{</span>MF_EXE<span class="sc">.</span>relative_to(ROOT)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"other binaries available: </span><span class="sc">{</span><span class="bu">sorted</span>(p.name <span class="cf">for</span> p <span class="kw">in</span> MF_EXE.parent.iterdir())[:<span class="dv">8</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That assertion, with that message, goes at the top of every MODFLOW notebook you write. It costs one line and it turns “<code>FileNotFoundError</code> from somewhere inside flopy” into “run postbuild.sh”.</p>
+<section id="where-the-model-files-go" class="level3">
+<h3 class="anchored" data-anchor-id="where-the-model-files-go">Where the model files go</h3>
+<p>A MODFLOW run writes about a dozen files. <strong>Give every model its own scratch directory</strong>, outside version control — otherwise <code>.hds</code>, <code>.cbc</code> and <code>.list</code> files accumulate in the repo root and get committed.</p>
+<div id="c004" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>WS <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"_run"</span> <span class="op">/</span> <span class="st">"week10_first"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>WS.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"model workspace: </span><span class="sc">{</span>WS<span class="sc">.</span>relative_to(ROOT)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"(_run/ is in .gitignore — model output is never committed)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-2-six-questions-six-packages" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-six-questions-six-packages">Part 2 — Six questions, six packages</h2>
+<p>MODFLOW has no single “model file”. It has a <strong>package per question</strong>, and a <code>.nam</code> file listing them.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Package</th>
+<th>FloPy class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>What shape is the domain, in what units, over what time?</td>
+<td><code>DIS</code></td>
+<td><code>ModflowDis</code></td>
+</tr>
+<tr class="even">
+<td>Which cells are active, and where do we start?</td>
+<td><code>BAS</code></td>
+<td><code>ModflowBas</code></td>
+</tr>
+<tr class="odd">
+<td>How permeable is it?</td>
+<td><code>LPF</code></td>
+<td><code>ModflowLpf</code></td>
+</tr>
+<tr class="even">
+<td>How do we solve it?</td>
+<td><code>PCG</code></td>
+<td><code>ModflowPcg</code></td>
+</tr>
+<tr class="odd">
+<td>What do we save?</td>
+<td><code>OC</code></td>
+<td><code>ModflowOc</code></td>
+</tr>
+<tr class="even">
+<td>Who is pumping, recharging, evaporating?</td>
+<td><code>WEL</code>, <code>RCH</code>, <code>EVT</code>, …</td>
+<td>one class each</td>
+</tr>
+</tbody>
+</table>
+<p>That table is the whole mental model. Everything you build from here is those answers, plus whichever stress packages the problem needs.</p>
+<section id="the-simplest-useful-model" class="level3">
+<h3 class="anchored" data-anchor-id="the-simplest-useful-model">The simplest useful model</h3>
+<p>One layer, 10 by 20 cells, constant head on the east and west edges, nothing else. Flow runs west to east because we told the two edges to differ.</p>
+<div id="c006" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>NLAY, NROW, NCOL <span class="op">=</span> <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">20</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>DELR <span class="op">=</span> DELC <span class="op">=</span> <span class="fl">100.0</span>        <span class="co"># m, cell size</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>mf <span class="op">=</span> flopy.modflow.Modflow(<span class="st">"first"</span>, model_ws<span class="op">=</span><span class="bu">str</span>(WS), exe_name<span class="op">=</span><span class="bu">str</span>(MF_EXE))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># DIS — geometry and time</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowDis(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    mf, NLAY, NROW, NCOL,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    delr<span class="op">=</span>DELR, delc<span class="op">=</span>DELC,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    top<span class="op">=</span><span class="fl">100.0</span>, botm<span class="op">=</span><span class="fl">0.0</span>,       <span class="co"># ELEVATIONS, not thicknesses</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    nper<span class="op">=</span><span class="dv">1</span>, steady<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mf.dis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>top=100.0, botm=0.0</code> are <strong>elevations above datum</strong>, so this aquifer is 100 m thick. Passing thicknesses instead gives you a layer with a negative thickness and an error message that does not mention <code>botm</code>.</p>
+<div id="c008" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BAS — which cells are active, and the starting heads</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ibound <span class="op">=</span> np.ones((NLAY, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>        <span class="co"># west edge: constant head</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ibound[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>       <span class="co"># east edge: constant head</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>strt <span class="op">=</span> np.full((NLAY, NROW, NCOL), <span class="fl">95.0</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>strt[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">85.0</span>       <span class="co"># 10 m lower on the east side</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowBas(mf, ibound<span class="op">=</span>ibound, strt<span class="op">=</span>strt)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"ibound values used:"</span>, np.unique(ibound))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  1 = active,  0 = inactive,  -1 = constant head"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p><strong><code>strt</code> does two jobs.</strong> In active cells it is only a starting guess for the solver. In <code>ibound == -1</code> cells it <em>is</em> the boundary condition, and it does not change. Same array, two meanings, decided by <code>ibound</code>.</p>
+</blockquote>
+<div id="c010" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LPF — hydraulic properties.  PCG — the solver.  OC — what to save.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowLpf(mf, hk<span class="op">=</span><span class="fl">10.0</span>, laytyp<span class="op">=</span><span class="dv">0</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowPcg(mf)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowOc(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    mf, stress_period_data<span class="op">=</span>{(<span class="dv">0</span>, <span class="dv">0</span>): [<span class="st">"save head"</span>, <span class="st">"save budget"</span>, <span class="st">"print budget"</span>]}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"packages attached:"</span>, mf.get_package_list())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Two arguments worth naming now, because they come back every week:</p>
+<ul>
+<li><strong><code>laytyp=0</code></strong> means <em>confined</em> — transmissivity is fixed. <code>laytyp=1</code> means <em>convertible</em>, so transmissivity depends on the computed head and the problem becomes nonlinear. Week 12 is about that difference.</li>
+<li><strong><code>ipakcb=53</code></strong> tells the package to write its flows to the cell-budget file. Leave it out and the budget terms for that package are silently absent.</li>
+</ul>
+</section>
+<section id="your-turn-1" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-1">YOUR TURN 1</h3>
+<p>Before running anything, work out what this model <em>should</em> say.</p>
+<p>The two constant-head boundaries are 95 m and 85 m, and there are 20 columns of 100 m cells. With no recharge and no wells, the head profile must be a straight line between them.</p>
+<p>Make a <strong>first estimate</strong> using the full width of the domain:</p>
+<ul>
+<li><code>domain_length_m</code> — the east–west extent of the model</li>
+<li><code>expected_gradient</code> — the hydraulic gradient, dimensionless</li>
+<li><code>expected_q</code> — the specific discharge in m/d, from Darcy’s law with <code>hk=10.0</code></li>
+</ul>
+<p>Hold onto these. Part 5 checks them against MODFLOW and the answer is <em>not</em> quite what you get here — for a reason worth knowing.</p>
+<div id="c012" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hk <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>domain_length_m <span class="op">=</span> ...</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>expected_gradient <span class="op">=</span> ...</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>expected_q <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c013" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(domain_length_m <span class="op">-</span> <span class="fl">2000.0</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, <span class="ss">f"got </span><span class="sc">{</span>domain_length_m<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(expected_gradient <span class="op">-</span> <span class="fl">0.005</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, <span class="ss">f"got </span><span class="sc">{</span>expected_gradient<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(expected_q <span class="op">-</span> <span class="fl">0.05</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, <span class="ss">f"got </span><span class="sc">{</span>expected_q<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"domain      </span><span class="sc">{</span>domain_length_m<span class="sc">:.0f}</span><span class="ss"> m"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"gradient    </span><span class="sc">{</span>expected_gradient<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"q           </span><span class="sc">{</span>expected_q<span class="sc">:.3f}</span><span class="ss"> m/d"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">That is the arithmetic. Part 5 asks whether MODFLOW agrees."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-3-running-it-and-checking-that-it-ran" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-running-it-and-checking-that-it-ran">Part 3 — Running it, and checking that it ran</h2>
+<p><code>write_input()</code> turns the FloPy objects into text files. <code>run_model()</code> shells out to the binary.</p>
+<div id="c015" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mf.write_input()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="bu">sorted</span>(WS.iterdir()):</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>f<span class="sc">.</span>name<span class="sc">:16s}</span><span class="ss"> </span><span class="sc">{</span>f<span class="sc">.</span>stat()<span class="sc">.</span>st_size<span class="sc">:8,d}</span><span class="ss"> bytes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c016" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>success, buff <span class="op">=</span> mf.run_model(silent<span class="op">=</span><span class="va">True</span>, report<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> success, <span class="st">"MODFLOW did not converge:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(buff[<span class="op">-</span><span class="dv">20</span>:])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"converged. </span><span class="sc">{</span><span class="bu">len</span>(buff)<span class="sc">}</span><span class="ss"> lines of output captured."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Three details in those two lines, and all three matter.</strong></p>
+<p><strong>FloPy does not raise when a model fails.</strong> It returns <code>(success, buff)</code> and carries on. Ignore <code>success</code> and you will happily plot whatever was last written to the <code>.hds</code> file and present it as a result.</p>
+<p><strong><code>report=True</code> is not optional.</strong> With <code>silent=True</code> alone, FloPy returns an <strong>empty</strong> <code>buff</code> — so the assertion fires with nothing in the message, at exactly the moment you needed a diagnostic. You will see tutorials that omit it.</p>
+<p><strong><code>silent=True</code> only suppresses the console echo.</strong> The full run log is always written to the <code>.list</code> file, which is where the real diagnosis lives.</p>
+</blockquote>
+<section id="your-turn-2-break-it-on-purpose" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-2-break-it-on-purpose">YOUR TURN 2 — break it on purpose</h3>
+<p>You need to have seen a failure before you meet one by accident.</p>
+<p>Build the same model again, but hand the solver an impossible convergence criterion: <code>mxiter=1, iter1=1, hclose=1e-12</code>. One iteration cannot close a head change to a picometre.</p>
+<p>Capture <code>success</code> and <code>buff</code> <strong>without</strong> asserting, so the cell completes.</p>
+<div id="c018" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>WS_FAIL <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"_run"</span> <span class="op">/</span> <span class="st">"week10_fail"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>WS_FAIL.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>bad <span class="op">=</span> flopy.modflow.Modflow(<span class="st">"nope"</span>, model_ws<span class="op">=</span><span class="bu">str</span>(WS_FAIL), exe_name<span class="op">=</span><span class="bu">str</span>(MF_EXE))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowDis(bad, NLAY, NROW, NCOL, delr<span class="op">=</span>DELR, delc<span class="op">=</span>DELC,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                         top<span class="op">=</span><span class="fl">100.0</span>, botm<span class="op">=</span><span class="fl">0.0</span>, nper<span class="op">=</span><span class="dv">1</span>, steady<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowBas(bad, ibound<span class="op">=</span>ibound, strt<span class="op">=</span>strt)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowLpf(bad, hk<span class="op">=</span>hk, laytyp<span class="op">=</span><span class="dv">1</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowPcg(bad, mxiter<span class="op">=</span><span class="dv">1</span>, iter1<span class="op">=</span><span class="dv">1</span>, hclose<span class="op">=</span><span class="fl">1e-12</span>, rclose<span class="op">=</span><span class="fl">1e-12</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowOc(bad, stress_period_data<span class="op">=</span>{(<span class="dv">0</span>, <span class="dv">0</span>): [<span class="st">"save head"</span>]})</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>bad.write_input()</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>bad_success, bad_buff <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c019" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bad_success <span class="kw">is</span> <span class="va">False</span>, <span class="ss">f"this model should NOT have converged (got </span><span class="sc">{</span>bad_success<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(bad_buff) <span class="op">&gt;</span> <span class="dv">0</span>, (</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"buff is empty — you need report=True, or the failure message tells you nothing"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"success = </span><span class="sc">{</span>bad_success<span class="sc">}</span><span class="ss">, with </span><span class="sc">{</span><span class="bu">len</span>(bad_buff)<span class="sc">}</span><span class="ss"> lines of output"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">last few lines:"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> [l.strip() <span class="cf">for</span> l <span class="kw">in</span> bad_buff <span class="cf">if</span> l.strip()][<span class="op">-</span><span class="dv">3</span>:]:</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>line<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There it is: <strong>FAILED TO MEET SOLVER CONVERGENCE CRITERIA</strong>.</p>
+<p>The <code>.list</code> file says more, including the number that tells you <em>how</em> badly it failed:</p>
+<div id="c021" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>listing <span class="op">=</span> (WS_FAIL <span class="op">/</span> <span class="st">"nope.list"</span>).read_text().splitlines()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>tail <span class="op">=</span> [l.strip() <span class="cf">for</span> l <span class="kw">in</span> listing <span class="cf">if</span> l.strip()]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> tail[<span class="op">-</span><span class="dv">6</span>:]:</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(line)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>BUDGET PERCENT DISCREPANCY IS -162.7.</strong> Water is not being conserved, by a factor of more than two. That single number is the first thing to look at when a model misbehaves, and we come back to it in Part 5.</p>
+<hr>
+</section>
+</section>
+<section id="part-4-reading-the-heads-back" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-reading-the-heads-back">Part 4 — Reading the heads back</h2>
+<p>Heads are written to a binary file. <code>flopy.utils.HeadFile</code> reads it.</p>
+<div id="c024" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hds <span class="op">=</span> flopy.utils.HeadFile(<span class="bu">str</span>(WS <span class="op">/</span> <span class="st">"first.hds"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"times available: </span><span class="sc">{</span>hds<span class="sc">.</span>get_times()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>head <span class="op">=</span> hds.get_data()                     <span class="co"># last time step by default</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"shape: </span><span class="sc">{</span>head<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">   (layers, rows, columns)"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"range: </span><span class="sc">{</span>head<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.2f}</span><span class="ss"> to </span><span class="sc">{</span>head<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2f}</span><span class="ss"> m"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="your-turn-3" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
+<p>Confirm MODFLOW agrees with the arithmetic you did in Part 1.</p>
+<p>Extract the head profile along <strong>row 5</strong> and compare it with a straight line between its two ends.</p>
+<ul>
+<li><code>profile</code> — the heads along row 5 of layer 0, as a 1D array</li>
+<li><code>max_deviation</code> — the largest absolute difference between <code>profile</code> and a straight line joining <code>profile[0]</code> to <code>profile[-1]</code></li>
+</ul>
+<p><code>np.linspace(a, b, n)</code> builds that straight line for you.</p>
+<div id="c026" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>profile <span class="op">=</span> ...</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>max_deviation <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c027" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> profile.shape <span class="op">==</span> (<span class="dv">20</span>,), <span class="ss">f"expected 20 values, got </span><span class="sc">{</span>profile<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(profile[<span class="dv">0</span>] <span class="op">-</span> <span class="fl">95.0</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span> <span class="kw">and</span> <span class="bu">abs</span>(profile[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> <span class="fl">85.0</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span>, <span class="op">\</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"the ends should sit exactly on the constant heads"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> max_deviation <span class="op">&lt;</span> <span class="fl">1e-4</span>, <span class="ss">f"expected a straight line, deviation was </span><span class="sc">{</span>max_deviation<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"profile ends: </span><span class="sc">{</span>profile[<span class="dv">0</span>]<span class="sc">:.2f}</span><span class="ss"> -&gt; </span><span class="sc">{</span>profile[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.2f}</span><span class="ss"> m"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"max deviation from a straight line: </span><span class="sc">{</span>max_deviation<span class="sc">:.2e}</span><span class="ss"> m"</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">MODFLOW reproduced the analytic solution exactly. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>This is the most important habit in the whole module.</strong> Before you trust a model on a problem you <em>can’t</em> solve by hand, run it on one you can.</p>
+<p>A one-dimensional confined aquifer between two fixed heads has a linear solution, and MODFLOW reproduces it to within floating-point noise. Now the grid, the units, the boundary handling and the solver are all confirmed working — so when a later result surprises you, the surprise is about the <em>physics</em> you added, not about whether you set the model up correctly.</p>
+<div id="c029" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">3.6</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>mv <span class="op">=</span> flopy.plot.PlotMapView(model<span class="op">=</span>mf, ax<span class="op">=</span>axes[<span class="dv">0</span>])</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>band <span class="op">=</span> mv.plot_array(head[<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">"Blues_r"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> mv.contour_array(head[<span class="dv">0</span>], levels<span class="op">=</span>np.arange(<span class="dv">86</span>, <span class="dv">96</span>, <span class="fl">1.0</span>), colors<span class="op">=</span><span class="st">"k"</span>, linewidths<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].clabel(cs, fmt<span class="op">=</span><span class="st">"%.0f"</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">"easting (m)"</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"northing (m)"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Head, plan view"</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>fig.colorbar(band, ax<span class="op">=</span>axes[<span class="dv">0</span>], label<span class="op">=</span><span class="st">"head (m)"</span>, shrink<span class="op">=</span><span class="fl">0.85</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> (np.arange(NCOL) <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">*</span> DELR</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(x, profile, <span class="st">"o-"</span>, color<span class="op">=</span><span class="st">"#AB0520"</span>, ms<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"MODFLOW"</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(x, np.linspace(profile[<span class="dv">0</span>], profile[<span class="op">-</span><span class="dv">1</span>], NCOL), <span class="st">"--"</span>,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"analytic (linear)"</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">"distance east (m)"</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">"head (m)"</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"Row 5 profile vs. the analytic solution"</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-5-the-water-budget" class="level2">
+<h2 class="anchored" data-anchor-id="part-5-the-water-budget">Part 5 — The water budget</h2>
+<p>Every MODFLOW run writes a mass balance to the <code>.list</code> file. <strong>Read it every time.</strong> A model can converge and still be wrong; a budget that doesn’t close tells you so.</p>
+<div id="c031" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>listing <span class="op">=</span> (WS <span class="op">/</span> <span class="st">"first.list"</span>).read_text().splitlines()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> <span class="bu">next</span>(i <span class="cf">for</span> i, l <span class="kw">in</span> <span class="bu">enumerate</span>(listing) <span class="cf">if</span> <span class="st">"VOLUMETRIC BUDGET"</span> <span class="kw">in</span> l)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> listing[start:start <span class="op">+</span> <span class="dv">26</span>]:</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> line.strip():</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(line.rstrip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Two halves — <code>IN</code> and <code>OUT</code> — and at the bottom the number that matters: <strong>PERCENT DISCREPANCY</strong>.</p>
+<div id="c033" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>discrepancy <span class="op">=</span> <span class="bu">next</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">float</span>(l.split()[<span class="op">-</span><span class="dv">1</span>]) <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">reversed</span>(listing) <span class="cf">if</span> <span class="st">"PERCENT DISCREPANCY"</span> <span class="kw">in</span> l</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"percent discrepancy: </span><span class="sc">{</span>discrepancy<span class="sc">:.4f}</span><span class="ss"> %"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(discrepancy) <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="st">"a converged steady-state model should close to well under 0.1%"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The budget closes. Water in equals water out."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="your-turn-4" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
+<p>Write <code>budget_discrepancy(list_path)</code>, returning the percent discrepancy from a MODFLOW <code>.list</code> file as a float.</p>
+<p>Read the file, find the <strong>last</strong> line containing <code>"PERCENT DISCREPANCY"</code>, and pull the number off the end of it. You will use this function every week from here.</p>
+<p>One wrinkle, and it is the kind real file formats always have. MODFLOW writes that phrase two different ways:</p>
+<pre><code> PERCENT DISCREPANCY =        -162.74     PERCENT DISCREPANCY =        -162.74
+ BUDGET PERCENT DISCREPANCY IS -162.7401</code></pre>
+<p>One uses <code>=</code> and repeats itself in two columns; the other uses <code>IS</code>. Splitting on <code>"="</code> works on the first and crashes on the second. <strong>Take the last whitespace-separated token instead</strong> — that is correct for both.</p>
+<div id="c035" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> budget_discrepancy(list_path):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Percent mass-balance discrepancy from a MODFLOW .list file."""</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c036" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>good <span class="op">=</span> budget_discrepancy(WS <span class="op">/</span> <span class="st">"first.list"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(good, <span class="bu">float</span>), <span class="ss">f"should return a float, got </span><span class="sc">{</span><span class="bu">type</span>(good)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(good) <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="ss">f"the converged model should close: got </span><span class="sc">{</span>good<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>bad_value <span class="op">=</span> budget_discrepancy(WS_FAIL <span class="op">/</span> <span class="st">"nope.list"</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(bad_value) <span class="op">&gt;</span> <span class="dv">100</span>, <span class="ss">f"the failed model was off by 160%, got </span><span class="sc">{</span>bad_value<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"converged model : </span><span class="sc">{</span>good<span class="sc">:+.4f}</span><span class="ss"> %"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"failed model    : </span><span class="sc">{</span>bad_value<span class="sc">:+.4f}</span><span class="ss"> %"</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="your-turn-5-how-much-water-is-actually-moving" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-5-how-much-water-is-actually-moving">YOUR TURN 5 — how much water is actually moving?</h3>
+<p>MODFLOW’s budget reports the flow through the system as the <code>CONSTANT HEAD</code> term. Compare it with the Darcy estimate from Part 1.</p>
+<ul>
+<li><code>cross_section_area</code> — the full north–south width times the aquifer thickness</li>
+<li><code>darcy_flow</code> — <code>expected_q</code> times that area</li>
+</ul>
+<div id="c038" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>thickness_m <span class="op">=</span> <span class="fl">100.0</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>cross_section_area <span class="op">=</span> ...</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>darcy_flow <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c039" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(cross_section_area <span class="op">-</span> <span class="fl">100_000.0</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span>, <span class="ss">f"got </span><span class="sc">{</span>cross_section_area<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(darcy_flow <span class="op">-</span> <span class="fl">5000.0</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span>, <span class="ss">f"got </span><span class="sc">{</span>darcy_flow<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>chd <span class="op">=</span> <span class="bu">next</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">float</span>(l.split()[<span class="op">-</span><span class="dv">1</span>]) <span class="cf">for</span> l <span class="kw">in</span> listing <span class="cf">if</span> l.strip().startswith(<span class="st">"CONSTANT HEAD ="</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Darcy's law (Part 1) says </span><span class="sc">{</span>darcy_flow<span class="sc">:9.1f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MODFLOW's budget says     </span><span class="sc">{</span>chd<span class="sc">:9.1f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"difference                </span><span class="sc">{</span><span class="dv">100</span> <span class="op">*</span> (chd <span class="op">-</span> darcy_flow) <span class="op">/</span> darcy_flow<span class="sc">:+9.1f}</span><span class="ss"> %"</span>)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Correct — and that 5</span><span class="sc">% g</span><span class="st">ap is not an error. Read on."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="where-the-5-went" class="level3">
+<h3 class="anchored" data-anchor-id="where-the-5-went">Where the 5% went</h3>
+<p>MODFLOW is right and the Part 1 arithmetic is wrong, in a way that catches everybody once.</p>
+<p><strong>A constant head is specified at the cell <em>centre</em>, not at the model edge.</strong> The head of 95 m sits at the middle of column 0, and the 85 m sits at the middle of column 19. The distance the water actually travels between those two points is</p>
+<p><span class="math display">\[19    imes 100\   ext{m} = 1900\  ext{m}\]</span></p>
+<p>not the 2000 m width of the domain. There is half a cell of aquifer outside each boundary head that is not part of the flow path.</p>
+</section>
+<section id="your-turn-6" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-6">YOUR TURN 6</h3>
+<p>Redo it with the right distance.</p>
+<ul>
+<li><code>centre_to_centre_m</code> — the distance between the two constant-head cell centres</li>
+<li><code>corrected_q</code> — specific discharge over that distance</li>
+<li><code>corrected_flow</code> — and the volumetric flow</li>
+</ul>
+<div id="c041" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>centre_to_centre_m <span class="op">=</span> ...</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>corrected_q <span class="op">=</span> ...</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>corrected_flow <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c042" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(centre_to_centre_m <span class="op">-</span> <span class="fl">1900.0</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, <span class="ss">f"got </span><span class="sc">{</span>centre_to_centre_m<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(corrected_flow <span class="op">-</span> chd) <span class="op">&lt;</span> <span class="fl">0.1</span>, (</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"expected to match MODFLOW's </span><span class="sc">{</span>chd<span class="sc">:.2f}</span><span class="ss">, got </span><span class="sc">{</span>corrected_flow<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"centre-to-centre distance </span><span class="sc">{</span>centre_to_centre_m<span class="sc">:9.0f}</span><span class="ss"> m"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"corrected q               </span><span class="sc">{</span>corrected_q<span class="sc">:9.5f}</span><span class="ss"> m/d"</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"corrected flow            </span><span class="sc">{</span>corrected_flow<span class="sc">:9.2f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MODFLOW                   </span><span class="sc">{</span>chd<span class="sc">:9.2f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Exact agreement. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>This is why you test against an analytic solution.</strong> A 5% error is small enough to look like rounding and large enough to matter, and the only way you would ever have found it is by predicting the answer first and being bothered when the numbers didn’t match.</p>
+<p>The practical consequence: <strong>a boundary condition is half a cell inside the edge you drew.</strong> On a 250 m grid that is 125 m of slop, and if you are trying to match an observed gradient across a small domain it is the first thing to check.</p>
+<p><strong>Think about this before Thursday:</strong> you now have a model that reproduces an analytic solution, closes its budget, and agrees with Darcy’s law. That is the baseline against which everything else this module gets judged.</p>
+<p>Next week you put a well in it, and the head field stops being something you could have worked out on paper.</p>
+<hr>
+</section>
+</section>
+<section id="before-you-leave" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-leave">Before you leave</h2>
+<ol type="1">
+<li><em>Kernel → Restart Kernel and Run All Cells</em></li>
+<li>Fix anything that breaks</li>
+<li>Save</li>
+</ol>
+</section>
+<section id="whats-due" class="level2">
+<h2 class="anchored" data-anchor-id="whats-due">What’s due</h2>
+<ul>
+<li><strong>HW 8 — Regression analysis</strong>, Wednesday 10/28 at 11:59pm</li>
+<li><strong>Project 2 analysis, part 2</strong></li>
+</ul>
+</section>
+<section id="next-week" class="level2">
+<h2 class="anchored" data-anchor-id="next-week">Next week</h2>
+<p>Building a real 2D model: a well, recharge, and a head field you cannot predict by hand.</p>
+</section>
+<section id="stuck" class="level2">
+<h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
+<ul>
+<li><code>FileNotFoundError</code> mentioning <code>mf2005</code> — the binary isn’t there. Run <code>./postbuild.sh</code> from a terminal.</li>
+<li><code>success</code> is <code>False</code> and <code>buff</code> is empty — you left out <code>report=True</code>.</li>
+<li>A model that converges but whose heads are all identical to <code>strt</code> usually means every cell is <code>ibound == -1</code>, so nothing was free to change.</li>
+<li><code>AssertionError</code> on layer thickness, or a <code>.list</code> file complaining about <code>BOTM</code>, means <code>top</code> and <code>botm</code> are the wrong way round.</li>
+<li>Office hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.</li>
+</ul>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../labs/week10";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/hwrs564-hydrogeologic-analysis\.github\.io\/hwrs564a_course_materials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../slides/week10_thu_running_it.html" class="pagination-link" aria-label="Thu 10/29 · Slides">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Thu 10/29 · Slides</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../slides/week11_tue_inputs_outputs.html" class="pagination-link" aria-label="Tue 11/3 · Slides">
+        <span class="nav-page-text">Tue 11/3 · Slides</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>HWRS 564a · Fall 2026 · Dr.&nbsp;Andrew Bennett</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

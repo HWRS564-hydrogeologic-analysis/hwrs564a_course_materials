@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Week 8 Lab — Figures worth showing people – HWRS 564a</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../slides/week09_tue_regression.html" rel="next">
+<link href="../../slides/week08_thu_annotation_maps.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8e547040071cf592dc7cfc6331f26ef2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-59c257db3cfdf6564f03842988c1a639.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">HWRS 564a</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-slides" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Slides</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-slides">    
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_tue_getting_started.html">
+ <span class="dropdown-text">Wk 2 · Getting started with Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_thu_data_types.html">
+ <span class="dropdown-text">Wk 2 · Data types &amp; sequences</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_tue_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_thu_functions.html">
+ <span class="dropdown-text">Wk 3 · Functions and modules</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_tue_arrays.html">
+ <span class="dropdown-text">Wk 4 · Arrays with numpy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_thu_iteration.html">
+ <span class="dropdown-text">Wk 4 · Iterative solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_tue_pandas.html">
+ <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_thu_filtering.html">
+ <span class="dropdown-text">Wk 5 · Filtering and first plots</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_tue_apis.html">
+ <span class="dropdown-text">Wk 6 · Where data comes from</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_thu_cleaning.html">
+ <span class="dropdown-text">Wk 6 · Gaps, duplicates, outliers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_tue_datetime.html">
+ <span class="dropdown-text">Wk 7 · Dates and resampling</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_thu_grouping.html">
+ <span class="dropdown-text">Wk 7 · Rolling and reshaping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_tue_figures.html">
+ <span class="dropdown-text">Wk 8 · Figures worth showing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_thu_annotation_maps.html">
+ <span class="dropdown-text">Wk 8 · Annotation and maps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_tue_regression.html">
+ <span class="dropdown-text">Wk 9 · Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_thu_chemistry.html">
+ <span class="dropdown-text">Wk 9 · Major-ion chemistry</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week10_tue_what_is_modflow.html">
+ <span class="dropdown-text">Wk 10 · What MODFLOW is</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week10_thu_running_it.html">
+ <span class="dropdown-text">Wk 10 · Running it</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week11_tue_inputs_outputs.html">
+ <span class="dropdown-text">Wk 11 · Inputs, outputs, hitting go</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week11_thu_budgets.html">
+ <span class="dropdown-text">Wk 11 · Budgets</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week12_tue_discretization.html">
+ <span class="dropdown-text">Wk 12 · Discretization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week12_thu_unconfined.html">
+ <span class="dropdown-text">Wk 12 · Unconfined flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_tue_time.html">
+ <span class="dropdown-text">Wk 13 · Time and storage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_thu_capture_et.html">
+ <span class="dropdown-text">Wk 13 · Capture and ET</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week14_tue_layers_rivers.html">
+ <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/week02/week02_lab_python_basics.html">
+ <span class="dropdown-text">Wk 2 · Python basics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week03/week03_lab_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow and functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week04/week04_lab_arrays_iteration.html">
+ <span class="dropdown-text">Wk 4 · Arrays and iteration</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week05/week05_lab_pandas.html">
+ <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week06/week06_lab_real_world_data.html">
+ <span class="dropdown-text">Wk 6 · Real-world data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week07/week07_lab_timeseries.html">
+ <span class="dropdown-text">Wk 7 · Time series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_lab_matplotlib.html">
+ <span class="dropdown-text">Wk 8 · Figures</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week09/week09_lab_regression_chemistry.html">
+ <span class="dropdown-text">Wk 9 · Regression and chemistry</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week10/week10_lab_meeting_modflow.html">
+ <span class="dropdown-text">Wk 10 · Meeting MODFLOW</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week11/week11_lab_basin_model.html">
+ <span class="dropdown-text">Wk 11 · Tucson basin model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week12/week12_lab_discretization_boundaries.html">
+ <span class="dropdown-text">Wk 12 · Discretization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week13/week13_lab_transient_stresses.html">
+ <span class="dropdown-text">Wk 13 · Transient stresses</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week14/week14_lab_layers_rivers_loading.html">
+ <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 2 · Data Analysis &amp; Visualization</li><li class="breadcrumb-item"><a href="../../slides/week08_tue_figures.html">Week 8 — Figures</a></li><li class="breadcrumb-item"><a href="../../labs/week08/week08_lab_matplotlib.html">Lab · Figures worth showing people</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 1 · Python Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 — Getting started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_tue_getting_started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_thu_data_types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/3 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week02/week02_lab_python_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Python basics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 — Control flow and functions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_tue_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_thu_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week03/week03_lab_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Control flow and functions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 — Arrays and iteration</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_tue_arrays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_thu_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/17 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week04/week04_lab_arrays_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Arrays and iterative solutions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 5 — Introduction to pandas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_tue_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_thu_filtering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/24 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Introduction to pandas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 2 · Data Analysis &amp; Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 6 — Real-world data</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_tue_apis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/29 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_thu_cleaning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week06/week06_lab_real_world_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Working with real-world data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 7 — Time series</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_tue_datetime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/6 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_thu_grouping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week07/week07_lab_timeseries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Time series with pandas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 8 — Figures</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_tue_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/13 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_thu_annotation_maps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_lab_matplotlib.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab · Figures worth showing people</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 9 — Regression and chemistry</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_tue_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/20 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_thu_chemistry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week09/week09_lab_regression_chemistry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Regression and water chemistry</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 3 · MODFLOW &amp; FloPy</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 10 — Meeting MODFLOW</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_tue_what_is_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/27 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_thu_running_it.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/29 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week10/week10_lab_meeting_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Meeting MODFLOW</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 11 — Inputs, outputs, hitting go</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week11_tue_inputs_outputs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/3 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week11_thu_budgets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/5 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week11/week11_lab_basin_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · A model of the Tucson basin</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 12 — Discretization and boundaries</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week12_tue_discretization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week12_thu_unconfined.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/12 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week12/week12_lab_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Discretization and unconfined flow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 13 — Transient stresses</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_tue_time.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/17 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_thu_capture_et.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/19 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week13/week13_lab_transient_stresses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Stresses that change with time</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 14 — Layers, rivers, loading</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week14_tue_layers_rivers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/24 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week14/week14_lab_layers_rivers_loading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Layers, rivers, and inheriting a model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link active" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#part-1-figure-and-axes" id="toc-part-1-figure-and-axes" class="nav-link" data-scroll-target="#part-1-figure-and-axes">Part 1 — Figure and axes</a>
+  <ul class="collapse">
+  <li><a href="#sharing-axes-is-a-claim-about-comparability" id="toc-sharing-axes-is-a-claim-about-comparability" class="nav-link" data-scroll-target="#sharing-axes-is-a-claim-about-comparability">Sharing axes is a claim about comparability</a></li>
+  <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
+  </ul></li>
+  <li><a href="#part-2-colour" id="toc-part-2-colour" class="nav-link" data-scroll-target="#part-2-colour">Part 2 — Colour</a>
+  <ul class="collapse">
+  <li><a href="#colour-cannot-be-the-only-signal" id="toc-colour-cannot-be-the-only-signal" class="nav-link" data-scroll-target="#colour-cannot-be-the-only-signal">Colour cannot be the only signal</a></li>
+  <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">YOUR TURN 2</a></li>
+  </ul></li>
+  <li><a href="#part-3-annotation" id="toc-part-3-annotation" class="nav-link" data-scroll-target="#part-3-annotation">Part 3 — Annotation</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
+  </ul></li>
+  <li><a href="#part-4-maps" id="toc-part-4-maps" class="nav-link" data-scroll-target="#part-4-maps">Part 4 — Maps</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
+  </ul></li>
+  <li><a href="#part-5-saving" id="toc-part-5-saving" class="nav-link" data-scroll-target="#part-5-saving">Part 5 — Saving</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">YOUR TURN 5</a></li>
+  </ul></li>
+  <li><a href="#before-you-leave" id="toc-before-you-leave" class="nav-link" data-scroll-target="#before-you-leave">Before you leave</a></li>
+  <li><a href="#whats-due" id="toc-whats-due" class="nav-link" data-scroll-target="#whats-due">What’s due</a></li>
+  <li><a href="#next-week" id="toc-next-week" class="nav-link" data-scroll-target="#next-week">Next week</a></li>
+  <li><a href="#stuck" id="toc-stuck" class="nav-link" data-scroll-target="#stuck">Stuck?</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 2 · Data Analysis &amp; Visualization</li><li class="breadcrumb-item"><a href="../../slides/week08_tue_figures.html">Week 8 — Figures</a></li><li class="breadcrumb-item"><a href="../../labs/week08/week08_lab_matplotlib.html">Lab · Figures worth showing people</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Week 8 Lab — Figures worth showing people</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>HWRS 564a · Fall 2026</strong></p>
+<p>Up to now you have made plots to find out what the data says. This week you make plots to <em>tell someone else</em> — which is a different job with different rules.</p>
+<p>The difference is mostly not aesthetic. A figure that encodes its meaning in colour alone is unreadable to about one person in twelve; a figure with an unlabelled axis is unreadable to everyone. Those are correctness problems, and they are the ones we spend the session on.</p>
+<section id="how-to-use-this-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
+<p>Run each cell with <strong>Shift+Enter</strong>. Cells marked <strong><code># YOUR TURN</code></strong> have something for you to write. Cells marked <strong><code># CHECK</code></strong> verify your answer — if they run without complaint, you’re right.</p>
+<blockquote class="blockquote">
+<p><strong>Before you submit anything all semester:</strong> <em>Kernel → Restart Kernel and Run All Cells</em>. A notebook that only works when run out of order is not finished.</p>
+</blockquote>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this notebook you can:</p>
+<ol type="1">
+<li>Build multi-panel figures with <code>subplots</code>, and share axes deliberately</li>
+<li>Choose a colormap that suits the data, and say why perceptual uniformity matters</li>
+<li>Encode a distinction redundantly, so colour is never load-bearing on its own</li>
+<li>Annotate a figure so the reader’s eye lands where you want it</li>
+<li>Draw a defensible map from latitude and longitude</li>
+<li>Save at a resolution and size that survives a journal or a projector</li>
+</ol>
+<hr>
+</section>
+<section id="part-1-figure-and-axes" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-figure-and-axes">Part 1 — Figure and axes</h2>
+<p>Everything starts the same way. <code>fig</code> is the page; <code>ax</code> is one set of axes on it.</p>
+<div id="c002" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(p <span class="cf">for</span> p <span class="kw">in</span> Path.cwd().parents <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists())</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>DATA <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"data"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>wells <span class="op">=</span> pd.read_csv(DATA <span class="op">/</span> <span class="st">"tucson_basin_wells.csv"</span>, dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>})</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> pd.read_csv(DATA <span class="op">/</span> <span class="st">"tucson_water_levels.csv"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                     dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>}, parse_dates<span class="op">=</span>[<span class="st">"date"</span>])</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>flow <span class="op">=</span> pd.read_csv(DATA <span class="op">/</span> <span class="st">"cache"</span> <span class="op">/</span> <span class="st">"nwis_09484000_dv.csv"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                   parse_dates<span class="op">=</span>[<span class="st">"datetime"</span>]).set_index(<span class="st">"datetime"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(wells)<span class="sc">:,}</span><span class="ss"> wells, </span><span class="sc">{</span><span class="bu">len</span>(levels)<span class="sc">:,}</span><span class="ss"> levels, </span><span class="sc">{</span><span class="bu">len</span>(flow)<span class="sc">:,}</span><span class="ss"> days of flow"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Always use the object-oriented interface.</strong> <code>plt.plot()</code> draws on whatever axes matplotlib last touched, which is fine for one plot and a bug generator for anything else. <code>ax.plot()</code> says exactly where the line goes.</p>
+<div id="c004" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(axes), axes.shape)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">"axes[0, 0]"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">"axes[0, 1]"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">"axes[1, 0]"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">"axes[1, 1]"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"subplots(2, 2) gives you a 2x2 array of axes"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="sharing-axes-is-a-claim-about-comparability" class="level3">
+<h3 class="anchored" data-anchor-id="sharing-axes-is-a-claim-about-comparability">Sharing axes is a claim about comparability</h3>
+<p><code>sharey=True</code> forces every panel onto the same scale. Do that when the panels should be compared, and <em>don’t</em> when they shouldn’t — a shared axis on incomparable quantities makes one panel look flat for no reason.</p>
+<div id="c006" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sites <span class="op">=</span> [<span class="st">"320906110592701"</span>, <span class="st">"320824110593001"</span>, <span class="st">"321208110525001"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">3.2</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, site <span class="kw">in</span> <span class="bu">zip</span>(axes, sites):</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    one <span class="op">=</span> levels[levels[<span class="st">"site_no"</span>] <span class="op">==</span> site].sort_values(<span class="st">"date"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    ax.plot(one[<span class="st">"date"</span>], one[<span class="st">"depth_to_water_ft"</span>], color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">1.2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    ax.set_title(site[<span class="op">-</span><span class="dv">6</span>:], fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"depth to water (ft)"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].invert_yaxis()          <span class="co"># shared, so inverting one inverts all three</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Three wells on a shared scale — the decline is comparable"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Because the y axis is shared, inverting <code>axes[0]</code> inverts all of them, and the middle well’s 110 ft of decline is visibly larger than the left well’s 6 ft. Set <code>sharey=False</code> and all three would look identical, which would be a lie told entirely with axis limits.</p>
+</section>
+<section id="your-turn-1" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-1">YOUR TURN 1</h3>
+<p>Build a two-panel figure, stacked vertically, sharing the <strong>x</strong> axis:</p>
+<ul>
+<li>top: daily discharge at Sabino Creek for 2006, as a line</li>
+<li>bottom: the same year’s data as a 7-day rolling mean</li>
+</ul>
+<p>Share x so the two line up in time. Label both y axes.</p>
+<div id="c008" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>q2006 <span class="op">=</span> flow.loc[<span class="st">"2006"</span>, <span class="st">"discharge_cfs"</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c009" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(axes) <span class="op">==</span> <span class="dv">2</span>, <span class="ss">f"expected 2 panels, got </span><span class="sc">{</span><span class="bu">len</span>(axes)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> axes[<span class="dv">0</span>].get_shared_x_axes().joined(axes[<span class="dv">0</span>], axes[<span class="dv">1</span>]), <span class="st">"the x axes aren't shared"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> axes[<span class="dv">0</span>].get_ylabel() <span class="kw">and</span> axes[<span class="dv">1</span>].get_ylabel(), <span class="st">"label both y axes"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(axes[<span class="dv">0</span>].lines) <span class="op">&gt;=</span> <span class="dv">1</span> <span class="kw">and</span> <span class="bu">len</span>(axes[<span class="dv">1</span>].lines) <span class="op">&gt;=</span> <span class="dv">1</span>, <span class="st">"both panels need a line"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Two panels, shared x, both labelled. Correct."</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-2-colour" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-colour">Part 2 — Colour</h2>
+<p>Three kinds of colormap, three kinds of data. Using the wrong one misleads.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Data</th>
+<th>Colormap</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>goes one way from low to high</td>
+<td><strong>sequential</strong></td>
+<td><code>viridis</code>, <code>Blues</code></td>
+</tr>
+<tr class="even">
+<td>has a meaningful middle</td>
+<td><strong>diverging</strong></td>
+<td><code>RdBu</code>, <code>coolwarm</code></td>
+</tr>
+<tr class="odd">
+<td>unordered categories</td>
+<td><strong>qualitative</strong></td>
+<td><code>tab10</code></td>
+</tr>
+</tbody>
+</table>
+<div id="c011" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gradient <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">256</span>).reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">4</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">2.6</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, name <span class="kw">in</span> <span class="bu">zip</span>(axes, [<span class="st">"viridis"</span>, <span class="st">"RdBu"</span>, <span class="st">"tab10"</span>, <span class="st">"jet"</span>]):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    ax.imshow(gradient, aspect<span class="op">=</span><span class="st">"auto"</span>, cmap<span class="op">=</span>name)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(name, rotation<span class="op">=</span><span class="dv">0</span>, ha<span class="op">=</span><span class="st">"right"</span>, va<span class="op">=</span><span class="st">"center"</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Look at <code>jet</code>, the bottom one. It has bright bands at cyan and yellow and dark regions at both ends, so <strong>equal steps in the data are not equal steps in apparent brightness</strong>. It invents boundaries that aren’t in the data and hides ones that are. It was the matplotlib default until 2015 and you will still see it everywhere; don’t add to the pile.</p>
+<p><code>viridis</code> is perceptually uniform and stays monotonic when printed in greyscale. That is the default for a reason.</p>
+<section id="colour-cannot-be-the-only-signal" class="level3">
+<h3 class="anchored" data-anchor-id="colour-cannot-be-the-only-signal">Colour cannot be the only signal</h3>
+<p>Roughly one student per cohort — and one reader in twelve — has a colour vision deficiency. Deuteranopia makes red and green nearly identical.</p>
+<div id="c013" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> np.arange(<span class="dv">2005</span>, <span class="dv">2025</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">564</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>series_a <span class="op">=</span> <span class="dv">40</span> <span class="op">+</span> np.cumsum(rng.normal(<span class="fl">1.2</span>, <span class="fl">2.0</span>, <span class="bu">len</span>(years)))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>series_b <span class="op">=</span> <span class="dv">40</span> <span class="op">+</span> np.cumsum(rng.normal(<span class="fl">0.3</span>, <span class="fl">2.0</span>, <span class="bu">len</span>(years)))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">3.4</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># colour only</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(years, series_a, color<span class="op">=</span><span class="st">"#D62728"</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"heavily pumped"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(years, series_b, color<span class="op">=</span><span class="st">"#2CA02C"</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"lightly pumped"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"colour only — indistinguishable to some readers"</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># colour AND dash pattern AND marker</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(years, series_a, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="dv">2</span>, ls<span class="op">=</span><span class="st">"-"</span>, marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>             label<span class="op">=</span><span class="st">"heavily pumped"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(years, series_b, color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="dv">2</span>, ls<span class="op">=</span><span class="st">"--"</span>, marker<span class="op">=</span><span class="st">"s"</span>, ms<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>             label<span class="op">=</span><span class="st">"lightly pumped"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"colour + dash + marker — readable either way"</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    ax.legend(frameon<span class="op">=</span><span class="va">False</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"year"</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"depth to water (ft)"</span>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The right panel costs two extra keyword arguments. <strong>Encode every distinction at least twice</strong> — colour plus dash, or colour plus marker — and the figure works in greyscale, on a bad projector, and for everyone in the room.</p>
+</section>
+<section id="your-turn-2" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-2">YOUR TURN 2</h3>
+<p>Make a scatter of well depth against land surface elevation, coloured by <code>well_depth_ft</code> with a <strong>sequential, perceptually uniform</strong> colormap, and add a colorbar with a label.</p>
+<p>Store the scatter in <code>sc</code> so the check can inspect it.</p>
+<div id="c015" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">4.5</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> ...</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>fig.colorbar(sc, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"well depth (ft)"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"land surface elevation (ft)"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"well depth (ft)"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c016" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sc <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, <span class="st">"assign ax.scatter(...) to sc"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sc.get_array() <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, <span class="st">"pass c=... so colour carries the depth"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>cmap_name <span class="op">=</span> sc.get_cmap().name</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cmap_name <span class="kw">in</span> {<span class="st">"viridis"</span>, <span class="st">"plasma"</span>, <span class="st">"inferno"</span>, <span class="st">"magma"</span>, <span class="st">"cividis"</span>}, (</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"</span><span class="sc">{</span>cmap_name<span class="sc">!r}</span><span class="ss"> is not perceptually uniform — use viridis or a sibling"</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>sc<span class="sc">.</span>get_offsets()<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">:,}</span><span class="ss"> wells, coloured with </span><span class="sc">{</span>cmap_name<span class="sc">}</span><span class="ss">. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-3-annotation" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-annotation">Part 3 — Annotation</h2>
+<p>A reader looks at a figure for a few seconds. Annotation is how you spend those seconds on the thing you care about, instead of leaving them to search.</p>
+<div id="c018" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>one <span class="op">=</span> levels[levels[<span class="st">"site_no"</span>] <span class="op">==</span> <span class="st">"320824110593001"</span>].sort_values(<span class="st">"date"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">9.5</span>, <span class="dv">4</span>))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>ax.plot(one[<span class="st">"date"</span>], one[<span class="st">"depth_to_water_ft"</span>], color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># a horizontal reference line, labelled</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>ax.axhline(one[<span class="st">"depth_to_water_ft"</span>].iloc[<span class="dv">0</span>], color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">":"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>ax.text(one[<span class="st">"date"</span>].iloc[<span class="dv">2</span>], one[<span class="st">"depth_to_water_ft"</span>].iloc[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">4</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"level when records began"</span>, fontsize<span class="op">=</span><span class="dv">9</span>, color<span class="op">=</span><span class="st">"grey"</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># a shaded era — the mid-century agricultural pumping peak</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>ax.axvspan(pd.Timestamp(<span class="st">"1950-01-01"</span>), pd.Timestamp(<span class="st">"1980-01-01"</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>           color<span class="op">=</span><span class="st">"#81D3EB"</span>, alpha<span class="op">=</span><span class="fl">0.18</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>ax.text(pd.Timestamp(<span class="st">"1952-01-01"</span>), <span class="dv">30</span>, <span class="st">"peak agricultural pumping"</span>, fontsize<span class="op">=</span><span class="dv">9</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">"#1E5288"</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># an arrow to the deepest point</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>deepest <span class="op">=</span> one.loc[one[<span class="st">"depth_to_water_ft"</span>].idxmax()]</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>ax.annotate(<span class="ss">f"</span><span class="sc">{</span>deepest[<span class="st">'depth_to_water_ft'</span>]<span class="sc">:.0f}</span><span class="ss"> ft"</span>,</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            xy<span class="op">=</span>(deepest[<span class="st">"date"</span>], deepest[<span class="st">"depth_to_water_ft"</span>]),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>            xytext<span class="op">=</span>(<span class="op">-</span><span class="dv">70</span>, <span class="dv">26</span>), textcoords<span class="op">=</span><span class="st">"offset points"</span>, fontsize<span class="op">=</span><span class="dv">9</span>,</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>            arrowprops<span class="op">=</span><span class="bu">dict</span>(arrowstyle<span class="op">=</span><span class="st">"-&gt;"</span>, color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="fl">1.2</span>))</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"depth to water (ft below land surface)"</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Well D-15-13 11CBA: 110 ft of decline over 63 years of record"</span>)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Four annotations, four jobs: a baseline to measure against, a shaded period to give context, an arrow to the extreme, and a title that states the finding rather than naming the variables.</p>
+<p><strong>Titles are the most wasted line in scientific figures.</strong> “Depth to water vs. time” tells the reader what they can already see. Say what it shows.</p>
+<section id="your-turn-3" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
+<p>Take the monthly climatology from last week and mark the monsoon.</p>
+<ul>
+<li>Shade June through September with <code>axvspan</code></li>
+<li>Add a text label saying <code>"monsoon"</code> inside the shading</li>
+<li>Give the figure a title that states a <em>finding</em>, not a variable list</li>
+</ul>
+<div id="c020" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> flow[<span class="st">"discharge_cfs"</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>climatology <span class="op">=</span> q.groupby(q.index.month).mean()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">3.6</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ax.bar(climatology.index, climatology.values, color<span class="op">=</span><span class="st">"#1E5288"</span>, alpha<span class="op">=</span><span class="fl">0.85</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">13</span>))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"month"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"mean daily discharge (cfs)"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c021" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(ax.patches) <span class="op">&gt;</span> <span class="dv">12</span>, <span class="st">"axvspan adds a patch — did you call it?"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">any</span>(<span class="st">"monsoon"</span> <span class="kw">in</span> t.get_text().lower() <span class="cf">for</span> t <span class="kw">in</span> ax.texts), <span class="op">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"add a text label saying 'monsoon'"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> ax.get_title()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> title, <span class="st">"give the figure a title"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">"vs"</span> <span class="kw">not</span> <span class="kw">in</span> title.lower() <span class="kw">and</span> <span class="bu">len</span>(title.split()) <span class="op">&gt;=</span> <span class="dv">4</span>, <span class="op">\</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"say what the figure shows, not which variables are on which axis"</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"title: </span><span class="sc">{</span>title<span class="sc">!r}</span><span class="ss">"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-4-maps" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-maps">Part 4 — Maps</h2>
+<p>A map is a scatter plot with two extra obligations: the aspect ratio has to be right, and the reader has to be able to tell where they are.</p>
+<div id="c023" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">4.6</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># wrong: default aspect stretches the basin</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].scatter(wells[<span class="st">"longitude"</span>], wells[<span class="st">"latitude"</span>], s<span class="op">=</span><span class="dv">4</span>, c<span class="op">=</span><span class="st">"#AB0520"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"default aspect — the basin is distorted"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># right: one degree of latitude is not one degree of longitude</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].scatter(wells[<span class="st">"longitude"</span>], wells[<span class="st">"latitude"</span>], s<span class="op">=</span><span class="dv">4</span>, c<span class="op">=</span><span class="st">"#AB0520"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.deg2rad(wells[<span class="st">"latitude"</span>].mean())))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"corrected for latitude"</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"longitude"</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"latitude"</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>At 32°N a degree of longitude is only <code>cos(32°) ≈ 0.85</code> as long as a degree of latitude. Plotting them 1:1 stretches everything east-west by 18%, which is enough to change what a reader thinks the basin’s shape is.</p>
+<p>For a small area, that aspect correction is honest and sufficient. For anything larger — or when you need a real projection, a scale bar, or a basemap — <code>cartopy</code> does it properly:</p>
+<div id="c025" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cartopy.crs <span class="im">as</span> ccrs</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="fl">6.5</span>, <span class="fl">6.5</span>))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, projection<span class="op">=</span>ccrs.PlateCarree())</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> ax.scatter(wells[<span class="st">"longitude"</span>], wells[<span class="st">"latitude"</span>],</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                c<span class="op">=</span>wells[<span class="st">"well_depth_ft"</span>], s<span class="op">=</span><span class="dv">10</span>, cmap<span class="op">=</span><span class="st">"viridis"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                transform<span class="op">=</span>ccrs.PlateCarree())</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>gl <span class="op">=</span> ax.gridlines(draw_labels<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">":"</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>gl.top_labels <span class="op">=</span> gl.right_labels <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>fig.colorbar(sc, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"well depth (ft)"</span>, shrink<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Tucson basin monitoring wells"</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: no plt.tight_layout() here — see below.</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Two things about cartopy that will cost you an afternoon.</strong></p>
+<p><strong><code>plt.tight_layout()</code> breaks it.</strong> On a cartopy <code>GeoAxes</code> it raises <code>GEOSException: Points of LinearRing do not form a closed linestring</code> from deep inside shapely, and nothing in that message mentions the layout call that caused it. Use <code>fig.subplots_adjust()</code> or <code>constrained_layout=True</code> instead.</p>
+<p><strong>Coastlines and basemaps need the internet.</strong> <code>ax.coastlines()</code>, <code>ax.add_feature(...)</code>, and any basemap download shapefiles from Natural Earth on first use. That works on your laptop and fails in a fresh codespace with no network. The projection and gridlines above need no download, which is why this lab stops there.</p>
+</blockquote>
+<section id="your-turn-4" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
+<p>Map the <strong>decline</strong>, not the depth. For each well in <code>levels</code>, compute the change in depth to water from its first to its last measurement, then map those 80 wells with a <strong>diverging</strong> colormap centred on zero.</p>
+<p>A diverging map is right here because zero is meaningful: negative is recovery, positive is decline, and the reader needs to see which side of zero a point is on.</p>
+<div id="c027" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>change <span class="op">=</span> (</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    levels.sort_values(<span class="st">"date"</span>).groupby(<span class="st">"site_no"</span>)[<span class="st">"depth_to_water_ft"</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    .agg(<span class="kw">lambda</span> s: s.iloc[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> s.iloc[<span class="dv">0</span>])</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    .rename(<span class="st">"change_ft"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>mapped <span class="op">=</span> wells.merge(change, left_on<span class="op">=</span><span class="st">"site_no"</span>, right_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(mapped)<span class="sc">}</span><span class="ss"> wells with a change value"</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">6.5</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> ...</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.deg2rad(mapped[<span class="st">"latitude"</span>].mean())))</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>fig.colorbar(sc, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"change in depth to water (ft)"</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"longitude"</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"latitude"</span>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Water table decline is not evenly distributed across the basin"</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c028" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sc <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, <span class="st">"assign ax.scatter(...) to sc"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> sc.get_array()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> arr <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, <span class="st">"colour has to carry change_ft"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sc.get_cmap().name <span class="kw">in</span> {<span class="st">"RdBu"</span>, <span class="st">"RdBu_r"</span>, <span class="st">"coolwarm"</span>, <span class="st">"bwr"</span>, <span class="st">"seismic"</span>, <span class="st">"PuOr"</span>}, <span class="op">\</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"</span><span class="sc">{</span>sc<span class="sc">.</span>get_cmap()<span class="sc">.</span>name<span class="sc">!r}</span><span class="ss"> is not diverging — zero has to sit in the middle"</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>lo, hi <span class="op">=</span> sc.get_clim()</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(lo <span class="op">+</span> hi) <span class="op">&lt;</span> <span class="fl">1e-6</span>, (</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"colour limits </span><span class="sc">{</span>lo<span class="sc">:.1f}</span><span class="ss"> to </span><span class="sc">{</span>hi<span class="sc">:.1f}</span><span class="ss"> are not symmetric about zero — "</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pass vmin=-v, vmax=+v or the neutral colour lands somewhere arbitrary"</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(arr)<span class="sc">}</span><span class="ss"> wells, </span><span class="sc">{</span>sc<span class="sc">.</span>get_cmap()<span class="sc">.</span>name<span class="sc">}</span><span class="ss">, limits </span><span class="sc">{</span>lo<span class="sc">:.0f}</span><span class="ss"> to </span><span class="sc">{</span>hi<span class="sc">:.0f}</span><span class="ss">. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>That symmetry check is the point of the exercise.</strong> A diverging colormap whose limits are −6 to +111 puts its neutral colour at +52 ft of decline, so wells that have dropped fifty feet appear white — “unchanged”. The colormap has to be centred on zero or it says the opposite of what you mean.</p>
+<hr>
+</section>
+</section>
+<section id="part-5-saving" class="level2">
+<h2 class="anchored" data-anchor-id="part-5-saving">Part 5 — Saving</h2>
+<p>The figure on your screen and the figure in the document are not the same object.</p>
+<div id="c031" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>OUT <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"_run"</span> <span class="op">/</span> <span class="st">"week08_figures"</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>OUT.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">6.5</span>, <span class="dv">4</span>))       <span class="co"># size in INCHES</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.plot(climatology.index, climatology.values, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="dv">2</span>, marker<span class="op">=</span><span class="st">"o"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"month"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"mean daily discharge (cfs)"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Sabino Creek monthly climatology, 2005-2024"</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>fig.savefig(OUT <span class="op">/</span> <span class="st">"climatology.png"</span>, dpi<span class="op">=</span><span class="dv">300</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>fig.savefig(OUT <span class="op">/</span> <span class="st">"climatology.pdf"</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="bu">sorted</span>(OUT.iterdir()):</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>f<span class="sc">.</span>name<span class="sc">:20s}</span><span class="ss"> </span><span class="sc">{</span>f<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="dv">1024</span><span class="sc">:8.1f}</span><span class="ss"> kB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The four arguments that matter:</p>
+<ul>
+<li><strong><code>figsize</code></strong> is in inches, and it sets how big the text is <em>relative to</em> the data. Scaling a figure down in Word shrinks the fonts with it; setting <code>figsize</code> to the final printed width does not.</li>
+<li><strong><code>dpi=300</code></strong> for raster output. 72 looks fine on screen and terrible on paper.</li>
+<li><strong><code>bbox_inches="tight"</code></strong> crops the whitespace, and stops a long y-label being cut off.</li>
+<li><strong><code>.pdf</code> or <code>.svg</code></strong> for anything going into a paper — vector, so it stays sharp at any zoom, and usually smaller than the PNG.</li>
+</ul>
+<section id="your-turn-5" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-5">YOUR TURN 5</h3>
+<p>Produce one figure you would put in front of an audience: the basin-wide record.</p>
+<p>Requirements the check enforces:</p>
+<ul>
+<li>two panels sharing the x axis</li>
+<li>top: median depth to water across all wells, by year</li>
+<li>bottom: how many wells were measured in each year</li>
+<li>both y axes labelled, the top one inverted, a title that states a finding</li>
+<li>saved to <code>OUT / "basin_summary.png"</code> at 300 dpi</li>
+</ul>
+<div id="c033" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>annual <span class="op">=</span> levels.assign(year<span class="op">=</span>levels[<span class="st">"date"</span>].dt.year)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>median_depth <span class="op">=</span> annual.groupby(<span class="st">"year"</span>)[<span class="st">"depth_to_water_ft"</span>].median()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n_wells <span class="op">=</span> annual.groupby(<span class="st">"year"</span>)[<span class="st">"site_no"</span>].nunique()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c034" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>saved <span class="op">=</span> OUT <span class="op">/</span> <span class="st">"basin_summary.png"</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> saved.exists(), <span class="ss">f"save the figure to </span><span class="sc">{</span>saved<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> saved.stat().st_size <span class="op">&gt;</span> <span class="dv">40_000</span>, <span class="st">"that file is too small for 300 dpi — check the dpi"</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(axes) <span class="op">==</span> <span class="dv">2</span>, <span class="ss">f"expected 2 panels, got </span><span class="sc">{</span><span class="bu">len</span>(axes)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> axes[<span class="dv">0</span>].get_shared_x_axes().joined(axes[<span class="dv">0</span>], axes[<span class="dv">1</span>]), <span class="st">"share the x axis"</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> axes[<span class="dv">0</span>].yaxis_inverted(), <span class="st">"invert the top y axis — depth counts downward"</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> axes[<span class="dv">0</span>].get_ylabel() <span class="kw">and</span> axes[<span class="dv">1</span>].get_ylabel(), <span class="st">"label both y axes"</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(axes[<span class="dv">0</span>].get_title() <span class="kw">or</span> fig._suptitle.get_text()) <span class="op">&gt;</span> <span class="dv">20</span>, <span class="st">"give it a real title"</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"saved </span><span class="sc">{</span>saved<span class="sc">.</span>name<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>saved<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="dv">1024</span><span class="sc">:.0f}</span><span class="ss"> kB. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Look at what the bottom panel does to the top one.</strong> The number of wells measured per year is not decoration — it is the caveat, and here it changes the reading entirely.</p>
+<p>Between 2007 and 2008 the median depth jumps from about 71 ft to about 242 ft. The aquifer did not drop 170 feet in a year. The well count went from three to five, and the three happened to be shallow ones. <strong>That entire feature is a sampling artifact</strong>, and it is invisible without the bottom panel.</p>
+<p>The genuine signal is narrower: among the five wells measured consistently since 2011, the median has risen about 32 ft. That is a real recovery in a real set of wells, and it is a much smaller claim than “the basin recovered”.</p>
+<p>Putting the sample size under the trend is how you make a figure that is honest about what it can support. It is also the difference between a figure that survives review and one that comes back.</p>
+<hr>
+</section>
+</section>
+<section id="before-you-leave" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-leave">Before you leave</h2>
+<ol type="1">
+<li><em>Kernel → Restart Kernel and Run All Cells</em></li>
+<li>Fix anything that breaks</li>
+<li>Save</li>
+</ol>
+</section>
+<section id="whats-due" class="level2">
+<h2 class="anchored" data-anchor-id="whats-due">What’s due</h2>
+<ul>
+<li><strong>HW 6 — Timeseries aggregation</strong>, Wednesday 10/14 at 11:59pm</li>
+<li><strong>Project 2 analysis, part 1</strong></li>
+</ul>
+</section>
+<section id="next-week" class="level2">
+<h2 class="anchored" data-anchor-id="next-week">Next week</h2>
+<p>Statistics and regression: fitting a trend, and saying honestly how much you believe it. Then water chemistry.</p>
+</section>
+<section id="stuck" class="level2">
+<h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
+<ul>
+<li>A figure that doesn’t appear usually means you forgot <code>plt.show()</code>, or the cell ended with something else.</li>
+<li>Overlapping labels: <code>plt.tight_layout()</code>, or <code>fig.subplots_adjust()</code> for fine control.</li>
+<li><code>ax.legend()</code> showing nothing means no artist has a <code>label=</code>.</li>
+<li>Text cut off in a saved file means you left out <code>bbox_inches="tight"</code>.</li>
+<li>Office hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.</li>
+</ul>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../labs/week08";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/hwrs564-hydrogeologic-analysis\.github\.io\/hwrs564a_course_materials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../slides/week08_thu_annotation_maps.html" class="pagination-link" aria-label="Thu 10/15 · Slides">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Thu 10/15 · Slides</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../slides/week09_tue_regression.html" class="pagination-link" aria-label="Tue 10/20 · Slides">
+        <span class="nav-page-text">Tue 10/20 · Slides</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>HWRS 564a · Fall 2026 · Dr.&nbsp;Andrew Bennett</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
