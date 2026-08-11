@@ -6,9 +6,6 @@ week: 3
 title: "Week 3 — Control flow and functions"
 dates: "September 8 & 10, 2026"
 
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Last week you wrote single expressions. This week your code starts making
   decisions and repeating itself. We cover conditionals, for and while loops,
@@ -47,9 +44,12 @@ assignments:
   - text: "Quiz 1 — on Week 2 material"
     quiz: "TBD-week03-quiz"
     note: "In class, Tuesday 9/8. Five minutes, at the start of the session."
-  - text: "Submit: HW 1 — My first Jupyter notebook"
+  - text: "Submit: HW 1 — A reproducible groundwater calculation"
     dropbox: "Arizona-13531601"
-    note: "Due Wednesday 9/9 at 11:59pm."
+    note: "Due Wednesday 9/9 at 11:59pm. Create and submit your own executed notebook."
+  - text: "Open: HW 2 — Numerical water balance"
+    dropbox: "TBD-hw02-dropbox"
+    note: "Available after class Thursday 9/10; due Wednesday 9/23 at 11:59pm. No starter notebook is provided."
 
 bonus:
   - text: "Python documentation — control flow tools"

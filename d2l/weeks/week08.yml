@@ -1,9 +1,6 @@
 week: 8
 title: "Week 8 — More on matplotlib"
 dates: "October 13 & 15, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Up to now you have made plots to find out what the data says. This week you
   make plots to tell someone else, which is a different job with different
@@ -45,9 +42,9 @@ assignments:
   - text: "Quiz 6 — on Week 7 material"
     quiz: "TBD-week08-quiz"
     note: "In class, Tuesday 10/13."
-  - text: "Submit: HW 6 — Timeseries aggregation"
-    dropbox: "TBD-hw06-dropbox"
-    note: "Due Wednesday 10/14 at 11:59pm."
+  - text: "Continue: HW 4 — Tell one hydrologic story with a figure"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Use this week's figure and map material; due Wednesday 10/21 at 11:59pm."
   - text: "Submit: Project 2 — analysis component, part 1"
     dropbox: "TBD-project2a-dropbox"
 

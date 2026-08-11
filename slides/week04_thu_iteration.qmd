@@ -13,7 +13,8 @@ Week 4, session 2 of 2
 1. Equations you can't rearrange, and what to do about them
 2. Bisection: the method that cannot fail
 3. Stepping through time: explicit vs. implicit
-4. Why explicit schemes blow up, and exactly when
+4. Newton iteration: how an implicit step is actually solved
+5. Why explicit schemes blow up, and exactly when
 
 This is the session that explains what MODFLOW is *doing* when you press go in
 Week 11. Everything after this is the same two ideas at scale.
@@ -289,6 +290,28 @@ The price: at $\Delta t = 0.15$ it gives 40.0 where the truth is 22.3. Stable is
 not the same as accurate.
 :::
 
+<!-- Adapted from old_slides/hwrs564a_sept4.pdf and hwrs564a_sept9.pdf. -->
+## Implicit methods move the hard problem inside the step {.smaller}
+
+For a nonlinear reservoir,
+
+$$\frac{dS}{dt} = P - kS^{3/2} - E$$
+
+an implicit step puts the unknown $S_{n+1}$ inside the flux term:
+
+$$g(S_{n+1}) = S_{n+1} - S_n - \Delta t\left(P-kS_{n+1}^{3/2}-E\right)=0$$
+
+::: {.fragment}
+Newton's method solves that root problem by repeatedly updating
+
+$$S^{(j+1)} = S^{(j)} - \frac{g(S^{(j)})}{g'(S^{(j)})}$$
+:::
+
+::: {.fragment .due-notice}
+The tolerance and iteration cap now apply **inside every time step**. That is
+the bridge from today's reservoir to MODFLOW's solver messages.
+:::
+
 ## Your turn: the stability limit
 
 At what time step does forward Euler start to *oscillate*, and at what time step
@@ -354,6 +377,7 @@ What you did today
 :::
 
 - Bisection: guaranteed, slow, needs a real bracket
+- Newton iteration: fast near a solution, but it needs a good starting point
 - Every solver needs a tolerance and an iteration cap
 - Explicit is accurate until it explodes; implicit never explodes and is damped
 - Stability for forward Euler is $\Delta t < 2/k$

@@ -12,9 +12,10 @@ Week 9, session 1 of 2
 
 1. Quiz — five minutes, on matplotlib
 2. Fitting a line, and what every returned number means
-3. Residuals, which is where the information is
-4. Why $R^2$ is not a measure of model quality
-5. scikit-learn, and splitting train from test *correctly*
+3. What a p-value is actually testing
+4. Residuals, which is where the information is
+5. Why $R^2$ is not a measure of model quality
+6. scikit-learn, and splitting train from test *correctly*
 
 Fitting is one function call. Everything worth learning is in what you do next.
 
@@ -70,6 +71,22 @@ With 379 measurements, almost **any** real trend is "significant".
 Significance answers *"is it distinguishable from zero?"* It does not answer
 *"is it large enough to matter?"* — and the second one is the question water
 managers ask.
+:::
+
+<!-- Adapted from old_slides/hwrs564a_sept25.pdf. -->
+## Every hypothesis test has four pieces {.smaller}
+
+| Piece | For the regression slope |
+|---|---|
+| **Test statistic** | estimated slope divided by its standard error |
+| **Null hypothesis** | the true slope is zero |
+| **Alternative** | the true slope is not zero |
+| **Null distribution** | values the statistic would take if the null were true |
+
+::: {.fragment}
+The p-value is the probability, **under the null model**, of a statistic at
+least as extreme as the one observed. It is not the probability that the null
+hypothesis is true.
 :::
 
 ## Your turn: report it properly
@@ -348,6 +365,7 @@ What you did today
 
 - Convert dates to elapsed years before fitting, so the slope has units
 - Report the slope with its standard error
+- Name the statistic, null, alternative, and null distribution before reading a p-value
 - Plot the residuals — structure there means the model is wrong
 - $R^2$ measures variance absorbed in *this sample*, not model quality
 - Split time series by time, never at random

@@ -12,9 +12,10 @@ Week 10, session 1 of 2
 
 1. Quiz — five minutes, on regression and chemistry
 2. What changes when you build a model
-3. The equation MODFLOW solves, and how it discretizes it
-4. Six questions, six packages
-5. FloPy, and why you never edit an input file by hand
+3. The conceptual model that comes before the grid
+4. The equation MODFLOW solves, and how it discretizes it
+5. Six questions, six packages
+6. FloPy, and why you never edit an input file by hand
 
 For nine weeks you inferred what the aquifer was doing from observations. From
 today you build something that has to obey conservation of mass.
@@ -62,6 +63,23 @@ constraint is the whole value.**
 ::: {.fragment}
 Weeks 10 to 14 are as much about **not being fooled by your own model** as about
 building one.
+:::
+
+<!-- Adapted from old_slides/hwrs564a_oct23.pdf. -->
+## A model starts as a question, not a grid
+
+Before opening FloPy, write down four things:
+
+::: {.incremental}
+1. **Purpose** — what decision or flux must the model inform?
+2. **System and boundaries** — what is inside, and what crosses the edges?
+3. **Inputs and outputs** — what is imposed, and what will be compared to data?
+4. **Use test** — what result would change your conclusion?
+:::
+
+::: {.fragment .due-notice}
+The grid, packages, and solver are an implementation of that conceptual model.
+If the question is vague, a finer grid only gives a more detailed vague answer.
 :::
 
 # The equation {background-color="#0C234B"}
@@ -310,6 +328,7 @@ What you did today
 :::
 
 - A model exists to close a water budget you cannot measure
+- Define the purpose, system, boundaries, and use test before building the grid
 - MODFLOW discretizes the flow equation into one equation per cell
 - Six questions, six packages, and a `.nam` file listing them
 - `top` and `botm` are elevations

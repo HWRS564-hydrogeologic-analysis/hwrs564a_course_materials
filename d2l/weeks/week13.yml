@@ -1,9 +1,6 @@
 week: 13
 title: "Week 13 — Wells, recharge, ET, and transient flow"
 dates: "November 17 & 19, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Every model so far has been steady state, which answers what the aquifer
   settles down to if nothing changes. Water managers ask *when* — when the water
@@ -39,9 +36,12 @@ assignments:
   - text: "Quiz 11 — on Week 12 material"
     quiz: "TBD-week13-quiz"
     note: "In class, Tuesday 11/17."
-  - text: "Submit: HW 11 — 2D steady-state model"
-    dropbox: "TBD-hw11-dropbox"
-    note: "Due Wednesday 11/25 at 11:59pm."
+  - text: "Submit: HW 6 — Build and stress-test a basin model"
+    dropbox: "TBD-hw06-dropbox"
+    note: "Due Wednesday 11/18 at 11:59pm."
+  - text: "Open: HW 7 — Where does the pumped water come from?"
+    dropbox: "TBD-hw07-dropbox"
+    note: "Available after class Thursday 11/19; due Wednesday 12/2 at 11:59pm."
   - text: "Submit: Project 3 — analysis component, part 1"
     dropbox: "TBD-project3a-dropbox"
 

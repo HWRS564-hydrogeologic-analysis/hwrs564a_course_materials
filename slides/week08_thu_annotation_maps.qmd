@@ -13,7 +13,7 @@ Week 8, session 2 of 2
 1. Annotation: spending the reader's attention deliberately
 2. Titles that say something
 3. Maps from latitude and longitude, without lying about shape
-4. Saving: `figsize`, `dpi`, and vector vs. raster
+4. Two meanings of vector vs. raster, then `figsize` and `dpi`
 5. The panel that keeps a figure honest
 
 # Annotation {background-color="#0C234B"}
@@ -121,6 +121,24 @@ notice that themselves, and most won't.
 :::
 
 # Maps {background-color="#AB0520"}
+
+<!-- Adapted from old_slides/hwrs564a_oct14.pdf. -->
+## Raster and vector describe two different decisions {.smaller}
+
+| Context | Raster | Vector |
+|---|---|---|
+| **GIS data** | A grid of cells: elevation, temperature, recharge | Points, lines, and polygons: wells, rivers, basin boundaries |
+| **Saved figures** | Pixels: PNG or JPEG | Drawing instructions: PDF or SVG |
+
+::: {.fragment}
+A vector basin boundary can be plotted over a raster elevation grid, then the
+whole figure can be saved as either a raster PNG or a vector PDF.
+:::
+
+::: {.fragment .due-notice}
+Same words, different decisions: **data structure** when building the map,
+**output format** when exporting the figure.
+:::
 
 ## A map is a scatter with two obligations
 
@@ -296,6 +314,7 @@ What you did today
 - Annotate the thing you want looked at; don't leave the reader to search
 - A title that could be generated from the axis labels is doing no work
 - Correct the aspect on any lat/lon map
+- Distinguish GIS raster/vector data from raster/vector output formats
 - `figsize` in final printed inches, `dpi=300`, `bbox_inches="tight"`
 - Show the sample size when the sample changes
 

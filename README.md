@@ -208,8 +208,7 @@ Every bullet must carry exactly one of five link forms — `url`,
 linter rejects an item with none of them.
 
 It also fails the build on the other failure modes that actually happened in
-2025: a missing section, a title whose week number disagrees with the file, a
-banner image with no alt text.
+2025: a missing section or a title whose week number disagrees with the file.
 
 A `dropbox` or `quiz` rcode written as `TBD-...` is a deliberate placeholder for
 a D2L object that doesn't exist yet. The page still generates so you can review
@@ -275,6 +274,7 @@ Two things worth knowing:
 ```bash
 python scripts/check_slides.py slides/*.qmd       # exercise/hint wiring, blanks, divs
 python d2l/generate.py d2l/weeks/*.yml --check    # D2L page lint
+python d2l/generate_assignments.py d2l/assignments/hw*.yml --check
 python scripts/fill_solutions.py labs/*/*.ipynb   # regenerate the runnable copies
 pytest labs/                                      # execute them top-to-bottom
 ```
@@ -315,7 +315,8 @@ the `gh-pages` branch.
 
 - Slides: `slides/weekNN_<day>_<topic>.qmd`
 - Labs: `labs/weekNN/weekNN_lab_<topic>.ipynb`
-- Homework: `homework/hwNN_<topic>.ipynb`
+- Homework prompt source: `homework/hwNN_<topic>.md`
+- D2L assignment settings: `d2l/assignments/hwNN.yml`
 - Quizzes: `quizzes/weekNN.yml`
 - D2L pages: `d2l/weeks/weekNN.yml`
 

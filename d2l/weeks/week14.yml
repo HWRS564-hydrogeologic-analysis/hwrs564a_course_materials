@@ -1,9 +1,6 @@
 week: 14
 title: "Week 14 — Layered models, rivers, and loading existing models"
 dates: "November 24, 2026 (Tuesday only)"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   One session this week; Thanksgiving is Thursday. Two topics, and they are the
   two you are most likely to need in practice. Layers, because aquifers are not
@@ -37,9 +34,9 @@ assignments:
   # A bare string renders as plain text with no link — which is right here,
   # because there is nothing to link to.
   - "*No quiz this week* — there is no Thursday session. Week 12 and 13 material is covered by the Week 15 quiz."
-  - text: "Submit: HW 12 — Applying fluxes to a MODFLOW model"
-    dropbox: "TBD-hw12-dropbox"
-    note: "Due Wednesday 12/2 at 11:59pm."
+  - text: "Continue: HW 7 — Where does the pumped water come from?"
+    dropbox: "TBD-hw07-dropbox"
+    note: "No work is due during Thanksgiving week; HW 7 is due Wednesday 12/2 at 11:59pm."
 
 bonus:
   - text: "FloPy — loading and modifying existing models"

@@ -1,9 +1,6 @@
 week: 11
 title: "Week 11 — Inputs, outputs, and hitting go"
 dates: "November 3 & 5, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   This week you build a model of the actual Tucson basin: 15 km by 10 km at 250 m
   resolution, on land-surface elevations fitted to the 1,693 USGS wells you have
@@ -40,9 +37,12 @@ assignments:
   - text: "Quiz 9 — on Week 10 material"
     quiz: "TBD-week11-quiz"
     note: "In class, Tuesday 11/3."
-  - text: "Submit: HW 9 — MODFLOW structure diagram"
-    dropbox: "TBD-hw09-dropbox"
-    note: "Due Wednesday 11/11 at 11:59pm."
+  - text: "Submit: HW 5 — Three checks before believing an answer"
+    dropbox: "TBD-hw05-dropbox"
+    note: "Due Wednesday 11/4 at 11:59pm."
+  - text: "Open: HW 6 — Build and stress-test a basin model"
+    dropbox: "TBD-hw06-dropbox"
+    note: "Available after class Thursday 11/5; due Wednesday 11/18 at 11:59pm."
 
 bonus:
   - text: "FloPy plotting — PlotMapView and PlotCrossSection"

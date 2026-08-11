@@ -13,7 +13,7 @@ Week 2, session 1 of 2
 1. Why Python, for *this* kind of work
 2. Three ways to run Python — and which one we use when
 3. Notebooks: cells, the kernel, and the trap everyone falls into
-4. Your environment: Codespaces and `uv`
+4. Your tool stack: GitHub, Codespaces, VS Code, Jupyter, and `uv`
 5. Packages and `import`
 
 By the end you will have run code, made a variable, and computed a Darcy flux.
@@ -36,7 +36,7 @@ It wins because **the tools you need already exist in it**:
 
 ::: {.fragment}
 That last row is why this course exists. By week 10 you will be building
-MODFLOW models from Python — and `flopy` is *the* way that's done now.
+MODFLOW models from Python, and `flopy` is the way that's done now.
 :::
 
 ## What this replaces
@@ -298,6 +298,22 @@ Nothing to install on your own machine. Nothing to break. If your codespace
 gets into a bad state, delete it and make a new one — that is the *point*.
 :::
 
+<!-- Adapted from old_slides/hwrs564a_sept11.pdf. -->
+## These tools are different layers
+
+| Layer | Its job in this course |
+|---|---|
+| **Git** | Records the history of changes to files |
+| **GitHub** | Hosts the shared repository and coordinates copies |
+| **Codespaces** | Runs the remote Linux computer that holds the repo |
+| **VS Code** | Gives you the editor, terminal, and notebook interface |
+| **Jupyter kernel** | Runs Python and remembers the current variables |
+
+::: {.fragment}
+When something breaks, name the layer first. A Git sync problem, a Codespaces
+build problem, and a stopped Jupyter kernel need three different fixes.
+:::
+
 ## What defines the environment
 
 `pyproject.toml`, in the repo root:
@@ -446,6 +462,7 @@ What you did today
 
 - Ran Python three different ways, and know when each is right
 - Know that a notebook's kernel has a history the document doesn't show
+- Can distinguish the repository, remote computer, interface, and Python kernel
 - Made variables, imported a module, computed a Darcy flux
 
 ::: {.kicker}

@@ -1,9 +1,6 @@
 week: 12
 title: "Week 12 — Discretization and boundary conditions"
 dates: "November 10 & 12, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Last week's model converged on the first try because the aquifer was confined,
   which makes the equations linear. This week you take the confining layer off,
@@ -41,9 +38,9 @@ assignments:
   - text: "Quiz 10 — on Week 11 material"
     quiz: "TBD-week12-quiz"
     note: "In class, Tuesday 11/10."
-  - text: "Submit: HW 10 — First MODFLOW model"
-    dropbox: "TBD-hw10-dropbox"
-    note: "Due Wednesday 11/18 at 11:59pm."
+  - text: "Continue: HW 6 — Build and stress-test a basin model"
+    dropbox: "TBD-hw06-dropbox"
+    note: "Use this week's discretization and boundary material; due Wednesday 11/18 at 11:59pm."
 
 bonus:
   - text: "MODFLOW-NWT — the version that handles dewatering properly"

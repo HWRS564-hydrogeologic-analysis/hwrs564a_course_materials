@@ -11,7 +11,7 @@ Week 6, session 1 of 2
 :::
 
 1. Quiz — five minutes, on pandas
-2. What an API is, and why you want one
+2. What an API request contains, and why you want one
 3. `dataretrieval`, and the fact that it moved
 4. Writing a fetch that survives the API being down
 5. What arrives, and why it isn't what you asked for
@@ -36,6 +36,29 @@ Three things that buys you:
 - **it is current** — no waiting for someone to re-export
 - **it is reproducible** — the request is in your code, not in your downloads folder
 - **it scales** — one site or four hundred, same three lines
+:::
+
+<!-- Adapted from old_slides/hwrs564a_sept23.pdf. -->
+## A request is an endpoint plus parameters
+
+```text
+https://waterservices.usgs.gov/nwis/dv/
+    ?sites=09484000
+    &format=json
+    &startDT=2005-01-01
+    &endDT=2024-12-31
+```
+
+::: {.incremental}
+- The **endpoint** names the service: daily values (`dv`)
+- `?` starts the query; `&` separates its pieces
+- Each `key=value` pair makes one choice explicit
+- Change the values in a loop and the same request scales to many sites
+:::
+
+::: {.fragment}
+A wrapper does not remove this request. It gives the parameters Python names,
+constructs the URL, sends it, and parses the response.
 :::
 
 ## Why use a wrapper
@@ -351,6 +374,7 @@ What you did today
 :::
 
 - An API is a URL that returns data; a wrapper turns it into a DataFrame
+- An API request is an endpoint plus explicit `key=value` parameters
 - `dataretrieval` moved to `waterdata`, and tutorials haven't caught up
 - Every API call gets a fallback, and the fallback announces itself
 - Rename cryptic columns at the point of import, not later

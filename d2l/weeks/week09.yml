@@ -1,9 +1,6 @@
 week: 9
 title: "Week 9 — Statistics, regression, and water chemistry"
 dates: "October 20 & 22, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Two halves this week. Tuesday is regression: fitting a trend is one function
   call, and everything worth learning is in what you do next — reading the
@@ -40,9 +37,12 @@ assignments:
   - text: "Quiz 7 — on Week 8 material"
     quiz: "TBD-week09-quiz"
     note: "In class, Tuesday 10/20."
-  - text: "Submit: HW 7 — Figure portfolio"
-    dropbox: "TBD-hw07-dropbox"
+  - text: "Submit: HW 4 — Tell one hydrologic story with a figure"
+    dropbox: "TBD-hw04-dropbox"
     note: "Due Wednesday 10/21 at 11:59pm."
+  - text: "Open: HW 5 — Three checks before believing an answer"
+    dropbox: "TBD-hw05-dropbox"
+    note: "Available after class Thursday 10/22; due Wednesday 11/4 at 11:59pm."
 
 bonus:
   - text: "scikit-learn — cross-validation, including TimeSeriesSplit"

@@ -1,9 +1,6 @@
 week: 10
 title: "Week 10 — Introduction to MODFLOW and FloPy"
 dates: "October 27 & 29, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   For nine weeks you inferred what the aquifer was doing from patterns in
   observations. From this week you build something that has to obey conservation
@@ -43,9 +40,9 @@ assignments:
   - text: "Quiz 8 — on Week 9 material"
     quiz: "TBD-week10-quiz"
     note: "In class, Tuesday 10/27."
-  - text: "Submit: HW 8 — Regression analysis"
-    dropbox: "TBD-hw08-dropbox"
-    note: "Due Wednesday 10/28 at 11:59pm."
+  - text: "Continue: HW 5 — Three checks before believing an answer"
+    dropbox: "TBD-hw05-dropbox"
+    note: "Add this week's model-run checks; due Wednesday 11/4 at 11:59pm."
   - text: "Submit: Project 2 — analysis component, part 2"
     dropbox: "TBD-project2b-dropbox"
 

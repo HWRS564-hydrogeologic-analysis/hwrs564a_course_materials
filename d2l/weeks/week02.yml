@@ -10,10 +10,6 @@ week: 2
 title: "Week 2 — Getting started with Python"
 dates: "September 1 & 3, 2026"
 
-# Optional banner image. Must already be uploaded to D2L Manage Files.
-banner: snakes.png
-banner_alt: "Two pythons, because of course"
-
 overview: >
   This week we start writing Python. We cover what Python is and the three
   different ways you can run it, how a Jupyter notebook actually works (and the
@@ -33,7 +29,7 @@ background:
     url: "https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials"
     note: "Do this before Tuesday. If it fails, email me rather than waiting for class."
   - text: "What is a Jupyter notebook? (6 min video)"
-    url: "https://www.youtube.com/watch?v=HW29067qVWk"
+    url: "https://www.youtube.com/watch?v=suAkMeWJ1yE"
 
 class_material:
   - text: "Tue 9/1 — Slides: Getting started with Python"
@@ -52,9 +48,9 @@ class_material:
     course_file: "python_conditionals.pdf"
 
 assignments:
-  - text: "Submit: HW 1 — My first Jupyter notebook"
+  - text: "Open: HW 1 — A reproducible groundwater calculation"
     dropbox: "Arizona-13531601"
-    note: "Due Wednesday 9/9 at 11:59pm."
+    note: "Available after class Thursday 9/3; due Wednesday 9/9 at 11:59pm. Create and submit your own executed notebook."
 
 bonus:
   - text: "Scientific Programming course materials (University of Innsbruck)"

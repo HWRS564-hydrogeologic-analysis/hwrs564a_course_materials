@@ -1,9 +1,6 @@
 week: 7
 title: "Week 7 — Timeseries analysis with pandas"
 dates: "October 6 & 8, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Almost everything in hydrology is a time series, and pandas has a whole second
   personality for them. Give a DataFrame a DatetimeIndex and you can ask for
@@ -42,9 +39,12 @@ assignments:
   - text: "Quiz 5 — on Week 6 material"
     quiz: "TBD-week07-quiz"
     note: "In class, Tuesday 10/6."
-  - text: "Submit: HW 5 — Data retrieval and cleaning"
-    dropbox: "TBD-hw05-dropbox"
+  - text: "Submit: HW 3 — Build a defensible groundwater dataset"
+    dropbox: "TBD-hw03-dropbox"
     note: "Due Wednesday 10/7 at 11:59pm."
+  - text: "Open: HW 4 — Tell one hydrologic story with a figure"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Available after class Thursday 10/8; due Wednesday 10/21 at 11:59pm."
 
 bonus:
   - text: "pandas — time series and date functionality"

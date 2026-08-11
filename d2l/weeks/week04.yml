@@ -6,9 +6,6 @@ week: 4
 title: "Week 4 — Arrays and iterative solutions"
 dates: "September 15 & 17, 2026"
 
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Two ideas that belong together. numpy gives you a container for numbers that
   lets you operate on all of them at once — which is both shorter to write and
@@ -48,9 +45,9 @@ assignments:
   - text: "Quiz 2 — on Week 3 material"
     quiz: "TBD-week04-quiz"
     note: "In class, Tuesday 9/15."
-  - text: "Submit: HW 2 — Control flow and functions"
+  - text: "Continue: HW 2 — Numerical water balance"
     dropbox: "TBD-hw02-dropbox"
-    note: "Due Wednesday 9/16 at 11:59pm."
+    note: "Use this week's arrays and iteration material; due Wednesday 9/23 at 11:59pm."
 
 bonus:
   - text: "NumPy — the absolute basics for beginners"

@@ -1,9 +1,6 @@
 week: 6
 title: "Week 6 — Working with real-world data"
 dates: "September 29 & October 1, 2026"
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   Last week's dataset was already tidy, because I tidied it. This week you get
   data the way it actually arrives: from an API, with gaps in it, duplicate
@@ -45,9 +42,9 @@ assignments:
   - text: "Quiz 4 — on Week 5 material"
     quiz: "TBD-week06-quiz"
     note: "In class, Tuesday 9/29."
-  - text: "Submit: HW 4 — pandas fundamentals"
-    dropbox: "TBD-hw04-dropbox"
-    note: "Due Wednesday 9/30 at 11:59pm."
+  - text: "Continue: HW 3 — Build a defensible groundwater dataset"
+    dropbox: "TBD-hw03-dropbox"
+    note: "Use this week's retrieval and cleaning material; due Wednesday 10/7 at 11:59pm."
 
 bonus:
   - text: "dataretrieval-python documentation"

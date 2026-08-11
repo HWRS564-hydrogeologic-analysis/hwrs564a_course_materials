@@ -6,9 +6,6 @@ week: 5
 title: "Week 5 — Introduction to pandas"
 dates: "September 22 & 24, 2026"
 
-banner: snakes.png
-banner_alt: "Two pythons"
-
 overview: >
   pandas is numpy with labels on it, and labels are what stop you from
   remembering that column 3 is the water level. This week we read our first
@@ -46,9 +43,12 @@ assignments:
   - text: "Quiz 3 — on Week 4 material"
     quiz: "TBD-week05-quiz"
     note: "In class, Tuesday 9/22."
-  - text: "Submit: HW 3 — Iterative groundwater solution"
-    dropbox: "TBD-hw03-dropbox"
+  - text: "Submit: HW 2 — Numerical water balance"
+    dropbox: "TBD-hw02-dropbox"
     note: "Due Wednesday 9/23 at 11:59pm."
+  - text: "Open: HW 3 — Build a defensible groundwater dataset"
+    dropbox: "TBD-hw03-dropbox"
+    note: "Available after class Thursday 9/24; due Wednesday 10/7 at 11:59pm."
   - text: "Submit: Project 1 — analysis component"
     dropbox: "TBD-project1-dropbox"
     note: "See the project brief for the full requirements."

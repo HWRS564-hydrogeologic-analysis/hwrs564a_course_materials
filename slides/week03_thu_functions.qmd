@@ -10,16 +10,32 @@ author: "Dr. Andrew Bennett"
 Week 3, session 2 of 2
 :::
 
-1. Why functions, and what goes in one
-2. Arguments, defaults, and `return`
-3. Failing loudly on bad input
-4. Comprehensions
-5. `import`: your code, and other people's
+1. Why readable code is part of the scientific record
+2. Why functions, and what goes in one
+3. Arguments, defaults, and `return`
+4. Failing loudly on bad input
+5. Comprehensions and modules
 
 By the end you will have written functions you'll reuse in Week 4 without
 opening this deck again.
 
 # Why bother {background-color="#0C234B"}
+
+<!-- Adapted from old_slides/hwrs564a_oct8.pdf. -->
+## Code is a research artifact
+
+Code is read far more often than it is written — usually by **future you**.
+
+::: {.incremental}
+- Names, spacing, and docstrings reduce the work of reconstructing intent
+- Common conventions let a reader focus on the science instead of your style
+- Reusable code can be checked, extended, and cited; opaque code cannot
+:::
+
+::: {.fragment .due-notice}
+You would not leave a field notebook with unlabeled units. Treat analysis code
+with the same care: it is part of the evidence behind the result.
+:::
 
 ## The problem functions solve
 
@@ -341,6 +357,7 @@ What you did today
 :::
 
 - Wrote functions with docstrings, defaults, and a real `return`
+- Treated names, units, and conventions as part of a reproducible analysis
 - Learned that `print` and `return` are different, and why it bites
 - Raised `ValueError` on input that can't be right
 - Wrote a comprehension, and know when *not* to

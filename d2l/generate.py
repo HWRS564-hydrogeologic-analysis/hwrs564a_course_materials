@@ -145,19 +145,6 @@ def render_items(items, where: str, problems: list[str]) -> str:
     return "\n".join(lines)
 
 
-def render_banner(spec: dict, problems: list[str]) -> str:
-    banner = spec.get("banner")
-    if not banner:
-        return ""
-    alt = spec.get("banner_alt")
-    if not alt:
-        problems.append("banner: set `banner_alt` — an image without alt text "
-                        "fails accessibility review")
-        alt = ""
-    return ('  <div><img src="%s" alt="%s" style="max-width: 100%%;"></div>'
-            % (html.escape(str(banner), quote=True), html.escape(alt, quote=True)))
-
-
 # --------------------------------------------------------------------------
 # driver
 # --------------------------------------------------------------------------
@@ -199,7 +186,6 @@ def build(path: Path, template: str, outdir: Path, check_only: bool):
     out_html = (template
                 .replace("{{TITLE}}", inline(title or path.stem))
                 .replace("{{HEADING}}", inline(title or path.stem))
-                .replace("{{BANNER}}", render_banner(spec, problems))
                 .replace("{{OVERVIEW}}", inline(spec.get("overview", "")))
                 .replace("{{RECITATION_URL}}", RECITATION_URL)
                 .replace("{{TIME_BUDGET}}",
