@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Regression: estimation, uncertainty, and evidence</title>
+  <title>HWRS 564a – Ordinary least squares, one step at a time</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,7 +197,7 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Regression: estimation, uncertainty, and evidence</h1>
+  <h1 class="title">Ordinary least squares, one step at a time</h1>
   <p class="subtitle">HWRS 564a · Week 9 · Tuesday, October 20</p>
 
 <div class="quarto-title-authors">
@@ -212,44 +212,9 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 9, session 1 of 2</p>
+<p>The job for this class</p>
 </div>
-<ol type="1">
-<li>A straight line as a statistical model</li>
-<li>What least squares minimises</li>
-<li>Where the slope, <span class="math inline">\(R^2\)</span>, and standard error come from</li>
-<li>Confidence intervals and hypothesis tests</li>
-<li>Assumptions—and what time series do to them</li>
-<li>Validation that matches the intended prediction</li>
-</ol>
-<p>Fitting is one function call. The mathematics tells you what the result means and when its uncertainty is believable.</p>
-</section>
-<section>
-<section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>The model</h1>
-
-</section>
-<section class="slide level2">
-<h2>A line describes the conditional mean</h2>
-<p><span class="math display">\[Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i\]</span></p>
-<ul>
-<li class="fragment"><span class="math inline">\(Y_i\)</span>: measured depth to water at observation <span class="math inline">\(i\)</span></li>
-<li class="fragment"><span class="math inline">\(x_i\)</span>: elapsed time in years</li>
-<li class="fragment"><span class="math inline">\(\beta_0 + \beta_1x_i\)</span>: mean depth predicted at that time</li>
-<li class="fragment"><span class="math inline">\(\varepsilon_i\)</span>: everything the straight line does not explain</li>
-</ul>
-<div class="fragment">
-<p><span class="math inline">\(\beta_1\)</span> has units of ft/yr. It describes the average linear change—not every month, and not necessarily every era in the record.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Least squares chooses the smallest squared residuals</h2>
-<p>For candidate coefficients <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>,</p>
-<p><span class="math display">\[
-\operatorname{RSS}(b_0,b_1)
-= \sum_{i=1}^{n}\left[y_i-(b_0+b_1x_i)\right]^2.
-\]</span></p>
-<p>The ordinary least-squares estimates minimise this quantity:</p>
+<p>Starting only with a line and a definition of error, derive</p>
 <p><span class="math display">\[
 \hat\beta_1=
 \frac{\sum_i(x_i-\bar x)(y_i-\bar y)}
@@ -257,25 +222,109 @@ Dr.&nbsp;Andrew Bennett
 \qquad
 \hat\beta_0=\bar y-\hat\beta_1\bar x.
 \]</span></p>
+<p>Then connect those coefficients to residuals, <span class="math inline">\(R^2\)</span>, standard error, and a confidence interval. No formula will arrive without its reason.</p>
+</section>
+<section>
+<section class="title-slide slide level1 center" data-background-color="#0C234B">
+<h1>Define the problem</h1>
+
+</section>
+<section class="slide level2">
+<h2>A line is a model for the mean</h2>
+<p>For observation <span class="math inline">\(i\)</span>,</p>
+<p><span class="math display">\[Y_i=\beta_0+\beta_1x_i+\varepsilon_i.\]</span></p>
+<ul>
+<li class="fragment"><span class="math inline">\(Y_i\)</span> is a random response; <span class="math inline">\(y_i\)</span> is the value we observed.</li>
+<li class="fragment"><span class="math inline">\(x_i\)</span> is the predictor: elapsed time in years.</li>
+<li class="fragment"><span class="math inline">\(\beta_0+\beta_1x_i\)</span> is the mean response at <span class="math inline">\(x_i\)</span>.</li>
+<li class="fragment"><span class="math inline">\(\varepsilon_i\)</span> is the departure from that mean.</li>
+</ul>
 <div class="fragment">
-<p>The slope is <strong>joint variation divided by variation in time</strong>. Squaring makes large misses expensive and gives a problem with a closed-form solution.</p>
+<p>We do not know <span class="math inline">\(\beta_0\)</span> or <span class="math inline">\(\beta_1\)</span>. We choose estimates <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> from the observations.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: calculate an OLS line</h2>
-<p>Compute <span class="math inline">\(S_{xx}\)</span>, <span class="math inline">\(S_{xy}\)</span>, the slope, and the intercept.</p>
-<script type="exercise-setup-ex_ols-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X29scyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBudW1weSBhcyBucFxueCA9IG5wLmFycmF5KFswLjAsIDEuMCwgMi4wLCAzLjBdKVxueSA9IG5wLmFycmF5KFsxMC4wLCAxMy4wLCAxNC4wLCAxOS4wXSkifQ==
+<h2>A candidate line creates one residual per point</h2>
+<p>The prediction at <span class="math inline">\(x_i\)</span> is</p>
+<p><span class="math display">\[\hat y_i=b_0+b_1x_i.\]</span></p>
+<p>The observed vertical error is</p>
+<p><span class="math display">\[e_i=y_i-\hat y_i=y_i-b_0-b_1x_i.\]</span></p>
+<div class="fragment">
+<p>Positive and negative residuals cancel if we simply add them. Absolute values would work numerically, but their corner at zero prevents this simple algebra. Least squares uses squared residuals.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>The objective is a function of two unknowns</h2>
+<p><span class="math display">\[
+S(b_0,b_1)
+=\sum_{i=1}^{n}e_i^2
+=\sum_{i=1}^{n}(y_i-b_0-b_1x_i)^2.
+\]</span></p>
+<ul>
+<li class="fragment">The data <span class="math inline">\(x_i,y_i\)</span> are fixed numbers in this minimisation.</li>
+<li class="fragment">The intercept <span class="math inline">\(b_0\)</span> and slope <span class="math inline">\(b_1\)</span> are variables.</li>
+<li class="fragment">The best-fitting line is the pair where <span class="math inline">\(S\)</span> is smallest.</li>
+</ul>
+<div class="fragment due-notice">
+<p>We need a minimum in two directions, so both partial derivatives must equal zero.</p>
+</div>
+</section></section>
+<section>
+<section class="title-slide slide level1 center" data-background-color="#AB0520">
+<h1>Solve for the intercept</h1>
+
+</section>
+<section class="slide level2">
+<h2>Differentiate with respect to <span class="math inline">\(b_0\)</span></h2>
+<p>Start with</p>
+<p><span class="math display">\[S=\sum_i(y_i-b_0-b_1x_i)^2.\]</span></p>
+<p>Use the chain rule on each squared term:</p>
+<p><span class="math display">\[
+\frac{\partial S}{\partial b_0}
+=\sum_i2(y_i-b_0-b_1x_i)(-1).
+\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[\frac{\partial S}{\partial b_0}=-2\sum_i(y_i-b_0-b_1x_i).\]</span></p>
+</section>
+<section class="slide level2">
+<h2>Set the derivative equal to zero</h2>
+<p><span class="math display">\[-2\sum_i(y_i-b_0-b_1x_i)=0\]</span></p>
+<p>Divide by <span class="math inline">\(-2\)</span> and distribute the sum:</p>
+<p><span class="math display">\[\sum_i y_i-\sum_i b_0-b_1\sum_i x_i=0.\]</span></p>
+<p>Because <span class="math inline">\(b_0\)</span> is constant across observations,</p>
+<p><span class="math display">\[\sum_i b_0=nb_0.\]</span></p>
+<p>So</p>
+<p><span class="math display">\[\sum_i y_i-nb_0-b_1\sum_i x_i=0.\]</span></p>
+</section>
+<section class="slide level2">
+<h2>Divide by <span class="math inline">\(n\)</span> and recognise the means</h2>
+<p>Rearrange the previous equation:</p>
+<p><span class="math display">\[nb_0=\sum_i y_i-b_1\sum_i x_i.\]</span></p>
+<p>Divide every term by <span class="math inline">\(n\)</span>:</p>
+<p><span class="math display">\[
+b_0=\frac{1}{n}\sum_i y_i
+-b_1\frac{1}{n}\sum_i x_i.
+\]</span></p>
+<p>Since <span class="math inline">\(\bar y=n^{-1}\sum_i y_i\)</span> and <span class="math inline">\(\bar x=n^{-1}\sum_i x_i\)</span>,</p>
+<p><span class="math display">\[\boxed{b_0=\bar y-b_1\bar x}.\]</span></p>
+<div class="fragment">
+<p>Every least-squares line with an intercept passes through <span class="math inline">\((\bar x,\bar y)\)</span>.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: use the first normal equation</h2>
+<script type="exercise-setup-ex_intercept-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2ludGVyY2VwdCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBudW1weSBhcyBucFxueCA9IG5wLmFycmF5KFswLjAsIDEuMCwgMi4wLCAzLjBdKVxueSA9IG5wLmFycmF5KFsxMC4wLCAxMy4wLCAxNC4wLCAxOS4wXSlcbmIxID0gMi44In0=
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X29scyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoieF9iYXIsIHlfYmFyID0geC5tZWFuKCksIHkubWVhbigpXG5zeHggPSBfX19fX19cbnN4eSA9IF9fX19fX1xuc2xvcGUgPSBfX19fX19cbmludGVyY2VwdCA9IF9fX19fX1xucHJpbnQoZlwieS1oYXQgPSB7aW50ZXJjZXB0Oi4xZn0gKyB7c2xvcGU6LjFmfSB4XCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2ludGVyY2VwdCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoieF9iYXIgPSBfX19fX19cbnlfYmFyID0gX19fX19fXG5iMCA9IF9fX19fX1xucHJpbnQoeF9iYXIsIHlfYmFyLCBiMCkifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_ols">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_intercept">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -285,12 +334,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Centre each variable on its mean. Then <code>slope = sxy / sxx</code> and the fitted line must pass through <span class="math inline">\((\bar x, \bar y)\)</span>.</p>
+<p>Use <span class="math inline">\(b_0=\bar y-b_1\bar x\)</span>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_ols">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_intercept">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -300,66 +349,100 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>sxx <span class="op">=</span> ((x <span class="op">-</span> x_bar) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>()</span>
-<span id="cb1-2"><a></a>sxy <span class="op">=</span> ((x <span class="op">-</span> x_bar) <span class="op">*</span> (y <span class="op">-</span> y_bar)).<span class="bu">sum</span>()</span>
-<span id="cb1-3"><a></a>slope <span class="op">=</span> sxy <span class="op">/</span> sxx</span>
-<span id="cb1-4"><a></a>intercept <span class="op">=</span> y_bar <span class="op">-</span> slope <span class="op">*</span> x_bar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><span class="math inline">\(S_{xx}=5\)</span>, <span class="math inline">\(S_{xy}=14\)</span>, so <span class="math inline">\(\hat y=9.8+2.8x\)</span>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>x_bar <span class="op">=</span> x.mean()</span>
+<span id="cb1-2"><a></a>y_bar <span class="op">=</span> y.mean()</span>
+<span id="cb1-3"><a></a>b0 <span class="op">=</span> y_bar <span class="op">-</span> b1 <span class="op">*</span> x_bar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="math inline">\(\bar x=1.5\)</span>, <span class="math inline">\(\bar y=14\)</span>, and <span class="math inline">\(b_0=9.8\)</span>.</p>
 </div>
 </div>
 </div>
 </div>
 </section></section>
 <section>
-<section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Fit and goodness of fit</h1>
+<section class="title-slide slide level1 center" data-background-color="#0C234B">
+<h1>Solve for the slope</h1>
 
 </section>
 <section class="slide level2">
-<h2>Residuals are vertical model errors</h2>
-<p><span class="math display">\[e_i=y_i-\hat y_i\]</span></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb2-2"><a></a></span>
-<span id="cb2-3"><a></a>fit <span class="op">=</span> stats.linregress(one[<span class="st">"years_elapsed"</span>], one[<span class="st">"depth_to_water_ft"</span>])</span>
-<span id="cb2-4"><a></a>one[<span class="st">"predicted"</span>] <span class="op">=</span> fit.intercept <span class="op">+</span> fit.slope <span class="op">*</span> one[<span class="st">"years_elapsed"</span>]</span>
-<span id="cb2-5"><a></a>one[<span class="st">"residual"</span>] <span class="op">=</span> one[<span class="st">"depth_to_water_ft"</span>] <span class="op">-</span> one[<span class="st">"predicted"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li class="fragment">With an intercept, <span class="math inline">\(\sum_i e_i=0\)</span>: residuals balance above and below the line.</li>
-<li class="fragment">Also <span class="math inline">\(\sum_i x_i e_i=0\)</span>: residuals have no remaining <em>linear</em> association with <span class="math inline">\(x\)</span>.</li>
-<li class="fragment">Neither property guarantees that residuals are random or independent.</li>
-</ul>
+<h2>Differentiate with respect to <span class="math inline">\(b_1\)</span></h2>
+<p>Again start with</p>
+<p><span class="math display">\[S=\sum_i(y_i-b_0-b_1x_i)^2.\]</span></p>
+<p>Now the inner derivative is <span class="math inline">\(-x_i\)</span>:</p>
+<p><span class="math display">\[
+\frac{\partial S}{\partial b_1}
+=\sum_i2(y_i-b_0-b_1x_i)(-x_i).
+\]</span></p>
+<p>Set it equal to zero and divide by <span class="math inline">\(-2\)</span>:</p>
+<p><span class="math display">\[\sum_i x_i(y_i-b_0-b_1x_i)=0.\]</span></p>
 </section>
 <section class="slide level2">
-<h2><span class="math inline">\(R^2\)</span> compares the line with a mean-only model</h2>
+<h2>Substitute the intercept relationship</h2>
+<p>Use <span class="math inline">\(b_0=\bar y-b_1\bar x\)</span>:</p>
 <p><span class="math display">\[
-\operatorname{TSS}=\sum_i(y_i-\bar y)^2,
-\qquad
-\operatorname{RSS}=\sum_i e_i^2
+\sum_i x_i[y_i-(\bar y-b_1\bar x)-b_1x_i]=0.
 \]</span></p>
+<p>Remove the parentheses:</p>
 <p><span class="math display">\[
-R^2=1-\frac{\operatorname{RSS}}{\operatorname{TSS}}.
+\sum_i x_i(y_i-\bar y+b_1\bar x-b_1x_i)=0.
+\]</span></p>
+<p>Factor <span class="math inline">\(b_1\)</span> inside the final two terms:</p>
+<p><span class="math display">\[
+\sum_i x_i[(y_i-\bar y)-b_1(x_i-\bar x)]=0.
+\]</span></p>
+</section>
+<section class="slide level2">
+<h2>Centring removes the distracting cross-terms</h2>
+<p>Define centred values</p>
+<p><span class="math display">\[X_i=x_i-\bar x,\qquad Y_i=y_i-\bar y.\]</span></p>
+<p>Because <span class="math inline">\(\sum_iX_i=0\)</span> and <span class="math inline">\(\sum_iY_i=0\)</span>, the second normal equation can be written as</p>
+<p><span class="math display">\[\sum_iX_i(Y_i-b_1X_i)=0.\]</span></p>
+<p>Distribute:</p>
+<p><span class="math display">\[\sum_iX_iY_i-b_1\sum_iX_i^2=0.\]</span></p>
+<p>Move the second term:</p>
+<p><span class="math display">\[b_1\sum_iX_i^2=\sum_iX_iY_i.\]</span></p>
+</section>
+<section class="slide level2">
+<h2>Divide to obtain the slope</h2>
+<p>If the <span class="math inline">\(x_i\)</span> are not all identical, then <span class="math inline">\(\sum_iX_i^2&gt;0\)</span>. Divide both sides:</p>
+<p><span class="math display">\[
+\boxed{
+b_1=\frac{\sum_iX_iY_i}{\sum_iX_i^2}
+=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}
+       {\sum_i(x_i-\bar x)^2}
+}.
 \]</span></p>
 <div class="fragment">
-<p><span class="math inline">\(R^2=0.90\)</span> means the fitted line removes 90% of the squared variation relative to predicting <span class="math inline">\(\bar y\)</span> for every observation. It does <strong>not</strong> say that predictions are 90% accurate or that the model assumptions hold.</p>
-</div>
-<div class="fragment due-notice">
-<p>The full 63-year record has <span class="math inline">\(R^2=0.90\)</span>; the visually straighter 1950–1990 window has <span class="math inline">\(R^2=0.67\)</span>. Changing the range changes TSS, so <span class="math inline">\(R^2\)</span> values across different samples are not directly comparable.</p>
+<p>Numerator: how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vary together. Denominator: how much <span class="math inline">\(x\)</span> varies. If <span class="math inline">\(x\)</span> has no variation, a slope cannot be estimated.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: reconstruct two fit metrics</h2>
-<script type="exercise-setup-ex_metrics-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X21ldHJpY3MiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbnkgPSBucC5hcnJheShbMTAuMCwgMTMuMCwgMTUuMCwgMjAuMF0pXG55X2hhdCA9IG5wLmFycmF5KFsxMC4wLCAxMi4wLCAxNi4wLCAyMC4wXSkifQ==
+<h2>Covariance divided by variance</h2>
+<p>Sample covariance and variance use the same factor <span class="math inline">\(1/(n-1)\)</span>:</p>
+<p><span class="math display">\[
+s_{xy}=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{n-1},
+\qquad
+s_x^2=\frac{\sum_i(x_i-\bar x)^2}{n-1}.
+\]</span></p>
+<p>Their ratio cancels that factor:</p>
+<p><span class="math display">\[\boxed{b_1=\frac{s_{xy}}{s_x^2}}.\]</span></p>
+<div class="fragment">
+<p>The sign comes from covariance. The magnitude also depends on the units and spread of <span class="math inline">\(x\)</span>.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: build the slope from centred sums</h2>
+<script type="exercise-setup-ex_slope-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Nsb3BlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5wXG54ID0gbnAuYXJyYXkoWzAuMCwgMS4wLCAyLjAsIDMuMF0pXG55ID0gbnAuYXJyYXkoWzEwLjAsIDEzLjAsIDE0LjAsIDE5LjBdKVxueF9iYXIsIHlfYmFyID0geC5tZWFuKCksIHkubWVhbigpIn0=
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X21ldHJpY3MiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InJlc2lkdWFsID0gX19fX19fXG5yc3MgPSBfX19fX19cbnRzcyA9IF9fX19fX1xucl9zcXVhcmVkID0gX19fX19fXG5ybXNlID0gX19fX19fXG5wcmludChyc3MsIHJfc3F1YXJlZCwgcm1zZSkifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Nsb3BlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJYID0gX19fX19fXG5ZID0gX19fX19fXG5zeHlfc3VtID0gX19fX19fXG5zeHhfc3VtID0gX19fX19fXG5iMSA9IF9fX19fX1xuYjAgPSBfX19fX19cbnByaW50KHN4eV9zdW0sIHN4eF9zdW0sIGIwLCBiMSkifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_metrics">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_slope">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -369,12 +452,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>RMSE is <span class="math inline">\(\sqrt{\operatorname{RSS}/n}\)</span>. TSS uses deviations from <code>y.mean()</code>.</p>
+<p>Compute the centred arrays first. Multiply <code>X * Y</code> elementwise before summing.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_metrics">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_slope">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -384,70 +467,46 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>residual <span class="op">=</span> y <span class="op">-</span> y_hat</span>
-<span id="cb3-2"><a></a>rss <span class="op">=</span> (residual <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>()</span>
-<span id="cb3-3"><a></a>tss <span class="op">=</span> ((y <span class="op">-</span> y.mean()) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>()</span>
-<span id="cb3-4"><a></a>r_squared <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> rss <span class="op">/</span> tss</span>
-<span id="cb3-5"><a></a>rmse <span class="op">=</span> np.sqrt(rss <span class="op">/</span> <span class="bu">len</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>RSS is 2, <span class="math inline">\(R^2\approx0.962\)</span>, and RMSE is about 0.71 measurement units.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>X <span class="op">=</span> x <span class="op">-</span> x_bar</span>
+<span id="cb2-2"><a></a>Y <span class="op">=</span> y <span class="op">-</span> y_bar</span>
+<span id="cb2-3"><a></a>sxy_sum <span class="op">=</span> (X <span class="op">*</span> Y).<span class="bu">sum</span>()</span>
+<span id="cb2-4"><a></a>sxx_sum <span class="op">=</span> (X <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>()</span>
+<span id="cb2-5"><a></a>b1 <span class="op">=</span> sxy_sum <span class="op">/</span> sxx_sum</span>
+<span id="cb2-6"><a></a>b0 <span class="op">=</span> y_bar <span class="op">-</span> b1 <span class="op">*</span> x_bar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="math inline">\(\sum X_iY_i=14\)</span>, <span class="math inline">\(\sum X_i^2=5\)</span>, so <span class="math inline">\(\hat y=9.8+2.8x\)</span>.</p>
 </div>
 </div>
 </div>
 </div>
 </section></section>
 <section>
-<section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Uncertainty</h1>
+<section class="title-slide slide level1 center" data-background-color="#AB0520">
+<h1>Check what the solution guarantees</h1>
 
 </section>
 <section class="slide level2">
-<h2>Standard error begins with unexplained variance</h2>
-<p>Under the ordinary regression assumptions,</p>
-<p><span class="math display">\[
-s^2=\frac{\operatorname{RSS}}{n-2},
-\qquad
-\operatorname{SE}(\hat\beta_1)=
-\frac{s}{\sqrt{\sum_i(x_i-\bar x)^2}}.
-\]</span></p>
-<ul>
-<li class="fragment">More residual scatter increases slope uncertainty.</li>
-<li class="fragment">A wider spread in <span class="math inline">\(x\)</span> decreases slope uncertainty.</li>
-<li class="fragment">The <span class="math inline">\(n-2\)</span> degrees of freedom pay for estimating two coefficients.</li>
-</ul>
+<h2>The fitted residuals satisfy both normal equations</h2>
+<p>At the minimum,</p>
+<p><span class="math display">\[\sum_i e_i=0,\qquad \sum_i x_ie_i=0.\]</span></p>
+<p>The first equation says residuals balance above and below the fitted line. The second says no <em>linear</em> association with <span class="math inline">\(x\)</span> remains.</p>
 <div class="fragment">
-<p>For the Tucson well: <span class="math inline">\(\hat\beta_1=2.081\)</span> ft/yr and the ordinary standard error is <span class="math inline">\(0.036\)</span> ft/yr.</p>
+<p>These are algebraic consequences of fitting an intercept and slope. They do not prove that residuals are independent, normally distributed, or patternless.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>A confidence interval and a test use the same statistic</h2>
-<p>For <span class="math inline">\(H_0:\beta_1=\beta_{1,0}\)</span>,</p>
-<p><span class="math display">\[
-t=\frac{\hat\beta_1-\beta_{1,0}}
-        {\operatorname{SE}(\hat\beta_1)},
-\qquad df=n-2.
-\]</span></p>
-<p>The corresponding 95% confidence interval is</p>
-<p><span class="math display">\[
-\hat\beta_1 \pm t_{0.975,n-2}\operatorname{SE}(\hat\beta_1).
-\]</span></p>
-<div class="fragment">
-<p>The p-value is the probability, <strong>assuming the null model and its assumptions</strong>, of a test statistic at least as extreme as the observed one. It is not the probability that the null hypothesis is true.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Your turn: quantify slope uncertainty</h2>
-<script type="exercise-setup-ex_ci-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NpIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoic2xvcGUgPSAyLjA4MTEzNVxuc3RhbmRhcmRfZXJyb3IgPSAwLjAzNTk4N1xudF9jcml0aWNhbCA9IDEuOTY2MyJ9
+<h2>Your turn: verify the normal equations</h2>
+<script type="exercise-setup-ex_normal-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X25vcm1hbCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBudW1weSBhcyBucFxueCA9IG5wLmFycmF5KFswLjAsIDEuMCwgMi4wLCAzLjBdKVxueSA9IG5wLmFycmF5KFsxMC4wLCAxMy4wLCAxNC4wLCAxOS4wXSlcbmIwLCBiMSA9IDkuOCwgMi44In0=
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NpIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJsb3dlciA9IF9fX19fX1xudXBwZXIgPSBfX19fX19cbnRfZm9yX3plcm8gPSBfX19fX19cbnByaW50KGZcIjk1JSBDSToge2xvd2VyOi4zZn0gdG8ge3VwcGVyOi4zZn0gZnQveXJcIilcbnByaW50KGZcInQgZm9yIEgwOiBzbG9wZSA9IDAgaXMge3RfZm9yX3plcm86LjFmfVwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X25vcm1hbCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoieV9oYXQgPSBfX19fX19cbnJlc2lkdWFsID0gX19fX19fXG5zdW1fcmVzaWR1YWwgPSBfX19fX19cbnN1bV94X3Jlc2lkdWFsID0gX19fX19fXG5wcmludChyZXNpZHVhbCwgc3VtX3Jlc2lkdWFsLCBzdW1feF9yZXNpZHVhbCkifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_ci">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_normal">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -457,12 +516,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The margin is <code>t_critical * standard_error</code>. For a zero-slope null, divide the estimated slope by its standard error.</p>
+<p>Prediction is <code>b0 + b1 * x</code>; residual is measured minus predicted.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_ci">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_normal">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -472,106 +531,11 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>lower <span class="op">=</span> slope <span class="op">-</span> t_critical <span class="op">*</span> standard_error</span>
-<span id="cb4-2"><a></a>upper <span class="op">=</span> slope <span class="op">+</span> t_critical <span class="op">*</span> standard_error</span>
-<span id="cb4-3"><a></a>t_for_zero <span class="op">=</span> slope <span class="op">/</span> standard_error</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The ordinary 95% interval is 2.010–2.152 ft/yr and <span class="math inline">\(t\approx57.8\)</span>. The arithmetic is precise; whether the interval is credible depends on the assumptions behind the standard error.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Least squares estimates need fewer assumptions than inference</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>For the line to represent the mean</strong></p>
-<ul>
-<li>The mean relationship is linear</li>
-<li>Errors average to zero at each <span class="math inline">\(x\)</span></li>
-<li>Predictors are measured adequately</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>For the ordinary SE, test, and CI</strong></p>
-<ul>
-<li>Residuals are independent</li>
-<li>Residual variance is constant</li>
-<li>Normal residuals give exact small-sample <span class="math inline">\(t\)</span> inference</li>
-</ul>
-</div></div>
-<div class="fragment due-notice">
-<p>Normality is not required to calculate the OLS line. It matters for inference, especially in small samples. Independence is the assumption time series most often violate.</p>
-</div>
-</section></section>
-<section>
-<section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Diagnostics</h1>
-
-</section>
-<section class="slide level2">
-<h2>A high <span class="math inline">\(R^2\)</span> can hide a wrong mean model</h2>
-<p>Mean residual by decade for the Tucson well:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a></a>1930    +1.9       1970    +9.4</span>
-<span id="cb5-2"><a></a>1940    -9.6       1980    -0.9</span>
-<span id="cb5-3"><a></a>1950   -14.6       1990    -7.8</span>
-<span id="cb5-4"><a></a>1960   -12.5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>Decade-long runs on one side of zero indicate curvature or changing regimes. One line averages the lightly pumped, agricultural, and later municipal eras and reports a rate describing none of them exactly.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Serial correlation makes the ordinary CI too confident</h2>
-<p>For these fitted residuals,</p>
-<p><span class="math display">\[\operatorname{corr}(e_i,e_{i-1})=0.986.\]</span></p>
-<ul>
-<li class="fragment">Adjacent residuals carry nearly the same model error.</li>
-<li class="fragment">The 379 observations do not provide 379 independent pieces of information.</li>
-<li class="fragment">The OLS line can still be calculated, but the ordinary <span class="math inline">\(0.036\)</span> ft/yr standard error is conditional on an assumption the diagnostic rejects.</li>
-</ul>
-<div class="fragment">
-<p>Possible responses include modelling the changing regimes, using errors with a time structure, or estimating uncertainty with a time-aware bootstrap or HAC standard error.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Your turn: separate estimation from inference</h2>
-<script type="exercise-setup-ex_diagnose-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RpYWdub3NlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY2hvaWNlcyA9IHtcbiAgICBcImFcIjogXCJUaGUgc2xvcGUgY2Fubm90IGJlIGNhbGN1bGF0ZWQgYmVjYXVzZSByZXNpZHVhbHMgYXJlIGNvcnJlbGF0ZWQuXCIsXG4gICAgXCJiXCI6IFwiVGhlIGxpbmUgaXMgZGVzY3JpcHRpdmUsIGJ1dCBpdHMgb3JkaW5hcnkgQ0kgaXMgdG9vIG9wdGltaXN0aWMuXCIsXG4gICAgXCJjXCI6IFwiUjIgPSAwLjkwIHByb3ZlcyB0aGUgaW5kZXBlbmRlbmNlIGFzc3VtcHRpb24gaXMgY2xvc2UgZW5vdWdoLlwiLFxuICAgIFwiZFwiOiBcIkEgc21hbGxlciBwLXZhbHVlIHJlcGFpcnMgdGhlIHJlc2lkdWFsIGRlcGVuZGVuY2UuXCIsXG59In0=
-</script>
-<div>
-<div id="pyodide-8" class="exercise-cell">
-
-</div>
-<script type="pyodide-8-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RpYWdub3NlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJhbnN3ZXIgPSBfX19fX19cbnByaW50KGNob2ljZXNbYW5zd2VyXSkifQ==
-</script>
-</div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_diagnose">
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Hint</strong></p>
-</div>
-<div class="callout-content">
-<p>OLS estimation and ordinary least-squares inference are related but distinct. Which claim keeps the fitted line while rejecting unsupported precision?</p>
-</div>
-</div>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_diagnose">
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Solution</strong></p>
-</div>
-<div class="callout-content">
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>answer <span class="op">=</span> <span class="st">"b"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The slope remains a computable descriptive summary. The usual standard error, p-value, and confidence interval treat residuals as independent, so those quantities are too confident here.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>y_hat <span class="op">=</span> b0 <span class="op">+</span> b1 <span class="op">*</span> x</span>
+<span id="cb3-2"><a></a>residual <span class="op">=</span> y <span class="op">-</span> y_hat</span>
+<span id="cb3-3"><a></a>sum_residual <span class="op">=</span> residual.<span class="bu">sum</span>()</span>
+<span id="cb3-4"><a></a>sum_x_residual <span class="op">=</span> (x <span class="op">*</span> residual).<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Both sums are zero apart from floating-point roundoff.</p>
 </div>
 </div>
 </div>
@@ -579,78 +543,165 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Prediction</h1>
+<h1>From a line to statistical evidence</h1>
 
 </section>
 <section class="slide level2">
-<h2>Prediction metrics answer different questions</h2>
+<h2><span class="math inline">\(R^2\)</span> compares the line with a mean-only model</h2>
+<p>Total squared variation:</p>
+<p><span class="math display">\[\operatorname{TSS}=\sum_i(y_i-\bar y)^2.\]</span></p>
+<p>Unexplained squared variation:</p>
+<p><span class="math display">\[\operatorname{RSS}=\sum_i(y_i-\hat y_i)^2=\sum_i e_i^2.\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[\boxed{R^2=1-\frac{\operatorname{RSS}}{\operatorname{TSS}}}.\]</span></p>
+<div class="fragment">
+<p><span class="math inline">\(R^2\)</span> is a relative in-sample comparison. It is not percent accuracy and does not test the regression assumptions.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Estimate the residual variance</h2>
+<p>If the errors have common variance <span class="math inline">\(\sigma^2\)</span>, estimate it from the residuals:</p>
 <p><span class="math display">\[
-\operatorname{MAE}=\frac{1}{m}\sum_{i=1}^{m}|y_i-\hat y_i|,
-\qquad
-\operatorname{RMSE}=\sqrt{\frac{1}{m}\sum_{i=1}^{m}(y_i-\hat y_i)^2}.
+s^2=\frac{\operatorname{RSS}}{n-2}.
 \]</span></p>
+<p>Why <span class="math inline">\(n-2\)</span>?</p>
 <ul>
-<li class="fragment">MAE describes a typical absolute miss in the response units.</li>
-<li class="fragment">RMSE penalises large misses more strongly.</li>
-<li class="fragment">Test <span class="math inline">\(R^2&lt;0\)</span> means the model predicts worse than the test-set mean.</li>
+<li class="fragment">We began with <span class="math inline">\(n\)</span> observed response values.</li>
+<li class="fragment">Estimating <span class="math inline">\(b_0\)</span> imposes <span class="math inline">\(\sum e_i=0\)</span>.</li>
+<li class="fragment">Estimating <span class="math inline">\(b_1\)</span> imposes <span class="math inline">\(\sum x_ie_i=0\)</span>.</li>
+<li class="fragment">Two fitted constraints leave <span class="math inline">\(n-2\)</span> residual degrees of freedom.</li>
 </ul>
 </section>
 <section class="slide level2">
-<h2>A time split tests extrapolation rather than interpolation</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Validation</th>
-<th style="text-align: right;">Test MAE</th>
-<th style="text-align: right;">Test RMSE</th>
-<th style="text-align: right;">Test <span class="math inline">\(R^2\)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Random 75/25 split</td>
-<td style="text-align: right;">11.3 ft</td>
-<td style="text-align: right;">13.3 ft</td>
-<td style="text-align: right;">0.89</td>
-</tr>
-<tr class="even">
-<td>Train before 1975; test after</td>
-<td style="text-align: right;">15.4 ft</td>
-<td style="text-align: right;">19.3 ft</td>
-<td style="text-align: right;">−4.81</td>
-</tr>
-</tbody>
-</table>
+<h2>Propagate residual scatter into slope uncertainty</h2>
+<p>Under independent errors with constant variance,</p>
+<p><span class="math display">\[
+\operatorname{Var}(b_1)=\frac{\sigma^2}{\sum_i(x_i-\bar x)^2}.
+\]</span></p>
+<p>Replace unknown <span class="math inline">\(\sigma\)</span> with <span class="math inline">\(s\)</span>:</p>
+<p><span class="math display">\[
+\boxed{\operatorname{SE}(b_1)=
+\frac{s}{\sqrt{\sum_i(x_i-\bar x)^2}}}.
+\]</span></p>
+<ul>
+<li class="fragment">More residual scatter makes the slope less certain.</li>
+<li class="fragment">A wider span of <span class="math inline">\(x\)</span> makes the slope more certain.</li>
+<li class="fragment">More rows help only to the extent that they add independent information.</li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Confidence interval and slope test use the same ratio</h2>
+<p>For the null hypothesis <span class="math inline">\(H_0:\beta_1=\beta_{1,0}\)</span>,</p>
+<p><span class="math display">\[t=\frac{b_1-\beta_{1,0}}{\operatorname{SE}(b_1)},\qquad df=n-2.\]</span></p>
+<p>A two-sided 95% confidence interval is</p>
+<p><span class="math display">\[
+b_1\pm t_{0.975,n-2}\operatorname{SE}(b_1).
+\]</span></p>
 <div class="fragment">
-<p>Random splitting places test observations between dates already in training. The chronological split asks the actual forecasting question and reveals that the early linear rate extrapolates poorly into a later pumping regime.</p>
+<p>The p-value asks how unusual the observed <span class="math inline">\(t\)</span> would be if the null model and its assumptions were true. The confidence interval lists slope values not rejected by the corresponding two-sided tests.</p>
 </div>
+</section>
+<section class="slide level2">
+<h2>Your turn: finish the inferential calculation</h2>
+<script type="exercise-setup-ex_inference-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2luZmVyZW5jZSIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBudW1weSBhcyBucFxuYjEgPSAyLjA4MTEzNVxucnNzID0gNjQxNjcuMDM4XG5uID0gMzc5XG5zeHggPSAxMzE0MjguMzE3XG50X2NyaXRpY2FsID0gMS45NjYzIn0=
+</script>
+<div>
+<div id="pyodide-8" class="exercise-cell">
+
+</div>
+<script type="pyodide-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2luZmVyZW5jZSIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoicmVzaWR1YWxfdmFyaWFuY2UgPSBfX19fX19cbnNsb3BlX3NlID0gX19fX19fXG5tYXJnaW4gPSBfX19fX19cbmNpID0gKF9fX19fXywgX19fX19fKVxucHJpbnQoc2xvcGVfc2UsIGNpKSJ9
+</script>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_inference">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hint</strong></p>
+</div>
+<div class="callout-content">
+<p>Use <span class="math inline">\(s^2=\mathrm{RSS}/(n-2)\)</span>, then <span class="math inline">\(\mathrm{SE}(b_1)=\sqrt{s^2/S_{xx}}\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_inference">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Solution</strong></p>
+</div>
+<div class="callout-content">
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>residual_variance <span class="op">=</span> rss <span class="op">/</span> (n <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb4-2"><a></a>slope_se <span class="op">=</span> np.sqrt(residual_variance <span class="op">/</span> sxx)</span>
+<span id="cb4-3"><a></a>margin <span class="op">=</span> t_critical <span class="op">*</span> slope_se</span>
+<span id="cb4-4"><a></a>ci <span class="op">=</span> (b1 <span class="op">-</span> margin, b1 <span class="op">+</span> margin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The ordinary standard error is 0.036 ft/yr and the 95% interval is 2.010–2.152 ft/yr.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2 smaller">
+<h2>The interval inherits the model assumptions</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Mean model</strong></p>
+<ul>
+<li>The relationship is adequately linear</li>
+<li>Errors have mean zero at each <span class="math inline">\(x\)</span></li>
+<li>The predictor is measured adequately</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Ordinary uncertainty</strong></p>
+<ul>
+<li>Residuals are independent</li>
+<li>Residual variance is constant</li>
+<li>Normal errors give exact small-sample <span class="math inline">\(t\)</span> inference</li>
+</ul>
+</div></div>
 <div class="fragment due-notice">
-<p>Model quality is not a property of the algorithm alone. It is a property of the algorithm, the data, the metric, and the validation design together.</p>
+<p>The line can always be calculated when <span class="math inline">\(x\)</span> varies. The standard error, confidence interval, and p-value are trustworthy only when their assumptions are defensible. Thursday’s lab is about checking that difference.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Week 7 was already a regression</h2>
+<p>For two independent groups, code <span class="math inline">\(x=0\)</span> for “pre” and <span class="math inline">\(x=1\)</span> for “post”:</p>
+<p><span class="math display">\[y_i=\beta_0+\beta_1x_i+\varepsilon_i.\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[\hat\beta_0=\bar y_{\text{pre}},\qquad
+\hat\beta_1=\bar y_{\text{post}}-\bar y_{\text{pre}}.\]</span></p>
+<div class="fragment">
+<p>Week 7 preserved pairing by first calculating <span class="math inline">\(d_i=y_{i,\text{post}}-
+y_{i,\text{pre}}\)</span>. The model <span class="math inline">\(d_i=\beta_0+\varepsilon_i\)</span> estimates <span class="math inline">\(\hat\beta_0=\bar d\)</span>: the same 12.47-ft mean paired change.</p>
+</div>
+<div class="fragment">
+<p>A t-test and a regression are often different views of the same comparison. The design still decides which rows are independent.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
 <h2>Wrap up</h2>
 <div class="kicker">
-<p>What you can now explain</p>
+<p>The whole derivation</p>
 </div>
-<ul>
-<li>OLS minimises RSS, with slope equal to centred cross-variation over <span class="math inline">\(S_{xx}\)</span></li>
-<li><span class="math inline">\(R^2=1-\mathrm{RSS}/\mathrm{TSS}\)</span> compares a line with a mean-only baseline</li>
-<li>Standard errors, confidence intervals, and tests are model-based quantities</li>
-<li>Structured and serially correlated residuals undermine ordinary inference</li>
-<li>MAE, RMSE, and test <span class="math inline">\(R^2\)</span> describe different predictive failures</li>
-<li>Time-series validation must preserve the direction of time</li>
-</ul>
-<div class="kicker">
-<p>Before Thursday</p>
-</div>
-<ul>
-<li>Parts 1–3 of <code>labs/week09/week09_lab_regression_chemistry.ipynb</code></li>
-</ul>
+<ol type="1">
+<li>Define <span class="math inline">\(e_i=y_i-b_0-b_1x_i\)</span> and minimise <span class="math inline">\(\sum e_i^2\)</span>.</li>
+<li><span class="math inline">\(\partial S/\partial b_0=0\)</span> gives <span class="math inline">\(b_0=\bar y-b_1\bar x\)</span>.</li>
+<li><span class="math inline">\(\partial S/\partial b_1=0\)</span> gives <span class="math inline">\(b_1=\sum(x_i-\bar x)(y_i-\bar y)/\sum(x_i-\bar x)^2\)</span>.</li>
+<li>Residual sums produce <span class="math inline">\(R^2\)</span>, <span class="math inline">\(s^2\)</span>, and the slope standard error.</li>
+<li>Inference requires assumptions that the algebra alone cannot verify.</li>
+</ol>
 <div class="kicker">
 <p>Thursday</p>
 </div>
-<p>Water chemistry: checking that an analysis balances, and reading a Piper diagram.</p>
+<p>One full-period lab: fit, diagnose, validate, and interpret a groundwater trend.</p>
 
 
 <script type="pyodide-data">

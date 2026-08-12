@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Week 5 Lab — Pandas and time series – HWRS 564a</title>
+<title>Week 9 Lab — Linear regression clinic – HWRS 564a</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../slides/week06_tue_apis.html" rel="next">
-<link href="../../slides/week05_thu_filtering.html" rel="prev">
+<link href="../../slides/week10_tue_what_is_modflow.html" rel="next">
+<link href="../../slides/week09_thu_regression_lab.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -109,6 +109,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -310,7 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and time series</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and time series</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 2 · Data Analysis &amp; Visualization</li><li class="breadcrumb-item"><a href="../../slides/week09_tue_regression.html">Week 9 — Linear regression</a></li><li class="breadcrumb-item"><a href="../../labs/week09/week09_lab_regression.html">Lab · Linear regression clinic</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -420,13 +449,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
  <span class="menu-text">Week 5 — Pandas and time series</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../slides/week05_tue_pandas.html" class="sidebar-item-text sidebar-link">
@@ -441,7 +470,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab · Pandas and time series</span></a>
   </div>
 </li>
@@ -547,13 +576,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
  <span class="menu-text">Week 9 — Linear regression</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../slides/week09_tue_regression.html" class="sidebar-item-text sidebar-link">
@@ -568,7 +597,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week09/week09_lab_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../../labs/week09/week09_lab_regression.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Lab · Linear regression clinic</span></a>
   </div>
 </li>
@@ -736,46 +765,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link active" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
-  <li><a href="#setup-find-the-repository-data" id="toc-setup-find-the-repository-data" class="nav-link" data-scroll-target="#setup-find-the-repository-data">Setup — find the repository data</a></li>
-  <li><a href="#part-1-read-and-inspect-before-calculating" id="toc-part-1-read-and-inspect-before-calculating" class="nav-link" data-scroll-target="#part-1-read-and-inspect-before-calculating">Part 1 — Read and inspect before calculating</a>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#part-1-prepare-a-predictor-with-interpretable-units" id="toc-part-1-prepare-a-predictor-with-interpretable-units" class="nav-link" data-scroll-target="#part-1-prepare-a-predictor-with-interpretable-units">Part 1 — Prepare a predictor with interpretable units</a>
   <ul class="collapse">
-  <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
+  <li><a href="#your-turn-1-reproduce-the-ols-coefficients" id="toc-your-turn-1-reproduce-the-ols-coefficients" class="nav-link" data-scroll-target="#your-turn-1-reproduce-the-ols-coefficients">YOUR TURN 1 — Reproduce the OLS coefficients</a></li>
   </ul></li>
-  <li><a href="#part-2-select-columns-and-filter-rows" id="toc-part-2-select-columns-and-filter-rows" class="nav-link" data-scroll-target="#part-2-select-columns-and-filter-rows">Part 2 — Select columns and filter rows</a>
+  <li><a href="#part-2-centre-the-predictor-to-make-the-intercept-useful" id="toc-part-2-centre-the-predictor-to-make-the-intercept-useful" class="nav-link" data-scroll-target="#part-2-centre-the-predictor-to-make-the-intercept-useful">Part 2 — Centre the predictor to make the intercept useful</a>
   <ul class="collapse">
-  <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">YOUR TURN 2</a></li>
+  <li><a href="#your-turn-2-put-the-intercept-at-1970" id="toc-your-turn-2-put-the-intercept-at-1970" class="nav-link" data-scroll-target="#your-turn-2-put-the-intercept-at-1970">YOUR TURN 2 — Put the intercept at 1970</a></li>
   </ul></li>
-  <li><a href="#part-3-dates-become-a-coordinate" id="toc-part-3-dates-become-a-coordinate" class="nav-link" data-scroll-target="#part-3-dates-become-a-coordinate">Part 3 — Dates become a coordinate</a>
+  <li><a href="#part-3-reconstruct-fit-and-uncertainty-statistics" id="toc-part-3-reconstruct-fit-and-uncertainty-statistics" class="nav-link" data-scroll-target="#part-3-reconstruct-fit-and-uncertainty-statistics">Part 3 — Reconstruct fit and uncertainty statistics</a>
   <ul class="collapse">
-  <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
+  <li><a href="#your-turn-3-calculate-r2-standard-error-and-the-interval" id="toc-your-turn-3-calculate-r2-standard-error-and-the-interval" class="nav-link" data-scroll-target="#your-turn-3-calculate-r2-standard-error-and-the-interval">YOUR TURN 3 — Calculate <span class="math inline">\(R^2\)</span>, standard error, and the interval</a></li>
   </ul></li>
-  <li><a href="#part-4-resample-a-daily-streamflow-record" id="toc-part-4-resample-a-daily-streamflow-record" class="nav-link" data-scroll-target="#part-4-resample-a-daily-streamflow-record">Part 4 — Resample a daily streamflow record</a>
+  <li><a href="#part-4-diagnose-the-assumptions" id="toc-part-4-diagnose-the-assumptions" class="nav-link" data-scroll-target="#part-4-diagnose-the-assumptions">Part 4 — Diagnose the assumptions</a>
   <ul class="collapse">
-  <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
+  <li><a href="#your-turn-4-measure-dependence-and-changing-spread" id="toc-your-turn-4-measure-dependence-and-changing-spread" class="nav-link" data-scroll-target="#your-turn-4-measure-dependence-and-changing-spread">YOUR TURN 4 — Measure dependence and changing spread</a></li>
   </ul></li>
-  <li><a href="#part-5-rolling-windows-retain-the-daily-coordinate" id="toc-part-5-rolling-windows-retain-the-daily-coordinate" class="nav-link" data-scroll-target="#part-5-rolling-windows-retain-the-daily-coordinate">Part 5 — Rolling windows retain the daily coordinate</a>
+  <li><a href="#part-5-validation-changes-with-the-prediction-question" id="toc-part-5-validation-changes-with-the-prediction-question" class="nav-link" data-scroll-target="#part-5-validation-changes-with-the-prediction-question">Part 5 — Validation changes with the prediction question</a>
   <ul class="collapse">
-  <li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">YOUR TURN 5</a></li>
+  <li><a href="#your-turn-5-compare-both-designs" id="toc-your-turn-5-compare-both-designs" class="nav-link" data-scroll-target="#your-turn-5-compare-both-designs">YOUR TURN 5 — Compare both designs</a></li>
   </ul></li>
-  <li><a href="#part-6-group-long-data-then-reshape-only-when-needed" id="toc-part-6-group-long-data-then-reshape-only-when-needed" class="nav-link" data-scroll-target="#part-6-group-long-data-then-reshape-only-when-needed">Part 6 — Group long data, then reshape only when needed</a>
+  <li><a href="#part-6-write-only-the-claims-the-evidence-supports" id="toc-part-6-write-only-the-claims-the-evidence-supports" class="nav-link" data-scroll-target="#part-6-write-only-the-claims-the-evidence-supports">Part 6 — Write only the claims the evidence supports</a>
   <ul class="collapse">
-  <li><a href="#your-turn-6" id="toc-your-turn-6" class="nav-link" data-scroll-target="#your-turn-6">YOUR TURN 6</a></li>
+  <li><a href="#your-turn-6-classify-the-conclusions" id="toc-your-turn-6-classify-the-conclusions" class="nav-link" data-scroll-target="#your-turn-6-classify-the-conclusions">YOUR TURN 6 — Classify the conclusions</a></li>
   </ul></li>
   <li><a href="#before-you-leave" id="toc-before-you-leave" class="nav-link" data-scroll-target="#before-you-leave">Before you leave</a></li>
-  <li><a href="#whats-due" id="toc-whats-due" class="nav-link" data-scroll-target="#whats-due">What’s due</a></li>
-  <li><a href="#next-week" id="toc-next-week" class="nav-link" data-scroll-target="#next-week">Next week</a></li>
-  <li><a href="#stuck" id="toc-stuck" class="nav-link" data-scroll-target="#stuck">Stuck?</a></li>
+  <li><a href="#if-you-get-stuck" id="toc-if-you-get-stuck" class="nav-link" data-scroll-target="#if-you-get-stuck">If you get stuck</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and time series</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and time series</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 2 · Data Analysis &amp; Visualization</li><li class="breadcrumb-item"><a href="../../slides/week09_tue_regression.html">Week 9 — Linear regression</a></li><li class="breadcrumb-item"><a href="../../labs/week09/week09_lab_regression.html">Lab · Linear regression clinic</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Week 5 Lab — Pandas and time series</h1>
+<h1 class="title">Week 9 Lab — Linear regression clinic</h1>
 </div>
 
 
@@ -792,287 +817,368 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="how-to-use-this-notebook" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
-<p>Work from top to bottom. Read the prose, run each example, and complete every <code>YOUR TURN</code> cell. The checks verify structure and selected values; they do not replace interpreting the table and figures.</p>
-<p>By the end, restart the kernel and run all cells. The completed solution should take about 2.5–3 hours in class.</p>
-</section>
+<p><strong>HWRS 564a · Fall 2026</strong></p>
+<p>Today is a full-period working session. You will derive, fit, diagnose, validate, and interpret one simple linear model using a 63-year groundwater record. The purpose is not to collect outputs from a function. It is to decide which statements those outputs support.</p>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
-<p>By the end of this lab, you should be able to:</p>
-<ul>
-<li>read and inspect a labelled table;</li>
-<li>select and filter rows without silently losing track of missing values;</li>
-<li>parse dates and use a <code>DatetimeIndex</code>;</li>
-<li>distinguish monthly resampling from a monthly climatology;</li>
-<li>compute water-year and rolling summaries; and</li>
-<li>group and reshape irregular groundwater observations.</li>
-</ul>
+<p>By the end of the lab you can:</p>
+<ol type="1">
+<li>reproduce the OLS slope and intercept from centred sums;</li>
+<li>explain how centring changes the intercept but not the slope;</li>
+<li>calculate RSS, TSS, <span class="math inline">\(R^2\)</span>, residual variance, slope standard error, and a confidence interval;</li>
+<li>diagnose nonlinearity, unequal variance, non-normality, and serial correlation;</li>
+<li>compare interpolation and forecasting validation; and</li>
+<li>separate descriptive, inferential, predictive, and causal claims.</li>
+</ol>
+<p>Run cells in order. Every <code># YOUR TURN</code> cell has a following <code># CHECK</code> cell. Before leaving, restart the kernel and run all cells.</p>
+<hr>
 </section>
-<section id="setup-find-the-repository-data" class="level2">
-<h2 class="anchored" data-anchor-id="setup-find-the-repository-data">Setup — find the repository data</h2>
-<div id="cell-2" class="cell">
+<section id="part-1-prepare-a-predictor-with-interpretable-units" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-prepare-a-predictor-with-interpretable-units">Part 1 — Prepare a predictor with interpretable units</h2>
+<p>We will model depth to water as a linear function of elapsed time. Because depth is measured downward, a positive slope means the water table becomes deeper: a decline in hydraulic head.</p>
+<div id="a165e1ac" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    p <span class="cf">for</span> p <span class="kw">in</span> [Path.cwd(), <span class="op">*</span>Path.cwd().parents]</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists()</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>DATA <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"data"</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"reading course data from </span><span class="sc">{</span>DATA<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    p <span class="cf">for</span> p <span class="kw">in</span> [Path.cwd(), <span class="op">*</span>Path.cwd().parents]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>DATA <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"data"</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> pd.read_csv(</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">/</span> <span class="st">"tucson_water_levels.csv"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>},</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    parse_dates<span class="op">=</span>[<span class="st">"date"</span>],</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>one <span class="op">=</span> (</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    levels.loc[levels[<span class="st">"site_no"</span>] <span class="op">==</span> <span class="st">"320824110593001"</span>]</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    .sort_values(<span class="st">"date"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    .dropna(subset<span class="op">=</span>[<span class="st">"date"</span>, <span class="st">"depth_to_water_ft"</span>])</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    .copy()</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>one[<span class="st">"years_elapsed"</span>] <span class="op">=</span> (one[<span class="st">"date"</span>] <span class="op">-</span> one[<span class="st">"date"</span>].<span class="bu">min</span>()).dt.days <span class="op">/</span> <span class="fl">365.25</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(one)<span class="sc">}</span><span class="ss"> measurements from </span><span class="sc">{</span>one[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>one[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one[[<span class="st">"date"</span>, <span class="st">"years_elapsed"</span>, <span class="st">"depth_to_water_ft"</span>]].head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="part-1-read-and-inspect-before-calculating" class="level2">
-<h2 class="anchored" data-anchor-id="part-1-read-and-inspect-before-calculating">Part 1 — Read and inspect before calculating</h2>
-<p>The well inventory has one row per registered well. <code>site_no</code> is an identifier, so read it as text even though it contains digits.</p>
-<div id="cell-4" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wells <span class="op">=</span> pd.read_csv(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">/</span> <span class="st">"tucson_basin_wells.csv"</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>},</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.shape)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.dtypes)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.isna().<span class="bu">sum</span>())</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>wells.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Common pitfall: dropping missing values from <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> separately can destroy their row-by-row pairing. Drop incomplete rows from both required columns in one operation, as above.</p>
+<section id="your-turn-1-reproduce-the-ols-coefficients" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-1-reproduce-the-ols-coefficients">YOUR TURN 1 — Reproduce the OLS coefficients</h3>
+<p>Use the formulas derived Tuesday:</p>
+<p><span class="math display">\[
+b_1=rac{\sum_i(x_i-ar x)(y_i-ar y)}
+          {\sum_i(x_i-ar x)^2},
+\qquad b_0=ar y-b_1ar x.
+\]</span></p>
+<div id="00496067" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> one[<span class="st">"years_elapsed"</span>].to_numpy()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> one[<span class="st">"depth_to_water_ft"</span>].to_numpy()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x_bar, y_bar <span class="op">=</span> x.mean(), y.mean()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sxx <span class="op">=</span> ...</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>sxy <span class="op">=</span> ...</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>manual_slope <span class="op">=</span> ...</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>manual_intercept <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="your-turn-1" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-1">YOUR TURN 1</h3>
-<p>Calculate the number of wells, the number missing <code>well_depth_ft</code>, and the deepest reported well. Use the table rather than typing known answers.</p>
-<div id="cell-6" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n_wells <span class="op">=</span> ...</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>n_missing_depth <span class="op">=</span> ...</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>deepest_ft <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="1e44869f" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(sxx, <span class="fl">131428.3168427</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(sxy, <span class="fl">273520.1171342</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(manual_slope, <span class="fl">2.0811353573</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(manual_intercept, <span class="fl">24.6629112752</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"depth = </span><span class="sc">{</span>manual_intercept<span class="sc">:.3f}</span><span class="ss"> + </span><span class="sc">{</span>manual_slope<span class="sc">:.3f}</span><span class="ss"> × elapsed years"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-7" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_wells <span class="op">==</span> <span class="bu">len</span>(wells)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_missing_depth <span class="op">==</span> wells[<span class="st">"well_depth_ft"</span>].isna().<span class="bu">sum</span>()</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> deepest_ft <span class="op">==</span> wells[<span class="st">"well_depth_ft"</span>].<span class="bu">max</span>()</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (n_wells, n_missing_depth, deepest_ft) <span class="op">==</span> (<span class="dv">1693</span>, <span class="dv">184</span>, <span class="fl">2505.0</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_wells<span class="sc">:,}</span><span class="ss"> wells; </span><span class="sc">{</span>n_missing_depth<span class="sc">}</span><span class="ss"> missing depth; deepest </span><span class="sc">{</span>deepest_ft<span class="sc">:,.0f}</span><span class="ss"> ft"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Why specify the dtype? Reading <code>site_no</code> as a number can remove a leading zero, which changes the identifier and later breaks joins.</p>
-</section>
-</section>
-<section id="part-2-select-columns-and-filter-rows" class="level2">
-<h2 class="anchored" data-anchor-id="part-2-select-columns-and-filter-rows">Part 2 — Select columns and filter rows</h2>
-<p>One name selects a Series; a list of names selects a DataFrame.</p>
-<div id="cell-9" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>depth <span class="op">=</span> wells[<span class="st">"well_depth_ft"</span>]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>location_and_depth <span class="op">=</span> wells[[<span class="st">"site_no"</span>, <span class="st">"latitude"</span>, <span class="st">"longitude"</span>, <span class="st">"well_depth_ft"</span>]]</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(depth).<span class="va">__name__</span>, <span class="bu">type</span>(location_and_depth).<span class="va">__name__</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>A filter is a boolean Series aligned with the table’s index. Inspect missing depths before applying a depth comparison: <code>NaN</code> fails every comparison and the row otherwise disappears without a warning.</p>
-<section id="your-turn-2" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-2">YOUR TURN 2</h3>
-<p>Create an independent table named <code>selected</code> containing wells that:</p>
-<ul>
-<li>are between 100 and 300 ft deep, inclusive; and</li>
-<li>have latitude greater than 32.2°.</li>
-</ul>
-<p>Use <code>.loc[...]</code> and <code>.copy()</code>. Then calculate <code>n_selected</code> and <code>median_depth_ft</code>.</p>
-<div id="cell-11" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>selected <span class="op">=</span> ...</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n_selected <span class="op">=</span> ...</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>median_depth_ft <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-12" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> selected <span class="kw">is</span> <span class="kw">not</span> wells</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> selected[<span class="st">"well_depth_ft"</span>].between(<span class="dv">100</span>, <span class="dv">300</span>).<span class="bu">all</span>()</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (selected[<span class="st">"latitude"</span>] <span class="op">&gt;</span> <span class="fl">32.2</span>).<span class="bu">all</span>()</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_selected <span class="op">==</span> <span class="dv">375</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> median_depth_ft <span class="op">==</span> <span class="fl">200.0</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_selected<span class="sc">}</span><span class="ss"> selected wells; median depth </span><span class="sc">{</span>median_depth_ft<span class="sc">:.0f}</span><span class="ss"> ft"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>Interpret the slope: the fitted depth increased by about 2.08 ft per year over this record. Because depth increases downward, that is an average water-level decline of 2.08 ft/yr.</p>
+<p>The intercept is the fitted depth when elapsed time is zero—the first date in the record. It is not a universal baseline.</p>
+<hr>
 </section>
 </section>
-<section id="part-3-dates-become-a-coordinate" class="level2">
-<h2 class="anchored" data-anchor-id="part-3-dates-become-a-coordinate">Part 3 — Dates become a coordinate</h2>
-<p>The groundwater-level table is long: each row is one measurement, while <code>site_no</code> identifies the well. Parse the dates when reading the CSV.</p>
-<div id="cell-14" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> pd.read_csv(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">/</span> <span class="st">"tucson_water_levels.csv"</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>},</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    parse_dates<span class="op">=</span>[<span class="st">"date"</span>],</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(levels[[<span class="st">"site_no"</span>, <span class="st">"date"</span>, <span class="st">"depth_to_water_ft"</span>]].dtypes)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(levels[<span class="st">"date"</span>].<span class="bu">min</span>(), <span class="st">"to"</span>, levels[<span class="st">"date"</span>].<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="part-2-centre-the-predictor-to-make-the-intercept-useful" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-centre-the-predictor-to-make-the-intercept-useful">Part 2 — Centre the predictor to make the intercept useful</h2>
+<p>Changing the origin of <span class="math inline">\(x\)</span> should not change the slope. It changes which date the intercept describes.</p>
+<section id="your-turn-2-put-the-intercept-at-1970" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-2-put-the-intercept-at-1970">YOUR TURN 2 — Put the intercept at 1970</h3>
+<p>Create elapsed years from 1 January 1970, fit the same response, and record the new intercept. <code>fit_1970.intercept</code> estimates depth at the 1970 reference date.</p>
+<div id="352eb084" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>one[<span class="st">"years_from_1970"</span>] <span class="op">=</span> (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    one[<span class="st">"date"</span>] <span class="op">-</span> pd.Timestamp(<span class="st">"1970-01-01"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>).dt.days <span class="op">/</span> <span class="fl">365.25</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> stats.linregress(one[<span class="st">"years_elapsed"</span>], one[<span class="st">"depth_to_water_ft"</span>])</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>fit_1970 <span class="op">=</span> ...</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>slope_change <span class="op">=</span> ...</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>depth_at_1970 <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="your-turn-3" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
-<ol type="1">
-<li>Find the site with the most measurements and store its identifier as <code>most_observed_site</code>.</li>
-<li>Filter that site, make <code>date</code> the index, and sort it into a DataFrame named <code>one_site</code>.</li>
-<li>Use partial-string selection to create <code>historical</code>, containing 1950 through 1979 inclusive.</li>
-</ol>
-<div id="cell-16" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>most_observed_site <span class="op">=</span> ...</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>one_site <span class="op">=</span> ...</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>historical <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="03e0d361" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(slope_change, <span class="fl">0.0</span>, atol<span class="op">=</span><span class="fl">1e-12</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(depth_at_1970, <span class="fl">104.7175362453</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"original intercept: </span><span class="sc">{</span>fit<span class="sc">.</span>intercept<span class="sc">:.2f}</span><span class="ss"> ft at the first observation"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"centred intercept: </span><span class="sc">{</span>depth_at_1970<span class="sc">:.2f}</span><span class="ss"> ft at 1970-01-01"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"slope in both fits: </span><span class="sc">{</span>fit_1970<span class="sc">.</span>slope<span class="sc">:.3f}</span><span class="ss"> ft/yr"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-17" class="cell">
+<p>Common pitfall: interpreting an intercept at <span class="math inline">\(x=0\)</span> when zero is far outside the data or has no physical meaning. Centre the predictor at a meaningful date or condition. This changes the intercept and its uncertainty, not the fitted line.</p>
+<hr>
+</section>
+</section>
+<section id="part-3-reconstruct-fit-and-uncertainty-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-reconstruct-fit-and-uncertainty-statistics">Part 3 — Reconstruct fit and uncertainty statistics</h2>
+<p>First compute predictions and residuals. Here residual means <strong>measured minus predicted</strong>.</p>
+<div id="8e6ea3bc" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>one[<span class="st">"predicted"</span>] <span class="op">=</span> manual_intercept <span class="op">+</span> manual_slope <span class="op">*</span> one[<span class="st">"years_elapsed"</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>one[<span class="st">"residual"</span>] <span class="op">=</span> one[<span class="st">"depth_to_water_ft"</span>] <span class="op">-</span> one[<span class="st">"predicted"</span>]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(one[<span class="st">"date"</span>], one[<span class="st">"depth_to_water_ft"</span>], <span class="st">"o"</span>, ms<span class="op">=</span><span class="fl">2.5</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">"#49595E"</span>, alpha<span class="op">=</span><span class="fl">0.55</span>, label<span class="op">=</span><span class="st">"measured"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(one[<span class="st">"date"</span>], one[<span class="st">"predicted"</span>], color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>             label<span class="op">=</span><span class="st">"OLS line"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].invert_yaxis()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"depth to water (ft)"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(one[<span class="st">"date"</span>], one[<span class="st">"residual"</span>], <span class="st">"o"</span>, ms<span class="op">=</span><span class="fl">2.5</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">"#1E5288"</span>, alpha<span class="op">=</span><span class="fl">0.65</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"k"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">"residual (ft)"</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">"date"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="your-turn-3-calculate-r2-standard-error-and-the-interval" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-3-calculate-r2-standard-error-and-the-interval">YOUR TURN 3 — Calculate <span class="math inline">\(R^2\)</span>, standard error, and the interval</h3>
+<p>Use</p>
+<p><span class="math display">\[
+R^2=1-\frac{\mathrm{RSS}}{\mathrm{TSS}},\quad
+s^2=\frac{\mathrm{RSS}}{n-2},\quad
+\mathrm{SE}(b_1)=\sqrt{\frac{s^2}{S_{xx}}}.
+\]</span></p>
+<p>Then form a 95% interval with the Student-<span class="math inline">\(t\)</span> critical value.</p>
+<div id="9372bcda" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>residual <span class="op">=</span> one[<span class="st">"residual"</span>].to_numpy()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(one)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t_critical <span class="op">=</span> stats.t.ppf(<span class="fl">0.975</span>, df<span class="op">=</span>n <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>rss <span class="op">=</span> ...</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>tss <span class="op">=</span> ...</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>r_squared <span class="op">=</span> ...</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>residual_variance <span class="op">=</span> ...</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>slope_se <span class="op">=</span> ...</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>margin <span class="op">=</span> ...</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ci_low <span class="op">=</span> ...</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>ci_high <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="773855de" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(rss, <span class="fl">64167.0382349</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(tss, <span class="fl">633399.4249409</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(r_squared, <span class="fl">0.8986941956</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(residual_variance, <span class="fl">170.20434545</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(slope_se, fit.stderr)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose([ci_low, ci_high], [<span class="fl">2.01037575</span>, <span class="fl">2.15189496</span>])</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"R2 = </span><span class="sc">{</span>r_squared<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"slope = </span><span class="sc">{</span>manual_slope<span class="sc">:.3f}</span><span class="ss"> ± </span><span class="sc">{</span>slope_se<span class="sc">:.3f}</span><span class="ss"> ft/yr (ordinary SE)"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ordinary 95% CI: </span><span class="sc">{</span>ci_low<span class="sc">:.3f}</span><span class="ss"> to </span><span class="sc">{</span>ci_high<span class="sc">:.3f}</span><span class="ss"> ft/yr"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The calculation is correct. Whether the interval is scientifically credible is a separate question. It assumes a linear mean, independent errors, and constant error variance; exact small-sample <span class="math inline">\(t\)</span> inference also assumes normal errors.</p>
+<hr>
+</section>
+</section>
+<section id="part-4-diagnose-the-assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-diagnose-the-assumptions">Part 4 — Diagnose the assumptions</h2>
+<p>The plots already show long runs above and below zero. Quantify that structure and compare the residual spread in the lower and upper halves of the fitted values.</p>
+<section id="your-turn-4-measure-dependence-and-changing-spread" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-4-measure-dependence-and-changing-spread">YOUR TURN 4 — Measure dependence and changing spread</h3>
+<div id="cdc1ac6f" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>year <span class="op">=</span> one[<span class="st">"date"</span>].dt.year</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>by_decade <span class="op">=</span> ...</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>lag1 <span class="op">=</span> ...</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>low_spread <span class="op">=</span> ...</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>high_spread <span class="op">=</span> ...</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>spread_ratio <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="325e5489" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> most_observed_site <span class="op">==</span> <span class="st">"320906110592701"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(one_site.index, pd.DatetimeIndex)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> one_site.index.is_monotonic_increasing</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(one_site) <span class="op">==</span> <span class="dv">547</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(historical) <span class="op">==</span> <span class="dv">308</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> historical.index.<span class="bu">min</span>().year <span class="op">==</span> <span class="dv">1950</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> historical.index.<span class="bu">max</span>().year <span class="op">==</span> <span class="dv">1979</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"site </span><span class="sc">{</span>most_observed_site<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(one_site)<span class="sc">}</span><span class="ss"> measurements; </span><span class="sc">{</span><span class="bu">len</span>(historical)<span class="sc">}</span><span class="ss"> in 1950–1979"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> by_decade.idxmin() <span class="op">==</span> <span class="dv">1950</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> by_decade.idxmax() <span class="op">==</span> <span class="dv">1970</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(lag1, <span class="fl">0.986071125</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(low_spread, <span class="fl">8.490762596</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(high_spread, <span class="fl">15.351717640</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(spread_ratio, <span class="fl">1.80804933</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(by_decade.<span class="bu">round</span>(<span class="dv">1</span>).to_string())</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"lag-1 residual correlation: </span><span class="sc">{</span>lag1<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"upper/lower fitted-range spread ratio: </span><span class="sc">{</span>spread_ratio<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Make a quick diagnostic plot. Depth is measured downward, so invert the axis.</p>
-<div id="cell-19" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.5</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ax.plot(one_site.index, one_site[<span class="st">"depth_to_water_ft"</span>], color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"date"</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"depth to water (ft below land surface)"</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Groundwater record at site </span><span class="sc">{</span>most_observed_site<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.25</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="07b21598" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="fl">3.6</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].scatter(one[<span class="st">"predicted"</span>], one[<span class="st">"residual"</span>], s<span class="op">=</span><span class="dv">14</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span><span class="st">"#1E5288"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"k"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">"fitted depth (ft)"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"residual (ft)"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Residual versus fitted"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].scatter(one[<span class="st">"residual"</span>].iloc[:<span class="op">-</span><span class="dv">1</span>], one[<span class="st">"residual"</span>].iloc[<span class="dv">1</span>:],</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                s<span class="op">=</span><span class="dv">14</span>, color<span class="op">=</span><span class="st">"#AB0520"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">"residual at observation i"</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">"residual at observation i + 1"</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f"Lag plot, r = </span><span class="sc">{</span>lag1<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>stats.probplot(one[<span class="st">"residual"</span>], dist<span class="op">=</span><span class="st">"norm"</span>, plot<span class="op">=</span>axes[<span class="dv">2</span>])</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="st">"Normal Q–Q plot"</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-</section>
-<section id="part-4-resample-a-daily-streamflow-record" class="level2">
-<h2 class="anchored" data-anchor-id="part-4-resample-a-daily-streamflow-record">Part 4 — Resample a daily streamflow record</h2>
-<p>Read the cached Sabino Creek daily discharge record and create a sorted <code>DatetimeIndex</code>.</p>
-<div id="cell-21" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flow <span class="op">=</span> (</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    pd.read_csv(DATA <span class="op">/</span> <span class="st">"cache"</span> <span class="op">/</span> <span class="st">"nwis_09484000_dv.csv"</span>, parse_dates<span class="op">=</span>[<span class="st">"datetime"</span>])</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    .set_index(<span class="st">"datetime"</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    .sort_index()</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> flow.index.is_unique</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> flow.index.is_monotonic_increasing</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(flow.index.<span class="bu">min</span>(), <span class="st">"to"</span>, flow.index.<span class="bu">max</span>(), <span class="ss">f"(</span><span class="sc">{</span><span class="bu">len</span>(flow)<span class="sc">:,}</span><span class="ss"> days)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="your-turn-4" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
-<p>Create:</p>
+<p>Interpretation:</p>
 <ul>
-<li><code>monsoon_2006</code>: July through September 2006;</li>
-<li><code>monthly_mean</code>: mean discharge for every separate calendar month; and</li>
-<li><code>water_year_mean</code>: mean discharge for years ending September 30.</li>
+<li>Decade-long residual structure challenges a single linear mean.</li>
+<li>Lag-1 correlation of 0.986 strongly rejects independence.</li>
+<li>Residual spread is about 1.8 times larger in the upper fitted range, challenging constant variance.</li>
+<li>The Q–Q plot checks distributional shape, but normal-looking residuals would not repair dependence or nonlinearity.</li>
 </ul>
-<div id="cell-23" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>monsoon_2006 <span class="op">=</span> ...</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>monthly_mean <span class="op">=</span> ...</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>water_year_mean <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-24" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(monsoon_2006) <span class="op">==</span> <span class="dv">92</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(monthly_mean) <span class="op">==</span> <span class="dv">240</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(water_year_mean) <span class="op">==</span> <span class="dv">21</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(monsoon_2006[<span class="st">"discharge_cfs"</span>].mean(), <span class="fl">93.2676087</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"monsoon 2006 mean: </span><span class="sc">{</span>monsoon_2006[<span class="st">'discharge_cfs'</span>]<span class="sc">.</span>mean()<span class="sc">:.1f}</span><span class="ss"> cfs"</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(monthly_mean)<span class="sc">}</span><span class="ss"> monthly values and </span><span class="sc">{</span><span class="bu">len</span>(water_year_mean)<span class="sc">}</span><span class="ss"> water-year values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Why are there 21 water-year values in a 20-calendar-year record? The January 2005 start and December 2024 end create partial water years. Those edge bins must be identified before comparing annual values.</p>
+<p>The OLS line remains a descriptive line. The ordinary standard error and confidence interval are much harder to defend.</p>
+<hr>
 </section>
 </section>
-<section id="part-5-rolling-windows-retain-the-daily-coordinate" class="level2">
-<h2 class="anchored" data-anchor-id="part-5-rolling-windows-retain-the-daily-coordinate">Part 5 — Rolling windows retain the daily coordinate</h2>
-<p>Resampling returns fewer values. A rolling window keeps the daily index and summarises neighbouring days.</p>
-<section id="your-turn-5" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-5">YOUR TURN 5</h3>
-<p>Calculate a centred 30-day rolling mean of discharge. Store the date and value of the largest rolling mean as <code>wettest_30_day_date</code> and <code>wettest_30_day_cfs</code>.</p>
-<div id="cell-26" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rolling_30 <span class="op">=</span> ...</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>wettest_30_day_date <span class="op">=</span> ...</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>wettest_30_day_cfs <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="part-5-validation-changes-with-the-prediction-question" class="level2">
+<h2 class="anchored" data-anchor-id="part-5-validation-changes-with-the-prediction-question">Part 5 — Validation changes with the prediction question</h2>
+<p>A random split asks whether the line can interpolate within an era represented in training. A chronological split asks whether an early linear trend can forecast a later era.</p>
+<section id="your-turn-5-compare-both-designs" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-5-compare-both-designs">YOUR TURN 5 — Compare both designs</h3>
+<div id="be65a201" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error, r2_score</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> one[[<span class="st">"years_elapsed"</span>]].to_numpy()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> one[<span class="st">"depth_to_water_ft"</span>].to_numpy()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state<span class="op">=</span><span class="dv">564</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>random_model <span class="op">=</span> LinearRegression().fit(X_train, y_train)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>random_prediction <span class="op">=</span> ...</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>random_mae <span class="op">=</span> ...</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>random_rmse <span class="op">=</span> ...</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>random_r2 <span class="op">=</span> ...</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>time_mask <span class="op">=</span> ...</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>time_model <span class="op">=</span> ...</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>time_prediction <span class="op">=</span> ...</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>time_mae <span class="op">=</span> ...</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>time_rmse <span class="op">=</span> ...</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>time_r2 <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-27" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> rolling_30.isna().<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">29</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wettest_30_day_date <span class="op">==</span> pd.Timestamp(<span class="st">"2006-08-12"</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(wettest_30_day_cfs, <span class="fl">258.2266667</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"wettest sustained month centred on </span><span class="sc">{</span>wettest_30_day_date<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss">: "</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>wettest_30_day_cfs<span class="sc">:.1f}</span><span class="ss"> cfs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fa81040e" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(random_mae, <span class="fl">11.27230049</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(random_rmse, <span class="fl">13.29259263</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(random_r2, <span class="fl">0.89142489</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> time_mask.<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">188</span> <span class="kw">and</span> (<span class="op">~</span>time_mask).<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">191</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(time_mae, <span class="fl">15.39927091</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(time_rmse, <span class="fl">19.34386821</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(time_r2, <span class="op">-</span><span class="fl">4.80587106</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"                 MAE      RMSE      R2"</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"random split   </span><span class="sc">{</span>random_mae<span class="sc">:6.1f}</span><span class="ss">    </span><span class="sc">{</span>random_rmse<span class="sc">:6.1f}</span><span class="ss">   </span><span class="sc">{</span>random_r2<span class="sc">:6.2f}</span><span class="ss">"</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"time split     </span><span class="sc">{</span>time_mae<span class="sc">:6.1f}</span><span class="ss">    </span><span class="sc">{</span>time_rmse<span class="sc">:6.1f}</span><span class="ss">   </span><span class="sc">{</span>time_r2<span class="sc">:6.2f}</span><span class="ss">"</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-28" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">3.8</span>))</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ax.plot(flow.index, flow[<span class="st">"discharge_cfs"</span>], color<span class="op">=</span><span class="st">"0.75"</span>, lw<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">"daily"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>ax.plot(rolling_30.index, rolling_30, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"30-day mean"</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"date"</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"discharge (cfs)"</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"A rolling mean separates sustained wet periods from daily peaks"</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>Common pitfalls:</p>
+<ul>
+<li>Test <span class="math inline">\(R^2\)</span> can be negative. It means predictions are worse than using the test-set mean as a baseline.</li>
+<li>Random splitting is not inherently wrong; it answers an interpolation question. It is wrong when presented as evidence of forecasting ability.</li>
+<li>MAE and RMSE retain the response units. RMSE reacts more strongly to large misses.</li>
+</ul>
+<hr>
 </section>
 </section>
-<section id="part-6-group-long-data-then-reshape-only-when-needed" class="level2">
-<h2 class="anchored" data-anchor-id="part-6-group-long-data-then-reshape-only-when-needed">Part 6 — Group long data, then reshape only when needed</h2>
-<p>Groundwater measurements remain most compact in long form. First summarise each site without reshaping. Sort by site and date before asking for the first and last measurement.</p>
-<section id="your-turn-6" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-6">YOUR TURN 6</h3>
+<section id="part-6-write-only-the-claims-the-evidence-supports" class="level2">
+<h2 class="anchored" data-anchor-id="part-6-write-only-the-claims-the-evidence-supports">Part 6 — Write only the claims the evidence supports</h2>
+<section id="your-turn-6-classify-the-conclusions" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-6-classify-the-conclusions">YOUR TURN 6 — Classify the conclusions</h3>
+<p>Complete the four variables. Use <code>True</code> only when the analysis supports the claim without an unaddressed assumption failure.</p>
+<div id="d8e20ccd" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>descriptive_rate <span class="op">=</span> ...</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ordinary_ci_is_trustworthy <span class="op">=</span> ...</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>forecast_model_is_adequate <span class="op">=</span> ...</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>causal_claim_is_supported <span class="op">=</span> ...</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>primary_warning <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="59931af9" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(descriptive_rate, <span class="fl">2.0811353573</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ordinary_ci_is_trustworthy <span class="kw">is</span> <span class="va">False</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> forecast_model_is_adequate <span class="kw">is</span> <span class="va">False</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> causal_claim_is_supported <span class="kw">is</span> <span class="va">False</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">"residual"</span> <span class="kw">in</span> primary_warning.lower()</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Descriptive rate: </span><span class="sc">{</span>descriptive_rate<span class="sc">:.2f}</span><span class="ss"> ft/yr of increasing depth"</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Trust ordinary CI without adjustment? </span><span class="sc">{</span>ordinary_ci_is_trustworthy<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Adequate for forecasting the later era? </span><span class="sc">{</span>forecast_model_is_adequate<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Does elapsed time establish causation? </span><span class="sc">{</span>causal_claim_is_supported<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Primary warning: </span><span class="sc">{</span>primary_warning<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now write a four-sentence conclusion in your own words:</p>
 <ol type="1">
-<li>Sort the measurements as <code>ordered</code>.</li>
-<li>Build <code>site_summary</code> with the count, first depth, and last depth for every site.</li>
-<li>Add <code>change_ft = last - first</code> and count sites with positive change as <code>n_declining</code>.</li>
-<li>Find the three sites with the most measurements and pivot only those records into <code>wide</code>, with dates as rows and sites as columns.</li>
+<li><strong>Descriptive:</strong> state the fitted rate, direction, units, site, and period.</li>
+<li><strong>Inferential:</strong> state that the narrow ordinary interval is conditional on assumptions that the residual diagnostics challenge.</li>
+<li><strong>Predictive:</strong> state what the chronological validation shows.</li>
+<li><strong>Causal:</strong> name at least one plausible process that elapsed time does not itself identify, such as pumping or recharge.</li>
 </ol>
-<div id="cell-30" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ordered <span class="op">=</span> ...</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>site_summary <span class="op">=</span> ...</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>site_summary[<span class="st">"change_ft"</span>] <span class="op">=</span> ...</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>n_declining <span class="op">=</span> ...</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>top_three <span class="op">=</span> ...</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>wide <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-31" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> site_summary.shape <span class="op">==</span> (<span class="dv">80</span>, <span class="dv">4</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_declining <span class="op">==</span> <span class="dv">73</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(site_summary[<span class="st">"change_ft"</span>].median(), <span class="fl">46.83</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wide.shape <span class="op">==</span> (<span class="dv">1185</span>, <span class="dv">3</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wide.isna().<span class="bu">sum</span>().<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">2281</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_declining<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(site_summary)<span class="sc">}</span><span class="ss"> sites have positive depth change"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"wide table: </span><span class="sc">{</span>wide<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">; </span><span class="sc">{</span>wide<span class="sc">.</span>isna()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:,}</span><span class="ss"> empty cells"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Positive depth change means the water table moved downward. The wide table is useful for aligned comparison, but it is sparse because field visits did not occur on the same dates. Missing cells are absence of measurement, not zero depth.</p>
+<p>Avoid these phrases:</p>
+<ul>
+<li>“<span class="math inline">\(R^2=0.90\)</span>, so the model is 90% accurate.”</li>
+<li>“The p-value proves groundwater decline.”</li>
+<li>“Time caused the water table to fall.”</li>
+<li>“The confidence interval contains 95% of future observations.”</li>
+</ul>
+<hr>
 </section>
 </section>
 <section id="before-you-leave" class="level2">
 <h2 class="anchored" data-anchor-id="before-you-leave">Before you leave</h2>
 <ol type="1">
 <li>Restart the kernel and run all cells.</li>
-<li>Confirm that all six CHECK cells pass.</li>
+<li>Resolve every failed check.</li>
 <li>Save the notebook.</li>
+<li>Confirm that your written interpretation separates descriptive, inferential, predictive, and causal statements.</li>
 </ol>
 </section>
-<section id="whats-due" class="level2">
-<h2 class="anchored" data-anchor-id="whats-due">What’s due</h2>
-<p><strong>HW 2 — Numerical water balance</strong>, Wednesday 9/23 at 11:59pm through D2L.</p>
-</section>
-<section id="next-week" class="level2">
-<h2 class="anchored" data-anchor-id="next-week">Next week</h2>
-<p>You will retrieve hydrologic records and diagnose gaps, duplicates, and outliers. The table and time-series operations in this lab are the tools you will use to do it.</p>
-</section>
-<section id="stuck" class="level2">
-<h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
+<section id="if-you-get-stuck" class="level2">
+<h2 class="anchored" data-anchor-id="if-you-get-stuck">If you get stuck</h2>
 <ul>
-<li>Print <code>.shape</code>, <code>.dtypes</code>, and <code>.index</code> before guessing what an object is.</li>
-<li>If a date slice fails, confirm the index is a sorted <code>DatetimeIndex</code>.</li>
-<li>If a filter drops too many rows, inspect missing values in every filtered column.</li>
-<li>If <code>pivot</code> raises a duplicate-entry error, check the site-date pairs rather than switching immediately to <code>pivot_table</code>.</li>
+<li><code>linregress</code> returns <code>nan</code>: drop incomplete <span class="math inline">\(x\)</span>–<span class="math inline">\(y\)</span> rows together.</li>
+<li>Your slope has units of ft/day: convert the datetime difference to years.</li>
+<li>Your residuals have the opposite sign: use measured minus predicted.</li>
+<li>Your standard error is close but not equal: residual variance uses <span class="math inline">\(n-2\)</span>.</li>
+<li>Your random-split values change: use <code>random_state=564</code>.</li>
+<li><code>Expected 2D array</code>: scikit-learn requires <code>X</code> shaped <code>(rows, predictors)</code>; use double brackets around the predictor column.</li>
 </ul>
 
 
@@ -1098,7 +1204,7 @@ eyJjb250ZW50cyI6W119
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
-window._ojs.paths.runtimeToDoc = "../../labs/week05";
+window._ojs.paths.runtimeToDoc = "../../labs/week09";
 window._ojs.paths.runtimeToRoot = "../..";
 window._ojs.paths.docToRoot = "../..";
 window._ojs.selfContained = false;
@@ -1505,13 +1611,13 @@ window._ojs.runtime.interpretFromScriptTags();
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../slides/week05_thu_filtering.html" class="pagination-link" aria-label="Thu 9/24 · Slides">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Thu 9/24 · Slides</span>
+      <a href="../../slides/week09_thu_regression_lab.html" class="pagination-link" aria-label="Thu 10/22 · Slides">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Thu 10/22 · Slides</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../slides/week06_tue_apis.html" class="pagination-link" aria-label="Tue 9/29 · Slides">
-        <span class="nav-page-text">Tue 9/29 · Slides</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../slides/week10_tue_what_is_modflow.html" class="pagination-link" aria-label="Tue 10/27 · Slides">
+        <span class="nav-page-text">Tue 10/27 · Slides</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

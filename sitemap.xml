@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week08/week08_lab_matplotlib.html</loc>
-    <lastmod>2026-07-28T16:41:38.174Z</lastmod>
+    <lastmod>2026-08-12T04:13:18.839Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week06/week06_lab_real_world_data.html</loc>
@@ -42,19 +42,19 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week10_tue_what_is_modflow.html</loc>
-    <lastmod>2026-08-11T18:27:43.761Z</lastmod>
+    <lastmod>2026-08-12T04:12:13.836Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week09_tue_regression.html</loc>
-    <lastmod>2026-08-12T03:26:19.610Z</lastmod>
+    <lastmod>2026-08-12T04:56:23.820Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week08_tue_figures.html</loc>
     <lastmod>2026-08-12T03:13:51.544Z</lastmod>
   </url>
   <url>
-    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week07_tue_datetime.html</loc>
-    <lastmod>2026-08-12T03:05:42.179Z</lastmod>
+    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week07_tue_inference.html</loc>
+    <lastmod>2026-08-12T15:38:24.085Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week06_tue_apis.html</loc>
@@ -78,7 +78,7 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/index.html</loc>
-    <lastmod>2026-08-12T03:29:54.002Z</lastmod>
+    <lastmod>2026-08-12T04:53:06.662Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week02_thu_data_types.html</loc>
@@ -101,16 +101,16 @@
     <lastmod>2026-07-28T16:41:38.182Z</lastmod>
   </url>
   <url>
-    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week07_thu_grouping.html</loc>
-    <lastmod>2026-08-12T03:05:42.274Z</lastmod>
+    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week07_thu_inference_lab.html</loc>
+    <lastmod>2026-08-12T15:35:15.382Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week08_thu_annotation_maps.html</loc>
-    <lastmod>2026-08-11T18:27:43.542Z</lastmod>
+    <lastmod>2026-08-12T04:12:13.797Z</lastmod>
   </url>
   <url>
-    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week09_thu_chemistry.html</loc>
-    <lastmod>2026-07-28T16:41:38.183Z</lastmod>
+    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week09_thu_regression_lab.html</loc>
+    <lastmod>2026-08-12T04:12:13.755Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week10_thu_running_it.html</loc>
@@ -141,12 +141,12 @@
     <lastmod>2026-08-12T03:20:34.098Z</lastmod>
   </url>
   <url>
-    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week07/week07_lab_timeseries.html</loc>
-    <lastmod>2026-08-12T03:09:32.033Z</lastmod>
+    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week07/week07_lab_inference.html</loc>
+    <lastmod>2026-08-12T15:37:04.934Z</lastmod>
   </url>
   <url>
-    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week09/week09_lab_regression_chemistry.html</loc>
-    <lastmod>2026-08-12T03:28:50.506Z</lastmod>
+    <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week09/week09_lab_regression.html</loc>
+    <lastmod>2026-08-12T04:14:39.296Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week11/week11_lab_basin_model.html</loc>

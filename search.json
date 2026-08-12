@@ -615,7 +615,7 @@
     "href": "labs/week08/week08_lab_matplotlib.html#next-week",
     "title": "Week 8 Lab — Figures worth showing people",
     "section": "Next week",
-    "text": "Next week\nStatistics and regression: fitting a trend, and saying honestly how much you believe it. Then water chemistry.",
+    "text": "Next week\nStatistics and regression: fitting a trend, and saying honestly how much you believe it, followed by a full-period regression lab.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
@@ -1149,7 +1149,7 @@
     "href": "index.html#schedule",
     "title": "HWRS 564a — Hydrogeologic Analysis Tools & Methods I",
     "section": "Schedule",
-    "text": "Schedule\n\n\n\nWeek\nDates\nTopic\nDue\n\n\n\n\n1\n8/24\nProgram field trip — no class\n\n\n\nModule 1 · Python Foundations\n\n\n\n\n\n2\n8/31\nGetting started with Python · Data types & sequences\n\n\n\n3\n9/7\nControl flow · Functions and modules\nHW 1 · Wed 9/9\n\n\n4\n9/14\nArrays with numpy · Iterative solutions\n\n\n\n5\n9/21\nPandas: labelled data through time · Filter, summarise, and reshape\nHW 2 · Wed 9/23 · Project 1\n\n\nModule 2 · Data Analysis & Visualization\n\n\n\n\n\n6\n9/28\nWhere data comes from · Gaps, duplicates, outliers\n\n\n\n7\n10/5\nTopic to be announced\nHW 3 · Wed 10/7\n\n\n8\n10/12\nFigures worth showing · Annotation and maps\nProject 2 pt 1\n\n\n9\n10/19\nRegression: estimation and uncertainty · Major-ion chemistry\nHW 4 · Wed 10/21\n\n\nModule 3 · Introduction to MODFLOW & FloPy\n\n\n\n\n\n10\n10/26\nWhat MODFLOW is · Running it\nProject 2 pt 2\n\n\n11\n11/2\nInputs, outputs, hitting go · Budgets\nHW 5 · Wed 11/4\n\n\n12\n11/9\nDiscretization · Unconfined flow\n\n\n\n13\n11/16\nTime and storage · Capture and ET\nHW 6 · Wed 11/18 · Project 3 pt 1\n\n\n14\n11/23\nLayers, rivers, loading (Tue only)\n\n\n\nModule 4 · Reproducible Workflows\n\n\n\n\n\n15\n11/30\nDebugging and coding practices\nHW 7 · Wed 12/2 · Project 3 pt 2\n\n\n16\n12/7\nProject 3 presentations (Tue only)"
+    "text": "Schedule\n\n\n\nWeek\nDates\nTopic\nDue\n\n\n\n\n1\n8/24\nProgram field trip — no class\n\n\n\nModule 1 · Python Foundations\n\n\n\n\n\n2\n8/31\nGetting started with Python · Data types & sequences\n\n\n\n3\n9/7\nControl flow · Functions and modules\nHW 1 · Wed 9/9\n\n\n4\n9/14\nArrays with numpy · Iterative solutions\n\n\n\n5\n9/21\nPandas: labelled data through time · Filter, summarise, and reshape\nHW 2 · Wed 9/23 · Project 1\n\n\nModule 2 · Data Analysis & Visualization\n\n\n\n\n\n6\n9/28\nWhere data comes from · Gaps, duplicates, outliers\n\n\n\n7\n10/5\nUncertainty and hypothesis testing · Groundwater inference lab\nHW 3 · Wed 10/7\n\n\n8\n10/12\nFigures worth showing · Annotation and maps\nProject 2 pt 1\n\n\n9\n10/19\nOLS, one step at a time · Regression lab\nHW 4 · Wed 10/21\n\n\nModule 3 · Introduction to MODFLOW & FloPy\n\n\n\n\n\n10\n10/26\nWhat MODFLOW is · Running it\nProject 2 pt 2\n\n\n11\n11/2\nInputs, outputs, hitting go · Budgets\nHW 5 · Wed 11/4\n\n\n12\n11/9\nDiscretization · Unconfined flow\n\n\n\n13\n11/16\nTime and storage · Capture and ET\nHW 6 · Wed 11/18 · Project 3 pt 1\n\n\n14\n11/23\nLayers, rivers, loading (Tue only)\n\n\n\nModule 4 · Reproducible Workflows\n\n\n\n\n\n15\n11/30\nDebugging and coding practices\nHW 7 · Wed 12/2 · Project 3 pt 2\n\n\n16\n12/7\nProject 3 presentations (Tue only)"
   },
   {
     "objectID": "index.html#how-class-works",
@@ -1517,172 +1517,289 @@
     ]
   },
   {
-    "objectID": "labs/week07/week07_lab_timeseries.html",
-    "href": "labs/week07/week07_lab_timeseries.html",
-    "title": "Week 7 Lab — Topic to be announced",
+    "objectID": "labs/week07/week07_lab_inference.html",
+    "href": "labs/week07/week07_lab_inference.html",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
     "section": "",
-    "text": "The former time-series lab has moved into the Week 5 introduction to pandas. Datetime indexing, resampling, grouping, rolling windows, and reshaping are now practiced in labs/week05/week05_lab_pandas.ipynb.\nThis notebook is a placeholder. Replacement Week 7 lab material will be added after the new topic is selected.",
+    "text": "HWRS 564a · Fall 2026\nThis lab follows one groundwater question through four steps: calculate a paired effect, show every well, build a no-effect distribution, and estimate uncertainty.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Topic to be announced",
-      "Lab · Topic to be announced"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html",
-    "href": "labs/week09/week09_lab_regression_chemistry.html",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "",
-    "text": "HWRS 564a · Fall 2026\nTwo halves this week.\nThe first is fitting a line and saying honestly how much you believe it. You will calculate the least-squares coefficients, goodness-of-fit statistics, and slope uncertainty from their definitions before using library functions.\nThe second is major-ion chemistry: checking an analysis before you trust it, and reading a Piper diagram. Tuesday’s session covers the statistics, Thursday’s the chemistry.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
-    ]
-  },
-  {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#how-to-use-this-notebook",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#how-to-use-this-notebook",
-    "title": "Week 9 Lab — Regression, and water chemistry",
+    "objectID": "labs/week07/week07_lab_inference.html#how-to-use-this-notebook",
+    "href": "labs/week07/week07_lab_inference.html#how-to-use-this-notebook",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
     "section": "How to use this notebook",
-    "text": "How to use this notebook\nRun each cell with Shift+Enter. Cells marked # YOUR TURN have something for you to write. Cells marked # CHECK verify your answer — if they run without complaint, you’re right.\n\nBefore you submit anything all semester: Kernel → Restart Kernel and Run All Cells. A notebook that only works when run out of order is not finished.",
+    "text": "How to use this notebook\nRun each cell with Shift+Enter. Cells marked # YOUR TURN need your code. Cells marked # CHECK verify the result. Before finishing, restart the kernel and run all cells in order.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#learning-objectives",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#learning-objectives",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nBy the end of this notebook you can:\n\nDerive a least-squares slope and intercept from centred sums\nCalculate RSS, TSS, \\(R^2\\), RMSE, and a confidence interval\nDiagnose nonlinearity and serial correlation in residuals\nCompare random and chronological validation using MAE, RMSE, and test \\(R^2\\)\nConvert mg/L to meq/L and check that an analysis balances\nPlot a Piper diagram and name the water types on it",
+    "objectID": "labs/week07/week07_lab_inference.html#by-the-end-you-can",
+    "href": "labs/week07/week07_lab_inference.html#by-the-end-you-can",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "By the end you can",
+    "text": "By the end you can\n\nidentify the independent observational unit;\ncalculate and report a paired effect in feet;\nconstruct and interpret a sign-flip null distribution;\nbootstrap an interval for the mean effect; and\nwrite a conclusion that states evidence without claiming a cause.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-1-fitting-a-trend",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#part-1-fitting-a-trend",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Part 1 — Fitting a trend",
-    "text": "Part 1 — Fitting a trend\nThe obvious question about a monitoring well: how fast is it falling?\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\nfrom scipy import stats\n\nROOT = next(\n    p for p in [Path.cwd(), *Path.cwd().parents]\n    if (p / \"pyproject.toml\").exists()\n)\nDATA = ROOT / \"data\"\n\nlevels = pd.read_csv(DATA / \"tucson_water_levels.csv\",\n                     dtype={\"site_no\": str}, parse_dates=[\"date\"])\n\none = levels[levels[\"site_no\"] == \"320824110593001\"].sort_values(\"date\").copy()\none[\"years_elapsed\"] = (one[\"date\"] - one[\"date\"].min()).dt.days / 365.25\n\nprint(f\"{len(one)} measurements, {one['date'].min():%Y} to {one['date'].max():%Y}\")\n\nSixty-three years of readings from a single well, ending in 1994 when it was taken out of the monitoring network. Start with the statistical model \\(Y_i = \\beta_0 + \\beta_1x_i + \\varepsilon_i\\). Ordinary least squares chooses \\(b_0\\) and \\(b_1\\) to minimise\n\\[\\operatorname{RSS}(b_0,b_1)=\\sum_i[y_i-(b_0+b_1x_i)]^2.\\]\nNote years_elapsed. You cannot regress against a datetime — it has no arithmetic that produces a slope in useful units. Converting to years since the start makes the slope come out in feet per year, which is what you want to report.\n\nfit = stats.linregress(one[\"years_elapsed\"], one[\"depth_to_water_ft\"])\n\nprint(f\"slope      {fit.slope:8.3f} ft/yr\")\nprint(f\"intercept  {fit.intercept:8.2f} ft\")\nprint(f\"r          {fit.rvalue:8.3f}\")\nprint(f\"r-squared  {fit.rvalue**2:8.3f}\")\nprint(f\"p-value    {fit.pvalue:8.2e}\")\nprint(f\"std error  {fit.stderr:8.4f} ft/yr\")\n\nThe library result is useful, but each returned number comes from a model:\n\nslope — the answer. 2.08 ft/yr of decline.\nr-squared — \\(1-\\mathrm{RSS}/\\mathrm{TSS}\\), relative to a mean-only model.\nstderr — model-based uncertainty on the slope under the ordinary regression assumptions.\np-value — under a zero-slope null and those assumptions, the probability of a test statistic at least as extreme as the observed one.\n\n\nA p-value is not the probability that the null hypothesis is true. A small p-value also does not make a trend large enough to matter.\n\n\none[\"predicted\"] = fit.intercept + fit.slope * one[\"years_elapsed\"]\n\nfig, ax = plt.subplots(figsize=(9, 3.8))\nax.plot(one[\"date\"], one[\"depth_to_water_ft\"], \"o\", ms=2.5,\n        color=\"#49595E\", alpha=0.6, label=\"measured\")\nax.plot(one[\"date\"], one[\"predicted\"], color=\"#AB0520\", lw=2,\n        label=f\"fit: {fit.slope:.2f} ft/yr\")\nax.invert_yaxis()\nax.set_ylabel(\"depth to water (ft)\")\nax.set_title(f\"Well D-15-13 11CBA, R-squared = {fit.rvalue**2:.2f}\")\nax.legend(frameon=False)\nax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n\nYOUR TURN 1\nReconstruct the ordinary least-squares coefficients from their definitions:\n\\[\\hat\\beta_1=\\frac{S_{xy}}{S_{xx}}, \\qquad\n\\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x.\\]\n\nsxx — \\(\\sum_i(x_i-\\bar x)^2\\)\nsxy — \\(\\sum_i(x_i-\\bar x)(y_i-\\bar y)\\)\nmanual_slope and manual_intercept — the two fitted coefficients\n\n\nx = one[\"years_elapsed\"].to_numpy()\ny = one[\"depth_to_water_ft\"].to_numpy()\nx_bar, y_bar = x.mean(), y.mean()\n\n# YOUR TURN\nsxx = ...\nsxy = ...\nmanual_slope = ...\nmanual_intercept = ...\n\n\n# CHECK\nnp.testing.assert_allclose(sxx, 131428.3168427)\nnp.testing.assert_allclose(sxy, 273520.1171342)\nnp.testing.assert_allclose(manual_slope, fit.slope)\nnp.testing.assert_allclose(manual_intercept, fit.intercept)\nprint(f\"manual:  depth = {manual_intercept:.3f} + {manual_slope:.3f} years\")\nprint(f\"scipy:   depth = {fit.intercept:.3f} + {fit.slope:.3f} years\")\nprint(\"Correct.\")\n\nThe two methods agree because linregress solves the same least-squares problem. The slope is centred cross-variation divided by variation in time; the fitted line then passes through \\((\\bar x,\\bar y)\\).\nFor context, fitting only 1950–1990 gives a steeper slope (2.36 ft/yr) but a lower \\(R^2\\) (0.67 instead of 0.90). The shorter window has less total variation for the line to explain.\n\\(R^2\\) is not a measure of how good your model is. It is a measure of how much of this particular spread the model absorbs.",
+    "objectID": "labs/week07/week07_lab_inference.html#the-groundwater-question",
+    "href": "labs/week07/week07_lab_inference.html#the-groundwater-question",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "The groundwater question",
+    "text": "The groundwater question\nTucson’s water-supply operations shifted around 2000–01 as pumping moved toward Avra Valley recharge-and-recovery facilities and deliveries began to include recharged Colorado River water. The event date comes from operations history, not from searching the water-level record.\nQuestion: Among Tucson-area wells monitored in both windows, how did median depth to water change from 1996–2000 to 2002–2006?\nThe year 2001 is excluded as a transition. A well is included only when it has measurements in at least three distinct years of each window. Each well contributes one pre-period median and one post-period median.\n\nSign convention: post - pre. Positive change means the water table was deeper below land surface in the later period.\n\nSources: Arizona Department of Water Resources and Tucson Water.\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\n\nROOT = next(\n    p for p in [Path.cwd(), *Path.cwd().parents]\n    if (p / \"pyproject.toml\").exists()\n)\nDATA = ROOT / \"data\"\n\nwells = pd.read_csv(\n    DATA / \"week07_tucson_paired_wells.csv\",\n    dtype={\"site_no\": str},\n)\nprint(f\"{len(wells)} rows and {wells['site_no'].nunique()} unique wells\")\nwells.head()",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-2-fit-statistics-and-slope-uncertainty",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#part-2-fit-statistics-and-slope-uncertainty",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Part 2 — Fit statistics and slope uncertainty",
-    "text": "Part 2 — Fit statistics and slope uncertainty\nThe residual is measured minus predicted. Its squared magnitude drives both goodness-of-fit statistics and the ordinary uncertainty estimate.\n\none[\"residual\"] = one[\"depth_to_water_ft\"] - one[\"predicted\"]\n\nfig, axes = plt.subplots(1, 2, figsize=(11, 3.4))\n\naxes[0].plot(one[\"date\"], one[\"residual\"], \"o\", ms=2.5, color=\"#AB0520\", alpha=0.6)\naxes[0].axhline(0, color=\"k\", lw=1)\naxes[0].set_ylabel(\"residual (ft)\")\naxes[0].set_title(\"Residuals over time\")\n\naxes[1].hist(one[\"residual\"], bins=30, color=\"#1E5288\", alpha=0.8)\naxes[1].axvline(0, color=\"k\", lw=1)\naxes[1].set_xlabel(\"residual (ft)\")\naxes[1].set_title(\"Residual distribution\")\n\nfor ax in axes:\n    ax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\nDefine\n\\[\\mathrm{RSS}=\\sum_i e_i^2, \\qquad\n\\mathrm{TSS}=\\sum_i(y_i-\\bar y)^2, \\qquad\nR^2=1-\\frac{\\mathrm{RSS}}{\\mathrm{TSS}}.\\]\nUnder independent errors with constant variance, estimate the residual variance and slope standard error with\n\\[s^2=\\frac{\\mathrm{RSS}}{n-2}, \\qquad\n\\mathrm{SE}(\\hat\\beta_1)=\\frac{s}{\\sqrt{S_{xx}}}.\\]\n\nYOUR TURN 2\nCalculate the fit statistics and the ordinary 95% confidence interval from their definitions.\n\nrss, tss, and r_squared_manual\nresidual_variance and slope_se_manual\nci_low and ci_high, using a Student-\\(t\\) critical value\n\n\nresidual = one[\"residual\"].to_numpy()\nn = len(one)\nt_critical = stats.t.ppf(0.975, df=n - 2)\n\n# YOUR TURN\nrss = ...\ntss = ...\nr_squared_manual = ...\nresidual_variance = ...\nslope_se_manual = ...\nci_low = ...\nci_high = ...\n\n\n# CHECK\nnp.testing.assert_allclose(rss, 64167.0382349)\nnp.testing.assert_allclose(tss, 633399.4249409)\nnp.testing.assert_allclose(r_squared_manual, fit.rvalue ** 2)\nnp.testing.assert_allclose(residual_variance, 170.2043455)\nnp.testing.assert_allclose(slope_se_manual, fit.stderr)\nnp.testing.assert_allclose([ci_low, ci_high], [2.01037575, 2.15189496])\nprint(f\"RSS = {rss:,.1f}; TSS = {tss:,.1f}; R2 = {r_squared_manual:.3f}\")\nprint(f\"slope = {manual_slope:.3f} ft/yr\")\nprint(f\"ordinary SE = {slope_se_manual:.3f} ft/yr\")\nprint(f\"ordinary 95% CI = [{ci_low:.3f}, {ci_high:.3f}] ft/yr\")\n\nyear = one[\"date\"].dt.year\nby_decade = one.groupby((year // 10) * 10)[\"residual\"].mean()\nlag1 = one[\"residual\"].autocorr(lag=1)\nprint(\"\\nmean residual by decade:\")\nprint(by_decade.round(1).to_string())\nprint(f\"lag-1 residual correlation = {lag1:.3f}\")\nprint(\"Correct.\")",
+    "objectID": "labs/week07/week07_lab_inference.html#the-unit-is-a-well-not-a-tape-reading",
+    "href": "labs/week07/week07_lab_inference.html#the-unit-is-a-well-not-a-tape-reading",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "The unit is a well, not a tape reading",
+    "text": "The unit is a well, not a tape reading\nThe source data contain 866 readings, but measurements from one well share location, construction, screened interval, and aquifer history. Treating every row as independent would exaggerate the sample size.\nHere the observational unit is one monitored well, so the sample size is 18 paired wells.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-3-assumptions-diagnostics-and-validation",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#part-3-assumptions-diagnostics-and-validation",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Part 3 — Assumptions, diagnostics, and validation",
-    "text": "Part 3 — Assumptions, diagnostics, and validation\nThe line is a useful descriptive estimate, but the ordinary standard error and confidence interval assume independent, constant-variance residuals around a linear mean. The diagnostic rejects those assumptions here: decade-long runs show curvature, and the lag-1 residual correlation is about 0.986.\nThe 379 readings therefore do not provide 379 independent pieces of information. The OLS slope is still calculable, but its ordinary confidence interval is too optimistic. Possible remedies include modelling separate regimes or using a time-aware uncertainty estimator.\nNow use scikit-learn to ask a different question: how well does the line predict data it was not fitted to?\n\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n\nX = one[[\"years_elapsed\"]].values      # 2D: rows are samples, columns are features\ny = one[\"depth_to_water_ft\"].values    # 1D\n\nmodel = LinearRegression().fit(X, y)\n\nprint(f\"sklearn slope     {model.coef_[0]:.3f} ft/yr\")\nprint(f\"scipy   slope     {fit.slope:.3f} ft/yr\")\nprint(f\"sklearn intercept {model.intercept_:.2f}\")\n\nIdentical, as they must be — it is the same least-squares problem. The thing to notice is the shape of X: scikit-learn always wants a 2D array of shape (n_samples, n_features), even with one feature. ValueError: Expected 2D array, got 1D array instead is the single most common scikit-learn error and this is why.\n\nTrain and test\nFitting and evaluating on the same data tells you how well the model memorised it. To find out whether it generalises, hold some data back.\n\nfrom sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.25, random_state=564\n)\n\nm = LinearRegression().fit(X_train, y_train)\n\nrandom_prediction = m.predict(X_test)\nrandom_mae = mean_absolute_error(y_test, random_prediction)\nrandom_rmse = np.sqrt(mean_squared_error(y_test, random_prediction))\nrandom_r2 = r2_score(y_test, random_prediction)\n\nprint(f\"random-split test MAE  {random_mae:.2f} ft\")\nprint(f\"random-split test RMSE {random_rmse:.2f} ft\")\nprint(f\"random-split test R2   {random_r2:.3f}\")\n\n\nA caveat that matters for time series. train_test_split shuffles, so the test set is scattered through the training period. For a smooth trend that turns the task into interpolation between dates represented in training, rather than forecasting beyond the training period.\nTo test whether a model predicts the future, split by time: train on the early record, test on the late one. That is a much harder test, and a much more honest one.\nThis well was measured from 1931 to 1994, so we split at 1975 — roughly half the measurements on each side.\n\n\n\nYOUR TURN 3\nDo the honest split. Train on measurements before 1975, test on 1975 onward.\n\nmask_train — boolean, True for rows before 1975\nmodel_time — a LinearRegression fitted on the pre-1975 rows\ntest_prediction — predictions for the 1975-and-later rows\ntest_mae, test_rmse, and test_r2 — three complementary test metrics\n\n\n# YOUR TURN\nmask_train = ...\nmodel_time = ...\ntest_prediction = ...\ntest_mae = ...\ntest_rmse = ...\ntest_r2 = ...\n\n\n# CHECK\nassert mask_train.sum() == 188, f\"expected 188 rows before 1975, got {mask_train.sum()}\"\nassert (~mask_train).sum() == 191, \"the test set should be about half the record\"\nnp.testing.assert_allclose(test_mae, 15.3992709)\nnp.testing.assert_allclose(test_rmse, 19.3438682)\nnp.testing.assert_allclose(test_r2, -4.8058711)\nprint(f\"trained on {mask_train.sum()} pre-1975 measurements\")\nprint(f\"tested on  {(~mask_train).sum()} from 1975 onward\")\nprint(f\"train slope {model_time.coef_[0]:.2f} ft/yr  vs  full record {fit.slope:.2f} ft/yr\")\nprint(f\"test MAE    {test_mae:.1f} ft\")\nprint(f\"test RMSE   {test_rmse:.1f} ft\")\nprint(f\"test R2     {test_r2:.2f}\")\nprint(\"Correct.\")\n\nThe random split gives MAE 11.3 ft, RMSE 13.3 ft, and \\(R^2=0.89\\). The time split gives MAE 15.4 ft, RMSE 19.3 ft, and \\(R^2=-4.81\\). A negative test \\(R^2\\) means the line predicts the late record worse than simply using the mean of those held-out values.\nThe reason is in the slope: fitted on 1931–1974 the model sees 1.92 ft/yr, but the decline slowed after the 1970s as agricultural pumping gave way to municipal supply. Extrapolating the early rate overshoots, and keeps overshooting further the longer it runs.\nThe validation design changes the scientific question. Random splitting tests interpolation within the observed era; chronological splitting tests extrapolation into a later regime.",
+    "objectID": "labs/week07/week07_lab_inference.html#part-1-calculate-the-observed-effect",
+    "href": "labs/week07/week07_lab_inference.html#part-1-calculate-the-observed-effect",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "Part 1 — Calculate the observed effect",
+    "text": "Part 1 — Calculate the observed effect\nFor each well, calculate\n\\[d_i = \\text{post median}_i - \\text{pre median}_i.\\]\nThe file includes this change, but recalculate it so the sign convention remains visible. Then find the mean change across the 18 wells.\n\nYOUR TURN 1 — Paired change and observed mean\nCreate change_check_ft from the two period medians and calculate mean_change_ft.\n\n# YOUR TURN\nwells[\"change_check_ft\"] = ...\nmean_change_ft = ...\n\n\n# CHECK\nassert wells[\"site_no\"].is_unique, \"each row should be one well\"\nassert np.allclose(wells[\"change_check_ft\"], wells[\"change_depth_ft\"])\nassert np.isclose(mean_change_ft, 12.4733333333)\nprint(f\"n = {len(wells)} wells\")\nprint(f\"mean paired change: {mean_change_ft:+.2f} ft\")\nprint(\"Correct. Positive means deeper in the later period.\")\n\nThe observed effect is +12.47 ft: on average, the later period median was about 12.5 ft deeper. Report that magnitude and unit before calculating a p-value.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-4-water-chemistry-does-the-analysis-balance",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#part-4-water-chemistry-does-the-analysis-balance",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Part 4 — Water chemistry: does the analysis balance?",
-    "text": "Part 4 — Water chemistry: does the analysis balance?\nNow the second half. A water analysis reports concentrations in mg/L, but chemistry happens in moles of charge, so the first thing to do with any analysis is convert.\n\\[\\text{meq/L} = \\frac{\\text{mg/L}}{\\text{molar mass} / |\\text{charge}|}\\]\n\nchem = pd.read_csv(DATA / \"tucson_chemistry.csv\", dtype={\"site_no\": str},\n                   parse_dates=[\"date\"])\n\nprint(f\"{len(chem)} complete analyses from {chem['site_no'].nunique()} wells\")\nprint(f\"{chem['date'].min():%Y} to {chem['date'].max():%Y}\")\nchem.head(3)\n\n\n# equivalent weight = molar mass / |charge|, in mg per meq\nEQ_WEIGHT = {\n    \"Ca\": 20.04,    # 40.08 / 2\n    \"Mg\": 12.15,    # 24.31 / 2\n    \"Na\": 22.99,    # 22.99 / 1\n    \"K\": 39.10,     # 39.10 / 1\n    \"Cl\": 35.45,    # 35.45 / 1\n    \"SO4\": 48.03,   # 96.06 / 2\n    \"HCO3\": 61.02,  # 61.02 / 1\n}\n\nmeq = pd.DataFrame({ion: chem[ion] / w for ion, w in EQ_WEIGHT.items()})\nmeq.head(3).round(3)\n\nWater is electrically neutral, so total cation charge must equal total anion charge. It never does exactly, because of measurement error and unmeasured species, so the convention is to report the charge balance error:\n\\[\\text{CBE} = 100 \\times \\frac{\\sum \\text{cations} - \\sum \\text{anions}}{\\sum \\text{cations} + \\sum \\text{anions}}\\]\nUnder ±5% is generally acceptable. Beyond ±10%, something is wrong with the analysis and you should not plot it.\n\nYOUR TURN 4\nCompute the charge balance error for every analysis.\n\ncations — summed meq/L of Ca, Mg, Na, K\nanions — summed meq/L of Cl, SO4, HCO3\ncbe — the percentage error, signed\n\n\n# YOUR TURN\ncations = ...\nanions = ...\ncbe = ...\n\n\n# CHECK\nassert len(cbe) == len(chem), f\"expected {len(chem)} values, got {len(cbe)}\"\nassert abs(cbe.abs().median() - 1.73) &lt; 0.1, f\"median |CBE| should be about 1.7%, got {cbe.abs().median():.2f}\"\nassert (cbe.abs() &lt;= 5).sum() == 40, f\"expected 40 within 5%, got {(cbe.abs() &lt;= 5).sum()}\"\nprint(f\"median |CBE|      {cbe.abs().median():.2f}%\")\nprint(f\"within +/- 5%     {(cbe.abs() &lt;= 5).sum()} of {len(cbe)}\")\nprint(f\"within +/- 10%    {(cbe.abs() &lt;= 10).sum()} of {len(cbe)}\")\nprint(f\"worst             {cbe.abs().max():.1f}%\")\nprint(\"Correct.\")\n\nForty of forty-two within 5%. These are good analyses, which is not something to assume — run this check on every dataset anyone hands you, including your own Project 2 data. An analysis that doesn’t balance is telling you an ion was mismeasured or one you didn’t measure is important, and either way the Piper diagram built from it will put the sample in the wrong place.",
+    "objectID": "labs/week07/week07_lab_inference.html#part-2-show-every-well",
+    "href": "labs/week07/week07_lab_inference.html#part-2-show-every-well",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "Part 2 — Show every well",
+    "text": "Part 2 — Show every well\nA mean hides variation. Plot all 18 paired changes so a reader can see direction, spread, exceptions, and whether one well dominates the result.\n\nYOUR TURN 2 — Plot the paired changes\nMake a horizontal dot plot with one point per well, a dashed line at zero, and a solid line at the observed mean.\n\n# YOUR TURN\nfig, ax = ...\nax.scatter(..., ..., color=\"#1E5288\")\nax.axvline(..., color=\"0.35\", ls=\"--\", label=\"no change\")\nax.axvline(..., color=\"#AB0520\", lw=3, label=\"observed mean\")\nax.set_xlabel(\"post minus pre median depth (ft)\")\nax.set_ylabel(\"well\")\nax.set_yticks([])\nax.legend()\nplt.show()\n\n\n# CHECK\nassert len(ax.collections[0].get_offsets()) == len(wells), \"show one point per well\"\nline_x = [line.get_xdata()[0] for line in ax.lines]\nassert any(np.isclose(x, 0) for x in line_x), \"include a zero reference line\"\nassert any(np.isclose(x, mean_change_ft) for x in line_x), \"show the observed mean\"\nprint(\"Correct. The observations remain visible behind the summary.\")",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-5-the-piper-diagram",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#part-5-the-piper-diagram",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Part 5 — The Piper diagram",
-    "text": "Part 5 — The Piper diagram\nA Piper diagram plots the relative proportions of major cations and anions, so samples group by water type regardless of how concentrated they are. It is the standard way to see whether waters share an origin or an evolutionary path.\nwqchartpy draws it, but it wants specific column names and a plotting-style column for each sample.\n\nfrom wqchartpy import triangle_piper\n\nOUT = ROOT / \"_run\" / \"week09_figures\"\nOUT.mkdir(parents=True, exist_ok=True)\n\npiper_input = chem.assign(\n    Sample=chem[\"site_no\"],\n    Label=\"Tucson basin\",\n    Color=\"#AB0520\",\n    Marker=\"o\",\n    Size=30,\n    Alpha=0.6,\n    CO3=0.0,                                       # not measured; negligible below pH 8.3\n    TDS=chem[list(EQ_WEIGHT)].sum(axis=1),\n)\npiper_input[\"pH\"] = piper_input[\"pH\"].fillna(7.5)  # 10 analyses have no pH on file\n\nprint(f\"{len(piper_input)} samples ready\")\nprint(sorted(piper_input.columns.tolist()))\n\nTwo judgement calls in that cell, both worth stating out loud rather than burying:\n\nCO3 = 0. Carbonate is negligible below about pH 8.3, and these samples top out at 8.0. Defensible here; not in an alkaline lake.\npH filled with 7.5. Ten analyses have no pH. The Piper diagram doesn’t use pH, so this fill only satisfies the function signature — but if you ever fill a value the plot does use, say so in the caption.\n\n\ntriangle_piper.plot(piper_input, unit=\"mg/L\",\n                    figname=str(OUT / \"piper_tucson\"), figformat=\"png\")\nprint(\"saved:\", (OUT / \"piper_tucson.png\").exists())\n\n\nwqchartpy writes to a file rather than returning a figure. There is no fig, ax to adjust, so pass a full path to figname — otherwise it lands in whatever directory the kernel happens to be in.\n\n\nfrom IPython.display import Image\nImage(filename=str(OUT / \"piper_tucson.png\"), width=720)\n\n\nReading it\nThe two lower triangles are cations (left) and anions (right); the diamond above projects both together.\n\nLeft triangle: most samples sit toward the Ca corner, with a tail running toward Na.\nRight triangle: a tight cluster at the HCO₃ corner, with a tail toward SO₄ and Cl.\n\nThat pairing — Ca-HCO₃ grading into Na-SO₄-Cl — is a textbook evolution trend. Recharge water dissolves carbonate near the mountain front and starts as Ca-HCO₃; as it moves down-basin it exchanges Ca for Na on clays and picks up sulfate and chloride. The diagram shows the flow path.\n\n\nYOUR TURN 5\nClassify each sample by its dominant cation and check the tail is real.\n\ndominant_cation — for each sample, the name of the cation with the largest meq/L share (\"Ca\", \"Mg\", \"Na\", or \"K\")\nn_calcium — how many samples are Ca-dominant\nn_sodium — how many are Na-dominant\n\n\ncation_meq = meq[[\"Ca\", \"Mg\", \"Na\", \"K\"]]\n\n# YOUR TURN\ndominant_cation = ...\nn_calcium = ...\nn_sodium = ...\n\n\n# CHECK\nassert len(dominant_cation) == len(chem)\nassert set(dominant_cation.unique()) &lt;= {\"Ca\", \"Mg\", \"Na\", \"K\"}\nassert n_calcium + n_sodium == len(chem), (\n    \"every sample here should be Ca- or Na-dominant; Mg and K never win\"\n)\nassert n_calcium &gt; n_sodium, \"calcium should be the more common dominant cation\"\nprint(dominant_cation.value_counts().to_string())\nprint(f\"\\n{n_calcium} Ca-dominant, {n_sodium} Na-dominant. Correct.\")\n\n\n# The evolution trend, as a scatter rather than a triangle\nna_fraction = meq[\"Na\"] / cation_meq.sum(axis=1) * 100\ncl_so4_fraction = (meq[\"Cl\"] + meq[\"SO4\"]) / (meq[\"Cl\"] + meq[\"SO4\"] + meq[\"HCO3\"]) * 100\n\nfig, ax = plt.subplots(figsize=(7, 4.6))\nsc = ax.scatter(na_fraction, cl_so4_fraction,\n                c=chem[list(EQ_WEIGHT)].sum(axis=1), s=55,\n                cmap=\"viridis\", edgecolor=\"k\", linewidth=0.4)\nfig.colorbar(sc, ax=ax, label=\"sum of major ions (mg/L)\")\nax.set_xlabel(\"Na as % of cations (meq)\")\nax.set_ylabel(\"Cl + SO4 as % of anions (meq)\")\nax.set_title(\"More sodium means more chloride and sulfate, and higher TDS\")\nax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\nThink about this before next week: the trend runs bottom-left to top-right, and the colour deepens along it. Three variables agreeing is a much stronger argument for a shared process than any one of them alone.\nIt is also, notably, a correlation — the same kind of evidence as the trend line in Part 1, and it deserves the same scepticism. From next week we stop inferring what the aquifer is doing from patterns in observations, and start building a model of it.",
+    "objectID": "labs/week07/week07_lab_inference.html#part-3-build-a-no-effect-distribution",
+    "href": "labs/week07/week07_lab_inference.html#part-3-build-a-no-effect-distribution",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "Part 3 — Build a no-effect distribution",
+    "text": "Part 3 — Build a no-effect distribution\nThe null hypothesis says there is no systematic pre/post change. Under that claim, pre and post labels can be swapped within a well. Swapping labels turns a paired change \\(d_i\\) into \\(-d_i\\).\nFor each repetition:\n\nrandomly keep or reverse each well’s sign;\ncalculate the mean signed change; and\nstore it.\n\nThis keeps every well pair intact.\n\nYOUR TURN 3 — Permutation distribution and p-value\nGenerate 10,000 sign-flipped mean changes. The two-sided p-value is the fraction at least as far from zero as the observed mean. The plus-one correction prevents a finite simulation from reporting exactly zero.\n\nchange = wells[\"change_depth_ft\"].to_numpy()\nobserved = change.mean()\nrng = np.random.default_rng(5647)\nn_perm = 10_000\n\n# YOUR TURN\nnull_means = ...\nfor i in range(n_perm):\n    signs = ...\n    null_means[i] = ...\np_perm = ...\n\n\n# CHECK\nassert null_means.shape == (n_perm,)\nassert abs(null_means.mean()) &lt; 0.25, \"the null distribution should center near zero\"\nassert 0 &lt; p_perm &lt; 0.005\nprint(f\"observed mean = {observed:+.2f} ft\")\nprint(f\"two-sided permutation p = {p_perm:.4f}\")\nprint(\"Correct.\")\n\n\nfig, ax = plt.subplots(figsize=(8, 3.6))\nax.hist(null_means, bins=35, color=\"#1E5288\", edgecolor=\"white\")\nax.axvline(observed, color=\"#AB0520\", lw=3, label=f\"observed = {observed:.2f} ft\")\nax.axvline(-observed, color=\"#AB0520\", lw=3)\nax.set_xlabel(\"mean change under no systematic effect (ft)\")\nax.set_ylabel(\"shuffles\")\nax.legend()\nplt.show()\n\nA p-value near 0.001 means: if there were no systematic period effect and the signs were exchangeable, about 1 in 1,000 random sign assignments would produce a mean at least this far from zero.\nIt is not the probability that the null is true, the size of the effect, or evidence of a causal mechanism.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#before-you-leave",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#before-you-leave",
-    "title": "Week 9 Lab — Regression, and water chemistry",
+    "objectID": "labs/week07/week07_lab_inference.html#part-4-bootstrap-uncertainty",
+    "href": "labs/week07/week07_lab_inference.html#part-4-bootstrap-uncertainty",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "Part 4 — Bootstrap uncertainty",
+    "text": "Part 4 — Bootstrap uncertainty\nPermutation simulates a no-effect world. Bootstrap resampling asks a different question: how much might the estimated mean change vary if a different set of similar wells had been observed?\nFor each bootstrap repetition, sample 18 well changes with replacement and calculate their mean. Resample wells, not the 866 tape readings.\n\nYOUR TURN 4 — Bootstrap a 95% interval\nGenerate 10,000 bootstrap means and retain the 2.5th and 97.5th percentiles.\n\nrng = np.random.default_rng(5647)\nn_boot = 10_000\n\n# YOUR TURN\nboot_means = ...\nfor i in range(n_boot):\n    boot_sample = ...\n    boot_means[i] = ...\nci_low, ci_high = ...\n\n\n# CHECK\nassert boot_means.shape == (n_boot,)\nassert np.isclose(boot_means.mean(), observed, atol=0.25)\nassert 6.0 &lt; ci_low &lt; 7.2\nassert 17.5 &lt; ci_high &lt; 19.2\nprint(f\"mean paired change: {observed:+.2f} ft\")\nprint(f\"95% bootstrap interval: [{ci_low:.2f}, {ci_high:.2f}] ft\")\nprint(\"Correct.\")\n\nThis interval describes variation from observing a different collection of wells similar to these. It does not repair nonrandom monitoring, screened-interval differences, datum errors, or the absence of an untreated comparison group.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
+    ]
+  },
+  {
+    "objectID": "labs/week07/week07_lab_inference.html#write-the-bounded-conclusion",
+    "href": "labs/week07/week07_lab_inference.html#write-the-bounded-conclusion",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
+    "section": "Write the bounded conclusion",
+    "text": "Write the bounded conclusion\nAdd a new Markdown cell below this one and write four sentences:\n\nResult: state the mean change, direction, and feet.\nUncertainty: state the bootstrap interval and permutation p-value.\nAssumption: state that wells are independent units and signs are exchangeable under the null.\nLimitation: name nonrandom monitoring, screened-interval differences, lack of an untreated control, or another specific limitation.\n\nA strong opening is: Across 18 paired Tucson-area monitoring wells, median depth to water was on average 12.47 ft greater in 2002–2006 than in 1996–2000…\nDo not write that the operational shift caused the change. This before/after design cannot isolate pumping operations from recharge, climate, spatial differences, or delayed aquifer response.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
+    ]
+  },
+  {
+    "objectID": "labs/week07/week07_lab_inference.html#before-you-leave",
+    "href": "labs/week07/week07_lab_inference.html#before-you-leave",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
     "section": "Before you leave",
-    "text": "Before you leave\n\nKernel → Restart Kernel and Run All Cells\nFix anything that breaks\nSave",
+    "text": "Before you leave\n\nRestart the kernel and run all completed cells in order.\nConfirm that positive always means deeper.\nConfirm that the sample size is 18 wells, not 866 readings.\nRead the conclusion without looking at the code.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#whats-due",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#whats-due",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "What’s due",
-    "text": "What’s due\nHW 7 — Figure portfolio, Wednesday 10/21 at 11:59pm.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
-    ]
-  },
-  {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#next-week",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#next-week",
-    "title": "Week 9 Lab — Regression, and water chemistry",
+    "objectID": "labs/week07/week07_lab_inference.html#next-week",
+    "href": "labs/week07/week07_lab_inference.html#next-week",
+    "title": "Week 7 Lab — Is the difference larger than the noise?",
     "section": "Next week",
-    "text": "Next week\nMODFLOW. What it is, why it is built the way it is, and getting it running from Python.",
+    "text": "Next week\nYou will turn this evidence into one figure worth showing, with all observations visible and uncertainty communicated honestly.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 7 — Groundwater inference",
+      "Lab · Is the difference larger than the noise?"
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#stuck",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#stuck",
-    "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Stuck?",
-    "text": "Stuck?\n\nValueError: Expected 2D array, got 1D array instead — scikit-learn wants X shaped (n_samples, n_features). df[[\"col\"]] (double brackets) gives you that; df[\"col\"] does not.\nlinregress returning nan almost always means a NaN in the input. .dropna() on both columns together, not separately.\nIf wqchartpy seems to do nothing, it saved a file. Check figname and look for the .png.\nA charge balance error over 100% usually means an ion is in the wrong unit — µg/L instead of mg/L is the classic.\nOffice hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.",
+    "objectID": "labs/week09/week09_lab_regression.html",
+    "href": "labs/week09/week09_lab_regression.html",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "",
+    "text": "HWRS 564a · Fall 2026\nToday is a full-period working session. You will derive, fit, diagnose, validate, and interpret one simple linear model using a 63-year groundwater record. The purpose is not to collect outputs from a function. It is to decide which statements those outputs support.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 9 — Regression and chemistry",
-      "Lab · Regression and water chemistry"
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#learning-objectives",
+    "href": "labs/week09/week09_lab_regression.html#learning-objectives",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nBy the end of the lab you can:\n\nreproduce the OLS slope and intercept from centred sums;\nexplain how centring changes the intercept but not the slope;\ncalculate RSS, TSS, \\(R^2\\), residual variance, slope standard error, and a confidence interval;\ndiagnose nonlinearity, unequal variance, non-normality, and serial correlation;\ncompare interpolation and forecasting validation; and\nseparate descriptive, inferential, predictive, and causal claims.\n\nRun cells in order. Every # YOUR TURN cell has a following # CHECK cell. Before leaving, restart the kernel and run all cells.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#part-1-prepare-a-predictor-with-interpretable-units",
+    "href": "labs/week09/week09_lab_regression.html#part-1-prepare-a-predictor-with-interpretable-units",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Part 1 — Prepare a predictor with interpretable units",
+    "text": "Part 1 — Prepare a predictor with interpretable units\nWe will model depth to water as a linear function of elapsed time. Because depth is measured downward, a positive slope means the water table becomes deeper: a decline in hydraulic head.\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\nfrom scipy import stats\n\nROOT = next(\n    p for p in [Path.cwd(), *Path.cwd().parents]\n    if (p / \"pyproject.toml\").exists()\n)\nDATA = ROOT / \"data\"\n\nlevels = pd.read_csv(\n    DATA / \"tucson_water_levels.csv\",\n    dtype={\"site_no\": str},\n    parse_dates=[\"date\"],\n)\n\none = (\n    levels.loc[levels[\"site_no\"] == \"320824110593001\"]\n    .sort_values(\"date\")\n    .dropna(subset=[\"date\", \"depth_to_water_ft\"])\n    .copy()\n)\none[\"years_elapsed\"] = (one[\"date\"] - one[\"date\"].min()).dt.days / 365.25\n\nprint(f\"{len(one)} measurements from {one['date'].min():%Y} to {one['date'].max():%Y}\")\nprint(one[[\"date\", \"years_elapsed\", \"depth_to_water_ft\"]].head())\n\nCommon pitfall: dropping missing values from \\(x\\) and \\(y\\) separately can destroy their row-by-row pairing. Drop incomplete rows from both required columns in one operation, as above.\n\nYOUR TURN 1 — Reproduce the OLS coefficients\nUse the formulas derived Tuesday:\n\\[\nb_1=\frac{\\sum_i(x_i-\bar x)(y_i-\bar y)}\n          {\\sum_i(x_i-\bar x)^2},\n\\qquad b_0=\bar y-b_1\bar x.\n\\]\n\nx = one[\"years_elapsed\"].to_numpy()\ny = one[\"depth_to_water_ft\"].to_numpy()\nx_bar, y_bar = x.mean(), y.mean()\n\n# YOUR TURN\nsxx = ...\nsxy = ...\nmanual_slope = ...\nmanual_intercept = ...\n\n\n# CHECK\nnp.testing.assert_allclose(sxx, 131428.3168427)\nnp.testing.assert_allclose(sxy, 273520.1171342)\nnp.testing.assert_allclose(manual_slope, 2.0811353573)\nnp.testing.assert_allclose(manual_intercept, 24.6629112752)\nprint(f\"depth = {manual_intercept:.3f} + {manual_slope:.3f} × elapsed years\")\nprint(\"Correct.\")\n\nInterpret the slope: the fitted depth increased by about 2.08 ft per year over this record. Because depth increases downward, that is an average water-level decline of 2.08 ft/yr.\nThe intercept is the fitted depth when elapsed time is zero—the first date in the record. It is not a universal baseline.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#part-2-centre-the-predictor-to-make-the-intercept-useful",
+    "href": "labs/week09/week09_lab_regression.html#part-2-centre-the-predictor-to-make-the-intercept-useful",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Part 2 — Centre the predictor to make the intercept useful",
+    "text": "Part 2 — Centre the predictor to make the intercept useful\nChanging the origin of \\(x\\) should not change the slope. It changes which date the intercept describes.\n\nYOUR TURN 2 — Put the intercept at 1970\nCreate elapsed years from 1 January 1970, fit the same response, and record the new intercept. fit_1970.intercept estimates depth at the 1970 reference date.\n\none[\"years_from_1970\"] = (\n    one[\"date\"] - pd.Timestamp(\"1970-01-01\")\n).dt.days / 365.25\n\nfit = stats.linregress(one[\"years_elapsed\"], one[\"depth_to_water_ft\"])\n\n# YOUR TURN\nfit_1970 = ...\nslope_change = ...\ndepth_at_1970 = ...\n\n\n# CHECK\nnp.testing.assert_allclose(slope_change, 0.0, atol=1e-12)\nnp.testing.assert_allclose(depth_at_1970, 104.7175362453)\nprint(f\"original intercept: {fit.intercept:.2f} ft at the first observation\")\nprint(f\"centred intercept: {depth_at_1970:.2f} ft at 1970-01-01\")\nprint(f\"slope in both fits: {fit_1970.slope:.3f} ft/yr\")\nprint(\"Correct.\")\n\nCommon pitfall: interpreting an intercept at \\(x=0\\) when zero is far outside the data or has no physical meaning. Centre the predictor at a meaningful date or condition. This changes the intercept and its uncertainty, not the fitted line.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#part-3-reconstruct-fit-and-uncertainty-statistics",
+    "href": "labs/week09/week09_lab_regression.html#part-3-reconstruct-fit-and-uncertainty-statistics",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Part 3 — Reconstruct fit and uncertainty statistics",
+    "text": "Part 3 — Reconstruct fit and uncertainty statistics\nFirst compute predictions and residuals. Here residual means measured minus predicted.\n\none[\"predicted\"] = manual_intercept + manual_slope * one[\"years_elapsed\"]\none[\"residual\"] = one[\"depth_to_water_ft\"] - one[\"predicted\"]\n\nfig, axes = plt.subplots(2, 1, figsize=(10, 6), sharex=True)\naxes[0].plot(one[\"date\"], one[\"depth_to_water_ft\"], \"o\", ms=2.5,\n             color=\"#49595E\", alpha=0.55, label=\"measured\")\naxes[0].plot(one[\"date\"], one[\"predicted\"], color=\"#AB0520\", lw=2,\n             label=\"OLS line\")\naxes[0].invert_yaxis()\naxes[0].set_ylabel(\"depth to water (ft)\")\naxes[0].legend(frameon=False)\n\naxes[1].plot(one[\"date\"], one[\"residual\"], \"o\", ms=2.5,\n             color=\"#1E5288\", alpha=0.65)\naxes[1].axhline(0, color=\"k\", lw=1)\naxes[1].set_ylabel(\"residual (ft)\")\naxes[1].set_xlabel(\"date\")\nfor ax in axes:\n    ax.grid(alpha=0.25)\nplt.tight_layout()\nplt.show()\n\n\nYOUR TURN 3 — Calculate \\(R^2\\), standard error, and the interval\nUse\n\\[\nR^2=1-\\frac{\\mathrm{RSS}}{\\mathrm{TSS}},\\quad\ns^2=\\frac{\\mathrm{RSS}}{n-2},\\quad\n\\mathrm{SE}(b_1)=\\sqrt{\\frac{s^2}{S_{xx}}}.\n\\]\nThen form a 95% interval with the Student-\\(t\\) critical value.\n\nresidual = one[\"residual\"].to_numpy()\nn = len(one)\nt_critical = stats.t.ppf(0.975, df=n - 2)\n\n# YOUR TURN\nrss = ...\ntss = ...\nr_squared = ...\nresidual_variance = ...\nslope_se = ...\nmargin = ...\nci_low = ...\nci_high = ...\n\n\n# CHECK\nnp.testing.assert_allclose(rss, 64167.0382349)\nnp.testing.assert_allclose(tss, 633399.4249409)\nnp.testing.assert_allclose(r_squared, 0.8986941956)\nnp.testing.assert_allclose(residual_variance, 170.20434545)\nnp.testing.assert_allclose(slope_se, fit.stderr)\nnp.testing.assert_allclose([ci_low, ci_high], [2.01037575, 2.15189496])\nprint(f\"R2 = {r_squared:.3f}\")\nprint(f\"slope = {manual_slope:.3f} ± {slope_se:.3f} ft/yr (ordinary SE)\")\nprint(f\"ordinary 95% CI: {ci_low:.3f} to {ci_high:.3f} ft/yr\")\nprint(\"Correct.\")\n\nThe calculation is correct. Whether the interval is scientifically credible is a separate question. It assumes a linear mean, independent errors, and constant error variance; exact small-sample \\(t\\) inference also assumes normal errors.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#part-4-diagnose-the-assumptions",
+    "href": "labs/week09/week09_lab_regression.html#part-4-diagnose-the-assumptions",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Part 4 — Diagnose the assumptions",
+    "text": "Part 4 — Diagnose the assumptions\nThe plots already show long runs above and below zero. Quantify that structure and compare the residual spread in the lower and upper halves of the fitted values.\n\nYOUR TURN 4 — Measure dependence and changing spread\n\nyear = one[\"date\"].dt.year\n\n# YOUR TURN\nby_decade = ...\nlag1 = ...\nlow_spread = ...\nhigh_spread = ...\nspread_ratio = ...\n\n\n# CHECK\nassert by_decade.idxmin() == 1950\nassert by_decade.idxmax() == 1970\nnp.testing.assert_allclose(lag1, 0.986071125)\nnp.testing.assert_allclose(low_spread, 8.490762596)\nnp.testing.assert_allclose(high_spread, 15.351717640)\nnp.testing.assert_allclose(spread_ratio, 1.80804933)\nprint(by_decade.round(1).to_string())\nprint()\nprint(f\"lag-1 residual correlation: {lag1:.3f}\")\nprint(f\"upper/lower fitted-range spread ratio: {spread_ratio:.2f}\")\nprint(\"Correct.\")\n\n\nfig, axes = plt.subplots(1, 3, figsize=(13, 3.6))\n\naxes[0].scatter(one[\"predicted\"], one[\"residual\"], s=14,\n                color=\"#1E5288\", alpha=0.6)\naxes[0].axhline(0, color=\"k\", lw=1)\naxes[0].set_xlabel(\"fitted depth (ft)\")\naxes[0].set_ylabel(\"residual (ft)\")\naxes[0].set_title(\"Residual versus fitted\")\n\naxes[1].scatter(one[\"residual\"].iloc[:-1], one[\"residual\"].iloc[1:],\n                s=14, color=\"#AB0520\", alpha=0.6)\naxes[1].set_xlabel(\"residual at observation i\")\naxes[1].set_ylabel(\"residual at observation i + 1\")\naxes[1].set_title(f\"Lag plot, r = {lag1:.3f}\")\n\nstats.probplot(one[\"residual\"], dist=\"norm\", plot=axes[2])\naxes[2].set_title(\"Normal Q–Q plot\")\n\nfor ax in axes:\n    ax.grid(alpha=0.25)\nplt.tight_layout()\nplt.show()\n\nInterpretation:\n\nDecade-long residual structure challenges a single linear mean.\nLag-1 correlation of 0.986 strongly rejects independence.\nResidual spread is about 1.8 times larger in the upper fitted range, challenging constant variance.\nThe Q–Q plot checks distributional shape, but normal-looking residuals would not repair dependence or nonlinearity.\n\nThe OLS line remains a descriptive line. The ordinary standard error and confidence interval are much harder to defend.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#part-5-validation-changes-with-the-prediction-question",
+    "href": "labs/week09/week09_lab_regression.html#part-5-validation-changes-with-the-prediction-question",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Part 5 — Validation changes with the prediction question",
+    "text": "Part 5 — Validation changes with the prediction question\nA random split asks whether the line can interpolate within an era represented in training. A chronological split asks whether an early linear trend can forecast a later era.\n\nYOUR TURN 5 — Compare both designs\n\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\nfrom sklearn.model_selection import train_test_split\n\nX = one[[\"years_elapsed\"]].to_numpy()\ny = one[\"depth_to_water_ft\"].to_numpy()\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.25, random_state=564\n)\nrandom_model = LinearRegression().fit(X_train, y_train)\n\n# YOUR TURN\nrandom_prediction = ...\nrandom_mae = ...\nrandom_rmse = ...\nrandom_r2 = ...\n\ntime_mask = ...\ntime_model = ...\ntime_prediction = ...\ntime_mae = ...\ntime_rmse = ...\ntime_r2 = ...\n\n\n# CHECK\nnp.testing.assert_allclose(random_mae, 11.27230049)\nnp.testing.assert_allclose(random_rmse, 13.29259263)\nnp.testing.assert_allclose(random_r2, 0.89142489)\nassert time_mask.sum() == 188 and (~time_mask).sum() == 191\nnp.testing.assert_allclose(time_mae, 15.39927091)\nnp.testing.assert_allclose(time_rmse, 19.34386821)\nnp.testing.assert_allclose(time_r2, -4.80587106)\nprint(\"                 MAE      RMSE      R2\")\nprint(f\"random split   {random_mae:6.1f}    {random_rmse:6.1f}   {random_r2:6.2f}\")\nprint(f\"time split     {time_mae:6.1f}    {time_rmse:6.1f}   {time_r2:6.2f}\")\nprint(\"Correct.\")\n\nCommon pitfalls:\n\nTest \\(R^2\\) can be negative. It means predictions are worse than using the test-set mean as a baseline.\nRandom splitting is not inherently wrong; it answers an interpolation question. It is wrong when presented as evidence of forecasting ability.\nMAE and RMSE retain the response units. RMSE reacts more strongly to large misses.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#part-6-write-only-the-claims-the-evidence-supports",
+    "href": "labs/week09/week09_lab_regression.html#part-6-write-only-the-claims-the-evidence-supports",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Part 6 — Write only the claims the evidence supports",
+    "text": "Part 6 — Write only the claims the evidence supports\n\nYOUR TURN 6 — Classify the conclusions\nComplete the four variables. Use True only when the analysis supports the claim without an unaddressed assumption failure.\n\n# YOUR TURN\ndescriptive_rate = ...\nordinary_ci_is_trustworthy = ...\nforecast_model_is_adequate = ...\ncausal_claim_is_supported = ...\nprimary_warning = ...\n\n\n# CHECK\nnp.testing.assert_allclose(descriptive_rate, 2.0811353573)\nassert ordinary_ci_is_trustworthy is False\nassert forecast_model_is_adequate is False\nassert causal_claim_is_supported is False\nassert \"residual\" in primary_warning.lower()\nprint(f\"Descriptive rate: {descriptive_rate:.2f} ft/yr of increasing depth\")\nprint(f\"Trust ordinary CI without adjustment? {ordinary_ci_is_trustworthy}\")\nprint(f\"Adequate for forecasting the later era? {forecast_model_is_adequate}\")\nprint(f\"Does elapsed time establish causation? {causal_claim_is_supported}\")\nprint(f\"Primary warning: {primary_warning}\")\nprint(\"Correct.\")\n\nNow write a four-sentence conclusion in your own words:\n\nDescriptive: state the fitted rate, direction, units, site, and period.\nInferential: state that the narrow ordinary interval is conditional on assumptions that the residual diagnostics challenge.\nPredictive: state what the chronological validation shows.\nCausal: name at least one plausible process that elapsed time does not itself identify, such as pumping or recharge.\n\nAvoid these phrases:\n\n“\\(R^2=0.90\\), so the model is 90% accurate.”\n“The p-value proves groundwater decline.”\n“Time caused the water table to fall.”\n“The confidence interval contains 95% of future observations.”",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#before-you-leave",
+    "href": "labs/week09/week09_lab_regression.html#before-you-leave",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "Before you leave",
+    "text": "Before you leave\n\nRestart the kernel and run all cells.\nResolve every failed check.\nSave the notebook.\nConfirm that your written interpretation separates descriptive, inferential, predictive, and causal statements.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
+    ]
+  },
+  {
+    "objectID": "labs/week09/week09_lab_regression.html#if-you-get-stuck",
+    "href": "labs/week09/week09_lab_regression.html#if-you-get-stuck",
+    "title": "Week 9 Lab — Linear regression clinic",
+    "section": "If you get stuck",
+    "text": "If you get stuck\n\nlinregress returns nan: drop incomplete \\(x\\)–\\(y\\) rows together.\nYour slope has units of ft/day: convert the datetime difference to years.\nYour residuals have the opposite sign: use measured minus predicted.\nYour standard error is close but not equal: residual variance uses \\(n-2\\).\nYour random-split values change: use random_state=564.\nExpected 2D array: scikit-learn requires X shaped (rows, predictors); use double brackets around the predictor column.",
+    "crumbs": [
+      "Home",
+      "Module 2 · Data Analysis & Visualization",
+      "Week 9 — Linear regression",
+      "Lab · Linear regression clinic"
     ]
   },
   {
