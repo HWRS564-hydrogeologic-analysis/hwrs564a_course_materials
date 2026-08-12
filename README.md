@@ -28,7 +28,7 @@ state, delete it and make a new one — that is what they are for.
 ├── slides/                One .qmd per class session
 │   └── _metadata.yml      Shared slide config (live-revealjs, pyodide packages)
 ├── labs/                  In-class notebooks, by week
-├── homework/              Graded assignments, released separately
+├── homework/              Assignment planning and design notes
 ├── quizzes/               Quiz questions as YAML + the D2L CSV generator
 ├── d2l/                   D2L page template, per-week YAML, and generator
 ├── data/                  Datasets — one place, not scattered per week
@@ -162,8 +162,8 @@ Don't drop interactivity just because the solver can't run in a browser.
 caches what a cell returns, not files it writes. A `{python}` block that saves
 a PNG and a separate `![](...)` link to it works on the first render and breaks
 on every cached one — the file is never recreated. Display the image from
-inside the cell instead (`IPython.display.Image`), as
-`slides/week09_thu_chemistry.qmd` does.
+inside the cell instead (`IPython.display.Image`), as the executed MODFLOW
+decks do.
 
 **Freeze.** `slides/_metadata.yml` sets `execute: freeze: auto`, so a deck only
 re-executes when its own source changes. Two things to know:
@@ -248,7 +248,6 @@ python scripts/fetch_data.py           # rebuild it (needs network)
 | `tucson_water_levels.csv` | 9,046 measurements, 1922–2026, 80 best-monitored wells |
 | `cache/nwis_09484000_dv.csv` | Sabino Creek daily discharge — the Week 6 offline fallback |
 | `week04_permeameter.xlsx` | Constant-head permeameter runs; the one `read_excel` demo |
-| `tucson_chemistry.csv` | 42 complete major-ion analyses, 1964–1992 (Week 9 Piper diagrams) |
 | `tucson_grid_top.csv` | Land surface on the 40×60 model grid, m (Weeks 11–14) |
 
 Two things worth knowing:
@@ -259,9 +258,6 @@ Two things worth knowing:
   `waterdata` API, not the one in older tutorials.
 - Anything over ~10 MB should be fetched with `pooch` and a hash, not committed.
   Nothing here is close.
-- **The chemistry build is slow.** The USGS samples endpoint times out on a
-  bbox query over the whole basin, so `build_chemistry` walks the site list in
-  chunks of 40. That is why the result is committed.
 - **`tucson_grid_top.csv` is a fitted trend surface, not a DEM.** Interpolating
   the well elevations directly gives 8 m of relief between adjacent 250 m cells —
   survey scatter, not topography, and steep enough to make a MODFLOW `top` that
@@ -274,7 +270,7 @@ Two things worth knowing:
 ```bash
 python scripts/check_slides.py slides/*.qmd       # exercise/hint wiring, blanks, divs
 python d2l/generate.py d2l/weeks/*.yml --check    # D2L page lint
-python d2l/generate_assignments.py d2l/assignments/hw*.yml --check
+python d2l/generate_assignments.py d2l/assignments/hw*.md --check
 python scripts/fill_solutions.py labs/*/*.ipynb   # regenerate the runnable copies
 pytest labs/                                      # execute them top-to-bottom
 ```
@@ -298,7 +294,8 @@ uv run pre-commit install
 ### Publishing
 
 Pushing to `main` triggers `.github/workflows/publish.yml`, which lints the D2L
-YAML, builds the quiz CSVs, renders the site, and pushes to `gh-pages`.
+weekly YAML and assignment Markdown, builds the quiz CSVs, renders the site, and
+pushes to `gh-pages`.
 
 **One-time setup before the action will work:** run
 
@@ -315,8 +312,7 @@ the `gh-pages` branch.
 
 - Slides: `slides/weekNN_<day>_<topic>.qmd`
 - Labs: `labs/weekNN/weekNN_lab_<topic>.ipynb`
-- Homework prompt source: `homework/hwNN_<topic>.md`
-- D2L assignment settings: `d2l/assignments/hwNN.yml`
+- D2L assignment prompt, settings, and rubric: `d2l/assignments/hwNN.md`
 - Quizzes: `quizzes/weekNN.yml`
 - D2L pages: `d2l/weeks/weekNN.yml`
 

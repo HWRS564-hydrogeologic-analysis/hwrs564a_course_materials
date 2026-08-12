@@ -1,14 +1,14 @@
 week: 9
-title: "Week 9 — Statistics, regression, and water chemistry"
+title: "Week 9 — Ordinary least squares and linear regression"
 dates: "October 20 & 22, 2026"
 overview: >
-  Two halves this week. Tuesday develops regression from the least-squares
-  objective through the slope formula, variance decomposition, standard error,
-  confidence interval, and hypothesis test. We then use residual structure and
-  serial correlation to decide whether that ordinary uncertainty is credible,
-  and compare random with chronological validation using MAE, RMSE, and test
-  R-squared. Thursday is major-ion chemistry: converting to meq/L, checking that
-  an analysis balances, and reading a Piper diagram of Tucson groundwater.
+  Tuesday derives ordinary least squares from the definition of a residual,
+  spelling out both normal equations and every algebraic step leading to the
+  slope and intercept. We then connect the fitted line to R-squared, residual
+  variance, slope standard error, confidence intervals, and hypothesis tests.
+  Thursday is a full-period lab: students reproduce the calculations, diagnose
+  assumption failures, compare random and chronological validation, and write
+  a careful interpretation of what the linear model can and cannot support.
 
 time_budget:
   - "3 hours in class"
@@ -23,21 +23,21 @@ background:
     note: "The residual plots on Tuesday assume you can build a two-panel figure."
 
 class_material:
-  - text: "Tue 10/20 — Slides: Regression — estimation, uncertainty, and evidence"
+  - text: "Tue 10/20 — Slides: Ordinary least squares, one step at a time"
     url: "slides/week09_tue_regression.html"
     site_relative: true
-  - text: "Thu 10/22 — Slides: Major-ion chemistry"
-    url: "slides/week09_thu_chemistry.html"
+  - text: "Thu 10/22 — Slides: Regression lab checkpoints"
+    url: "slides/week09_thu_regression_lab.html"
     site_relative: true
-  - text: "Lab notebook — Regression, and water chemistry"
-    url: "labs/week09/week09_lab_regression_chemistry.html"
+  - text: "Lab notebook — Linear regression clinic"
+    url: "labs/week09/week09_lab_regression.html"
     site_relative: true
 
 assignments:
   - text: "Quiz 7 — on Week 8 material"
     quiz: "TBD-week09-quiz"
     note: "In class, Tuesday 10/20."
-  - text: "Submit: HW 4 — Tell one hydrologic story with a figure"
+  - text: "Submit: HW 4 — Evaluate and communicate a groundwater difference"
     dropbox: "TBD-hw04-dropbox"
     note: "Due Wednesday 10/21 at 11:59pm."
   - text: "Open: HW 5 — Three checks before believing an answer"
@@ -45,11 +45,9 @@ assignments:
     note: "Available after class Thursday 10/22; due Wednesday 11/4 at 11:59pm."
 
 bonus:
+  - text: "OpenIntro Statistics — simple linear regression"
+    url: "https://www.openintro.org/book/os/"
+  - text: "SciPy — linregress reference"
+    url: "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html"
   - text: "scikit-learn — cross-validation, including TimeSeriesSplit"
     url: "https://scikit-learn.org/stable/modules/cross_validation.html"
-  - text: "wqchartpy — the package behind the Piper diagram"
-    url: "https://github.com/jyangfsu/WQChartPy"
-  - text: "Piper (1944), the original paper"
-    url: "https://doi.org/10.1029/TR025i006p00914"
-  - text: "USGS — charge balance and the quality of a water analysis"
-    url: "https://pubs.usgs.gov/twri/twri5-a1/"

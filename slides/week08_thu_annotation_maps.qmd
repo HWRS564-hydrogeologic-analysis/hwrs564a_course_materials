@@ -329,5 +329,5 @@ What's due
 Next week
 :::
 
-Regression — fitting a trend, and being honest about how much you believe it.
-Then water chemistry.
+Regression — deriving the least-squares line, then spending a full class
+diagnosing and interpreting it.

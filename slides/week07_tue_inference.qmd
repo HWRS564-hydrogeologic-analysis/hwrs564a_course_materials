@@ -1,0 +1,348 @@
+---
+title: "Is the difference larger than the noise?"
+subtitle: "HWRS 564a · Week 7 · Tuesday, October 6"
+author: "Dr. Andrew Bennett"
+---
+
+## One question, all period
+
+Did typical depth to water change at Tucson-area monitoring wells after a major
+shift in the city's water-supply operations?
+
+::: {.kicker}
+Observed change → changes expected under no effect → is ours unusual?
+:::
+
+By the end, you should be able to identify the independent unit, report a
+paired change in feet, build a sign-flip null distribution, and explain what a
+p-value and bootstrap interval do—and do not—say.
+
+# Start with the groundwater {background-color="#0C234B"}
+
+## A physical event fixes the comparison
+
+Around 2000–01, Tucson Water shifted pumping toward Avra Valley
+recharge-and-recovery facilities and began delivering a blend containing
+recharged Colorado River water.
+
+Sources: [Arizona Department of Water Resources](https://www.azwater.gov/sites/default/files/2022-08/download.pdf)
+and [Tucson Water](https://www.tucsonaz.gov/Departments/Water/Water-Quality/CCR_MainSystem_2024-File).
+
+Among Tucson-area wells monitored in both windows, how did median depth to
+water change from **1996–2000** to **2002–2006**?
+
+::: {.incremental}
+- 2001 is treated as a transition year.
+- A well needs observations in at least three years of each window.
+- Each well contributes one pre median and one post median.
+- Positive change means water became **deeper** below land surface.
+:::
+
+::: {.fragment .due-notice}
+The event date came from operations records, not from searching the hydrograph.
+This before/after comparison does not by itself tell us why levels changed.
+:::
+
+## What counts as one observation?
+
+The source file contains 866 tape readings from the selected wells.
+
+::: {.columns}
+::: {.column width="48%"}
+**Not independent**
+
+519 pre-period readings and 347 post-period readings.
+:::
+
+::: {.column width="48%"}
+**Independent units for this analysis**
+
+18 paired monitoring wells.
+:::
+:::
+
+::: {.fragment}
+Readings from one well share location, construction, screened interval, and
+aquifer history. Different CSV rows do not automatically become replicates.
+:::
+
+## Let every well be its own control
+
+Depths range from about 20 to 330 ft across wells. Pairing separates those large
+site-to-site differences from the period comparison.
+
+For well $i$,
+
+$$d_i=\text{post median}_i-\text{pre median}_i.$$
+
+::: {.fragment}
+The analysis uses the 18 changes $d_i$. Our target quantity is their mean.
+:::
+
+## Calculate the observed effect
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_effect
+import numpy as np
+
+change_ft = np.array([
+    -15.620, 3.250, 7.340, 15.775, 13.380, 18.595,
+    38.850, 31.830, 24.180, 4.160, 24.750, -4.480,
+    1.000, 8.115, 23.050, 7.390, 16.945, 6.010,
+])
+```
+
+```{pyodide}
+#| exercise: ex_effect
+mean_change = ______
+print(f"mean paired change: {mean_change:+.2f} ft")
+```
+
+::: {.hint exercise="ex_effect"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Use the array's `.mean()` method.
+:::
+:::
+
+::: {.solution exercise="ex_effect"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+mean_change = change_ft.mean()
+```
+
+The observed mean change is **+12.47 ft**. Positive means the water table was
+deeper in the later window.
+:::
+:::
+
+## See the observations behind the mean
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 10
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(8, 3.5))
+ax.scatter(change_ft, np.arange(len(change_ft)), color="#1E5288")
+ax.axvline(0, color="0.35", ls="--", label="no change")
+ax.axvline(change_ft.mean(), color="#AB0520", lw=3, label="mean = +12.47 ft")
+ax.set(xlabel="post minus pre median depth (ft)", ylabel="well")
+ax.set_yticks([])
+ax.legend()
+plt.show()
+```
+
+::: {.fragment}
+Most wells became deeper, but not all. The mean preserves that variation.
+:::
+
+# Imagine no systematic period effect {background-color="#AB0520"}
+
+## The null hypothesis in ordinary language
+
+**Null:** across these kinds of wells, there is no systematic pre/post change.
+
+Written compactly:
+
+$$H_0:\text{mean paired change}=0\ \text{ft}.$$
+
+::: {.fragment}
+If the null were a reasonable description, “pre” and “post” could be swapped
+within each well without systematically changing the result.
+:::
+
+## A label swap is a sign flip
+
+For one well:
+
+$$d_i=\text{post}-\text{pre}.$$
+
+Swapping its labels gives
+
+$$\text{pre}-\text{post}=-d_i.$$
+
+Under the null, randomly keep or reverse each of the 18 signs, then calculate
+the mean again.
+
+::: {.fragment .due-notice}
+Keep the well pairs intact. Do not shuffle individual tape readings.
+:::
+
+## Try one null world
+
+```{pyodide}
+#| exercise: ex_one_shuffle
+rng = np.random.default_rng(7)
+signs = rng.choice([-1, 1], size=len(change_ft))
+null_once = ______
+print(f"observed mean: {change_ft.mean():+.2f} ft")
+print(f"one null mean: {null_once:+.2f} ft")
+```
+
+::: {.hint exercise="ex_one_shuffle"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Multiply every change by its sign, then take the mean.
+:::
+:::
+
+::: {.solution exercise="ex_one_shuffle"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+null_once = (change_ft * signs).mean()
+```
+
+One shuffled result is not enough. Repeat the same operation many times to see
+the full range expected under the null.
+:::
+:::
+
+## Build the null distribution
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 14
+rng = np.random.default_rng(5647)
+n_perm = 10_000
+null_means = np.empty(n_perm)
+
+for i in range(n_perm):
+    signs = rng.choice([-1, 1], size=len(change_ft))
+    null_means[i] = (change_ft * signs).mean()
+
+observed = change_ft.mean()
+p_value = (np.sum(np.abs(null_means) >= abs(observed)) + 1) / (n_perm + 1)
+
+fig, ax = plt.subplots(figsize=(8, 3.5))
+ax.hist(null_means, bins=35, color="#1E5288", edgecolor="white")
+ax.axvline(observed, color="#AB0520", lw=3, label=f"observed = {observed:.2f} ft")
+ax.axvline(-observed, color="#AB0520", lw=3)
+ax.set(xlabel="mean change under no systematic effect (ft)", ylabel="shuffles")
+ax.legend()
+plt.show()
+print(f"two-sided p = {p_value:.4f}")
+```
+
+## Read the p-value as a conditional statement
+
+Here $p\approx0.001$.
+
+> **If** there were no systematic period effect and within-well labels were
+> exchangeable, only about 1 in 1,000 random sign assignments would produce a
+> mean change at least this far from zero.
+
+::: {.fragment}
+It is not a 0.1% probability that the null is true.
+:::
+
+::: {.incremental}
+- **Size:** +12.47 ft gives magnitude and direction.
+- **Evidence:** $p\approx0.001$ says the result is unusual under the null.
+- **Cause:** neither number isolates pumping, recharge, climate, or aquifer lag.
+:::
+
+# How uncertain is +12.47 ft? {background-color="#0C234B"}
+
+## Permutation and bootstrap have different jobs
+
+| Procedure | What is resampled? | Question |
+|---|---|---|
+| permutation | pre/post labels within wells | Would this be unusual under no effect? |
+| bootstrap | wells, with replacement | How much might the estimated mean vary? |
+
+::: {.fragment}
+Both resample **wells**, because wells are the observational units.
+:::
+
+## Bootstrap the mean change
+
+```{pyodide}
+#| exercise: ex_bootstrap
+rng = np.random.default_rng(5647)
+n_boot = 10_000
+boot_means = np.empty(n_boot)
+
+for i in range(n_boot):
+    boot_sample = rng.choice(change_ft, size=len(change_ft), replace=True)
+    boot_means[i] = ______
+
+ci_low, ci_high = ______
+print(f"95% bootstrap interval: [{ci_low:.2f}, {ci_high:.2f}] ft")
+```
+
+::: {.hint exercise="ex_bootstrap"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Store `boot_sample.mean()`, then use
+`np.percentile(boot_means, [2.5, 97.5])`.
+:::
+:::
+
+::: {.solution exercise="ex_bootstrap"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+boot_means[i] = boot_sample.mean()
+ci_low, ci_high = np.percentile(boot_means, [2.5, 97.5])
+```
+
+The interval is approximately **[6.58, 18.39] ft**.
+:::
+:::
+
+## What that interval leaves out
+
+The bootstrap describes variability from observing a different collection of
+wells similar to these 18.
+
+It does not repair:
+
+::: {.incremental}
+- nonrandom monitoring locations;
+- screened-interval differences;
+- datum or measurement errors; or
+- the lack of an untreated comparison group.
+:::
+
+# Finish with a bounded conclusion {background-color="#AB0520"}
+
+## Four sentences
+
+1. **Result:** what changed, by how much, and in what unit?
+2. **Uncertainty:** what interval and p-value accompany it?
+3. **Assumption:** what was treated as independent or exchangeable?
+4. **Limitation:** what prevents a broader or causal conclusion?
+
+Across 18 paired Tucson-area monitoring wells, median depth to water was on
+average **12.47 ft greater** in 2002–2006 than in 1996–2000 (95% bootstrap
+interval: **6.58 to 18.39 ft**; paired permutation $p\approx0.001$).
+
+The analysis treats wells—not individual tape readings—as independent and
+assumes pre/post labels are exchangeable within wells under the null. Because
+the monitored wells were not randomly sampled and there is no untreated control,
+the result does not describe the entire aquifer or establish a cause.
+
+## Thursday
+
+You will reproduce four steps in the notebook:
+
+1. calculate the paired effect;
+2. plot all 18 well changes;
+3. construct the sign-flip null distribution; and
+4. bootstrap the interval and write the conclusion.
+
+::: {.kicker}
+One question, one design, one defensible conclusion.
+:::

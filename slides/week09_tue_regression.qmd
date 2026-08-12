@@ -1,5 +1,5 @@
 ---
-title: "Regression: estimation, uncertainty, and evidence"
+title: "Ordinary least squares, one step at a time"
 subtitle: "HWRS 564a · Week 9 · Tuesday, October 20"
 author: "Dr. Andrew Bennett"
 ---
@@ -7,47 +7,10 @@ author: "Dr. Andrew Bennett"
 ## Today {.smaller}
 
 ::: {.kicker}
-Week 9, session 1 of 2
+The job for this class
 :::
 
-1. A straight line as a statistical model
-2. What least squares minimises
-3. Where the slope, $R^2$, and standard error come from
-4. Confidence intervals and hypothesis tests
-5. Assumptions—and what time series do to them
-6. Validation that matches the intended prediction
-
-Fitting is one function call. The mathematics tells you what the result means
-and when its uncertainty is believable.
-
-# The model {background-color="#0C234B"}
-
-## A line describes the conditional mean
-
-$$Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$$
-
-::: {.incremental}
-- $Y_i$: measured depth to water at observation $i$
-- $x_i$: elapsed time in years
-- $\beta_0 + \beta_1x_i$: mean depth predicted at that time
-- $\varepsilon_i$: everything the straight line does not explain
-:::
-
-::: {.fragment}
-$\beta_1$ has units of ft/yr. It describes the average linear change—not every
-month, and not necessarily every era in the record.
-:::
-
-## Least squares chooses the smallest squared residuals
-
-For candidate coefficients $b_0$ and $b_1$,
-
-$$
-\operatorname{RSS}(b_0,b_1)
-= \sum_{i=1}^{n}\left[y_i-(b_0+b_1x_i)\right]^2.
-$$
-
-The ordinary least-squares estimates minimise this quantity:
+Starting only with a line and a definition of error, derive
 
 $$
 \hat\beta_1=
@@ -57,396 +20,546 @@ $$
 \hat\beta_0=\bar y-\hat\beta_1\bar x.
 $$
 
-::: {.fragment}
-The slope is **joint variation divided by variation in time**. Squaring makes
-large misses expensive and gives a problem with a closed-form solution.
-:::
+Then connect those coefficients to residuals, $R^2$, standard error, and a
+confidence interval. No formula will arrive without its reason.
 
-## Your turn: calculate an OLS line
+# Define the problem {background-color="#0C234B"}
 
-Compute $S_{xx}$, $S_{xy}$, the slope, and the intercept.
+## A line is a model for the mean
 
-```{pyodide}
-#| setup: true
-#| exercise: ex_ols
-import numpy as np
-x = np.array([0.0, 1.0, 2.0, 3.0])
-y = np.array([10.0, 13.0, 14.0, 19.0])
-```
+For observation $i$,
 
-```{pyodide}
-#| exercise: ex_ols
-x_bar, y_bar = x.mean(), y.mean()
-sxx = ______
-sxy = ______
-slope = ______
-intercept = ______
-print(f"y-hat = {intercept:.1f} + {slope:.1f} x")
-```
-
-::: {.hint exercise="ex_ols"}
-::: {.callout-note collapse="false"}
-## Hint
-
-Centre each variable on its mean. Then `slope = sxy / sxx` and the fitted line
-must pass through $(\bar x, \bar y)$.
-:::
-:::
-
-::: {.solution exercise="ex_ols"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```python
-sxx = ((x - x_bar) ** 2).sum()
-sxy = ((x - x_bar) * (y - y_bar)).sum()
-slope = sxy / sxx
-intercept = y_bar - slope * x_bar
-```
-
-$S_{xx}=5$, $S_{xy}=14$, so $\hat y=9.8+2.8x$.
-:::
-:::
-
-# Fit and goodness of fit {background-color="#AB0520"}
-
-## Residuals are vertical model errors
-
-$$e_i=y_i-\hat y_i$$
-
-```python
-from scipy import stats
-
-fit = stats.linregress(one["years_elapsed"], one["depth_to_water_ft"])
-one["predicted"] = fit.intercept + fit.slope * one["years_elapsed"]
-one["residual"] = one["depth_to_water_ft"] - one["predicted"]
-```
+$$Y_i=\beta_0+\beta_1x_i+\varepsilon_i.$$
 
 ::: {.incremental}
-- With an intercept, $\sum_i e_i=0$: residuals balance above and below the line.
-- Also $\sum_i x_i e_i=0$: residuals have no remaining *linear* association with $x$.
-- Neither property guarantees that residuals are random or independent.
+- $Y_i$ is a random response; $y_i$ is the value we observed.
+- $x_i$ is the predictor: elapsed time in years.
+- $\beta_0+\beta_1x_i$ is the mean response at $x_i$.
+- $\varepsilon_i$ is the departure from that mean.
 :::
 
-## $R^2$ compares the line with a mean-only model
+::: {.fragment}
+We do not know $\beta_0$ or $\beta_1$. We choose estimates $b_0$ and $b_1$
+from the observations.
+:::
 
-$$
-\operatorname{TSS}=\sum_i(y_i-\bar y)^2,
-\qquad
-\operatorname{RSS}=\sum_i e_i^2
-$$
+## A candidate line creates one residual per point
 
-$$
-R^2=1-\frac{\operatorname{RSS}}{\operatorname{TSS}}.
-$$
+The prediction at $x_i$ is
+
+$$\hat y_i=b_0+b_1x_i.$$
+
+The observed vertical error is
+
+$$e_i=y_i-\hat y_i=y_i-b_0-b_1x_i.$$
 
 ::: {.fragment}
-$R^2=0.90$ means the fitted line removes 90% of the squared variation relative
-to predicting $\bar y$ for every observation. It does **not** say that predictions
-are 90% accurate or that the model assumptions hold.
+Positive and negative residuals cancel if we simply add them. Absolute values
+would work numerically, but their corner at zero prevents this simple algebra.
+Least squares uses squared residuals.
+:::
+
+## The objective is a function of two unknowns
+
+$$
+S(b_0,b_1)
+=\sum_{i=1}^{n}e_i^2
+=\sum_{i=1}^{n}(y_i-b_0-b_1x_i)^2.
+$$
+
+::: {.incremental}
+- The data $x_i,y_i$ are fixed numbers in this minimisation.
+- The intercept $b_0$ and slope $b_1$ are variables.
+- The best-fitting line is the pair where $S$ is smallest.
 :::
 
 ::: {.fragment .due-notice}
-The full 63-year record has $R^2=0.90$; the visually straighter 1950–1990 window
-has $R^2=0.67$. Changing the range changes TSS, so $R^2$ values across different
-samples are not directly comparable.
+We need a minimum in two directions, so both partial derivatives must equal zero.
 :::
 
-## Your turn: reconstruct two fit metrics
+# Solve for the intercept {background-color="#AB0520"}
+
+## Differentiate with respect to $b_0$
+
+Start with
+
+$$S=\sum_i(y_i-b_0-b_1x_i)^2.$$
+
+Use the chain rule on each squared term:
+
+$$
+\frac{\partial S}{\partial b_0}
+=\sum_i2(y_i-b_0-b_1x_i)(-1).
+$$
+
+Therefore
+
+$$\frac{\partial S}{\partial b_0}=-2\sum_i(y_i-b_0-b_1x_i).$$
+
+## Set the derivative equal to zero
+
+$$-2\sum_i(y_i-b_0-b_1x_i)=0$$
+
+Divide by $-2$ and distribute the sum:
+
+$$\sum_i y_i-\sum_i b_0-b_1\sum_i x_i=0.$$
+
+Because $b_0$ is constant across observations,
+
+$$\sum_i b_0=nb_0.$$
+
+So
+
+$$\sum_i y_i-nb_0-b_1\sum_i x_i=0.$$
+
+## Divide by $n$ and recognise the means
+
+Rearrange the previous equation:
+
+$$nb_0=\sum_i y_i-b_1\sum_i x_i.$$
+
+Divide every term by $n$:
+
+$$
+b_0=\frac{1}{n}\sum_i y_i
+-b_1\frac{1}{n}\sum_i x_i.
+$$
+
+Since $\bar y=n^{-1}\sum_i y_i$ and $\bar x=n^{-1}\sum_i x_i$,
+
+$$\boxed{b_0=\bar y-b_1\bar x}.$$
+
+::: {.fragment}
+Every least-squares line with an intercept passes through $(\bar x,\bar y)$.
+:::
+
+## Your turn: use the first normal equation
 
 ```{pyodide}
 #| setup: true
-#| exercise: ex_metrics
+#| exercise: ex_intercept
 import numpy as np
-y = np.array([10.0, 13.0, 15.0, 20.0])
-y_hat = np.array([10.0, 12.0, 16.0, 20.0])
+x = np.array([0.0, 1.0, 2.0, 3.0])
+y = np.array([10.0, 13.0, 14.0, 19.0])
+b1 = 2.8
 ```
 
 ```{pyodide}
-#| exercise: ex_metrics
-residual = ______
-rss = ______
-tss = ______
-r_squared = ______
-rmse = ______
-print(rss, r_squared, rmse)
+#| exercise: ex_intercept
+x_bar = ______
+y_bar = ______
+b0 = ______
+print(x_bar, y_bar, b0)
 ```
 
-::: {.hint exercise="ex_metrics"}
+::: {.hint exercise="ex_intercept"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
-RMSE is $\sqrt{\operatorname{RSS}/n}$. TSS uses deviations from `y.mean()`.
+Use $b_0=\bar y-b_1\bar x$.
 :::
 :::
 
-::: {.solution exercise="ex_metrics"}
+::: {.solution exercise="ex_intercept"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```python
-residual = y - y_hat
-rss = (residual ** 2).sum()
-tss = ((y - y.mean()) ** 2).sum()
-r_squared = 1 - rss / tss
-rmse = np.sqrt(rss / len(y))
+x_bar = x.mean()
+y_bar = y.mean()
+b0 = y_bar - b1 * x_bar
 ```
 
-RSS is 2, $R^2\approx0.962$, and RMSE is about 0.71 measurement units.
+$\bar x=1.5$, $\bar y=14$, and $b_0=9.8$.
 :::
 :::
 
-# Uncertainty {background-color="#0C234B"}
+# Solve for the slope {background-color="#0C234B"}
 
-## Standard error begins with unexplained variance
+## Differentiate with respect to $b_1$
 
-Under the ordinary regression assumptions,
+Again start with
+
+$$S=\sum_i(y_i-b_0-b_1x_i)^2.$$
+
+Now the inner derivative is $-x_i$:
 
 $$
-s^2=\frac{\operatorname{RSS}}{n-2},
+\frac{\partial S}{\partial b_1}
+=\sum_i2(y_i-b_0-b_1x_i)(-x_i).
+$$
+
+Set it equal to zero and divide by $-2$:
+
+$$\sum_i x_i(y_i-b_0-b_1x_i)=0.$$
+
+## Substitute the intercept relationship
+
+Use $b_0=\bar y-b_1\bar x$:
+
+$$
+\sum_i x_i[y_i-(\bar y-b_1\bar x)-b_1x_i]=0.
+$$
+
+Remove the parentheses:
+
+$$
+\sum_i x_i(y_i-\bar y+b_1\bar x-b_1x_i)=0.
+$$
+
+Factor $b_1$ inside the final two terms:
+
+$$
+\sum_i x_i[(y_i-\bar y)-b_1(x_i-\bar x)]=0.
+$$
+
+## Centring removes the distracting cross-terms
+
+Define centred values
+
+$$X_i=x_i-\bar x,\qquad Y_i=y_i-\bar y.$$
+
+Because $\sum_iX_i=0$ and $\sum_iY_i=0$, the second normal equation can be
+written as
+
+$$\sum_iX_i(Y_i-b_1X_i)=0.$$
+
+Distribute:
+
+$$\sum_iX_iY_i-b_1\sum_iX_i^2=0.$$
+
+Move the second term:
+
+$$b_1\sum_iX_i^2=\sum_iX_iY_i.$$
+
+## Divide to obtain the slope
+
+If the $x_i$ are not all identical, then $\sum_iX_i^2>0$. Divide both sides:
+
+$$
+\boxed{
+b_1=\frac{\sum_iX_iY_i}{\sum_iX_i^2}
+=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}
+       {\sum_i(x_i-\bar x)^2}
+}.
+$$
+
+::: {.fragment}
+Numerator: how $x$ and $y$ vary together. Denominator: how much $x$ varies.
+If $x$ has no variation, a slope cannot be estimated.
+:::
+
+## Covariance divided by variance
+
+Sample covariance and variance use the same factor $1/(n-1)$:
+
+$$
+s_{xy}=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{n-1},
 \qquad
-\operatorname{SE}(\hat\beta_1)=
-\frac{s}{\sqrt{\sum_i(x_i-\bar x)^2}}.
+s_x^2=\frac{\sum_i(x_i-\bar x)^2}{n-1}.
 $$
 
-::: {.incremental}
-- More residual scatter increases slope uncertainty.
-- A wider spread in $x$ decreases slope uncertainty.
-- The $n-2$ degrees of freedom pay for estimating two coefficients.
-:::
+Their ratio cancels that factor:
+
+$$\boxed{b_1=\frac{s_{xy}}{s_x^2}}.$$
 
 ::: {.fragment}
-For the Tucson well: $\hat\beta_1=2.081$ ft/yr and the ordinary standard error
-is $0.036$ ft/yr.
+The sign comes from covariance. The magnitude also depends on the units and
+spread of $x$.
 :::
 
-## A confidence interval and a test use the same statistic
-
-For $H_0:\beta_1=\beta_{1,0}$,
-
-$$
-t=\frac{\hat\beta_1-\beta_{1,0}}
-        {\operatorname{SE}(\hat\beta_1)},
-\qquad df=n-2.
-$$
-
-The corresponding 95% confidence interval is
-
-$$
-\hat\beta_1 \pm t_{0.975,n-2}\operatorname{SE}(\hat\beta_1).
-$$
-
-::: {.fragment}
-The p-value is the probability, **assuming the null model and its assumptions**,
-of a test statistic at least as extreme as the observed one. It is not the
-probability that the null hypothesis is true.
-:::
-
-## Your turn: quantify slope uncertainty
+## Your turn: build the slope from centred sums
 
 ```{pyodide}
 #| setup: true
-#| exercise: ex_ci
-slope = 2.081135
-standard_error = 0.035987
+#| exercise: ex_slope
+import numpy as np
+x = np.array([0.0, 1.0, 2.0, 3.0])
+y = np.array([10.0, 13.0, 14.0, 19.0])
+x_bar, y_bar = x.mean(), y.mean()
+```
+
+```{pyodide}
+#| exercise: ex_slope
+X = ______
+Y = ______
+sxy_sum = ______
+sxx_sum = ______
+b1 = ______
+b0 = ______
+print(sxy_sum, sxx_sum, b0, b1)
+```
+
+::: {.hint exercise="ex_slope"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Compute the centred arrays first. Multiply `X * Y` elementwise before summing.
+:::
+:::
+
+::: {.solution exercise="ex_slope"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+X = x - x_bar
+Y = y - y_bar
+sxy_sum = (X * Y).sum()
+sxx_sum = (X ** 2).sum()
+b1 = sxy_sum / sxx_sum
+b0 = y_bar - b1 * x_bar
+```
+
+$\sum X_iY_i=14$, $\sum X_i^2=5$, so $\hat y=9.8+2.8x$.
+:::
+:::
+
+# Check what the solution guarantees {background-color="#AB0520"}
+
+## The fitted residuals satisfy both normal equations
+
+At the minimum,
+
+$$\sum_i e_i=0,\qquad \sum_i x_ie_i=0.$$
+
+The first equation says residuals balance above and below the fitted line. The
+second says no *linear* association with $x$ remains.
+
+::: {.fragment}
+These are algebraic consequences of fitting an intercept and slope. They do
+not prove that residuals are independent, normally distributed, or patternless.
+:::
+
+## Your turn: verify the normal equations
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_normal
+import numpy as np
+x = np.array([0.0, 1.0, 2.0, 3.0])
+y = np.array([10.0, 13.0, 14.0, 19.0])
+b0, b1 = 9.8, 2.8
+```
+
+```{pyodide}
+#| exercise: ex_normal
+y_hat = ______
+residual = ______
+sum_residual = ______
+sum_x_residual = ______
+print(residual, sum_residual, sum_x_residual)
+```
+
+::: {.hint exercise="ex_normal"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Prediction is `b0 + b1 * x`; residual is measured minus predicted.
+:::
+:::
+
+::: {.solution exercise="ex_normal"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+y_hat = b0 + b1 * x
+residual = y - y_hat
+sum_residual = residual.sum()
+sum_x_residual = (x * residual).sum()
+```
+
+Both sums are zero apart from floating-point roundoff.
+:::
+:::
+
+# From a line to statistical evidence {background-color="#0C234B"}
+
+## $R^2$ compares the line with a mean-only model
+
+Total squared variation:
+
+$$\operatorname{TSS}=\sum_i(y_i-\bar y)^2.$$
+
+Unexplained squared variation:
+
+$$\operatorname{RSS}=\sum_i(y_i-\hat y_i)^2=\sum_i e_i^2.$$
+
+Therefore
+
+$$\boxed{R^2=1-\frac{\operatorname{RSS}}{\operatorname{TSS}}}.$$
+
+::: {.fragment}
+$R^2$ is a relative in-sample comparison. It is not percent accuracy and does
+not test the regression assumptions.
+:::
+
+## Estimate the residual variance
+
+If the errors have common variance $\sigma^2$, estimate it from the residuals:
+
+$$
+s^2=\frac{\operatorname{RSS}}{n-2}.
+$$
+
+Why $n-2$?
+
+::: {.incremental}
+- We began with $n$ observed response values.
+- Estimating $b_0$ imposes $\sum e_i=0$.
+- Estimating $b_1$ imposes $\sum x_ie_i=0$.
+- Two fitted constraints leave $n-2$ residual degrees of freedom.
+:::
+
+## Propagate residual scatter into slope uncertainty
+
+Under independent errors with constant variance,
+
+$$
+\operatorname{Var}(b_1)=\frac{\sigma^2}{\sum_i(x_i-\bar x)^2}.
+$$
+
+Replace unknown $\sigma$ with $s$:
+
+$$
+\boxed{\operatorname{SE}(b_1)=
+\frac{s}{\sqrt{\sum_i(x_i-\bar x)^2}}}.
+$$
+
+::: {.incremental}
+- More residual scatter makes the slope less certain.
+- A wider span of $x$ makes the slope more certain.
+- More rows help only to the extent that they add independent information.
+:::
+
+## Confidence interval and slope test use the same ratio
+
+For the null hypothesis $H_0:\beta_1=\beta_{1,0}$,
+
+$$t=\frac{b_1-\beta_{1,0}}{\operatorname{SE}(b_1)},\qquad df=n-2.$$
+
+A two-sided 95% confidence interval is
+
+$$
+b_1\pm t_{0.975,n-2}\operatorname{SE}(b_1).
+$$
+
+::: {.fragment}
+The p-value asks how unusual the observed $t$ would be if the null model and
+its assumptions were true. The confidence interval lists slope values not
+rejected by the corresponding two-sided tests.
+:::
+
+## Your turn: finish the inferential calculation
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_inference
+import numpy as np
+b1 = 2.081135
+rss = 64167.038
+n = 379
+sxx = 131428.317
 t_critical = 1.9663
 ```
 
 ```{pyodide}
-#| exercise: ex_ci
-lower = ______
-upper = ______
-t_for_zero = ______
-print(f"95% CI: {lower:.3f} to {upper:.3f} ft/yr")
-print(f"t for H0: slope = 0 is {t_for_zero:.1f}")
+#| exercise: ex_inference
+residual_variance = ______
+slope_se = ______
+margin = ______
+ci = (______, ______)
+print(slope_se, ci)
 ```
 
-::: {.hint exercise="ex_ci"}
+::: {.hint exercise="ex_inference"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
-The margin is `t_critical * standard_error`. For a zero-slope null, divide the
-estimated slope by its standard error.
+Use $s^2=\mathrm{RSS}/(n-2)$, then $\mathrm{SE}(b_1)=\sqrt{s^2/S_{xx}}$.
 :::
 :::
 
-::: {.solution exercise="ex_ci"}
+::: {.solution exercise="ex_inference"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```python
-lower = slope - t_critical * standard_error
-upper = slope + t_critical * standard_error
-t_for_zero = slope / standard_error
+residual_variance = rss / (n - 2)
+slope_se = np.sqrt(residual_variance / sxx)
+margin = t_critical * slope_se
+ci = (b1 - margin, b1 + margin)
 ```
 
-The ordinary 95% interval is 2.010–2.152 ft/yr and $t\approx57.8$.
-The arithmetic is precise; whether the interval is credible depends on the
-assumptions behind the standard error.
+The ordinary standard error is 0.036 ft/yr and the 95% interval is
+2.010–2.152 ft/yr.
 :::
 :::
 
-## Least squares estimates need fewer assumptions than inference
+## The interval inherits the model assumptions {.smaller}
 
 ::: {.columns}
 ::: {.column width="50%"}
-**For the line to represent the mean**
+**Mean model**
 
-- The mean relationship is linear
-- Errors average to zero at each $x$
-- Predictors are measured adequately
+- The relationship is adequately linear
+- Errors have mean zero at each $x$
+- The predictor is measured adequately
 :::
 
 ::: {.column width="50%"}
-**For the ordinary SE, test, and CI**
+**Ordinary uncertainty**
 
 - Residuals are independent
 - Residual variance is constant
-- Normal residuals give exact small-sample $t$ inference
+- Normal errors give exact small-sample $t$ inference
 :::
 :::
 
 ::: {.fragment .due-notice}
-Normality is not required to calculate the OLS line. It matters for inference,
-especially in small samples. Independence is the assumption time series most
-often violate.
+The line can always be calculated when $x$ varies. The standard error,
+confidence interval, and p-value are trustworthy only when their assumptions
+are defensible. Thursday’s lab is about checking that difference.
 :::
 
-# Diagnostics {background-color="#AB0520"}
+## Week 7 was already a regression
 
-## A high $R^2$ can hide a wrong mean model
+For two independent groups, code $x=0$ for “pre” and $x=1$ for “post”:
 
-Mean residual by decade for the Tucson well:
+$$y_i=\beta_0+\beta_1x_i+\varepsilon_i.$$
 
-```text
-1930    +1.9       1970    +9.4
-1940    -9.6       1980    -0.9
-1950   -14.6       1990    -7.8
-1960   -12.5
-```
+Then
+
+$$\hat\beta_0=\bar y_{\text{pre}},\qquad
+\hat\beta_1=\bar y_{\text{post}}-\bar y_{\text{pre}}.$$
 
 ::: {.fragment}
-Decade-long runs on one side of zero indicate curvature or changing regimes.
-One line averages the lightly pumped, agricultural, and later municipal eras
-and reports a rate describing none of them exactly.
-:::
-
-## Serial correlation makes the ordinary CI too confident
-
-For these fitted residuals,
-
-$$\operatorname{corr}(e_i,e_{i-1})=0.986.$$
-
-::: {.incremental}
-- Adjacent residuals carry nearly the same model error.
-- The 379 observations do not provide 379 independent pieces of information.
-- The OLS line can still be calculated, but the ordinary $0.036$ ft/yr standard
-  error is conditional on an assumption the diagnostic rejects.
+Week 7 preserved pairing by first calculating $d_i=y_{i,\text{post}}-
+y_{i,\text{pre}}$. The model $d_i=\beta_0+\varepsilon_i$ estimates
+$\hat\beta_0=\bar d$: the same 12.47-ft mean paired change.
 :::
 
 ::: {.fragment}
-Possible responses include modelling the changing regimes, using errors with a
-time structure, or estimating uncertainty with a time-aware bootstrap or HAC
-standard error.
-:::
-
-## Your turn: separate estimation from inference
-
-```{pyodide}
-#| setup: true
-#| exercise: ex_diagnose
-choices = {
-    "a": "The slope cannot be calculated because residuals are correlated.",
-    "b": "The line is descriptive, but its ordinary CI is too optimistic.",
-    "c": "R2 = 0.90 proves the independence assumption is close enough.",
-    "d": "A smaller p-value repairs the residual dependence.",
-}
-```
-
-```{pyodide}
-#| exercise: ex_diagnose
-answer = ______
-print(choices[answer])
-```
-
-::: {.hint exercise="ex_diagnose"}
-::: {.callout-note collapse="false"}
-## Hint
-
-OLS estimation and ordinary least-squares inference are related but distinct.
-Which claim keeps the fitted line while rejecting unsupported precision?
-:::
-:::
-
-::: {.solution exercise="ex_diagnose"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```python
-answer = "b"
-```
-
-The slope remains a computable descriptive summary. The usual standard error,
-p-value, and confidence interval treat residuals as independent, so those
-quantities are too confident here.
-:::
-:::
-
-# Prediction {background-color="#0C234B"}
-
-## Prediction metrics answer different questions
-
-$$
-\operatorname{MAE}=\frac{1}{m}\sum_{i=1}^{m}|y_i-\hat y_i|,
-\qquad
-\operatorname{RMSE}=\sqrt{\frac{1}{m}\sum_{i=1}^{m}(y_i-\hat y_i)^2}.
-$$
-
-::: {.incremental}
-- MAE describes a typical absolute miss in the response units.
-- RMSE penalises large misses more strongly.
-- Test $R^2<0$ means the model predicts worse than the test-set mean.
-:::
-
-## A time split tests extrapolation rather than interpolation
-
-| Validation | Test MAE | Test RMSE | Test $R^2$ |
-|---|---:|---:|---:|
-| Random 75/25 split | 11.3 ft | 13.3 ft | 0.89 |
-| Train before 1975; test after | 15.4 ft | 19.3 ft | −4.81 |
-
-::: {.fragment}
-Random splitting places test observations between dates already in training.
-The chronological split asks the actual forecasting question and reveals that
-the early linear rate extrapolates poorly into a later pumping regime.
-:::
-
-::: {.fragment .due-notice}
-Model quality is not a property of the algorithm alone. It is a property of the
-algorithm, the data, the metric, and the validation design together.
+A t-test and a regression are often different views of the same comparison.
+The design still decides which rows are independent.
 :::
 
 ## Wrap up {.smaller}
 
 ::: {.kicker}
-What you can now explain
+The whole derivation
 :::
 
-- OLS minimises RSS, with slope equal to centred cross-variation over $S_{xx}$
-- $R^2=1-\mathrm{RSS}/\mathrm{TSS}$ compares a line with a mean-only baseline
-- Standard errors, confidence intervals, and tests are model-based quantities
-- Structured and serially correlated residuals undermine ordinary inference
-- MAE, RMSE, and test $R^2$ describe different predictive failures
-- Time-series validation must preserve the direction of time
-
-::: {.kicker}
-Before Thursday
-:::
-
-- Parts 1–3 of `labs/week09/week09_lab_regression_chemistry.ipynb`
+1. Define $e_i=y_i-b_0-b_1x_i$ and minimise $\sum e_i^2$.
+2. $\partial S/\partial b_0=0$ gives $b_0=\bar y-b_1\bar x$.
+3. $\partial S/\partial b_1=0$ gives
+   $b_1=\sum(x_i-\bar x)(y_i-\bar y)/\sum(x_i-\bar x)^2$.
+4. Residual sums produce $R^2$, $s^2$, and the slope standard error.
+5. Inference requires assumptions that the algebra alone cannot verify.
 
 ::: {.kicker}
 Thursday
 :::
 
-Water chemistry: checking that an analysis balances, and reading a Piper diagram.
+One full-period lab: fit, diagnose, validate, and interpret a groundwater trend.

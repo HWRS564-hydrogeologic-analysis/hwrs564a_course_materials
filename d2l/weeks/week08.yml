@@ -16,10 +16,10 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Complete the Week 7 preparation posted in D2L"
-    url: "slides/week07_tue_datetime.html"
+  - text: "Finish the Week 7 inference lab"
+    url: "labs/week07/week07_lab_inference.html"
     site_relative: true
-    note: "This link will be updated when the replacement Week 7 topic is finalized."
+    note: "Bring the effect estimate, interval, and limitation you will communicate in a figure."
   - text: "Look at a figure you have made before and ask what its title says"
     url: "https://www.data-to-viz.com/caveats.html"
     note: "If the title could be generated from the axis labels, it is doing no work."
@@ -40,10 +40,12 @@ class_material:
     course_file: "matplotlib_commands2.png"
 
 assignments:
-  - "*Week 7 quiz details will be added with the replacement Week 7 topic.*"
-  - text: "Continue: HW 4 — Tell one hydrologic story with a figure"
+  - text: "Quiz 6 — on Week 7 inference"
+    quiz: "TBD-week08-quiz"
+    note: "In class, Tuesday 10/13."
+  - text: "Continue: HW 4 — Evaluate and communicate a groundwater difference"
     dropbox: "TBD-hw04-dropbox"
-    note: "Use this week's figure and map material; due Wednesday 10/21 at 11:59pm."
+    note: "Use this week's figure material to communicate the Week 7 analysis; due Wednesday 10/21 at 11:59pm."
   - text: "Submit: Project 2 — analysis component, part 1"
     dropbox: "TBD-project2a-dropbox"
 

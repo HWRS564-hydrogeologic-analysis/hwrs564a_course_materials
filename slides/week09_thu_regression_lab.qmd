@@ -1,0 +1,113 @@
+---
+title: "Regression lab: fit, diagnose, interpret"
+subtitle: "HWRS 564a · Week 9 · Thursday, October 22"
+author: "Dr. Andrew Bennett"
+---
+
+## Today is a working session
+
+Open `labs/week09/week09_lab_regression.ipynb`.
+
+You will use the full class period to:
+
+1. reproduce an OLS fit from the formulas derived Tuesday;
+2. interpret slope and intercept with units and a stated reference date;
+3. diagnose nonlinearity, unequal variance, and serial correlation;
+4. compare interpolation with chronological prediction; and
+5. write a conclusion whose certainty matches the evidence.
+
+# Work in checkpoints {background-color="#0C234B"}
+
+## Checkpoint 1 — Know what the coefficients mean
+
+Before accepting a fitted line, state:
+
+- What one unit of $x$ represents
+- What one unit of $y$ represents
+- What a positive slope means physically
+- What date or condition $x=0$ represents
+- Whether the intercept is scientifically meaningful
+
+::: {.due-notice}
+If you cannot say the slope’s units in words, stop before interpreting it.
+:::
+
+## Checkpoint 2 — Verify the library result
+
+Your manual calculation and `scipy.stats.linregress` must agree on:
+
+$$b_1,\qquad b_0,\qquad R^2,\qquad \operatorname{SE}(b_1).$$
+
+If they do not, check these common failures:
+
+- Date strings were never converted to elapsed years
+- Missing $x$ and $y$ values were dropped separately
+- `predicted - measured` was called a residual
+- $n$ was used instead of $n-2$ for residual variance
+- `sum(x - x.mean())**2` was used instead of `sum((x - x.mean())**2)`
+
+## Checkpoint 3 — Inspect assumptions, not just coefficients
+
+Use the diagnostic plots and statistics to ask:
+
+| Assumption | Evidence to inspect |
+|---|---|
+| Linear mean | Residuals versus time and fitted values |
+| Constant variance | Does vertical spread change with fitted value? |
+| Independent errors | Runs over time and lag-1 residual correlation |
+| Approximate normality | Histogram or Q–Q plot; extreme tails |
+
+::: {.due-notice}
+A residual mean near zero is guaranteed by OLS with an intercept. It is not a
+diagnostic victory.
+:::
+
+## Checkpoint 4 — Match validation to the question
+
+::: {.columns}
+::: {.column width="50%"}
+**Interpolation question**
+
+Can the line predict held-out observations within the period represented in
+training?
+
+A random split can address this.
+:::
+
+::: {.column width="50%"}
+**Forecasting question**
+
+Can a line fitted to the early record predict a later period?
+
+The split must preserve time order.
+:::
+:::
+
+::: {.fragment}
+Report MAE and RMSE in feet. Interpret negative test $R^2$ as worse than the
+test-set mean baseline—not as “negative variance explained.”
+:::
+
+## Checkpoint 5 — Interpret the model at the right level
+
+A defensible conclusion separates four claims:
+
+1. **Descriptive:** the fitted average linear rate in this record.
+2. **Inferential:** the ordinary interval, conditional on its assumptions.
+3. **Diagnostic:** which assumptions the residuals challenge.
+4. **Predictive:** performance under a validation design matching the use case.
+
+::: {.fragment .due-notice}
+Do not write “time causes groundwater decline.” Time is an index for processes
+such as pumping and recharge; it is not the mechanism.
+:::
+
+## Before you leave
+
+- Restart the kernel and run all cells
+- Resolve every failed check
+- Save the completed notebook
+- Write the final four-part interpretation in your own words
+
+The goal is not to produce the smallest p-value. It is to identify exactly
+which claims this linear model can and cannot support.

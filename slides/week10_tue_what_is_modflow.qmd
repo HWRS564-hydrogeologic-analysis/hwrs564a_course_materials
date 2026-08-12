@@ -10,7 +10,7 @@ author: "Dr. Andrew Bennett"
 Week 10, session 1 of 2
 :::
 
-1. Quiz — five minutes, on regression and chemistry
+1. Quiz — five minutes, on regression
 2. What changes when you build a model
 3. The conceptual model that comes before the grid
 4. The equation MODFLOW solves, and how it discretizes it
@@ -27,7 +27,7 @@ today you build something that has to obey conservation of mass.
 ::: {.incremental}
 - A hydrograph tells you the water table fell
 - It does not tell you **where the water went**
-- A Piper diagram tells you two waters share a path
+- A trend line describes how an observation changed through time
 - It does not tell you **how much** moves along it
 :::
 

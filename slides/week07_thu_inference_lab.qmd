@@ -1,0 +1,142 @@
+---
+title: "Groundwater inference lab"
+subtitle: "HWRS 564a · Week 7 · Thursday, October 8"
+author: "Dr. Andrew Bennett"
+---
+
+## Today's one question
+
+Among Tucson-area wells monitored in both windows, how did median depth to
+water change from **1996–2000** to **2002–2006**?
+
+::: {.kicker}
+One well, one paired change
+:::
+
+Positive change means the later water level was deeper below land surface.
+
+## What you will finish
+
+In the notebook:
+
+1. calculate the mean paired change;
+2. show all 18 changes in a plot;
+3. build the sign-flip null distribution and p-value; and
+4. bootstrap an interval and write a four-sentence conclusion.
+
+No test selection and no new dataset cleaning today.
+
+# Before code {background-color="#0C234B"}
+
+## Keep the design in view
+
+| Choice | This investigation |
+|---|---|
+| observational unit | one monitored well |
+| paired change | post median minus pre median |
+| sample size | 18 wells |
+| null in words | no systematic pre/post change |
+| sign convention | positive means deeper |
+
+::: {.fragment .due-notice}
+The source has 866 tape readings, but it does not have 866 independent wells.
+:::
+
+## What is already done for you
+
+`data/week07_tucson_paired_wells.csv` is cleaned and instructor-checked.
+
+Each row contains one well's:
+
+- pre-period median depth;
+- post-period median depth;
+- number of years and measurements represented; and
+- paired change in feet.
+
+The coverage rule required measurements in at least three years of each window.
+
+# Four checkpoints {background-color="#AB0520"}
+
+## 1 — Effect and plot · target: 25 minutes
+
+Recalculate `post - pre`, then report the mean with its direction and unit.
+
+Your plot must show all 18 well changes and a zero reference line.
+
+::: {.incremental}
+- Do most wells point the same direction?
+- Are there exceptions?
+- Could a reader see whether one well dominates the result?
+:::
+
+## 2 — Permutation · target: 50 minutes
+
+Within each repetition:
+
+```python
+signs = rng.choice([-1, 1], size=n_wells)
+null_means[i] = (change * signs).mean()
+```
+
+Then count null means at least as far from zero as the observed mean.
+
+::: {.fragment}
+If you shuffle measurements across wells, stop: that breaks the paired design.
+:::
+
+## 3 — Bootstrap · target: 65 minutes
+
+Within each repetition:
+
+```python
+sample = rng.choice(change, size=n_wells, replace=True)
+boot_means[i] = sample.mean()
+```
+
+Keep the 2.5th and 97.5th percentiles.
+
+::: {.fragment .due-notice}
+Permutation asks about a no-effect world. Bootstrap asks how the effect estimate
+varies across repeated samples. Do not interchange the two distributions.
+:::
+
+## 4 — Conclusion · target: 75 minutes
+
+Write four sentences:
+
+1. result, direction, and feet;
+2. bootstrap interval and permutation p-value;
+3. wells as the unit and within-well label exchangeability; and
+4. one limitation on representativeness or causality.
+
+::: {.fragment}
+Write **+12.47 ft deeper**, not just **significant**.
+:::
+
+# Interpretation check {background-color="#0C234B"}
+
+## A sentence you may write
+
+> Across 18 paired monitoring wells, median depth to water was on average 12.47
+> ft greater in 2002–2006 than in 1996–2000.
+
+Then add the interval, p-value, assumption, and limitation.
+
+## A sentence you may not write
+
+> The water-supply shift caused groundwater levels to decline by 12.47 ft.
+
+This is a before/after design without an untreated control. Pumping, recharge,
+climate, location, and delayed aquifer response also vary.
+
+## Before you leave
+
+1. Restart the kernel and run every completed cell in order.
+2. Confirm that positive always means deeper.
+3. Make sure the sample size is stated as 18 **wells**.
+4. Read the conclusion without looking at the code.
+
+::: {.due-notice}
+HW 4 repeats this paired workflow on another cleaned groundwater dataset. Week 8
+adds one polished evidence figure; it does not add another statistical design.
+:::

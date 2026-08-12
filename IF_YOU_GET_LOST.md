@@ -28,8 +28,7 @@ Run repository commands from that directory.
 |---|---|
 | Weekly D2L modules | `d2l/weeks/weekNN.yml` |
 | Shared weekly-module layout | `d2l/template.html` |
-| Homework instructions | `homework/hwNN_<topic>.md` |
-| D2L homework settings and rubrics | `d2l/assignments/hwNN.yml` |
+| Homework instructions, settings, and rubrics | `d2l/assignments/hwNN.md` |
 | Homework HTML layout | `d2l/assignment_template.html` |
 
 Generate and validate the weekly module pages with:
@@ -42,8 +41,8 @@ python d2l/generate.py d2l/weeks/*.yml --check
 Generate and validate the D2L assignment instructions with:
 
 ```bash
-python d2l/generate_assignments.py d2l/assignments/hw*.yml
-python d2l/generate_assignments.py d2l/assignments/hw*.yml --check
+python d2l/generate_assignments.py d2l/assignments/hw*.md
+python d2l/generate_assignments.py d2l/assignments/hw*.md --check
 ```
 
 Generated HTML is placed in `d2l/build/`. That directory is ignored by Git and
@@ -70,7 +69,8 @@ Important source locations include:
 - `slides/` — lecture slides
 - `labs/` — student lab notebooks
 - `data/` — shared course datasets
-- `homework/` — D2L homework prompt sources and assignment planning
+- `homework/` — assignment planning and design notes
+- `d2l/assignments/` — complete Markdown homework sources
 - `d2l/` — D2L templates, definitions, and generators
 - `quizzes/` — quiz definitions and D2L import generator
 

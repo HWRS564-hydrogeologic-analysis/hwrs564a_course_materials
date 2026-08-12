@@ -1,12 +1,13 @@
 week: 7
-title: "Week 7 — Topic to be announced"
+title: "Week 7 — Uncertainty and hypothesis testing"
 dates: "October 6 & 8, 2026"
 overview: >
-  Week 7 is being redesigned. The time-series material formerly taught here is
-  now part of Week 5, so students can select dates, resample records, calculate
-  rolling summaries, and reshape tables as soon as they learn pandas. The
-  replacement Week 7 topic and materials will be announced after the revised
-  course sequence is finalized.
+  An apparent difference is not yet evidence. This week uses paired Tucson-area
+  monitoring wells to ask whether a change in median depth to water is larger
+  than the variability expected under a no-change model. Students identify the
+  observational unit, report an effect in feet, construct a permutation null
+  distribution, bootstrap an uncertainty interval, and write a conclusion that
+  distinguishes evidence from a causal mechanism.
 
 time_budget:
   - "3 hours in class"
@@ -18,17 +19,17 @@ background:
   - text: "Finish the Week 6 lab notebook"
     url: "labs/week06/week06_lab_real_world_data.html"
     site_relative: true
-    note: "Complete the cleaning workflow before the replacement Week 7 material begins."
+    note: "The Week 7 dataset is already cleaned so inference remains the main task."
 
 class_material:
-  - text: "Tue 10/6 — Slides: Topic to be announced"
-    url: "slides/week07_tue_datetime.html"
+  - text: "Tue 10/6 — Slides: Is the difference larger than the noise?"
+    url: "slides/week07_tue_inference.html"
     site_relative: true
-  - text: "Thu 10/8 — Slides: Topic to be announced"
-    url: "slides/week07_thu_grouping.html"
+  - text: "Thu 10/8 — Slides: Groundwater inference lab"
+    url: "slides/week07_thu_inference_lab.html"
     site_relative: true
-  - text: "Lab notebook — Topic to be announced"
-    url: "labs/week07/week07_lab_timeseries.html"
+  - text: "Lab notebook — Is the difference larger than the noise?"
+    url: "labs/week07/week07_lab_inference.html"
     site_relative: true
 
 assignments:
@@ -38,8 +39,8 @@ assignments:
   - text: "Submit: HW 3 — Build a defensible groundwater dataset"
     dropbox: "TBD-hw03-dropbox"
     note: "Due Wednesday 10/7 at 11:59pm."
-  - text: "Open: HW 4 — Tell one hydrologic story with a figure"
+  - text: "Open: HW 4 — Evaluate and communicate a groundwater difference"
     dropbox: "TBD-hw04-dropbox"
-    note: "Available after class Thursday 10/8; due Wednesday 10/21 at 11:59pm."
+    note: "Inference this week, evidence figure in Week 8; due Wednesday 10/21 at 11:59pm."
 
 bonus: []
