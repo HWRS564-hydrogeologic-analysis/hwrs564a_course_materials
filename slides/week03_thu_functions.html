@@ -215,18 +215,30 @@ Dr.&nbsp;Andrew Bennett
 <p>Week 3, session 2 of 2</p>
 </div>
 <ol type="1">
+<li>Why readable code is part of the scientific record</li>
 <li>Why functions, and what goes in one</li>
 <li>Arguments, defaults, and <code>return</code></li>
 <li>Failing loudly on bad input</li>
-<li>Comprehensions</li>
-<li><code>import</code>: your code, and other people’s</li>
+<li>Comprehensions and modules</li>
 </ol>
 <p>By the end you will have written functions you’ll reuse in Week 4 without opening this deck again.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
 <h1>Why bother</h1>
-
+<!-- Adapted from old_slides/hwrs564a_oct8.pdf. -->
+</section>
+<section class="slide level2">
+<h2>Code is a research artifact</h2>
+<p>Code is read far more often than it is written — usually by <strong>future you</strong>.</p>
+<ul>
+<li class="fragment">Names, spacing, and docstrings reduce the work of reconstructing intent</li>
+<li class="fragment">Common conventions let a reader focus on the science instead of your style</li>
+<li class="fragment">Reusable code can be checked, extended, and cited; opaque code cannot</li>
+</ul>
+<div class="fragment due-notice">
+<p>You would not leave a field notebook with unlabeled units. Treat analysis code with the same care: it is part of the evidence behind the result.</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>The problem functions solve</h2>
@@ -523,6 +535,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 </div>
 <ul>
 <li>Wrote functions with docstrings, defaults, and a real <code>return</code></li>
+<li>Treated names, units, and conventions as part of a reproducible analysis</li>
 <li>Learned that <code>print</code> and <code>return</code> are different, and why it bites</li>
 <li>Raised <code>ValueError</code> on input that can’t be right</li>
 <li>Wrote a comprehension, and know when <em>not</em> to</li>

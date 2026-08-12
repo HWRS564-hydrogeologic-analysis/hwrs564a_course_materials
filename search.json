@@ -1044,7 +1044,7 @@
     "href": "labs/week02/week02_lab_python_basics.html#part-5-lists-indexing-slicing",
     "title": "Week 2 Lab — Python basics",
     "section": "Part 5 — Lists, indexing, slicing",
-    "text": "Part 5 — Lists, indexing, slicing\nA year of monthly water-level measurements, January first.\n\nmonthly_head = [\n    415.2, 414.8, 414.1, 413.2, 412.0, 410.6,\n    409.1, 411.7, 413.9, 414.6, 415.0, 415.3,\n]\n\nprint(f\"number of measurements: {len(monthly_head)}\")\nprint(f\"January (index 0):      {monthly_head[0]}\")\nprint(f\"December (index -1):    {monthly_head[-1]}\")\nprint(f\"lowest level:           {min(monthly_head)}\")\n\nSlices are half-open: [start:stop] includes start and excludes stop. So stop - start is always the number of elements you get.\n\nprint(f\"first quarter:  {monthly_head[0:3]}\")\nprint(f\"same thing:     {monthly_head[:3]}\")\nprint(f\"from July on:   {monthly_head[6:]}\")\nprint(f\"last two:       {monthly_head[-2:]}\")\n\n\nYOUR TURN 3\nExtract the monsoon months — July, August, September — into monsoon. Then find the annual range (max minus min) and store it in annual_range.\n\n# YOUR TURN\nmonsoon = ...\nannual_range = ...\n\n\n# CHECK\nassert monsoon == [409.1, 411.7, 413.9], f\"got {monsoon}\"\nassert abs(annual_range - 6.2) &lt; 1e-9, f\"expected 6.2, got {annual_range}\"\nprint(f\"Monsoon months: {monsoon}\")\nprint(f\"Annual range:   {annual_range:.1f} m. Correct.\")\n\nWorth noticing: the minimum is in June and the recovery begins in July. That shape is the monsoon signal in a hydrograph, and you’ll be plotting it in Week 7.",
+    "text": "Part 5 — Lists, indexing, slicing\nA year of monthly water-level measurements, January first.\n\nmonthly_head = [\n    415.2, 414.8, 414.1, 413.2, 412.0, 410.6,\n    409.1, 411.7, 413.9, 414.6, 415.0, 415.3,\n]\n\nprint(f\"number of measurements: {len(monthly_head)}\")\nprint(f\"January (index 0):      {monthly_head[0]}\")\nprint(f\"December (index -1):    {monthly_head[-1]}\")\nprint(f\"lowest level:           {min(monthly_head)}\")\n\nSlices are half-open: [start:stop] includes start and excludes stop. So stop - start is always the number of elements you get.\n\nprint(f\"first quarter:  {monthly_head[0:3]}\")\nprint(f\"same thing:     {monthly_head[:3]}\")\nprint(f\"from July on:   {monthly_head[6:]}\")\nprint(f\"last two:       {monthly_head[-2:]}\")\n\n\nYOUR TURN 3\nExtract the monsoon months — July, August, September — into monsoon. Then find the annual range (max minus min) and store it in annual_range.\n\n# YOUR TURN\nmonsoon = ...\nannual_range = ...\n\n\n# CHECK\nassert monsoon == [409.1, 411.7, 413.9], f\"got {monsoon}\"\nassert abs(annual_range - 6.2) &lt; 1e-9, f\"expected 6.2, got {annual_range}\"\nprint(f\"Monsoon months: {monsoon}\")\nprint(f\"Annual range:   {annual_range:.1f} m. Correct.\")\n\nWorth noticing: the minimum is in June and the recovery begins in July. That shape is the monsoon signal in a hydrograph, and you’ll be plotting it in Week 5.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1149,14 +1149,14 @@
     "href": "index.html#schedule",
     "title": "HWRS 564a — Hydrogeologic Analysis Tools & Methods I",
     "section": "Schedule",
-    "text": "Schedule\n\n\n\nWeek\nDates\nTopic\nDue\n\n\n\n\n1\n8/24\nProgram field trip — no class\n\n\n\nModule 1 · Python Foundations\n\n\n\n\n\n2\n8/31\nGetting started with Python · Data types & sequences\n\n\n\n3\n9/7\nControl flow · Functions and modules\nHW 1\n\n\n4\n9/14\nArrays with numpy · Iterative solutions\nHW 2\n\n\n5\n9/21\nIntroduction to pandas · Filtering and first plots\nHW 3 · Project 1\n\n\nModule 2 · Data Analysis & Visualization\n\n\n\n\n\n6\n9/28\nWhere data comes from · Gaps, duplicates, outliers\nHW 4\n\n\n7\n10/5\nDates and resampling · Rolling and reshaping\nHW 5\n\n\n8\n10/12\nFigures worth showing · Annotation and maps\nHW 6 · Project 2 pt 1\n\n\n9\n10/19\nRegression · Major-ion chemistry\nHW 7\n\n\nModule 3 · Introduction to MODFLOW & FloPy\n\n\n\n\n\n10\n10/26\nWhat MODFLOW is · Running it\nHW 8 · Project 2 pt 2\n\n\n11\n11/2\nInputs, outputs, hitting go · Budgets\nHW 9\n\n\n12\n11/9\nDiscretization · Unconfined flow\nHW 10\n\n\n13\n11/16\nTime and storage · Capture and ET\nHW 11 · Project 3 pt 1\n\n\n14\n11/23\nLayers, rivers, loading (Tue only)\n\n\n\nModule 4 · Reproducible Workflows\n\n\n\n\n\n15\n11/30\nDebugging and coding practices\nHW 12 · Project 3 pt 2\n\n\n16\n12/7\nProject 3 presentations (Tue only)"
+    "text": "Schedule\n\n\n\nWeek\nDates\nTopic\nDue\n\n\n\n\n1\n8/24\nProgram field trip — no class\n\n\n\nModule 1 · Python Foundations\n\n\n\n\n\n2\n8/31\nGetting started with Python · Data types & sequences\n\n\n\n3\n9/7\nControl flow · Functions and modules\nHW 1 · Wed 9/9\n\n\n4\n9/14\nArrays with numpy · Iterative solutions\n\n\n\n5\n9/21\nPandas: labelled data through time · Filter, summarise, and reshape\nHW 2 · Wed 9/23 · Project 1\n\n\nModule 2 · Data Analysis & Visualization\n\n\n\n\n\n6\n9/28\nWhere data comes from · Gaps, duplicates, outliers\n\n\n\n7\n10/5\nTopic to be announced\nHW 3 · Wed 10/7\n\n\n8\n10/12\nFigures worth showing · Annotation and maps\nProject 2 pt 1\n\n\n9\n10/19\nRegression: estimation and uncertainty · Major-ion chemistry\nHW 4 · Wed 10/21\n\n\nModule 3 · Introduction to MODFLOW & FloPy\n\n\n\n\n\n10\n10/26\nWhat MODFLOW is · Running it\nProject 2 pt 2\n\n\n11\n11/2\nInputs, outputs, hitting go · Budgets\nHW 5 · Wed 11/4\n\n\n12\n11/9\nDiscretization · Unconfined flow\n\n\n\n13\n11/16\nTime and storage · Capture and ET\nHW 6 · Wed 11/18 · Project 3 pt 1\n\n\n14\n11/23\nLayers, rivers, loading (Tue only)\n\n\n\nModule 4 · Reproducible Workflows\n\n\n\n\n\n15\n11/30\nDebugging and coding practices\nHW 7 · Wed 12/2 · Project 3 pt 2\n\n\n16\n12/7\nProject 3 presentations (Tue only)"
   },
   {
     "objectID": "index.html#how-class-works",
     "href": "index.html#how-class-works",
     "title": "HWRS 564a — Hydrogeologic Analysis Tools & Methods I",
     "section": "How class works",
-    "text": "How class works\nEach week has two sessions. Most sessions mix short lecture segments with coding exercises you work through in the slides. Most weeks open with a five-minute quiz on the previous week’s material — ten over the semester, two lowest dropped.\nHomework is assigned Mondays and due the following Wednesday at 11:59pm through D2L. No late work is accepted, and your two lowest assignment grades are dropped automatically."
+    "text": "How class works\nEach week has two sessions. Most sessions mix short lecture segments with coding exercises you work through in the slides. Most weeks open with a five-minute quiz on the previous week’s material — ten over the semester, two lowest dropped.\nSeven homework assignments are due every other Wednesday at 11:59pm through D2L. HW 1 is released during Week 2; after that, the next assignment opens on the Thursday following each deadline. Each D2L assignment contains the full prompt, and students create and submit their own executed Jupyter notebook."
   },
   {
     "objectID": "index.html#getting-help",
@@ -1337,326 +1337,196 @@
   {
     "objectID": "labs/week05/week05_lab_pandas.html",
     "href": "labs/week05/week05_lab_pandas.html",
-    "title": "Week 5 Lab — Introduction to pandas",
+    "title": "Week 5 Lab — Pandas and time series",
     "section": "",
-    "text": "HWRS 564a · Fall 2026\nEverything you did last week with numpy works on numbers in a grid. Real data comes with labels — this column is the well depth, that row is site 320906110592701 — and keeping track of which column was index 3 is how mistakes happen.\npandas is numpy with labels on it. This week we use it on the real thing: every USGS monitoring well in the Tucson basin, and a century of water levels from the best-monitored of them.",
+    "text": "Work from top to bottom. Read the prose, run each example, and complete every YOUR TURN cell. The checks verify structure and selected values; they do not replace interpreting the table and figures.\nBy the end, restart the kernel and run all cells. The completed solution should take about 2.5–3 hours in class.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
     "objectID": "labs/week05/week05_lab_pandas.html#how-to-use-this-notebook",
     "href": "labs/week05/week05_lab_pandas.html#how-to-use-this-notebook",
-    "title": "Week 5 Lab — Introduction to pandas",
-    "section": "How to use this notebook",
-    "text": "How to use this notebook\nRun each cell with Shift+Enter. Cells marked # YOUR TURN have something for you to write. Cells marked # CHECK verify your answer — if they run without complaint, you’re right.\n\nBefore you submit anything all semester: Kernel → Restart Kernel and Run All Cells. A notebook that only works when run out of order is not finished.",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "",
+    "text": "Work from top to bottom. Read the prose, run each example, and complete every YOUR TURN cell. The checks verify structure and selected values; they do not replace interpreting the table and figures.\nBy the end, restart the kernel and run all cells. The completed solution should take about 2.5–3 hours in class.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
     "objectID": "labs/week05/week05_lab_pandas.html#learning-objectives",
     "href": "labs/week05/week05_lab_pandas.html#learning-objectives",
-    "title": "Week 5 Lab — Introduction to pandas",
+    "title": "Week 5 Lab — Pandas and time series",
     "section": "Learning objectives",
-    "text": "Learning objectives\nBy the end of this notebook you can:\n\nRead a CSV into a DataFrame and inspect it before trusting it\nSelect columns, rows, and both at once with .loc and .iloc\nFilter rows with a boolean mask, including several conditions at once\nCompute a new column from existing ones\nRead an Excel file, because collaborators will send you them forever\nMake a first plot straight from a DataFrame",
+    "text": "Learning objectives\nBy the end of this lab, you should be able to:\n\nread and inspect a labelled table;\nselect and filter rows without silently losing track of missing values;\nparse dates and use a DatetimeIndex;\ndistinguish monthly resampling from a monthly climatology;\ncompute water-year and rolling summaries; and\ngroup and reshape irregular groundwater observations.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
-    "objectID": "labs/week05/week05_lab_pandas.html#part-1-reading-data-and-looking-before-you-leap",
-    "href": "labs/week05/week05_lab_pandas.html#part-1-reading-data-and-looking-before-you-leap",
-    "title": "Week 5 Lab — Introduction to pandas",
-    "section": "Part 1 — Reading data, and looking before you leap",
-    "text": "Part 1 — Reading data, and looking before you leap\nEvery dataset in this course lives in data/, referenced by a path relative to the repo root. Never a hardcoded /Users/... — your notebook has to run in someone else’s codespace.\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\n\n# Walk up from wherever this notebook is until we find the repo root, then\n# point at data/. Counting \"../..\" works right up until you move the file.\nROOT = next(p for p in Path.cwd().parents if (p / \"pyproject.toml\").exists())\nDATA = ROOT / \"data\"\nprint(f\"reading from {DATA}\")\nprint(sorted(p.name for p in DATA.glob(\"*\")))\n\n\nwells = pd.read_csv(DATA / \"tucson_basin_wells.csv\", dtype={\"site_no\": str})\n\nprint(f\"{len(wells):,} wells, {wells.shape[1]} columns\")\nwells.head()\n\ndtype={\"site_no\": str} is not decoration. Site numbers are 15-digit identifiers, and pandas would happily read them as integers and drop leading zeros — quietly breaking every join you make later.\nFour things to check before you trust a table. Do these every time.\n\nprint(\"--- dtypes: is anything a string that should be a number? ---\")\nprint(wells.dtypes)\n\n\nprint(\"--- how much is missing? ---\")\nprint(wells.isna().sum())\n\n\nprint(\"--- do the numbers look physical? ---\")\nwells[[\"land_surface_elev_ft\", \"well_depth_ft\", \"latitude\", \"longitude\"]].describe()\n\nRead that table. The wells range from 30 ft to over 3,000 ft deep, land surface runs 1,900–3,600 ft, and aquifer_code is missing for almost every well. None of that is wrong, but all of it is worth knowing before you compute a mean.\n\nYOUR TURN 1\nAnswer three questions about the table, in code rather than by reading the output above:\n\nn_wells — how many wells are there?\nn_missing_depth — how many are missing well_depth_ft?\ndeepest_ft — how deep is the deepest well?\n\n\n# YOUR TURN\nn_wells = ...\nn_missing_depth = ...\ndeepest_ft = ...\n\n\n# CHECK\nassert n_wells == len(wells), f\"expected {len(wells)}, got {n_wells}\"\nassert n_missing_depth == wells[\"well_depth_ft\"].isna().sum()\nassert abs(deepest_ft - wells[\"well_depth_ft\"].max()) &lt; 1e-9\nprint(f\"{n_wells:,} wells; {n_missing_depth} missing a depth; \"\n      f\"deepest is {deepest_ft:,.0f} ft.\")\nprint(\"Correct.\")",
+    "objectID": "labs/week05/week05_lab_pandas.html#setup-find-the-repository-data",
+    "href": "labs/week05/week05_lab_pandas.html#setup-find-the-repository-data",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "Setup — find the repository data",
+    "text": "Setup — find the repository data\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\n\nROOT = next(\n    p for p in [Path.cwd(), *Path.cwd().parents]\n    if (p / \"pyproject.toml\").exists()\n)\nDATA = ROOT / \"data\"\nprint(f\"reading course data from {DATA}\")",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
-    "objectID": "labs/week05/week05_lab_pandas.html#part-2-getting-at-the-data",
-    "href": "labs/week05/week05_lab_pandas.html#part-2-getting-at-the-data",
-    "title": "Week 5 Lab — Introduction to pandas",
-    "section": "Part 2 — Getting at the data",
-    "text": "Part 2 — Getting at the data\nA DataFrame is a dictionary of columns. One column is a Series.\n\ndepths = wells[\"well_depth_ft\"]\n\nprint(type(depths))\nprint(depths.head(3))\nprint(f\"\\nmean depth: {depths.mean():.0f} ft   (NaNs are skipped, silently)\")\n\nA list of column names gives you back a DataFrame with those columns:\n\nwells[[\"site_no\", \"station_name\", \"well_depth_ft\"]].head(3)\n\nFor rows, there are two accessors and the distinction matters:\n\n.loc[] works on labels — the index value, and the column name\n.iloc[] works on integer positions — like a numpy array\n\nThey agree here only because the index happens to be 0, 1, 2, …\n\nprint(\".iloc[3] — the fourth row by position\")\nprint(wells.iloc[3][[\"site_no\", \"well_depth_ft\"]])\nprint()\nprint(\".loc[3] — the row whose index label is 3\")\nprint(wells.loc[3][[\"site_no\", \"well_depth_ft\"]])\n\nSet a meaningful index and they part company immediately:\n\nby_site = wells.set_index(\"site_no\")\n\nprint(by_site.loc[\"320906110592701\", [\"station_name\", \"well_depth_ft\"]])\nprint()\nprint(\"...and .iloc[0] is still just 'whatever is first':\")\nprint(by_site.iloc[0][[\"station_name\", \"well_depth_ft\"]])\n\n.loc takes rows and columns: .loc[rows, columns]. A slice with .loc is inclusive of its endpoint, unlike every other slice in Python. That inconsistency is real and it catches everyone once.\n\nprint(\"iloc[2:5] gives 3 rows:\", len(wells.iloc[2:5]))\nprint(\"loc[2:5]  gives 4 rows:\", len(wells.loc[2:5]))\n\n\nYOUR TURN 2\nUsing .loc, pull out the station_name and land_surface_elev_ft of the well with site number \"320824110593001\" from by_site, into a Series called one_well.\n\n# YOUR TURN\none_well = ...\n\n\n# CHECK\nassert isinstance(one_well, pd.Series), f\"expected a Series, got {type(one_well)}\"\nassert list(one_well.index) == [\"station_name\", \"land_surface_elev_ft\"], \\\n    f\"wrong columns: {list(one_well.index)}\"\nassert one_well[\"station_name\"] == \"D-15-13 11CBA\", f\"got {one_well['station_name']!r}\"\nprint(one_well)\nprint(\"Correct.\")",
+    "objectID": "labs/week05/week05_lab_pandas.html#part-1-read-and-inspect-before-calculating",
+    "href": "labs/week05/week05_lab_pandas.html#part-1-read-and-inspect-before-calculating",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "Part 1 — Read and inspect before calculating",
+    "text": "Part 1 — Read and inspect before calculating\nThe well inventory has one row per registered well. site_no is an identifier, so read it as text even though it contains digits.\n\nwells = pd.read_csv(\n    DATA / \"tucson_basin_wells.csv\",\n    dtype={\"site_no\": str},\n)\n\nprint(wells.shape)\nprint(wells.dtypes)\nprint(wells.isna().sum())\nwells.head()\n\n\nYOUR TURN 1\nCalculate the number of wells, the number missing well_depth_ft, and the deepest reported well. Use the table rather than typing known answers.\n\n# YOUR TURN\nn_wells = ...\nn_missing_depth = ...\ndeepest_ft = ...\n\n\n# CHECK\nassert n_wells == len(wells)\nassert n_missing_depth == wells[\"well_depth_ft\"].isna().sum()\nassert deepest_ft == wells[\"well_depth_ft\"].max()\nassert (n_wells, n_missing_depth, deepest_ft) == (1693, 184, 2505.0)\nprint(f\"{n_wells:,} wells; {n_missing_depth} missing depth; deepest {deepest_ft:,.0f} ft\")\n\nWhy specify the dtype? Reading site_no as a number can remove a leading zero, which changes the identifier and later breaks joins.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
-    "objectID": "labs/week05/week05_lab_pandas.html#part-3-filtering",
-    "href": "labs/week05/week05_lab_pandas.html#part-3-filtering",
-    "title": "Week 5 Lab — Introduction to pandas",
-    "section": "Part 3 — Filtering",
-    "text": "Part 3 — Filtering\nA comparison on a column gives a boolean Series. Indexing with it keeps the True rows. This is the numpy mask from last week, with labels attached.\n\ndeep = wells[wells[\"well_depth_ft\"] &gt; 1000]\n\nprint(f\"{len(deep)} wells deeper than 1000 ft\")\ndeep[[\"site_no\", \"station_name\", \"well_depth_ft\"]].head()\n\nCombine conditions with & (and) and | (or). Each condition needs its own parentheses — & binds more tightly than &gt;, so leaving them out is a TypeError, and an especially unhelpful one.\n\ndeep_and_high = wells[\n    (wells[\"well_depth_ft\"] &gt; 1000) & (wells[\"land_surface_elev_ft\"] &gt; 2500)\n]\nprint(f\"{len(deep_and_high)} wells that are both deep and up-basin\")\n\n\nYOUR TURN 3\nFind the wells in the northwest of the study area that are shallow:\n\nlatitude greater than 32.3\nlongitude less than −111.0\nwell_depth_ft less than 200\n\nPut them in nw_shallow, and put the count in n_nw_shallow.\n\n# YOUR TURN\nnw_shallow = ...\nn_nw_shallow = ...\n\n\n# CHECK\nexpected = wells[\n    (wells[\"latitude\"] &gt; 32.3)\n    & (wells[\"longitude\"] &lt; -111.0)\n    & (wells[\"well_depth_ft\"] &lt; 200)\n]\nassert n_nw_shallow == len(expected), f\"expected {len(expected)}, got {n_nw_shallow}\"\nassert set(nw_shallow[\"site_no\"]) == set(expected[\"site_no\"]), \"different wells selected\"\nprint(f\"{n_nw_shallow} shallow wells in the northwest.\")\nprint(nw_shallow[[\"site_no\", \"latitude\", \"longitude\", \"well_depth_ft\"]].head())\nprint(\"Correct.\")\n\nWorth noticing: a well missing its depth is excluded by well_depth_ft &lt; 200, because a comparison against NaN is always False. That is usually what you want, but it is never announced. If 184 wells have no depth on file, 184 wells silently left your analysis.",
+    "objectID": "labs/week05/week05_lab_pandas.html#part-2-select-columns-and-filter-rows",
+    "href": "labs/week05/week05_lab_pandas.html#part-2-select-columns-and-filter-rows",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "Part 2 — Select columns and filter rows",
+    "text": "Part 2 — Select columns and filter rows\nOne name selects a Series; a list of names selects a DataFrame.\n\ndepth = wells[\"well_depth_ft\"]\nlocation_and_depth = wells[[\"site_no\", \"latitude\", \"longitude\", \"well_depth_ft\"]]\nprint(type(depth).__name__, type(location_and_depth).__name__)\n\nA filter is a boolean Series aligned with the table’s index. Inspect missing depths before applying a depth comparison: NaN fails every comparison and the row otherwise disappears without a warning.\n\nYOUR TURN 2\nCreate an independent table named selected containing wells that:\n\nare between 100 and 300 ft deep, inclusive; and\nhave latitude greater than 32.2°.\n\nUse .loc[...] and .copy(). Then calculate n_selected and median_depth_ft.\n\n# YOUR TURN\nselected = ...\nn_selected = ...\nmedian_depth_ft = ...\n\n\n# CHECK\nassert selected is not wells\nassert selected[\"well_depth_ft\"].between(100, 300).all()\nassert (selected[\"latitude\"] &gt; 32.2).all()\nassert n_selected == 375\nassert median_depth_ft == 200.0\nprint(f\"{n_selected} selected wells; median depth {median_depth_ft:.0f} ft\")",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
-    "objectID": "labs/week05/week05_lab_pandas.html#part-4-new-columns",
-    "href": "labs/week05/week05_lab_pandas.html#part-4-new-columns",
-    "title": "Week 5 Lab — Introduction to pandas",
-    "section": "Part 4 — New columns",
-    "text": "Part 4 — New columns\nAssigning to a column that doesn’t exist creates it. The arithmetic is elementwise, exactly like numpy.\n\nwells[\"well_depth_m\"] = wells[\"well_depth_ft\"] * 0.3048\nwells[\"screen_bottom_elev_ft\"] = wells[\"land_surface_elev_ft\"] - wells[\"well_depth_ft\"]\n\nwells[[\"site_no\", \"land_surface_elev_ft\", \"well_depth_ft\", \"screen_bottom_elev_ft\"]].head()\n\nNow the water levels — 9,046 measurements from the 80 best-monitored wells in the basin, going back to 1922.\n\nlevels = pd.read_csv(\n    DATA / \"tucson_water_levels.csv\",\n    dtype={\"site_no\": str},\n    parse_dates=[\"date\"],\n)\n\nprint(f\"{len(levels):,} measurements, {levels['site_no'].nunique()} wells\")\nprint(f\"from {levels['date'].min():%Y-%m-%d} to {levels['date'].max():%Y-%m-%d}\")\nlevels.head()\n\nThis is long format: one row per measurement, with the well identified in a column rather than by position. Nearly all real monitoring data arrives this way. Reshaping it is a Week 7 topic; for now we just filter it.\n\none_site = levels[levels[\"site_no\"] == \"320824110593001\"].sort_values(\"date\")\n\nprint(f\"{len(one_site)} measurements spanning \"\n      f\"{one_site['date'].min():%Y} to {one_site['date'].max():%Y}\")\none_site[[\"date\", \"depth_to_water_ft\", \"water_level_elev_ft\"]].head()\n\n\nYOUR TURN 4\ndepth_to_water_ft counts downward from the land surface, so a rising number means a falling water table — which is exactly the wrong way round for plotting, and a reliable source of sign errors.\nFor one_site, add a column decline_ft giving how far the water table has dropped since the first measurement in the record.\nThe first row should be 0.0, and later rows positive where the level has fallen.\n\none_site = one_site.copy()      # avoid a SettingWithCopyWarning; see the note below\n\n# YOUR TURN\none_site[\"decline_ft\"] = ...\n\n\n# CHECK\nassert \"decline_ft\" in one_site.columns\nassert abs(one_site[\"decline_ft\"].iloc[0]) &lt; 1e-9, \"the first measurement should be 0\"\nlast = one_site[\"decline_ft\"].iloc[-1]\nassert abs(last - 111.05) &lt; 0.01, f\"expected about 111.05 ft of decline, got {last}\"\nprint(f\"first measurement: {one_site['date'].iloc[0]:%Y-%m-%d}, \"\n      f\"{one_site['depth_to_water_ft'].iloc[0]:.1f} ft down\")\nprint(f\"last measurement:  {one_site['date'].iloc[-1]:%Y-%m-%d}, \"\n      f\"{one_site['depth_to_water_ft'].iloc[-1]:.1f} ft down\")\nprint(f\"net decline:       {last:.1f} ft. Correct.\")\n\n\nThat .copy(). Slicing a DataFrame sometimes gives you a view and sometimes a copy, and assigning into a view raises SettingWithCopyWarning. When you plan to modify a subset, take an explicit .copy() first. It is the most common warning you will see this semester and the fix is always this.\n\nA hundred and eleven feet, in one well, in one lifetime. That is what basin groundwater depletion looks like in a table.",
+    "objectID": "labs/week05/week05_lab_pandas.html#part-3-dates-become-a-coordinate",
+    "href": "labs/week05/week05_lab_pandas.html#part-3-dates-become-a-coordinate",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "Part 3 — Dates become a coordinate",
+    "text": "Part 3 — Dates become a coordinate\nThe groundwater-level table is long: each row is one measurement, while site_no identifies the well. Parse the dates when reading the CSV.\n\nlevels = pd.read_csv(\n    DATA / \"tucson_water_levels.csv\",\n    dtype={\"site_no\": str},\n    parse_dates=[\"date\"],\n)\n\nprint(levels[[\"site_no\", \"date\", \"depth_to_water_ft\"]].dtypes)\nprint(levels[\"date\"].min(), \"to\", levels[\"date\"].max())\n\n\nYOUR TURN 3\n\nFind the site with the most measurements and store its identifier as most_observed_site.\nFilter that site, make date the index, and sort it into a DataFrame named one_site.\nUse partial-string selection to create historical, containing 1950 through 1979 inclusive.\n\n\n# YOUR TURN\nmost_observed_site = ...\none_site = ...\nhistorical = ...\n\n\n# CHECK\nassert most_observed_site == \"320906110592701\"\nassert isinstance(one_site.index, pd.DatetimeIndex)\nassert one_site.index.is_monotonic_increasing\nassert len(one_site) == 547\nassert len(historical) == 308\nassert historical.index.min().year == 1950\nassert historical.index.max().year == 1979\nprint(f\"site {most_observed_site}: {len(one_site)} measurements; {len(historical)} in 1950–1979\")\n\nMake a quick diagnostic plot. Depth is measured downward, so invert the axis.\n\nfig, ax = plt.subplots(figsize=(9, 3.5))\nax.plot(one_site.index, one_site[\"depth_to_water_ft\"], color=\"#0C234B\", lw=1)\nax.invert_yaxis()\nax.set_xlabel(\"date\")\nax.set_ylabel(\"depth to water (ft below land surface)\")\nax.set_title(f\"Groundwater record at site {most_observed_site}\")\nax.grid(alpha=0.25)\nplt.show()",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
-    "objectID": "labs/week05/week05_lab_pandas.html#part-5-the-one-excel-file",
-    "href": "labs/week05/week05_lab_pandas.html#part-5-the-one-excel-file",
-    "title": "Week 5 Lab — Introduction to pandas",
-    "section": "Part 5 — The one Excel file",
-    "text": "Part 5 — The one Excel file\nYou will not use Excel in this course. You will absolutely be sent Excel files, forever, by people who are not going to stop. Reading one is a Python skill.\n\nperm = pd.read_excel(DATA / \"week04_permeameter.xlsx\", sheet_name=\"Constant Head\")\nperm.head()\n\npd.read_excel is pd.read_csv with a sheet_name. Everything after this point is identical — which is the whole point.\n\nYOUR TURN 5\nCompute hydraulic conductivity for each permeameter run and add it as a column K_m_per_day.\nFor a constant-head permeameter, Darcy’s law rearranges to\n\\[K = \\frac{Q L}{A \\, \\Delta h}\\]\nwhere \\(Q\\) is the flow rate, \\(L\\) the sample length, \\(A\\) the cross-sectional area, and \\(\\Delta h\\) the head difference.\nTwo steps to get right:\n\n\\(Q\\) is volume_collected_cm3 / duration_s, in cm³/s\nthe answer comes out in cm/s; multiply by 864 to get m/d\n\n\n# YOUR TURN\narea_cm2 = ...\nflow_cm3_per_s = ...\nperm[\"K_m_per_day\"] = ...\n\n\n# CHECK\nassert \"K_m_per_day\" in perm.columns\nby_material = perm.groupby(\"material\")[\"K_m_per_day\"].mean()\nassert abs(by_material[\"coarse sand\"] - 28.7) &lt; 0.5, f\"got {by_material['coarse sand']:.2f}\"\nassert abs(by_material[\"fine sand\"] - 4.4) &lt; 0.2, f\"got {by_material['fine sand']:.2f}\"\nassert abs(by_material[\"silty sand\"] - 0.66) &lt; 0.05, f\"got {by_material['silty sand']:.2f}\"\nprint(by_material.round(2).to_string())\nprint(\"\\nThree orders of magnitude between coarse sand and silty sand. Correct.\")\n\nThat spread is the single most important number in hydrogeology. Hydraulic conductivity varies over about thirteen orders of magnitude across earth materials — from gravel to unfractured granite — which is why a model calibrated on the wrong lithology is not slightly wrong.",
+    "objectID": "labs/week05/week05_lab_pandas.html#part-4-resample-a-daily-streamflow-record",
+    "href": "labs/week05/week05_lab_pandas.html#part-4-resample-a-daily-streamflow-record",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "Part 4 — Resample a daily streamflow record",
+    "text": "Part 4 — Resample a daily streamflow record\nRead the cached Sabino Creek daily discharge record and create a sorted DatetimeIndex.\n\nflow = (\n    pd.read_csv(DATA / \"cache\" / \"nwis_09484000_dv.csv\", parse_dates=[\"datetime\"])\n    .set_index(\"datetime\")\n    .sort_index()\n)\n\nassert flow.index.is_unique\nassert flow.index.is_monotonic_increasing\nprint(flow.index.min(), \"to\", flow.index.max(), f\"({len(flow):,} days)\")\n\n\nYOUR TURN 4\nCreate:\n\nmonsoon_2006: July through September 2006;\nmonthly_mean: mean discharge for every separate calendar month; and\nwater_year_mean: mean discharge for years ending September 30.\n\n\n# YOUR TURN\nmonsoon_2006 = ...\nmonthly_mean = ...\nwater_year_mean = ...\n\n\n# CHECK\nassert len(monsoon_2006) == 92\nassert len(monthly_mean) == 240\nassert len(water_year_mean) == 21\nnp.testing.assert_allclose(monsoon_2006[\"discharge_cfs\"].mean(), 93.2676087)\nprint(f\"monsoon 2006 mean: {monsoon_2006['discharge_cfs'].mean():.1f} cfs\")\nprint(f\"{len(monthly_mean)} monthly values and {len(water_year_mean)} water-year values\")\n\nWhy are there 21 water-year values in a 20-calendar-year record? The January 2005 start and December 2024 end create partial water years. Those edge bins must be identified before comparing annual values.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
-    "objectID": "labs/week05/week05_lab_pandas.html#part-6-a-first-plot",
-    "href": "labs/week05/week05_lab_pandas.html#part-6-a-first-plot",
-    "title": "Week 5 Lab — Introduction to pandas",
-    "section": "Part 6 — A first plot",
-    "text": "Part 6 — A first plot\nA DataFrame plots itself. This is not the polished version — Week 8 is about making figures worth showing people — but it is what you use while you are still working out what the data says.\n\nfig, ax = plt.subplots(figsize=(9, 3.8))\nax.plot(one_site[\"date\"], one_site[\"depth_to_water_ft\"],\n        color=\"#AB0520\", lw=1.2, marker=\".\", ms=3)\nax.invert_yaxis()          # depth increases downward; so should the axis\nax.set_ylabel(\"depth to water (ft below land surface)\")\nax.set_title(\"Well D-15-13 11CBA — one well, one century\")\nax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\nNote invert_yaxis(). Plotting depth-below-surface the normal way up draws a falling water table as a rising line, and someone will misread it. When the quantity counts downward, so should the axis.\n\nYOUR TURN 6\nMake a scatter plot of the whole well inventory: longitude on the x axis, latitude on the y, with the marker colour set by well_depth_ft.\nStore the result of ax.scatter(...) in sc so the check can look at it, and add a colorbar.\n\nfig, ax = plt.subplots(figsize=(7, 6))\n\n# YOUR TURN\nsc = ...\n\nfig.colorbar(sc, ax=ax, label=\"well depth (ft)\")\nax.set_xlabel(\"longitude\")\nax.set_ylabel(\"latitude\")\nax.set_title(\"Tucson basin monitoring wells\")\nax.set_aspect(\"equal\")\nplt.tight_layout()\nplt.show()\n\n\n# CHECK\nassert sc is not None, \"assign the result of ax.scatter(...) to sc\"\nassert sc.get_offsets().shape[0] == len(wells), \\\n    f\"plotted {sc.get_offsets().shape[0]} points, expected {len(wells)}\"\nassert sc.get_array() is not None, \"pass c=... so the colour carries the depth\"\nprint(f\"{len(wells):,} wells plotted, coloured by depth. Correct.\")\n\nThink about this before next week: the deep wells are not scattered at random. They cluster, and the clusters line up with the basin axis and with where the water has been pumped hardest. Making that legible — rather than merely visible — is what Week 8 is about.",
+    "objectID": "labs/week05/week05_lab_pandas.html#part-5-rolling-windows-retain-the-daily-coordinate",
+    "href": "labs/week05/week05_lab_pandas.html#part-5-rolling-windows-retain-the-daily-coordinate",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "Part 5 — Rolling windows retain the daily coordinate",
+    "text": "Part 5 — Rolling windows retain the daily coordinate\nResampling returns fewer values. A rolling window keeps the daily index and summarises neighbouring days.\n\nYOUR TURN 5\nCalculate a centred 30-day rolling mean of discharge. Store the date and value of the largest rolling mean as wettest_30_day_date and wettest_30_day_cfs.\n\n# YOUR TURN\nrolling_30 = ...\nwettest_30_day_date = ...\nwettest_30_day_cfs = ...\n\n\n# CHECK\nassert rolling_30.isna().sum() == 29\nassert wettest_30_day_date == pd.Timestamp(\"2006-08-12\")\nnp.testing.assert_allclose(wettest_30_day_cfs, 258.2266667)\nprint(f\"wettest sustained month centred on {wettest_30_day_date:%Y-%m-%d}: \"\n      f\"{wettest_30_day_cfs:.1f} cfs\")\n\n\nfig, ax = plt.subplots(figsize=(10, 3.8))\nax.plot(flow.index, flow[\"discharge_cfs\"], color=\"0.75\", lw=0.5, label=\"daily\")\nax.plot(rolling_30.index, rolling_30, color=\"#AB0520\", lw=1.5, label=\"30-day mean\")\nax.set_xlabel(\"date\")\nax.set_ylabel(\"discharge (cfs)\")\nax.set_title(\"A rolling mean separates sustained wet periods from daily peaks\")\nax.legend(frameon=False)\nplt.show()",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
+    ]
+  },
+  {
+    "objectID": "labs/week05/week05_lab_pandas.html#part-6-group-long-data-then-reshape-only-when-needed",
+    "href": "labs/week05/week05_lab_pandas.html#part-6-group-long-data-then-reshape-only-when-needed",
+    "title": "Week 5 Lab — Pandas and time series",
+    "section": "Part 6 — Group long data, then reshape only when needed",
+    "text": "Part 6 — Group long data, then reshape only when needed\nGroundwater measurements remain most compact in long form. First summarise each site without reshaping. Sort by site and date before asking for the first and last measurement.\n\nYOUR TURN 6\n\nSort the measurements as ordered.\nBuild site_summary with the count, first depth, and last depth for every site.\nAdd change_ft = last - first and count sites with positive change as n_declining.\nFind the three sites with the most measurements and pivot only those records into wide, with dates as rows and sites as columns.\n\n\n# YOUR TURN\nordered = ...\nsite_summary = ...\nsite_summary[\"change_ft\"] = ...\nn_declining = ...\n\ntop_three = ...\nwide = ...\n\n\n# CHECK\nassert site_summary.shape == (80, 4)\nassert n_declining == 73\nnp.testing.assert_allclose(site_summary[\"change_ft\"].median(), 46.83)\nassert wide.shape == (1185, 3)\nassert wide.isna().sum().sum() == 2281\nprint(f\"{n_declining} of {len(site_summary)} sites have positive depth change\")\nprint(f\"wide table: {wide.shape}; {wide.isna().sum().sum():,} empty cells\")\n\nPositive depth change means the water table moved downward. The wide table is useful for aligned comparison, but it is sparse because field visits did not occur on the same dates. Missing cells are absence of measurement, not zero depth.",
+    "crumbs": [
+      "Home",
+      "Module 1 · Python Foundations",
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
     "objectID": "labs/week05/week05_lab_pandas.html#before-you-leave",
     "href": "labs/week05/week05_lab_pandas.html#before-you-leave",
-    "title": "Week 5 Lab — Introduction to pandas",
+    "title": "Week 5 Lab — Pandas and time series",
     "section": "Before you leave",
-    "text": "Before you leave\n\nKernel → Restart Kernel and Run All Cells\nFix anything that breaks\nSave",
+    "text": "Before you leave\n\nRestart the kernel and run all cells.\nConfirm that all six CHECK cells pass.\nSave the notebook.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
     "objectID": "labs/week05/week05_lab_pandas.html#whats-due",
     "href": "labs/week05/week05_lab_pandas.html#whats-due",
-    "title": "Week 5 Lab — Introduction to pandas",
+    "title": "Week 5 Lab — Pandas and time series",
     "section": "What’s due",
-    "text": "What’s due\n\nHW 3 — Iterative groundwater solution, Wednesday 9/23 at 11:59pm\nProject 1 analysis component — see the project brief on D2L",
+    "text": "What’s due\nHW 2 — Numerical water balance, Wednesday 9/23 at 11:59pm through D2L.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
     "objectID": "labs/week05/week05_lab_pandas.html#next-week",
     "href": "labs/week05/week05_lab_pandas.html#next-week",
-    "title": "Week 5 Lab — Introduction to pandas",
+    "title": "Week 5 Lab — Pandas and time series",
     "section": "Next week",
-    "text": "Next week\nWhere data actually comes from: pulling records straight from the USGS API, and dealing with the gaps, duplicates, and outliers that arrive with them.",
+    "text": "Next week\nYou will retrieve hydrologic records and diagnose gaps, duplicates, and outliers. The table and time-series operations in this lab are the tools you will use to do it.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
     "objectID": "labs/week05/week05_lab_pandas.html#stuck",
     "href": "labs/week05/week05_lab_pandas.html#stuck",
-    "title": "Week 5 Lab — Introduction to pandas",
+    "title": "Week 5 Lab — Pandas and time series",
     "section": "Stuck?",
-    "text": "Stuck?\n\nKeyError: 'well_depth' means the column is spelled differently. Print wells.columns rather than guessing.\nSettingWithCopyWarning means you are assigning into something that might be a view. Take a .copy() when you slice.\nTypeError: cannot compare ... when combining filters almost always means a missing pair of parentheses around one of the conditions.\nA mean that comes out as NaN means the whole column is NaN; a mean that looks slightly off usually means some rows were skipped. .isna().sum() tells you which.\nOffice hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.",
+    "text": "Stuck?\n\nPrint .shape, .dtypes, and .index before guessing what an object is.\nIf a date slice fails, confirm the index is a sorted DatetimeIndex.\nIf a filter drops too many rows, inspect missing values in every filtered column.\nIf pivot raises a duplicate-entry error, check the site-date pairs rather than switching immediately to pivot_table.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
-      "Week 5 — Introduction to pandas",
-      "Lab · Introduction to pandas"
+      "Week 5 — Pandas and time series",
+      "Lab · Pandas and time series"
     ]
   },
   {
     "objectID": "labs/week07/week07_lab_timeseries.html",
     "href": "labs/week07/week07_lab_timeseries.html",
-    "title": "Week 7 Lab — Time series with pandas",
+    "title": "Week 7 Lab — Topic to be announced",
     "section": "",
-    "text": "HWRS 564a · Fall 2026\nAlmost everything in hydrology is a time series, and pandas has a whole second personality for them. Give a DataFrame a DatetimeIndex and you can ask for “2015”, “every August”, “a 30-day average”, or “annual totals by water year” without writing a single loop over dates.\nThis week is that personality: resample, groupby, rolling, and reshaping between long and wide.",
+    "text": "The former time-series lab has moved into the Week 5 introduction to pandas. Datetime indexing, resampling, grouping, rolling windows, and reshaping are now practiced in labs/week05/week05_lab_pandas.ipynb.\nThis notebook is a placeholder. Replacement Week 7 lab material will be added after the new topic is selected.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#how-to-use-this-notebook",
-    "href": "labs/week07/week07_lab_timeseries.html#how-to-use-this-notebook",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "How to use this notebook",
-    "text": "How to use this notebook\nRun each cell with Shift+Enter. Cells marked # YOUR TURN have something for you to write. Cells marked # CHECK verify your answer — if they run without complaint, you’re right.\n\nBefore you submit anything all semester: Kernel → Restart Kernel and Run All Cells. A notebook that only works when run out of order is not finished.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#learning-objectives",
-    "href": "labs/week07/week07_lab_timeseries.html#learning-objectives",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nBy the end of this notebook you can:\n\nBuild a DatetimeIndex and select periods by partial string\nUse the .dt accessor to pull year, month, and day-of-year out of a column\nresample a daily series to monthly and annual, and pick the right aggregation\nGroup by a derived key — including the water year, which is not the calendar year\nSmooth with rolling, and say what a centred window does to the ends\nReshape long to wide with pivot_table, and back with melt",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#part-1-the-datetimeindex",
-    "href": "labs/week07/week07_lab_timeseries.html#part-1-the-datetimeindex",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Part 1 — The DatetimeIndex",
-    "text": "Part 1 — The DatetimeIndex\nReading dates as text gets you strings. Reading them as dates gets you a whole API.\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\n\nROOT = next(p for p in Path.cwd().parents if (p / \"pyproject.toml\").exists())\nDATA = ROOT / \"data\"\n\nflow = pd.read_csv(DATA / \"cache\" / \"nwis_09484000_dv.csv\", parse_dates=[\"datetime\"])\nflow = flow.set_index(\"datetime\").sort_index()\n\nprint(type(flow.index))\nprint(f\"{len(flow):,} days, {flow.index.min():%Y-%m-%d} to {flow.index.max():%Y-%m-%d}\")\nflow.head(3)\n\nWith a DatetimeIndex you can slice with partial strings. This is the single most useful thing in this notebook.\n\nprint(f'flow.loc[\"2006\"]         -&gt; {len(flow.loc[\"2006\"]):,} rows (a whole year)')\nprint(f'flow.loc[\"2006-08\"]      -&gt; {len(flow.loc[\"2006-08\"]):,} rows (one month)')\nprint(f'flow.loc[\"2006-07\":\"2006-09\"] -&gt; {len(flow.loc[\"2006-07\":\"2006-09\"]):,} rows')\n\nNote that a .loc slice on dates is inclusive at both ends — the same rule as label slices from Week 5, and here it is what you want.\nThe .dt accessor does the same job on a column that isn’t the index.\n\nlevels = pd.read_csv(DATA / \"tucson_water_levels.csv\",\n                     dtype={\"site_no\": str}, parse_dates=[\"date\"])\n\nprint(levels[\"date\"].dt.year.head(3).tolist())\nprint(levels[\"date\"].dt.month.head(3).tolist())\nprint(levels[\"date\"].dt.dayofyear.head(3).tolist())\nprint(levels[\"date\"].dt.quarter.head(3).tolist())\n\n\nYOUR TURN 1\nPull out the monsoon of 2006 — July through September — and describe it.\n\nmonsoon_2006 — the rows of flow for those three months\nmonsoon_peak — the largest daily discharge in that window\nmonsoon_days — how many days are in it\n\n\n# YOUR TURN\nmonsoon_2006 = ...\nmonsoon_peak = ...\nmonsoon_days = ...\n\n\n# CHECK\nassert monsoon_days == 92, f\"July-September is 92 days, got {monsoon_days}\"\nassert isinstance(monsoon_2006.index, pd.DatetimeIndex), \"you lost the index somewhere\"\nassert monsoon_2006.index.min().month == 7 and monsoon_2006.index.max().month == 9\nassert abs(monsoon_peak - 2450.0) &lt; 1.0, f\"expected about 2450 cfs, got {monsoon_peak}\"\nprint(f\"{monsoon_days} days, peaking at {monsoon_peak:,.0f} cfs\")\nprint(\"Correct.\")",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#part-2-resampling",
-    "href": "labs/week07/week07_lab_timeseries.html#part-2-resampling",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Part 2 — Resampling",
-    "text": "Part 2 — Resampling\nresample is groupby for time. You give it a frequency and an aggregation.\n\nq = flow[\"discharge_cfs\"]\n\nmonthly = q.resample(\"ME\").mean()      # ME = month end\nannual = q.resample(\"YE\").mean()       # YE = year end\n\nprint(f\"{len(q):,} daily -&gt; {len(monthly)} monthly -&gt; {len(annual)} annual\")\nprint()\nprint(annual.round(1).head(5).to_string())\n\nChoosing the aggregation is a hydrology decision, not a pandas one.\n\n\n\nYou want\nUse\n\n\n\n\naverage conditions\n.mean()\n\n\ntotal volume of water\n.sum()\n\n\nflood risk\n.max()\n\n\na typical day, ignoring floods\n.median()\n\n\n\nFor discharge in cfs, .sum() over a month gives you cfs-days — a volume, and a perfectly good one, as long as you say so in the axis label.\n\nprint(f\"wettest year: {annual.idxmax():%Y} at {annual.max():.1f} cfs mean daily\")\nprint(f\"driest year:  {annual.idxmin():%Y} at {annual.min():.1f} cfs mean daily\")\nprint(f\"ratio: {annual.max() / annual.min():.0f}x between the two\")\n\nA factor of ten between the wettest and driest year, in the same creek. Any analysis that uses “the average year” is describing a year that does not occur.\n\nThe water year\nHydrologists count years from October 1 to September 30, so that a winter snowpack and the melt it produces land in the same year. Calendar years split them, which makes every winter storm look like it belongs to the wrong season.\nPandas knows about this: resample(\"YE-SEP\") ends years in September.\n\ncalendar_totals = q.resample(\"YE\").sum()\nwater_year_totals = q.resample(\"YE-SEP\").sum()\n\nprint(f\"calendar years: {len(calendar_totals)}\")\nprint(f\"water years:    {len(water_year_totals)}\")\nprint()\nprint(\"water-year totals, cfs-days:\")\nprint(water_year_totals.head(4).round(0).to_string())\n\n\n\nYOUR TURN 2\nBuild the monthly climatology of Sabino Creek: the long-term average flow in each calendar month, across all twenty years.\nThis is not resample — resample would give you 240 separate months. You want all the Januaries averaged together, so group by the month number.\n\n# YOUR TURN\nclimatology = ...\n\n\n# CHECK\nassert len(climatology) == 12, f\"expected 12 values, got {len(climatology)}\"\nassert climatology.index.min() == 1 and climatology.index.max() == 12\nassert climatology.idxmax() == 1, f\"expected January to be wettest, got {climatology.idxmax()}\"\nassert climatology.idxmin() == 6, f\"expected June to be driest, got {climatology.idxmin()}\"\nprint(climatology.round(1).to_string())\nprint(\"\\nCorrect.\")\n\nTwo peaks, and they have different causes. January is winter frontal storms — long, gentle, basin-wide. July and August are monsoon thunderstorms — short, violent, local. June is the foresummer drought between them.\nA single “mean annual flow” number averages those together into a season that does not exist. This is why the climatology plot is worth making before any other analysis.\n\nfig, ax = plt.subplots(figsize=(8, 3.4))\nax.bar(climatology.index, climatology.values, color=\"#1E5288\", alpha=0.85)\nax.set_xticks(range(1, 13))\nax.set_xticklabels([\"J\", \"F\", \"M\", \"A\", \"M\", \"J\", \"J\", \"A\", \"S\", \"O\", \"N\", \"D\"])\nax.set_xlabel(\"month\")\nax.set_ylabel(\"mean daily discharge (cfs)\")\nax.set_title(\"Sabino Creek: winter storms and the monsoon, with a dry gap between\")\nax.grid(alpha=0.3, axis=\"y\")\nplt.tight_layout()\nplt.show()",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#part-3-rolling-windows",
-    "href": "labs/week07/week07_lab_timeseries.html#part-3-rolling-windows",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Part 3 — Rolling windows",
-    "text": "Part 3 — Rolling windows\nResampling gives you fewer, coarser points. A rolling window keeps every point but averages each one with its neighbours — useful when you want to see the shape of a season without losing the daily axis.\n\nsmooth_30 = q.rolling(window=30, center=True).mean()\nsmooth_365 = q.rolling(window=365, center=True).mean()\n\nprint(f\"original : {q.notna().sum():,} values\")\nprint(f\"30-day   : {smooth_30.notna().sum():,} values  ({smooth_30.isna().sum()} lost at the ends)\")\nprint(f\"365-day  : {smooth_365.notna().sum():,} values  ({smooth_365.isna().sum()} lost at the ends)\")\n\ncenter=True costs you half a window at each end. A centred 365-day mean cannot be computed for the first or last 182 days, because half the window falls outside the data. That is honest — the alternative, center=False, labels each average with the last day of its window, which shifts every feature later by half a window.\nUse center=True when you are describing the data. Use center=False when you are simulating something that could only know the past.\n\nfig, ax = plt.subplots(figsize=(11, 3.8))\nax.plot(q.index, q, color=\"#C9C9C9\", lw=0.5, label=\"daily\")\nax.plot(smooth_30.index, smooth_30, color=\"#AB0520\", lw=1.2, label=\"30-day mean\")\nax.plot(smooth_365.index, smooth_365, color=\"#0C234B\", lw=2.2, ls=\"--\", label=\"365-day mean\")\nax.set_yscale(\"symlog\", linthresh=1)\nax.set_ylabel(\"discharge (cfs, symlog)\")\nax.set_title(\"Sabino Creek, 2005-2024\")\nax.legend(frameon=False, ncol=3)\nax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\nNote symlog. A linear axis is dominated by the 2,450 cfs peak and everything else is a flat line at the bottom; a pure log axis cannot show the zeros at all. symlog is linear near zero and logarithmic beyond — which is the right choice for a record that spans zero to thousands.\n\nYOUR TURN 3\nWater managers care about sustained flow, not single-day spikes. Find the wettest 30-day period in the record.\n\nrolling_30 — the centred 30-day rolling mean\nwettest_window_cfs — its maximum value\nwettest_window_end — the date at which that maximum sits\n\n\n# YOUR TURN\nrolling_30 = ...\nwettest_window_cfs = ...\nwettest_window_end = ...\n\n\n# CHECK\nassert abs(wettest_window_cfs - 258.2) &lt; 1.0, f\"expected about 258 cfs, got {wettest_window_cfs}\"\nassert wettest_window_end.year == 2006, f\"expected 2006, got {wettest_window_end.year}\"\nprint(f\"wettest 30 days averaged {wettest_window_cfs:.1f} cfs, \"\n      f\"centred on {wettest_window_end:%Y-%m-%d}\")\nprint(f\"the single wettest day was {q.max():,.0f} cfs — {q.max() / wettest_window_cfs:.0f}x higher\")\nprint(\"Correct.\")\n\nThe peak day is roughly ten times the wettest sustained month. That gap is the whole difference between flood hydrology and water-supply hydrology, and it is why the two fields argue about which statistic matters.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#part-4-grouping-by-something-you-computed",
-    "href": "labs/week07/week07_lab_timeseries.html#part-4-grouping-by-something-you-computed",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Part 4 — Grouping by something you computed",
-    "text": "Part 4 — Grouping by something you computed\ngroupby takes any key, including one you derive on the spot. That is how you answer questions the index alone can’t.\n\n# One row per well per year — 80 wells, ~28 years each\nannual_levels = (\n    levels\n    .assign(year=levels[\"date\"].dt.year)\n    .groupby([\"site_no\", \"year\"])[\"depth_to_water_ft\"]\n    .mean()\n    .reset_index()\n)\n\nprint(f\"{len(annual_levels):,} well-years from {len(levels):,} measurements\")\nannual_levels.head()\n\n.agg() runs several aggregations at once, which saves three passes over the data and reads better:\n\nby_site = levels.groupby(\"site_no\")[\"depth_to_water_ft\"].agg(\n    n=\"size\", first=\"first\", last=\"last\", deepest=\"max\", shallowest=\"min\"\n)\nby_site[\"change_ft\"] = by_site[\"last\"] - by_site[\"first\"]\n\nprint(by_site.sort_values(\"change_ft\", ascending=False).head(5).round(1).to_string())\n\n\nYOUR TURN 4\nHow widespread is the decline? Using by_site:\n\nn_declining — how many wells ended deeper than they started\nn_recovering — how many ended shallower\nmedian_change — the median change in feet across all 80 wells\n\n\n# YOUR TURN\nn_declining = ...\nn_recovering = ...\nmedian_change = ...\n\n\n# CHECK\nassert n_declining + n_recovering &lt;= len(by_site)\nassert n_declining == 73, f\"expected 73 declining, got {n_declining}\"\nassert abs(median_change - 46.8) &lt; 0.5, f\"expected about 46.8 ft, got {median_change}\"\nprint(f\"{n_declining} of {len(by_site)} wells declined; {n_recovering} recovered\")\nprint(f\"median change: {median_change:+.1f} ft\")\nprint(\"Correct.\")\n\nSeventy-three of eighty, with a median of nearly fifty feet. That is not a handful of overpumped wells; that is a basin.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#part-5-long-and-wide",
-    "href": "labs/week07/week07_lab_timeseries.html#part-5-long-and-wide",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Part 5 — Long and wide",
-    "text": "Part 5 — Long and wide\nlevels is long: one row per measurement, well identified by a column. Most analysis wants that. Most plotting of many series at once wants wide: one column per well, one row per date.\n\nwide = levels.pivot_table(index=\"date\", columns=\"site_no\",\n                          values=\"depth_to_water_ft\")\n\nprint(f\"long: {levels.shape}  -&gt;  wide: {wide.shape}\")\nwide.iloc[:4, :4]\n\nLook at the shape: 4,731 dates by 80 wells is 378,480 cells, from 9,046 measurements. The wide form is 98% empty, because no two wells were measured on the same days.\nThat is the trade. Wide is convenient and sparse; long is compact and awkward. For irregular field data, stay long as long as you can.\nmelt goes back the other way:\n\nback_to_long = (\n    wide.reset_index()\n    .melt(id_vars=\"date\", var_name=\"site_no\", value_name=\"depth_to_water_ft\")\n    .dropna(subset=[\"depth_to_water_ft\"])\n)\nprint(f\"{len(back_to_long):,} rows back from wide — matches the original {len(levels):,}?\"\n      f\"  {len(back_to_long) == len(levels)}\")\n\n\nYOUR TURN 5\nResample the wide table to annual means per well, then find how many wells have a value in every one of the last ten years (2015–2024).\n\nannual_wide — the wide table resampled to year end, using the mean\ncomplete_recent — the number of wells with no missing annual value in 2015–2024\n\n\n# YOUR TURN\nannual_wide = ...\ncomplete_recent = ...\n\n\n# CHECK\nassert annual_wide.shape[1] == 80, f\"expected 80 wells, got {annual_wide.shape[1]}\"\nrecent = annual_wide.loc[\"2015\":\"2024\"]\nassert complete_recent == int(recent.notna().all().sum()), \\\n    f\"expected {int(recent.notna().all().sum())}, got {complete_recent}\"\nprint(f\"{annual_wide.shape[0]} years x {annual_wide.shape[1]} wells\")\nprint(f\"{complete_recent} wells measured in every year 2015-2024\")\nprint(\"Correct.\")\n\nThink about this before next week: very few wells have a gap-free recent record. Any figure showing “the basin water level over time” is really showing whichever wells happened to be visited, and that set changes year to year.\nMaking that limitation visible — rather than hiding it behind a smooth line — is a figure design problem, and figure design is Week 8.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#before-you-leave",
-    "href": "labs/week07/week07_lab_timeseries.html#before-you-leave",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Before you leave",
-    "text": "Before you leave\n\nKernel → Restart Kernel and Run All Cells\nFix anything that breaks\nSave",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#whats-due",
-    "href": "labs/week07/week07_lab_timeseries.html#whats-due",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "What’s due",
-    "text": "What’s due\nHW 5 — Data retrieval and cleaning, Wednesday 10/7 at 11:59pm.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#next-week",
-    "href": "labs/week07/week07_lab_timeseries.html#next-week",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Next week",
-    "text": "Next week\nmatplotlib properly: subplots, colour that survives being printed, annotation, and maps.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
-    ]
-  },
-  {
-    "objectID": "labs/week07/week07_lab_timeseries.html#stuck",
-    "href": "labs/week07/week07_lab_timeseries.html#stuck",
-    "title": "Week 7 Lab — Time series with pandas",
-    "section": "Stuck?",
-    "text": "Stuck?\n\nKeyError on flow.loc[\"2006\"] means the index isn’t a DatetimeIndex. Check with type(df.index) — parse_dates= plus set_index is the fix.\nresample raises “Only valid with DatetimeIndex” for the same reason.\nFrequency strings changed in pandas 2.2: it is ME/YE, not M/Y. Older tutorials will use the old ones and you will get a FutureWarning.\nA rolling mean that is all NaN usually means the window is longer than the series.\nOffice hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.",
-    "crumbs": [
-      "Home",
-      "Module 2 · Data Analysis & Visualization",
-      "Week 7 — Time series",
-      "Lab · Time series with pandas"
+      "Week 7 — Topic to be announced",
+      "Lab · Topic to be announced"
     ]
   },
   {
@@ -1664,7 +1534,7 @@
     "href": "labs/week09/week09_lab_regression_chemistry.html",
     "title": "Week 9 Lab — Regression, and water chemistry",
     "section": "",
-    "text": "HWRS 564a · Fall 2026\nTwo halves this week.\nThe first is fitting a line and saying honestly how much you believe it. Fitting is one function call; the judgement is in the residuals, and in noticing when a good \\(R^2\\) is describing something other than what you meant.\nThe second is major-ion chemistry: checking an analysis before you trust it, and reading a Piper diagram. Tuesday’s session covers the statistics, Thursday’s the chemistry.",
+    "text": "HWRS 564a · Fall 2026\nTwo halves this week.\nThe first is fitting a line and saying honestly how much you believe it. You will calculate the least-squares coefficients, goodness-of-fit statistics, and slope uncertainty from their definitions before using library functions.\nThe second is major-ion chemistry: checking an analysis before you trust it, and reading a Piper diagram. Tuesday’s session covers the statistics, Thursday’s the chemistry.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
@@ -1690,7 +1560,7 @@
     "href": "labs/week09/week09_lab_regression_chemistry.html#learning-objectives",
     "title": "Week 9 Lab — Regression, and water chemistry",
     "section": "Learning objectives",
-    "text": "Learning objectives\nBy the end of this notebook you can:\n\nFit a linear trend with scipy.stats.linregress and interpret every number it returns\nRead a residual plot, and say what a pattern in it means\nFit the same model with scikit-learn, and split train from test\nExplain why \\(R^2\\) on its own is not evidence of anything\nConvert mg/L to meq/L and check that an analysis balances\nPlot a Piper diagram and name the water types on it",
+    "text": "Learning objectives\nBy the end of this notebook you can:\n\nDerive a least-squares slope and intercept from centred sums\nCalculate RSS, TSS, \\(R^2\\), RMSE, and a confidence interval\nDiagnose nonlinearity and serial correlation in residuals\nCompare random and chronological validation using MAE, RMSE, and test \\(R^2\\)\nConvert mg/L to meq/L and check that an analysis balances\nPlot a Piper diagram and name the water types on it",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
@@ -1703,7 +1573,7 @@
     "href": "labs/week09/week09_lab_regression_chemistry.html#part-1-fitting-a-trend",
     "title": "Week 9 Lab — Regression, and water chemistry",
     "section": "Part 1 — Fitting a trend",
-    "text": "Part 1 — Fitting a trend\nThe obvious question about a monitoring well: how fast is it falling?\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\nfrom scipy import stats\n\nROOT = next(p for p in Path.cwd().parents if (p / \"pyproject.toml\").exists())\nDATA = ROOT / \"data\"\n\nlevels = pd.read_csv(DATA / \"tucson_water_levels.csv\",\n                     dtype={\"site_no\": str}, parse_dates=[\"date\"])\n\none = levels[levels[\"site_no\"] == \"320824110593001\"].sort_values(\"date\").copy()\none[\"years_elapsed\"] = (one[\"date\"] - one[\"date\"].min()).dt.days / 365.25\n\nprint(f\"{len(one)} measurements, {one['date'].min():%Y} to {one['date'].max():%Y}\")\n\nSixty-three years of monthly readings from a single well, ending in 1994 when it was taken out of the monitoring network.\nNote years_elapsed. You cannot regress against a datetime — it has no arithmetic that produces a slope in useful units. Converting to years since the start makes the slope come out in feet per year, which is what you want to report.\n\nfit = stats.linregress(one[\"years_elapsed\"], one[\"depth_to_water_ft\"])\n\nprint(f\"slope      {fit.slope:8.3f} ft/yr\")\nprint(f\"intercept  {fit.intercept:8.2f} ft\")\nprint(f\"r          {fit.rvalue:8.3f}\")\nprint(f\"r-squared  {fit.rvalue**2:8.3f}\")\nprint(f\"p-value    {fit.pvalue:8.2e}\")\nprint(f\"std error  {fit.stderr:8.4f} ft/yr\")\n\nWhat each of those actually means:\n\nslope — the answer. 2.08 ft/yr of decline.\nr-squared — the fraction of variance the line explains. 0.90 is high.\np-value — the probability of seeing a slope this steep if the true slope were zero. Here it is \\(10^{-189}\\), which is not a meaningful number so much as a statement that the question was never in doubt.\nstderr — the uncertainty on the slope. Report the slope as 2.081 ± 0.035 ft/yr, not as 2.081.\n\n\nOn p-values. With 379 measurements, almost any real trend is “significant”. Significance answers “is it distinguishable from zero?”, not “is it large enough to matter?” Those are different questions and the second one is the one water managers ask.\n\n\none[\"predicted\"] = fit.intercept + fit.slope * one[\"years_elapsed\"]\n\nfig, ax = plt.subplots(figsize=(9, 3.8))\nax.plot(one[\"date\"], one[\"depth_to_water_ft\"], \"o\", ms=2.5,\n        color=\"#49595E\", alpha=0.6, label=\"measured\")\nax.plot(one[\"date\"], one[\"predicted\"], color=\"#AB0520\", lw=2,\n        label=f\"fit: {fit.slope:.2f} ft/yr\")\nax.invert_yaxis()\nax.set_ylabel(\"depth to water (ft)\")\nax.set_title(f\"Well D-15-13 11CBA, R-squared = {fit.rvalue**2:.2f}\")\nax.legend(frameon=False)\nax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n\nYOUR TURN 1\nFit the same well over the 1950–1990 window only, when the decline was steepest, and compare.\n\nsubset — the rows of one with a year from 1950 to 1990 inclusive\nfit_mid — the linregress result for that window\nslope_ratio — how many times steeper the mid-century slope is than the full-record slope\n\n\n# YOUR TURN\nsubset = ...\nfit_mid = ...\nslope_ratio = ...\n\n\n# CHECK\nassert len(subset) == 270, f\"expected 270 rows in 1950-1990, got {len(subset)}\"\nassert abs(fit_mid.slope - 2.36) &lt; 0.02, f\"expected about 2.36 ft/yr, got {fit_mid.slope:.3f}\"\nassert 1.0 &lt; slope_ratio &lt; 1.3, f\"slope ratio looks wrong: {slope_ratio}\"\nprint(f\"full record : {fit.slope:.3f} ft/yr  (R2 = {fit.rvalue**2:.3f})\")\nprint(f\"1950-1990   : {fit_mid.slope:.3f} ft/yr  (R2 = {fit_mid.rvalue**2:.3f})\")\nprint(f\"the mid-century decline is {slope_ratio:.2f}x steeper\")\nprint(\"Correct.\")\n\nLook at what happened to \\(R^2\\). It went down, from 0.90 to 0.67, even though we restricted to the period where the line fits best by eye.\nThat is not a paradox. \\(R^2\\) is the fraction of variance in this sample that the line explains, and the full record contains a century of monotonic decline — enormous variance, easy to explain. The 40-year window has less range, so the same quality of fit accounts for a smaller share of it.\n\\(R^2\\) is not a measure of how good your model is. It is a measure of how much of this particular spread the model absorbs, and you can raise it by choosing a wider window.",
+    "text": "Part 1 — Fitting a trend\nThe obvious question about a monitoring well: how fast is it falling?\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pandas as pd\nfrom scipy import stats\n\nROOT = next(\n    p for p in [Path.cwd(), *Path.cwd().parents]\n    if (p / \"pyproject.toml\").exists()\n)\nDATA = ROOT / \"data\"\n\nlevels = pd.read_csv(DATA / \"tucson_water_levels.csv\",\n                     dtype={\"site_no\": str}, parse_dates=[\"date\"])\n\none = levels[levels[\"site_no\"] == \"320824110593001\"].sort_values(\"date\").copy()\none[\"years_elapsed\"] = (one[\"date\"] - one[\"date\"].min()).dt.days / 365.25\n\nprint(f\"{len(one)} measurements, {one['date'].min():%Y} to {one['date'].max():%Y}\")\n\nSixty-three years of readings from a single well, ending in 1994 when it was taken out of the monitoring network. Start with the statistical model \\(Y_i = \\beta_0 + \\beta_1x_i + \\varepsilon_i\\). Ordinary least squares chooses \\(b_0\\) and \\(b_1\\) to minimise\n\\[\\operatorname{RSS}(b_0,b_1)=\\sum_i[y_i-(b_0+b_1x_i)]^2.\\]\nNote years_elapsed. You cannot regress against a datetime — it has no arithmetic that produces a slope in useful units. Converting to years since the start makes the slope come out in feet per year, which is what you want to report.\n\nfit = stats.linregress(one[\"years_elapsed\"], one[\"depth_to_water_ft\"])\n\nprint(f\"slope      {fit.slope:8.3f} ft/yr\")\nprint(f\"intercept  {fit.intercept:8.2f} ft\")\nprint(f\"r          {fit.rvalue:8.3f}\")\nprint(f\"r-squared  {fit.rvalue**2:8.3f}\")\nprint(f\"p-value    {fit.pvalue:8.2e}\")\nprint(f\"std error  {fit.stderr:8.4f} ft/yr\")\n\nThe library result is useful, but each returned number comes from a model:\n\nslope — the answer. 2.08 ft/yr of decline.\nr-squared — \\(1-\\mathrm{RSS}/\\mathrm{TSS}\\), relative to a mean-only model.\nstderr — model-based uncertainty on the slope under the ordinary regression assumptions.\np-value — under a zero-slope null and those assumptions, the probability of a test statistic at least as extreme as the observed one.\n\n\nA p-value is not the probability that the null hypothesis is true. A small p-value also does not make a trend large enough to matter.\n\n\none[\"predicted\"] = fit.intercept + fit.slope * one[\"years_elapsed\"]\n\nfig, ax = plt.subplots(figsize=(9, 3.8))\nax.plot(one[\"date\"], one[\"depth_to_water_ft\"], \"o\", ms=2.5,\n        color=\"#49595E\", alpha=0.6, label=\"measured\")\nax.plot(one[\"date\"], one[\"predicted\"], color=\"#AB0520\", lw=2,\n        label=f\"fit: {fit.slope:.2f} ft/yr\")\nax.invert_yaxis()\nax.set_ylabel(\"depth to water (ft)\")\nax.set_title(f\"Well D-15-13 11CBA, R-squared = {fit.rvalue**2:.2f}\")\nax.legend(frameon=False)\nax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n\nYOUR TURN 1\nReconstruct the ordinary least-squares coefficients from their definitions:\n\\[\\hat\\beta_1=\\frac{S_{xy}}{S_{xx}}, \\qquad\n\\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x.\\]\n\nsxx — \\(\\sum_i(x_i-\\bar x)^2\\)\nsxy — \\(\\sum_i(x_i-\\bar x)(y_i-\\bar y)\\)\nmanual_slope and manual_intercept — the two fitted coefficients\n\n\nx = one[\"years_elapsed\"].to_numpy()\ny = one[\"depth_to_water_ft\"].to_numpy()\nx_bar, y_bar = x.mean(), y.mean()\n\n# YOUR TURN\nsxx = ...\nsxy = ...\nmanual_slope = ...\nmanual_intercept = ...\n\n\n# CHECK\nnp.testing.assert_allclose(sxx, 131428.3168427)\nnp.testing.assert_allclose(sxy, 273520.1171342)\nnp.testing.assert_allclose(manual_slope, fit.slope)\nnp.testing.assert_allclose(manual_intercept, fit.intercept)\nprint(f\"manual:  depth = {manual_intercept:.3f} + {manual_slope:.3f} years\")\nprint(f\"scipy:   depth = {fit.intercept:.3f} + {fit.slope:.3f} years\")\nprint(\"Correct.\")\n\nThe two methods agree because linregress solves the same least-squares problem. The slope is centred cross-variation divided by variation in time; the fitted line then passes through \\((\\bar x,\\bar y)\\).\nFor context, fitting only 1950–1990 gives a steeper slope (2.36 ft/yr) but a lower \\(R^2\\) (0.67 instead of 0.90). The shorter window has less total variation for the line to explain.\n\\(R^2\\) is not a measure of how good your model is. It is a measure of how much of this particular spread the model absorbs.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
@@ -1712,11 +1582,11 @@
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-2-residuals-which-is-where-the-information-is",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#part-2-residuals-which-is-where-the-information-is",
+    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-2-fit-statistics-and-slope-uncertainty",
+    "href": "labs/week09/week09_lab_regression_chemistry.html#part-2-fit-statistics-and-slope-uncertainty",
     "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Part 2 — Residuals, which is where the information is",
-    "text": "Part 2 — Residuals, which is where the information is\nThe residual is measured minus predicted. If the model is right, residuals are patternless noise around zero. If they have structure, the model is missing something.\n\none[\"residual\"] = one[\"depth_to_water_ft\"] - one[\"predicted\"]\n\nfig, axes = plt.subplots(1, 2, figsize=(11, 3.4))\n\naxes[0].plot(one[\"date\"], one[\"residual\"], \"o\", ms=2.5, color=\"#AB0520\", alpha=0.6)\naxes[0].axhline(0, color=\"k\", lw=1)\naxes[0].set_ylabel(\"residual (ft)\")\naxes[0].set_title(\"Residuals over time\")\n\naxes[1].hist(one[\"residual\"], bins=30, color=\"#1E5288\", alpha=0.8)\naxes[1].axvline(0, color=\"k\", lw=1)\naxes[1].set_xlabel(\"residual (ft)\")\naxes[1].set_title(\"Residual distribution\")\n\nfor ax in axes:\n    ax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\nThose residuals are not patternless. They sit below zero through the middle of the century, swing well above it in the 1970s, and fall below again after 1990. A residual that changes sign in a systematic way is the signature of fitting a straight line to something that curves.\nAnd physically it should curve. The decline was slow while the basin was lightly pumped, accelerated sharply through the mid-century agricultural era, and then eased as pumping shifted from irrigation to municipal supply. One straight line averages three regimes and reports a rate describing none of them.\nA high \\(R^2\\) with structured residuals means you have fitted the wrong model well.\n\nYOUR TURN 2\nQuantify the structure. Take the mean residual by decade — a groupby on a key you compute, exactly as in Week 7.\n\nby_decade — mean residual for each decade, indexed by the decade’s first year\nworst_decade — the decade whose mean residual is furthest above zero\nn_sign_changes — how many times the decadal mean crosses zero\n\n\nyear = one[\"date\"].dt.year\n\n# YOUR TURN\nby_decade = ...\nworst_decade = ...\nn_sign_changes = ...\n\n\n# CHECK\nassert len(by_decade) == 7, f\"expected 7 decades, got {len(by_decade)}\"\nassert worst_decade == 1970, f\"expected the 1970s, got {worst_decade}\"\nassert n_sign_changes &gt;= 3, (\n    f\"only {n_sign_changes} sign changes — a patternless residual would hover \"\n    \"around zero, not swing across it in runs\"\n)\nprint(by_decade.round(1).to_string())\nprint(f\"\\nfurthest above the line: the {worst_decade}s\")\nprint(f\"the decadal mean crosses zero {n_sign_changes} times\")\nprint(\"Correct.\")",
+    "section": "Part 2 — Fit statistics and slope uncertainty",
+    "text": "Part 2 — Fit statistics and slope uncertainty\nThe residual is measured minus predicted. Its squared magnitude drives both goodness-of-fit statistics and the ordinary uncertainty estimate.\n\none[\"residual\"] = one[\"depth_to_water_ft\"] - one[\"predicted\"]\n\nfig, axes = plt.subplots(1, 2, figsize=(11, 3.4))\n\naxes[0].plot(one[\"date\"], one[\"residual\"], \"o\", ms=2.5, color=\"#AB0520\", alpha=0.6)\naxes[0].axhline(0, color=\"k\", lw=1)\naxes[0].set_ylabel(\"residual (ft)\")\naxes[0].set_title(\"Residuals over time\")\n\naxes[1].hist(one[\"residual\"], bins=30, color=\"#1E5288\", alpha=0.8)\naxes[1].axvline(0, color=\"k\", lw=1)\naxes[1].set_xlabel(\"residual (ft)\")\naxes[1].set_title(\"Residual distribution\")\n\nfor ax in axes:\n    ax.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\nDefine\n\\[\\mathrm{RSS}=\\sum_i e_i^2, \\qquad\n\\mathrm{TSS}=\\sum_i(y_i-\\bar y)^2, \\qquad\nR^2=1-\\frac{\\mathrm{RSS}}{\\mathrm{TSS}}.\\]\nUnder independent errors with constant variance, estimate the residual variance and slope standard error with\n\\[s^2=\\frac{\\mathrm{RSS}}{n-2}, \\qquad\n\\mathrm{SE}(\\hat\\beta_1)=\\frac{s}{\\sqrt{S_{xx}}}.\\]\n\nYOUR TURN 2\nCalculate the fit statistics and the ordinary 95% confidence interval from their definitions.\n\nrss, tss, and r_squared_manual\nresidual_variance and slope_se_manual\nci_low and ci_high, using a Student-\\(t\\) critical value\n\n\nresidual = one[\"residual\"].to_numpy()\nn = len(one)\nt_critical = stats.t.ppf(0.975, df=n - 2)\n\n# YOUR TURN\nrss = ...\ntss = ...\nr_squared_manual = ...\nresidual_variance = ...\nslope_se_manual = ...\nci_low = ...\nci_high = ...\n\n\n# CHECK\nnp.testing.assert_allclose(rss, 64167.0382349)\nnp.testing.assert_allclose(tss, 633399.4249409)\nnp.testing.assert_allclose(r_squared_manual, fit.rvalue ** 2)\nnp.testing.assert_allclose(residual_variance, 170.2043455)\nnp.testing.assert_allclose(slope_se_manual, fit.stderr)\nnp.testing.assert_allclose([ci_low, ci_high], [2.01037575, 2.15189496])\nprint(f\"RSS = {rss:,.1f}; TSS = {tss:,.1f}; R2 = {r_squared_manual:.3f}\")\nprint(f\"slope = {manual_slope:.3f} ft/yr\")\nprint(f\"ordinary SE = {slope_se_manual:.3f} ft/yr\")\nprint(f\"ordinary 95% CI = [{ci_low:.3f}, {ci_high:.3f}] ft/yr\")\n\nyear = one[\"date\"].dt.year\nby_decade = one.groupby((year // 10) * 10)[\"residual\"].mean()\nlag1 = one[\"residual\"].autocorr(lag=1)\nprint(\"\\nmean residual by decade:\")\nprint(by_decade.round(1).to_string())\nprint(f\"lag-1 residual correlation = {lag1:.3f}\")\nprint(\"Correct.\")",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",
@@ -1725,11 +1595,11 @@
     ]
   },
   {
-    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-3-the-same-fit-with-scikit-learn",
-    "href": "labs/week09/week09_lab_regression_chemistry.html#part-3-the-same-fit-with-scikit-learn",
+    "objectID": "labs/week09/week09_lab_regression_chemistry.html#part-3-assumptions-diagnostics-and-validation",
+    "href": "labs/week09/week09_lab_regression_chemistry.html#part-3-assumptions-diagnostics-and-validation",
     "title": "Week 9 Lab — Regression, and water chemistry",
-    "section": "Part 3 — The same fit with scikit-learn",
-    "text": "Part 3 — The same fit with scikit-learn\nscipy.stats.linregress is the right tool for one predictor. scikit-learn is the right tool once you have several, and it is the interface every other model in that library shares — so learning it on a problem you already understand is cheap.\n\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_absolute_error, r2_score\n\nX = one[[\"years_elapsed\"]].values      # 2D: rows are samples, columns are features\ny = one[\"depth_to_water_ft\"].values    # 1D\n\nmodel = LinearRegression().fit(X, y)\n\nprint(f\"sklearn slope     {model.coef_[0]:.3f} ft/yr\")\nprint(f\"scipy   slope     {fit.slope:.3f} ft/yr\")\nprint(f\"sklearn intercept {model.intercept_:.2f}\")\n\nIdentical, as they must be — it is the same least-squares problem. The thing to notice is the shape of X: scikit-learn always wants a 2D array of shape (n_samples, n_features), even with one feature. ValueError: Expected 2D array, got 1D array instead is the single most common scikit-learn error and this is why.\n\nTrain and test\nFitting and evaluating on the same data tells you how well the model memorised it. To find out whether it generalises, hold some data back.\n\nfrom sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.25, random_state=564\n)\n\nm = LinearRegression().fit(X_train, y_train)\n\nprint(f\"train R2  {r2_score(y_train, m.predict(X_train)):.3f}\")\nprint(f\"test  R2  {r2_score(y_test, m.predict(X_test)):.3f}\")\nprint(f\"test  MAE {mean_absolute_error(y_test, m.predict(X_test)):.2f} ft\")\n\n\nA caveat that matters for time series. train_test_split shuffles, so the test set is scattered through the training period. For a smooth trend that makes the test set almost trivially predictable — you are interpolating between neighbours, not forecasting.\nTo test whether a model predicts the future, split by time: train on the early record, test on the late one. That is a much harder test, and a much more honest one.\nThis well was measured from 1931 to 1994, so we split at 1975 — roughly half the measurements on each side.\n\n\n\nYOUR TURN 3\nDo the honest split. Train on measurements before 1975, test on 1975 onward.\n\nmask_train — boolean, True for rows before 1975\nmodel_time — a LinearRegression fitted on the pre-1975 rows\ntest_mae — mean absolute error on the 1975-and-later rows, in feet\n\n\n# YOUR TURN\nmask_train = ...\nmodel_time = ...\ntest_mae = ...\n\n\n# CHECK\nassert mask_train.sum() == 188, f\"expected 188 rows before 1975, got {mask_train.sum()}\"\nassert (~mask_train).sum() == 191, \"the test set should be about half the record\"\nassert abs(test_mae - 15.4) &lt; 1.0, f\"expected about 15 ft, got {test_mae:.1f}\"\nprint(f\"trained on {mask_train.sum()} pre-1975 measurements\")\nprint(f\"tested on  {(~mask_train).sum()} from 1975 onward\")\nprint(f\"train slope {model_time.coef_[0]:.2f} ft/yr  vs  full record {fit.slope:.2f} ft/yr\")\nprint(f\"test MAE    {test_mae:.1f} ft\")\nprint(\"Correct.\")\n\nFifteen feet of average error, against a shuffled-split MAE of a couple of feet. Same model, same data, two validation schemes, and one of them says it works.\nThe reason is in the slope: fitted on 1931–1974 the model sees 1.92 ft/yr, but the decline slowed after the 1970s as agricultural pumping gave way to municipal supply. Extrapolating the early rate overshoots, and keeps overshooting further the longer it runs.\nThat gap between the two numbers is the whole lesson. A validation scheme that doesn’t match how the model will be used will tell you it works.",
+    "section": "Part 3 — Assumptions, diagnostics, and validation",
+    "text": "Part 3 — Assumptions, diagnostics, and validation\nThe line is a useful descriptive estimate, but the ordinary standard error and confidence interval assume independent, constant-variance residuals around a linear mean. The diagnostic rejects those assumptions here: decade-long runs show curvature, and the lag-1 residual correlation is about 0.986.\nThe 379 readings therefore do not provide 379 independent pieces of information. The OLS slope is still calculable, but its ordinary confidence interval is too optimistic. Possible remedies include modelling separate regimes or using a time-aware uncertainty estimator.\nNow use scikit-learn to ask a different question: how well does the line predict data it was not fitted to?\n\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n\nX = one[[\"years_elapsed\"]].values      # 2D: rows are samples, columns are features\ny = one[\"depth_to_water_ft\"].values    # 1D\n\nmodel = LinearRegression().fit(X, y)\n\nprint(f\"sklearn slope     {model.coef_[0]:.3f} ft/yr\")\nprint(f\"scipy   slope     {fit.slope:.3f} ft/yr\")\nprint(f\"sklearn intercept {model.intercept_:.2f}\")\n\nIdentical, as they must be — it is the same least-squares problem. The thing to notice is the shape of X: scikit-learn always wants a 2D array of shape (n_samples, n_features), even with one feature. ValueError: Expected 2D array, got 1D array instead is the single most common scikit-learn error and this is why.\n\nTrain and test\nFitting and evaluating on the same data tells you how well the model memorised it. To find out whether it generalises, hold some data back.\n\nfrom sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.25, random_state=564\n)\n\nm = LinearRegression().fit(X_train, y_train)\n\nrandom_prediction = m.predict(X_test)\nrandom_mae = mean_absolute_error(y_test, random_prediction)\nrandom_rmse = np.sqrt(mean_squared_error(y_test, random_prediction))\nrandom_r2 = r2_score(y_test, random_prediction)\n\nprint(f\"random-split test MAE  {random_mae:.2f} ft\")\nprint(f\"random-split test RMSE {random_rmse:.2f} ft\")\nprint(f\"random-split test R2   {random_r2:.3f}\")\n\n\nA caveat that matters for time series. train_test_split shuffles, so the test set is scattered through the training period. For a smooth trend that turns the task into interpolation between dates represented in training, rather than forecasting beyond the training period.\nTo test whether a model predicts the future, split by time: train on the early record, test on the late one. That is a much harder test, and a much more honest one.\nThis well was measured from 1931 to 1994, so we split at 1975 — roughly half the measurements on each side.\n\n\n\nYOUR TURN 3\nDo the honest split. Train on measurements before 1975, test on 1975 onward.\n\nmask_train — boolean, True for rows before 1975\nmodel_time — a LinearRegression fitted on the pre-1975 rows\ntest_prediction — predictions for the 1975-and-later rows\ntest_mae, test_rmse, and test_r2 — three complementary test metrics\n\n\n# YOUR TURN\nmask_train = ...\nmodel_time = ...\ntest_prediction = ...\ntest_mae = ...\ntest_rmse = ...\ntest_r2 = ...\n\n\n# CHECK\nassert mask_train.sum() == 188, f\"expected 188 rows before 1975, got {mask_train.sum()}\"\nassert (~mask_train).sum() == 191, \"the test set should be about half the record\"\nnp.testing.assert_allclose(test_mae, 15.3992709)\nnp.testing.assert_allclose(test_rmse, 19.3438682)\nnp.testing.assert_allclose(test_r2, -4.8058711)\nprint(f\"trained on {mask_train.sum()} pre-1975 measurements\")\nprint(f\"tested on  {(~mask_train).sum()} from 1975 onward\")\nprint(f\"train slope {model_time.coef_[0]:.2f} ft/yr  vs  full record {fit.slope:.2f} ft/yr\")\nprint(f\"test MAE    {test_mae:.1f} ft\")\nprint(f\"test RMSE   {test_rmse:.1f} ft\")\nprint(f\"test R2     {test_r2:.2f}\")\nprint(\"Correct.\")\n\nThe random split gives MAE 11.3 ft, RMSE 13.3 ft, and \\(R^2=0.89\\). The time split gives MAE 15.4 ft, RMSE 19.3 ft, and \\(R^2=-4.81\\). A negative test \\(R^2\\) means the line predicts the late record worse than simply using the mean of those held-out values.\nThe reason is in the slope: fitted on 1931–1974 the model sees 1.92 ft/yr, but the decline slowed after the 1970s as agricultural pumping gave way to municipal supply. Extrapolating the early rate overshoots, and keeps overshooting further the longer it runs.\nThe validation design changes the scientific question. Random splitting tests interpolation within the observed era; chronological splitting tests extrapolation into a later regime.",
     "crumbs": [
       "Home",
       "Module 2 · Data Analysis & Visualization",

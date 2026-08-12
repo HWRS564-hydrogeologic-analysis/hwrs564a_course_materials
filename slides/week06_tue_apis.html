@@ -216,7 +216,7 @@ Dr.&nbsp;Andrew Bennett
 </div>
 <ol type="1">
 <li>Quiz — five minutes, on pandas</li>
-<li>What an API is, and why you want one</li>
+<li>What an API request contains, and why you want one</li>
 <li><code>dataretrieval</code>, and the fact that it moved</li>
 <li>Writing a fetch that survives the API being down</li>
 <li>What arrives, and why it isn’t what you asked for</li>
@@ -240,14 +240,32 @@ Dr.&nbsp;Andrew Bennett
 <li><strong>it scales</strong> — one site or four hundred, same three lines</li>
 </ul>
 </div>
+<!-- Adapted from old_slides/hwrs564a_sept23.pdf. -->
+</section>
+<section class="slide level2">
+<h2>A request is an endpoint plus parameters</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a></a>https://waterservices.usgs.gov/nwis/dv/</span>
+<span id="cb2-2"><a></a>    ?sites=09484000</span>
+<span id="cb2-3"><a></a>    &amp;format=json</span>
+<span id="cb2-4"><a></a>    &amp;startDT=2005-01-01</span>
+<span id="cb2-5"><a></a>    &amp;endDT=2024-12-31</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li class="fragment">The <strong>endpoint</strong> names the service: daily values (<code>dv</code>)</li>
+<li class="fragment"><code>?</code> starts the query; <code>&amp;</code> separates its pieces</li>
+<li class="fragment">Each <code>key=value</code> pair makes one choice explicit</li>
+<li class="fragment">Change the values in a loop and the same request scales to many sites</li>
+</ul>
+<div class="fragment">
+<p>A wrapper does not remove this request. It gives the parameters Python names, constructs the URL, sends it, and parses the response.</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>Why use a wrapper</h2>
 <p>You could build those URLs yourself. <code>dataretrieval</code> builds them for you, and more importantly parses what comes back into a DataFrame.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="im">import</span> dataretrieval.nwis <span class="im">as</span> nwis</span>
-<span id="cb2-2"><a></a></span>
-<span id="cb2-3"><a></a>df <span class="op">=</span> nwis.get_record(sites<span class="op">=</span><span class="st">"09484000"</span>, service<span class="op">=</span><span class="st">"dv"</span>,</span>
-<span id="cb2-4"><a></a>                     start<span class="op">=</span><span class="st">"2005-01-01"</span>, end<span class="op">=</span><span class="st">"2024-12-31"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">import</span> dataretrieval.nwis <span class="im">as</span> nwis</span>
+<span id="cb3-2"><a></a></span>
+<span id="cb3-3"><a></a>df <span class="op">=</span> nwis.get_record(sites<span class="op">=</span><span class="st">"09484000"</span>, service<span class="op">=</span><span class="st">"dv"</span>,</span>
+<span id="cb3-4"><a></a>                     start<span class="op">=</span><span class="st">"2005-01-01"</span>, end<span class="op">=</span><span class="st">"2024-12-31"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
 <p>7,305 rows of daily discharge, indexed by date, in one call.</p>
 </div>
@@ -340,7 +358,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>choice <span class="op">=</span> <span class="st">"waterdata.get_field_measurements"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>choice <span class="op">=</span> <span class="st">"waterdata.get_field_measurements"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Discrete, manual readings. <code>get_continuous</code> and <code>get_daily</code> would return almost nothing — very few wells in the Tucson basin are instrumented, and the ones that are have short records.</p>
 <p>Choosing the wrong one here doesn’t error. It returns an empty DataFrame, and you spend twenty minutes wondering why the basin has no data.</p>
 </div>
@@ -367,16 +385,16 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section>
 <section class="slide level2">
 <h2>The pattern</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="kw">def</span> load_sabino():</span>
-<span id="cb5-2"><a></a>    <span class="co">"""Daily discharge at Sabino Creek. Live if possible, cached if not."""</span></span>
-<span id="cb5-3"><a></a>    <span class="cf">try</span>:</span>
-<span id="cb5-4"><a></a>        df <span class="op">=</span> nwis.get_record(sites<span class="op">=</span>SABINO, service<span class="op">=</span><span class="st">"dv"</span>, ...)</span>
-<span id="cb5-5"><a></a>        <span class="bu">print</span>(<span class="ss">f"live from NWIS: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span>
-<span id="cb5-6"><a></a>        <span class="cf">return</span> tidy(df)</span>
-<span id="cb5-7"><a></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
-<span id="cb5-8"><a></a>        <span class="bu">print</span>(<span class="ss">f"live fetch failed (</span><span class="sc">{</span><span class="bu">type</span>(exc)<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">); using the cached copy"</span>)</span>
-<span id="cb5-9"><a></a>        <span class="cf">return</span> pd.read_csv(DATA <span class="op">/</span> <span class="st">"cache"</span> <span class="op">/</span> <span class="ss">f"nwis_</span><span class="sc">{</span>SABINO<span class="sc">}</span><span class="ss">_dv.csv"</span>,</span>
-<span id="cb5-10"><a></a>                           parse_dates<span class="op">=</span>[<span class="st">"datetime"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="kw">def</span> load_sabino():</span>
+<span id="cb6-2"><a></a>    <span class="co">"""Daily discharge at Sabino Creek. Live if possible, cached if not."""</span></span>
+<span id="cb6-3"><a></a>    <span class="cf">try</span>:</span>
+<span id="cb6-4"><a></a>        df <span class="op">=</span> nwis.get_record(sites<span class="op">=</span>SABINO, service<span class="op">=</span><span class="st">"dv"</span>, ...)</span>
+<span id="cb6-5"><a></a>        <span class="bu">print</span>(<span class="ss">f"live from NWIS: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span>
+<span id="cb6-6"><a></a>        <span class="cf">return</span> tidy(df)</span>
+<span id="cb6-7"><a></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
+<span id="cb6-8"><a></a>        <span class="bu">print</span>(<span class="ss">f"live fetch failed (</span><span class="sc">{</span><span class="bu">type</span>(exc)<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">); using the cached copy"</span>)</span>
+<span id="cb6-9"><a></a>        <span class="cf">return</span> pd.read_csv(DATA <span class="op">/</span> <span class="st">"cache"</span> <span class="op">/</span> <span class="ss">f"nwis_</span><span class="sc">{</span>SABINO<span class="sc">}</span><span class="ss">_dv.csv"</span>,</span>
+<span id="cb6-10"><a></a>                           parse_dates<span class="op">=</span>[<span class="st">"datetime"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
 <p>Three properties worth copying: both paths return <strong>the same columns</strong>, the function <strong>says which one ran</strong>, and the failure is <strong>not silent</strong>.</p>
 </div>
@@ -419,11 +437,11 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="cf">try</span>:</span>
-<span id="cb6-2"><a></a>    <span class="cf">return</span> fetch_live(site)</span>
-<span id="cb6-3"><a></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
-<span id="cb6-4"><a></a>    <span class="bu">print</span>(...)</span>
-<span id="cb6-5"><a></a>    <span class="cf">return</span> read_cache(site)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="cf">try</span>:</span>
+<span id="cb7-2"><a></a>    <span class="cf">return</span> fetch_live(site)</span>
+<span id="cb7-3"><a></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
+<span id="cb7-4"><a></a>    <span class="bu">print</span>(...)</span>
+<span id="cb7-5"><a></a>    <span class="cf">return</span> read_cache(site)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Catching bare <code>Exception</code> is usually bad practice — it hides bugs in your own code. Here it is right, because <strong>every</strong> failure mode should end the same way: you cannot enumerate all the ways a network call can fail, and the student needs the lab to keep going regardless.</p>
 </div>
 </div>
@@ -433,8 +451,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <section class="slide level2">
 <h2>Where the cache comes from</h2>
 <p>Committed data with no provenance rots into magic numbers nobody dares change. So the cache is <em>generated</em>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a></a><span class="ex">python</span> scripts/fetch_data.py <span class="at">--list</span>    <span class="co"># what gets built</span></span>
-<span id="cb7-2"><a></a><span class="ex">python</span> scripts/fetch_data.py           <span class="co"># rebuild it</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a></a><span class="ex">python</span> scripts/fetch_data.py <span class="at">--list</span>    <span class="co"># what gets built</span></span>
+<span id="cb8-2"><a></a><span class="ex">python</span> scripts/fetch_data.py           <span class="co"># rebuild it</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
 <p>Every dataset in <code>data/</code> came from that script, and the script is in the repo. If you want to know where a number came from, you can read it.</p>
 </div>
@@ -455,7 +473,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 <div class="fragment">
 <p><strong>Rename on the way in.</strong> Every line you write afterward reads better, and you only have to look up the parameter code once.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>df <span class="op">=</span> df.rename(columns<span class="op">=</span>{<span class="st">"00060_Mean"</span>: <span class="st">"discharge_cfs"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>df <span class="op">=</span> df.rename(columns<span class="op">=</span>{<span class="st">"00060_Mean"</span>: <span class="st">"discharge_cfs"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
@@ -497,10 +515,10 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>tidy <span class="op">=</span> raw.rename(columns<span class="op">=</span>{</span>
-<span id="cb10-2"><a></a>    <span class="st">"00060_Mean"</span>: <span class="st">"discharge_cfs"</span>,</span>
-<span id="cb10-3"><a></a>    <span class="st">"00060_Mean_cd"</span>: <span class="st">"qualifier"</span>,</span>
-<span id="cb10-4"><a></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>tidy <span class="op">=</span> raw.rename(columns<span class="op">=</span>{</span>
+<span id="cb11-2"><a></a>    <span class="st">"00060_Mean"</span>: <span class="st">"discharge_cfs"</span>,</span>
+<span id="cb11-3"><a></a>    <span class="st">"00060_Mean_cd"</span>: <span class="st">"qualifier"</span>,</span>
+<span id="cb11-4"><a></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note the unit is in the name. <code>discharge</code> alone invites somebody to assume m³/s six months from now, and the conversion factor between them is 35.3 — big enough that the mistake shows up, small enough that it might not.</p>
 </div>
 </div>
@@ -528,6 +546,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 </div>
 <ul>
 <li>An API is a URL that returns data; a wrapper turns it into a DataFrame</li>
+<li>An API request is an endpoint plus explicit <code>key=value</code> parameters</li>
 <li><code>dataretrieval</code> moved to <code>waterdata</code>, and tutorials haven’t caught up</li>
 <li>Every API call gets a fallback, and the fallback announces itself</li>
 <li>Rename cryptic columns at the point of import, not later</li>

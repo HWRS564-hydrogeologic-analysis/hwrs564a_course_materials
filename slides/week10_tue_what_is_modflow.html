@@ -217,6 +217,7 @@ Dr.&nbsp;Andrew Bennett
 <ol type="1">
 <li>Quiz — five minutes, on regression and chemistry</li>
 <li>What changes when you build a model</li>
+<li>The conceptual model that comes before the grid</li>
 <li>The equation MODFLOW solves, and how it discretizes it</li>
 <li>Six questions, six packages</li>
 <li>FloPy, and why you never edit an input file by hand</li>
@@ -262,6 +263,20 @@ Dr.&nbsp;Andrew Bennett
 </ul>
 <div class="fragment">
 <p>Weeks 10 to 14 are as much about <strong>not being fooled by your own model</strong> as about building one.</p>
+</div>
+<!-- Adapted from old_slides/hwrs564a_oct23.pdf. -->
+</section>
+<section class="slide level2">
+<h2>A model starts as a question, not a grid</h2>
+<p>Before opening FloPy, write down four things:</p>
+<ol type="1">
+<li class="fragment"><strong>Purpose</strong> — what decision or flux must the model inform?</li>
+<li class="fragment"><strong>System and boundaries</strong> — what is inside, and what crosses the edges?</li>
+<li class="fragment"><strong>Inputs and outputs</strong> — what is imposed, and what will be compared to data?</li>
+<li class="fragment"><strong>Use test</strong> — what result would change your conclusion?</li>
+</ol>
+<div class="fragment due-notice">
+<p>The grid, packages, and solver are an implementation of that conceptual model. If the question is vague, a finer grid only gives a more detailed vague answer.</p>
 </div>
 </section></section>
 <section>
@@ -529,6 +544,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 <ul>
 <li>A model exists to close a water budget you cannot measure</li>
+<li>Define the purpose, system, boundaries, and use test before building the grid</li>
 <li>MODFLOW discretizes the flow equation into one equation per cell</li>
 <li>Six questions, six packages, and a <code>.nam</code> file listing them</li>
 <li><code>top</code> and <code>botm</code> are elevations</li>

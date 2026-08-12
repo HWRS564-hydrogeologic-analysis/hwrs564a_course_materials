@@ -218,6 +218,7 @@ Dr.&nbsp;Andrew Bennett
 <li>Equations you can’t rearrange, and what to do about them</li>
 <li>Bisection: the method that cannot fail</li>
 <li>Stepping through time: explicit vs.&nbsp;implicit</li>
+<li>Newton iteration: how an implicit step is actually solved</li>
 <li>Why explicit schemes blow up, and exactly when</li>
 </ol>
 <p>This is the session that explains what MODFLOW is <em>doing</em> when you press go in Week 11. Everything after this is the same two ideas at scale.</p>
@@ -457,6 +458,21 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwibWluLWxpbmVz
 <div class="fragment">
 <p>The price: at <span class="math inline">\(\Delta t = 0.15\)</span> it gives 40.0 where the truth is 22.3. Stable is not the same as accurate.</p>
 </div>
+<!-- Adapted from old_slides/hwrs564a_sept4.pdf and hwrs564a_sept9.pdf. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Implicit methods move the hard problem inside the step</h2>
+<p>For a nonlinear reservoir,</p>
+<p><span class="math display">\[\frac{dS}{dt} = P - kS^{3/2} - E\]</span></p>
+<p>an implicit step puts the unknown <span class="math inline">\(S_{n+1}\)</span> inside the flux term:</p>
+<p><span class="math display">\[g(S_{n+1}) = S_{n+1} - S_n - \Delta t\left(P-kS_{n+1}^{3/2}-E\right)=0\]</span></p>
+<div class="fragment">
+<p>Newton’s method solves that root problem by repeatedly updating</p>
+<p><span class="math display">\[S^{(j+1)} = S^{(j)} - \frac{g(S^{(j)})}{g'(S^{(j)})}\]</span></p>
+</div>
+<div class="fragment due-notice">
+<p>The tolerance and iteration cap now apply <strong>inside every time step</strong>. That is the bridge from today’s reservoir to MODFLOW’s solver messages.</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>Your turn: the stability limit</h2>
@@ -549,6 +565,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 <ul>
 <li>Bisection: guaranteed, slow, needs a real bracket</li>
+<li>Newton iteration: fast near a solution, but it needs a good starting point</li>
 <li>Every solver needs a tolerance and an iteration cap</li>
 <li>Explicit is accurate until it explodes; implicit never explodes and is damped</li>
 <li>Stability for forward Euler is <span class="math inline">\(\Delta t &lt; 2/k\)</span></li>

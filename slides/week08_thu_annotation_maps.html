@@ -218,7 +218,7 @@ Dr.&nbsp;Andrew Bennett
 <li>Annotation: spending the reader’s attention deliberately</li>
 <li>Titles that say something</li>
 <li>Maps from latitude and longitude, without lying about shape</li>
-<li>Saving: <code>figsize</code>, <code>dpi</code>, and vector vs.&nbsp;raster</li>
+<li>Two meanings of vector vs.&nbsp;raster, then <code>figsize</code> and <code>dpi</code></li>
 <li>The panel that keeps a figure honest</li>
 </ol>
 </section>
@@ -322,7 +322,42 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
 <h1>Maps</h1>
-
+<!-- Adapted from old_slides/hwrs564a_oct14.pdf. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Raster and vector describe two different decisions</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Context</th>
+<th>Raster</th>
+<th>Vector</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>GIS data</strong></td>
+<td>A grid of cells: elevation, temperature, recharge</td>
+<td>Points, lines, and polygons: wells, rivers, basin boundaries</td>
+</tr>
+<tr class="even">
+<td><strong>Saved figures</strong></td>
+<td>Pixels: PNG or JPEG</td>
+<td>Drawing instructions: PDF or SVG</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>A vector basin boundary can be plotted over a raster elevation grid, then the whole figure can be saved as either a raster PNG or a vector PDF.</p>
+</div>
+<div class="fragment due-notice">
+<p>Same words, different decisions: <strong>data structure</strong> when building the map, <strong>output format</strong> when exporting the figure.</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>A map is a scatter with two obligations</h2>
@@ -479,6 +514,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <li>Annotate the thing you want looked at; don’t leave the reader to search</li>
 <li>A title that could be generated from the axis labels is doing no work</li>
 <li>Correct the aspect on any lat/lon map</li>
+<li>Distinguish GIS raster/vector data from raster/vector output formats</li>
 <li><code>figsize</code> in final printed inches, <code>dpi=300</code>, <code>bbox_inches="tight"</code></li>
 <li>Show the sample size when the sample changes</li>
 </ul>

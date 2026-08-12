@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Week 5 Lab — Introduction to pandas – HWRS 564a</title>
+<title>Week 5 Lab — Pandas and time series – HWRS 564a</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,35 +109,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -193,11 +164,11 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week05_tue_pandas.html">
- <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+ <span class="dropdown-text">Wk 5 · Labelled data through time</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week05_thu_filtering.html">
- <span class="dropdown-text">Wk 5 · Filtering and first plots</span></a>
+ <span class="dropdown-text">Wk 5 · Filter, summarise, reshape</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week06_tue_apis.html">
@@ -209,11 +180,11 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week07_tue_datetime.html">
- <span class="dropdown-text">Wk 7 · Dates and resampling</span></a>
+ <span class="dropdown-text">Wk 7 · Topic to be announced</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week07_thu_grouping.html">
- <span class="dropdown-text">Wk 7 · Rolling and reshaping</span></a>
+ <span class="dropdown-text">Wk 7 · Topic to be announced</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week08_tue_figures.html">
@@ -225,7 +196,7 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week09_tue_regression.html">
- <span class="dropdown-text">Wk 9 · Regression</span></a>
+ <span class="dropdown-text">Wk 9 · Regression and uncertainty</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week09_thu_chemistry.html">
@@ -288,7 +259,7 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/week05/week05_lab_pandas.html">
- <span class="dropdown-text">Wk 5 · Introduction to pandas</span></a>
+ <span class="dropdown-text">Wk 5 · Pandas and time series</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/week06/week06_lab_real_world_data.html">
@@ -296,7 +267,7 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/week07/week07_lab_timeseries.html">
- <span class="dropdown-text">Wk 7 · Time series</span></a>
+ <span class="dropdown-text">Wk 7 · Topic to be announced</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/week08/week08_lab_matplotlib.html">
@@ -339,7 +310,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Introduction to pandas</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Introduction to pandas</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and time series</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and time series</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -450,7 +421,7 @@ window.Quarto = {
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Week 5 — Introduction to pandas</span></a>
+ <span class="menu-text">Week 5 — Pandas and time series</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -471,7 +442,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Lab · Introduction to pandas</span></a>
+ <span class="menu-text">Lab · Pandas and time series</span></a>
   </div>
 </li>
       </ul>
@@ -519,7 +490,7 @@ window.Quarto = {
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 7 — Time series</span></a>
+ <span class="menu-text">Week 7 — Topic to be announced</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -540,7 +511,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../labs/week07/week07_lab_timeseries.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Time series with pandas</span></a>
+ <span class="menu-text">Lab · Topic to be announced</span></a>
   </div>
 </li>
       </ul>
@@ -767,27 +738,28 @@ window.Quarto = {
   <ul>
   <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link active" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
-  <li><a href="#part-1-reading-data-and-looking-before-you-leap" id="toc-part-1-reading-data-and-looking-before-you-leap" class="nav-link" data-scroll-target="#part-1-reading-data-and-looking-before-you-leap">Part 1 — Reading data, and looking before you leap</a>
+  <li><a href="#setup-find-the-repository-data" id="toc-setup-find-the-repository-data" class="nav-link" data-scroll-target="#setup-find-the-repository-data">Setup — find the repository data</a></li>
+  <li><a href="#part-1-read-and-inspect-before-calculating" id="toc-part-1-read-and-inspect-before-calculating" class="nav-link" data-scroll-target="#part-1-read-and-inspect-before-calculating">Part 1 — Read and inspect before calculating</a>
   <ul class="collapse">
   <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
   </ul></li>
-  <li><a href="#part-2-getting-at-the-data" id="toc-part-2-getting-at-the-data" class="nav-link" data-scroll-target="#part-2-getting-at-the-data">Part 2 — Getting at the data</a>
+  <li><a href="#part-2-select-columns-and-filter-rows" id="toc-part-2-select-columns-and-filter-rows" class="nav-link" data-scroll-target="#part-2-select-columns-and-filter-rows">Part 2 — Select columns and filter rows</a>
   <ul class="collapse">
   <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">YOUR TURN 2</a></li>
   </ul></li>
-  <li><a href="#part-3-filtering" id="toc-part-3-filtering" class="nav-link" data-scroll-target="#part-3-filtering">Part 3 — Filtering</a>
+  <li><a href="#part-3-dates-become-a-coordinate" id="toc-part-3-dates-become-a-coordinate" class="nav-link" data-scroll-target="#part-3-dates-become-a-coordinate">Part 3 — Dates become a coordinate</a>
   <ul class="collapse">
   <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
   </ul></li>
-  <li><a href="#part-4-new-columns" id="toc-part-4-new-columns" class="nav-link" data-scroll-target="#part-4-new-columns">Part 4 — New columns</a>
+  <li><a href="#part-4-resample-a-daily-streamflow-record" id="toc-part-4-resample-a-daily-streamflow-record" class="nav-link" data-scroll-target="#part-4-resample-a-daily-streamflow-record">Part 4 — Resample a daily streamflow record</a>
   <ul class="collapse">
   <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
   </ul></li>
-  <li><a href="#part-5-the-one-excel-file" id="toc-part-5-the-one-excel-file" class="nav-link" data-scroll-target="#part-5-the-one-excel-file">Part 5 — The one Excel file</a>
+  <li><a href="#part-5-rolling-windows-retain-the-daily-coordinate" id="toc-part-5-rolling-windows-retain-the-daily-coordinate" class="nav-link" data-scroll-target="#part-5-rolling-windows-retain-the-daily-coordinate">Part 5 — Rolling windows retain the daily coordinate</a>
   <ul class="collapse">
   <li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">YOUR TURN 5</a></li>
   </ul></li>
-  <li><a href="#part-6-a-first-plot" id="toc-part-6-a-first-plot" class="nav-link" data-scroll-target="#part-6-a-first-plot">Part 6 — A first plot</a>
+  <li><a href="#part-6-group-long-data-then-reshape-only-when-needed" id="toc-part-6-group-long-data-then-reshape-only-when-needed" class="nav-link" data-scroll-target="#part-6-group-long-data-then-reshape-only-when-needed">Part 6 — Group long data, then reshape only when needed</a>
   <ul class="collapse">
   <li><a href="#your-turn-6" id="toc-your-turn-6" class="nav-link" data-scroll-target="#your-turn-6">YOUR TURN 6</a></li>
   </ul></li>
@@ -801,9 +773,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Introduction to pandas</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Introduction to pandas</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and time series</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and time series</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Week 5 Lab — Introduction to pandas</h1>
+<h1 class="title">Week 5 Lab — Pandas and time series</h1>
 </div>
 
 
@@ -820,370 +792,287 @@ window.Quarto = {
 </header>
 
 
-<p><strong>HWRS 564a · Fall 2026</strong></p>
-<p>Everything you did last week with numpy works on numbers in a grid. Real data comes with <strong>labels</strong> — this column is the well depth, that row is site 320906110592701 — and keeping track of which column was index 3 is how mistakes happen.</p>
-<p><code>pandas</code> is numpy with labels on it. This week we use it on the real thing: every USGS monitoring well in the Tucson basin, and a century of water levels from the best-monitored of them.</p>
 <section id="how-to-use-this-notebook" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
-<p>Run each cell with <strong>Shift+Enter</strong>. Cells marked <strong><code># YOUR TURN</code></strong> have something for you to write. Cells marked <strong><code># CHECK</code></strong> verify your answer — if they run without complaint, you’re right.</p>
-<blockquote class="blockquote">
-<p><strong>Before you submit anything all semester:</strong> <em>Kernel → Restart Kernel and Run All Cells</em>. A notebook that only works when run out of order is not finished.</p>
-</blockquote>
+<p>Work from top to bottom. Read the prose, run each example, and complete every <code>YOUR TURN</code> cell. The checks verify structure and selected values; they do not replace interpreting the table and figures.</p>
+<p>By the end, restart the kernel and run all cells. The completed solution should take about 2.5–3 hours in class.</p>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
-<p>By the end of this notebook you can:</p>
-<ol type="1">
-<li>Read a CSV into a <code>DataFrame</code> and inspect it before trusting it</li>
-<li>Select columns, rows, and both at once with <code>.loc</code> and <code>.iloc</code></li>
-<li>Filter rows with a boolean mask, including several conditions at once</li>
-<li>Compute a new column from existing ones</li>
-<li>Read an Excel file, because collaborators will send you them forever</li>
-<li>Make a first plot straight from a DataFrame</li>
-</ol>
-<hr>
+<p>By the end of this lab, you should be able to:</p>
+<ul>
+<li>read and inspect a labelled table;</li>
+<li>select and filter rows without silently losing track of missing values;</li>
+<li>parse dates and use a <code>DatetimeIndex</code>;</li>
+<li>distinguish monthly resampling from a monthly climatology;</li>
+<li>compute water-year and rolling summaries; and</li>
+<li>group and reshape irregular groundwater observations.</li>
+</ul>
 </section>
-<section id="part-1-reading-data-and-looking-before-you-leap" class="level2">
-<h2 class="anchored" data-anchor-id="part-1-reading-data-and-looking-before-you-leap">Part 1 — Reading data, and looking before you leap</h2>
-<p>Every dataset in this course lives in <code>data/</code>, referenced by a path relative to the repo root. Never a hardcoded <code>/Users/...</code> — your notebook has to run in someone else’s codespace.</p>
-<div id="c002" class="cell">
+<section id="setup-find-the-repository-data" class="level2">
+<h2 class="anchored" data-anchor-id="setup-find-the-repository-data">Setup — find the repository data</h2>
+<div id="cell-2" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Walk up from wherever this notebook is until we find the repo root, then</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># point at data/. Counting "../.." works right up until you move the file.</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(p <span class="cf">for</span> p <span class="kw">in</span> Path.cwd().parents <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists())</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>DATA <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"data"</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"reading from </span><span class="sc">{</span>DATA<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sorted</span>(p.name <span class="cf">for</span> p <span class="kw">in</span> DATA.glob(<span class="st">"*"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    p <span class="cf">for</span> p <span class="kw">in</span> [Path.cwd(), <span class="op">*</span>Path.cwd().parents]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>DATA <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"data"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"reading course data from </span><span class="sc">{</span>DATA<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c003" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wells <span class="op">=</span> pd.read_csv(DATA <span class="op">/</span> <span class="st">"tucson_basin_wells.csv"</span>, dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>})</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(wells)<span class="sc">:,}</span><span class="ss"> wells, </span><span class="sc">{</span>wells<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> columns"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>wells.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="part-1-read-and-inspect-before-calculating" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-read-and-inspect-before-calculating">Part 1 — Read and inspect before calculating</h2>
+<p>The well inventory has one row per registered well. <code>site_no</code> is an identifier, so read it as text even though it contains digits.</p>
+<div id="cell-4" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wells <span class="op">=</span> pd.read_csv(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">/</span> <span class="st">"tucson_basin_wells.csv"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>},</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.shape)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.dtypes)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.isna().<span class="bu">sum</span>())</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>wells.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>dtype={"site_no": str}</code> is not decoration. Site numbers are 15-digit identifiers, and pandas would happily read them as integers and drop leading zeros — quietly breaking every join you make later.</p>
-<p><strong>Four things to check before you trust a table.</strong> Do these every time.</p>
-<div id="c005" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"--- dtypes: is anything a string that should be a number? ---"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.dtypes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="c006" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"--- how much is missing? ---"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.isna().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="c007" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"--- do the numbers look physical? ---"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>wells[[<span class="st">"land_surface_elev_ft"</span>, <span class="st">"well_depth_ft"</span>, <span class="st">"latitude"</span>, <span class="st">"longitude"</span>]].describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Read that table. The wells range from 30 ft to over 3,000 ft deep, land surface runs 1,900–3,600 ft, and <code>aquifer_code</code> is missing for almost every well. None of that is wrong, but all of it is worth knowing before you compute a mean.</p>
 <section id="your-turn-1" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-1">YOUR TURN 1</h3>
-<p>Answer three questions about the table, in code rather than by reading the output above:</p>
-<ul>
-<li><code>n_wells</code> — how many wells are there?</li>
-<li><code>n_missing_depth</code> — how many are missing <code>well_depth_ft</code>?</li>
-<li><code>deepest_ft</code> — how deep is the deepest well?</li>
-</ul>
-<div id="c009" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>n_wells <span class="op">=</span> ...</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n_missing_depth <span class="op">=</span> ...</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>deepest_ft <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Calculate the number of wells, the number missing <code>well_depth_ft</code>, and the deepest reported well. Use the table rather than typing known answers.</p>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n_wells <span class="op">=</span> ...</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>n_missing_depth <span class="op">=</span> ...</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>deepest_ft <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c010" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_wells <span class="op">==</span> <span class="bu">len</span>(wells), <span class="ss">f"expected </span><span class="sc">{</span><span class="bu">len</span>(wells)<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span>n_wells<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_missing_depth <span class="op">==</span> wells[<span class="st">"well_depth_ft"</span>].isna().<span class="bu">sum</span>()</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(deepest_ft <span class="op">-</span> wells[<span class="st">"well_depth_ft"</span>].<span class="bu">max</span>()) <span class="op">&lt;</span> <span class="fl">1e-9</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_wells<span class="sc">:,}</span><span class="ss"> wells; </span><span class="sc">{</span>n_missing_depth<span class="sc">}</span><span class="ss"> missing a depth; "</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"deepest is </span><span class="sc">{</span>deepest_ft<span class="sc">:,.0f}</span><span class="ss"> ft."</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-7" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_wells <span class="op">==</span> <span class="bu">len</span>(wells)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_missing_depth <span class="op">==</span> wells[<span class="st">"well_depth_ft"</span>].isna().<span class="bu">sum</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> deepest_ft <span class="op">==</span> wells[<span class="st">"well_depth_ft"</span>].<span class="bu">max</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (n_wells, n_missing_depth, deepest_ft) <span class="op">==</span> (<span class="dv">1693</span>, <span class="dv">184</span>, <span class="fl">2505.0</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_wells<span class="sc">:,}</span><span class="ss"> wells; </span><span class="sc">{</span>n_missing_depth<span class="sc">}</span><span class="ss"> missing depth; deepest </span><span class="sc">{</span>deepest_ft<span class="sc">:,.0f}</span><span class="ss"> ft"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<hr>
+<p>Why specify the dtype? Reading <code>site_no</code> as a number can remove a leading zero, which changes the identifier and later breaks joins.</p>
 </section>
 </section>
-<section id="part-2-getting-at-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="part-2-getting-at-the-data">Part 2 — Getting at the data</h2>
-<p>A <code>DataFrame</code> is a dictionary of columns. One column is a <code>Series</code>.</p>
-<div id="c012" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>depths <span class="op">=</span> wells[<span class="st">"well_depth_ft"</span>]</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(depths))</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(depths.head(<span class="dv">3</span>))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">mean depth: </span><span class="sc">{</span>depths<span class="sc">.</span>mean()<span class="sc">:.0f}</span><span class="ss"> ft   (NaNs are skipped, silently)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="part-2-select-columns-and-filter-rows" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-select-columns-and-filter-rows">Part 2 — Select columns and filter rows</h2>
+<p>One name selects a Series; a list of names selects a DataFrame.</p>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>depth <span class="op">=</span> wells[<span class="st">"well_depth_ft"</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>location_and_depth <span class="op">=</span> wells[[<span class="st">"site_no"</span>, <span class="st">"latitude"</span>, <span class="st">"longitude"</span>, <span class="st">"well_depth_ft"</span>]]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(depth).<span class="va">__name__</span>, <span class="bu">type</span>(location_and_depth).<span class="va">__name__</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A <strong>list</strong> of column names gives you back a DataFrame with those columns:</p>
-<div id="c014" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>wells[[<span class="st">"site_no"</span>, <span class="st">"station_name"</span>, <span class="st">"well_depth_ft"</span>]].head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>For rows, there are two accessors and the distinction matters:</p>
-<ul>
-<li><strong><code>.loc[]</code></strong> works on <strong>labels</strong> — the index value, and the column name</li>
-<li><strong><code>.iloc[]</code></strong> works on <strong>integer positions</strong> — like a numpy array</li>
-</ul>
-<p>They agree here only because the index happens to be 0, 1, 2, …</p>
-<div id="c016" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">".iloc[3] — the fourth row by position"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.iloc[<span class="dv">3</span>][[<span class="st">"site_no"</span>, <span class="st">"well_depth_ft"</span>]])</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">".loc[3] — the row whose index label is 3"</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wells.loc[<span class="dv">3</span>][[<span class="st">"site_no"</span>, <span class="st">"well_depth_ft"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Set a meaningful index and they part company immediately:</p>
-<div id="c018" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>by_site <span class="op">=</span> wells.set_index(<span class="st">"site_no"</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(by_site.loc[<span class="st">"320906110592701"</span>, [<span class="st">"station_name"</span>, <span class="st">"well_depth_ft"</span>]])</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"...and .iloc[0] is still just 'whatever is first':"</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(by_site.iloc[<span class="dv">0</span>][[<span class="st">"station_name"</span>, <span class="st">"well_depth_ft"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><code>.loc</code> takes rows <strong>and</strong> columns: <code>.loc[rows, columns]</code>. A slice with <code>.loc</code> is <strong>inclusive</strong> of its endpoint, unlike every other slice in Python. That inconsistency is real and it catches everyone once.</p>
-<div id="c020" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"iloc[2:5] gives 3 rows:"</span>, <span class="bu">len</span>(wells.iloc[<span class="dv">2</span>:<span class="dv">5</span>]))</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"loc[2:5]  gives 4 rows:"</span>, <span class="bu">len</span>(wells.loc[<span class="dv">2</span>:<span class="dv">5</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>A filter is a boolean Series aligned with the table’s index. Inspect missing depths before applying a depth comparison: <code>NaN</code> fails every comparison and the row otherwise disappears without a warning.</p>
 <section id="your-turn-2" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-2">YOUR TURN 2</h3>
-<p>Using <code>.loc</code>, pull out the <code>station_name</code> and <code>land_surface_elev_ft</code> of the well with site number <code>"320824110593001"</code> from <code>by_site</code>, into a Series called <code>one_well</code>.</p>
-<div id="c022" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>one_well <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create an independent table named <code>selected</code> containing wells that:</p>
+<ul>
+<li>are between 100 and 300 ft deep, inclusive; and</li>
+<li>have latitude greater than 32.2°.</li>
+</ul>
+<p>Use <code>.loc[...]</code> and <code>.copy()</code>. Then calculate <code>n_selected</code> and <code>median_depth_ft</code>.</p>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>selected <span class="op">=</span> ...</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n_selected <span class="op">=</span> ...</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>median_depth_ft <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c023" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(one_well, pd.Series), <span class="ss">f"expected a Series, got </span><span class="sc">{</span><span class="bu">type</span>(one_well)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">list</span>(one_well.index) <span class="op">==</span> [<span class="st">"station_name"</span>, <span class="st">"land_surface_elev_ft"</span>], <span class="op">\</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"wrong columns: </span><span class="sc">{</span><span class="bu">list</span>(one_well.index)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> one_well[<span class="st">"station_name"</span>] <span class="op">==</span> <span class="st">"D-15-13 11CBA"</span>, <span class="ss">f"got </span><span class="sc">{</span>one_well[<span class="st">'station_name'</span>]<span class="sc">!r}</span><span class="ss">"</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one_well)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> selected <span class="kw">is</span> <span class="kw">not</span> wells</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> selected[<span class="st">"well_depth_ft"</span>].between(<span class="dv">100</span>, <span class="dv">300</span>).<span class="bu">all</span>()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (selected[<span class="st">"latitude"</span>] <span class="op">&gt;</span> <span class="fl">32.2</span>).<span class="bu">all</span>()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_selected <span class="op">==</span> <span class="dv">375</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> median_depth_ft <span class="op">==</span> <span class="fl">200.0</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_selected<span class="sc">}</span><span class="ss"> selected wells; median depth </span><span class="sc">{</span>median_depth_ft<span class="sc">:.0f}</span><span class="ss"> ft"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<hr>
 </section>
 </section>
-<section id="part-3-filtering" class="level2">
-<h2 class="anchored" data-anchor-id="part-3-filtering">Part 3 — Filtering</h2>
-<p>A comparison on a column gives a boolean Series. Indexing with it keeps the <code>True</code> rows. This is the numpy mask from last week, with labels attached.</p>
-<div id="c025" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>deep <span class="op">=</span> wells[wells[<span class="st">"well_depth_ft"</span>] <span class="op">&gt;</span> <span class="dv">1000</span>]</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(deep)<span class="sc">}</span><span class="ss"> wells deeper than 1000 ft"</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>deep[[<span class="st">"site_no"</span>, <span class="st">"station_name"</span>, <span class="st">"well_depth_ft"</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Combine conditions with <code>&amp;</code> (and) and <code>|</code> (or). <strong>Each condition needs its own parentheses</strong> — <code>&amp;</code> binds more tightly than <code>&gt;</code>, so leaving them out is a <code>TypeError</code>, and an especially unhelpful one.</p>
-<div id="c027" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>deep_and_high <span class="op">=</span> wells[</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    (wells[<span class="st">"well_depth_ft"</span>] <span class="op">&gt;</span> <span class="dv">1000</span>) <span class="op">&amp;</span> (wells[<span class="st">"land_surface_elev_ft"</span>] <span class="op">&gt;</span> <span class="dv">2500</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(deep_and_high)<span class="sc">}</span><span class="ss"> wells that are both deep and up-basin"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="part-3-dates-become-a-coordinate" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-dates-become-a-coordinate">Part 3 — Dates become a coordinate</h2>
+<p>The groundwater-level table is long: each row is one measurement, while <code>site_no</code> identifies the well. Parse the dates when reading the CSV.</p>
+<div id="cell-14" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> pd.read_csv(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">/</span> <span class="st">"tucson_water_levels.csv"</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>},</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    parse_dates<span class="op">=</span>[<span class="st">"date"</span>],</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(levels[[<span class="st">"site_no"</span>, <span class="st">"date"</span>, <span class="st">"depth_to_water_ft"</span>]].dtypes)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(levels[<span class="st">"date"</span>].<span class="bu">min</span>(), <span class="st">"to"</span>, levels[<span class="st">"date"</span>].<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="your-turn-3" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
-<p>Find the wells in the <strong>northwest</strong> of the study area that are <strong>shallow</strong>:</p>
-<ul>
-<li>latitude greater than 32.3</li>
-<li>longitude less than −111.0</li>
-<li><code>well_depth_ft</code> less than 200</li>
-</ul>
-<p>Put them in <code>nw_shallow</code>, and put the count in <code>n_nw_shallow</code>.</p>
-<div id="c029" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>nw_shallow <span class="op">=</span> ...</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>n_nw_shallow <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="1">
+<li>Find the site with the most measurements and store its identifier as <code>most_observed_site</code>.</li>
+<li>Filter that site, make <code>date</code> the index, and sort it into a DataFrame named <code>one_site</code>.</li>
+<li>Use partial-string selection to create <code>historical</code>, containing 1950 through 1979 inclusive.</li>
+</ol>
+<div id="cell-16" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>most_observed_site <span class="op">=</span> ...</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>one_site <span class="op">=</span> ...</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>historical <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c030" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>expected <span class="op">=</span> wells[</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    (wells[<span class="st">"latitude"</span>] <span class="op">&gt;</span> <span class="fl">32.3</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span> (wells[<span class="st">"longitude"</span>] <span class="op">&lt;</span> <span class="op">-</span><span class="fl">111.0</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span> (wells[<span class="st">"well_depth_ft"</span>] <span class="op">&lt;</span> <span class="dv">200</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_nw_shallow <span class="op">==</span> <span class="bu">len</span>(expected), <span class="ss">f"expected </span><span class="sc">{</span><span class="bu">len</span>(expected)<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span>n_nw_shallow<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">set</span>(nw_shallow[<span class="st">"site_no"</span>]) <span class="op">==</span> <span class="bu">set</span>(expected[<span class="st">"site_no"</span>]), <span class="st">"different wells selected"</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_nw_shallow<span class="sc">}</span><span class="ss"> shallow wells in the northwest."</span>)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nw_shallow[[<span class="st">"site_no"</span>, <span class="st">"latitude"</span>, <span class="st">"longitude"</span>, <span class="st">"well_depth_ft"</span>]].head())</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> most_observed_site <span class="op">==</span> <span class="st">"320906110592701"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(one_site.index, pd.DatetimeIndex)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> one_site.index.is_monotonic_increasing</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(one_site) <span class="op">==</span> <span class="dv">547</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(historical) <span class="op">==</span> <span class="dv">308</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> historical.index.<span class="bu">min</span>().year <span class="op">==</span> <span class="dv">1950</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> historical.index.<span class="bu">max</span>().year <span class="op">==</span> <span class="dv">1979</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"site </span><span class="sc">{</span>most_observed_site<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(one_site)<span class="sc">}</span><span class="ss"> measurements; </span><span class="sc">{</span><span class="bu">len</span>(historical)<span class="sc">}</span><span class="ss"> in 1950–1979"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Worth noticing:</strong> a well missing its depth is excluded by <code>well_depth_ft &lt; 200</code>, because a comparison against <code>NaN</code> is always <code>False</code>. That is usually what you want, but it is never announced. If 184 wells have no depth on file, 184 wells silently left your analysis.</p>
-<hr>
+<p>Make a quick diagnostic plot. Depth is measured downward, so invert the axis.</p>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.5</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ax.plot(one_site.index, one_site[<span class="st">"depth_to_water_ft"</span>], color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"date"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"depth to water (ft below land surface)"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Groundwater record at site </span><span class="sc">{</span>most_observed_site<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
-<section id="part-4-new-columns" class="level2">
-<h2 class="anchored" data-anchor-id="part-4-new-columns">Part 4 — New columns</h2>
-<p>Assigning to a column that doesn’t exist creates it. The arithmetic is elementwise, exactly like numpy.</p>
-<div id="c033" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>wells[<span class="st">"well_depth_m"</span>] <span class="op">=</span> wells[<span class="st">"well_depth_ft"</span>] <span class="op">*</span> <span class="fl">0.3048</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>wells[<span class="st">"screen_bottom_elev_ft"</span>] <span class="op">=</span> wells[<span class="st">"land_surface_elev_ft"</span>] <span class="op">-</span> wells[<span class="st">"well_depth_ft"</span>]</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>wells[[<span class="st">"site_no"</span>, <span class="st">"land_surface_elev_ft"</span>, <span class="st">"well_depth_ft"</span>, <span class="st">"screen_bottom_elev_ft"</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Now the water levels — 9,046 measurements from the 80 best-monitored wells in the basin, going back to 1922.</p>
-<div id="c035" class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> pd.read_csv(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">/</span> <span class="st">"tucson_water_levels.csv"</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>{<span class="st">"site_no"</span>: <span class="bu">str</span>},</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    parse_dates<span class="op">=</span>[<span class="st">"date"</span>],</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(levels)<span class="sc">:,}</span><span class="ss"> measurements, </span><span class="sc">{</span>levels[<span class="st">'site_no'</span>]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss"> wells"</span>)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"from </span><span class="sc">{</span>levels[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>levels[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>levels.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>This is <strong>long format</strong>: one row per measurement, with the well identified in a column rather than by position. Nearly all real monitoring data arrives this way. Reshaping it is a Week 7 topic; for now we just filter it.</p>
-<div id="c037" class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>one_site <span class="op">=</span> levels[levels[<span class="st">"site_no"</span>] <span class="op">==</span> <span class="st">"320824110593001"</span>].sort_values(<span class="st">"date"</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(one_site)<span class="sc">}</span><span class="ss"> measurements spanning "</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>one_site[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>one_site[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>one_site[[<span class="st">"date"</span>, <span class="st">"depth_to_water_ft"</span>, <span class="st">"water_level_elev_ft"</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="part-4-resample-a-daily-streamflow-record" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-resample-a-daily-streamflow-record">Part 4 — Resample a daily streamflow record</h2>
+<p>Read the cached Sabino Creek daily discharge record and create a sorted <code>DatetimeIndex</code>.</p>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flow <span class="op">=</span> (</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    pd.read_csv(DATA <span class="op">/</span> <span class="st">"cache"</span> <span class="op">/</span> <span class="st">"nwis_09484000_dv.csv"</span>, parse_dates<span class="op">=</span>[<span class="st">"datetime"</span>])</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    .set_index(<span class="st">"datetime"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    .sort_index()</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> flow.index.is_unique</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> flow.index.is_monotonic_increasing</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(flow.index.<span class="bu">min</span>(), <span class="st">"to"</span>, flow.index.<span class="bu">max</span>(), <span class="ss">f"(</span><span class="sc">{</span><span class="bu">len</span>(flow)<span class="sc">:,}</span><span class="ss"> days)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="your-turn-4" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
-<p><code>depth_to_water_ft</code> counts <strong>downward</strong> from the land surface, so a rising number means a falling water table — which is exactly the wrong way round for plotting, and a reliable source of sign errors.</p>
-<p>For <code>one_site</code>, add a column <code>decline_ft</code> giving how far the water table has dropped <strong>since the first measurement in the record</strong>.</p>
-<p>The first row should be <code>0.0</code>, and later rows positive where the level has fallen.</p>
-<div id="c039" class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>one_site <span class="op">=</span> one_site.copy()      <span class="co"># avoid a SettingWithCopyWarning; see the note below</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>one_site[<span class="st">"decline_ft"</span>] <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create:</p>
+<ul>
+<li><code>monsoon_2006</code>: July through September 2006;</li>
+<li><code>monthly_mean</code>: mean discharge for every separate calendar month; and</li>
+<li><code>water_year_mean</code>: mean discharge for years ending September 30.</li>
+</ul>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>monsoon_2006 <span class="op">=</span> ...</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>monthly_mean <span class="op">=</span> ...</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>water_year_mean <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c040" class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">"decline_ft"</span> <span class="kw">in</span> one_site.columns</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(one_site[<span class="st">"decline_ft"</span>].iloc[<span class="dv">0</span>]) <span class="op">&lt;</span> <span class="fl">1e-9</span>, <span class="st">"the first measurement should be 0"</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>last <span class="op">=</span> one_site[<span class="st">"decline_ft"</span>].iloc[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(last <span class="op">-</span> <span class="fl">111.05</span>) <span class="op">&lt;</span> <span class="fl">0.01</span>, <span class="ss">f"expected about 111.05 ft of decline, got </span><span class="sc">{</span>last<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"first measurement: </span><span class="sc">{</span>one_site[<span class="st">'date'</span>]<span class="sc">.</span>iloc[<span class="dv">0</span>]<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss">, "</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>one_site[<span class="st">'depth_to_water_ft'</span>]<span class="sc">.</span>iloc[<span class="dv">0</span>]<span class="sc">:.1f}</span><span class="ss"> ft down"</span>)</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"last measurement:  </span><span class="sc">{</span>one_site[<span class="st">'date'</span>]<span class="sc">.</span>iloc[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss">, "</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>one_site[<span class="st">'depth_to_water_ft'</span>]<span class="sc">.</span>iloc[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.1f}</span><span class="ss"> ft down"</span>)</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"net decline:       </span><span class="sc">{</span>last<span class="sc">:.1f}</span><span class="ss"> ft. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-24" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(monsoon_2006) <span class="op">==</span> <span class="dv">92</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(monthly_mean) <span class="op">==</span> <span class="dv">240</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(water_year_mean) <span class="op">==</span> <span class="dv">21</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(monsoon_2006[<span class="st">"discharge_cfs"</span>].mean(), <span class="fl">93.2676087</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"monsoon 2006 mean: </span><span class="sc">{</span>monsoon_2006[<span class="st">'discharge_cfs'</span>]<span class="sc">.</span>mean()<span class="sc">:.1f}</span><span class="ss"> cfs"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(monthly_mean)<span class="sc">}</span><span class="ss"> monthly values and </span><span class="sc">{</span><span class="bu">len</span>(water_year_mean)<span class="sc">}</span><span class="ss"> water-year values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<blockquote class="blockquote">
-<p><strong>That <code>.copy()</code>.</strong> Slicing a DataFrame sometimes gives you a view and sometimes a copy, and assigning into a view raises <code>SettingWithCopyWarning</code>. When you plan to modify a subset, take an explicit <code>.copy()</code> first. It is the most common warning you will see this semester and the fix is always this.</p>
-</blockquote>
-<p>A hundred and eleven feet, in one well, in one lifetime. That is what basin groundwater depletion looks like in a table.</p>
-<hr>
+<p>Why are there 21 water-year values in a 20-calendar-year record? The January 2005 start and December 2024 end create partial water years. Those edge bins must be identified before comparing annual values.</p>
 </section>
 </section>
-<section id="part-5-the-one-excel-file" class="level2">
-<h2 class="anchored" data-anchor-id="part-5-the-one-excel-file">Part 5 — The one Excel file</h2>
-<p>You will not use Excel in this course. You will absolutely be <em>sent</em> Excel files, forever, by people who are not going to stop. Reading one is a Python skill.</p>
-<div id="c043" class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>perm <span class="op">=</span> pd.read_excel(DATA <span class="op">/</span> <span class="st">"week04_permeameter.xlsx"</span>, sheet_name<span class="op">=</span><span class="st">"Constant Head"</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>perm.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><code>pd.read_excel</code> is <code>pd.read_csv</code> with a <code>sheet_name</code>. Everything after this point is identical — which is the whole point.</p>
+<section id="part-5-rolling-windows-retain-the-daily-coordinate" class="level2">
+<h2 class="anchored" data-anchor-id="part-5-rolling-windows-retain-the-daily-coordinate">Part 5 — Rolling windows retain the daily coordinate</h2>
+<p>Resampling returns fewer values. A rolling window keeps the daily index and summarises neighbouring days.</p>
 <section id="your-turn-5" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-5">YOUR TURN 5</h3>
-<p>Compute hydraulic conductivity for each permeameter run and add it as a column <code>K_m_per_day</code>.</p>
-<p>For a constant-head permeameter, Darcy’s law rearranges to</p>
-<p><span class="math display">\[K = \frac{Q L}{A \, \Delta h}\]</span></p>
-<p>where <span class="math inline">\(Q\)</span> is the flow rate, <span class="math inline">\(L\)</span> the sample length, <span class="math inline">\(A\)</span> the cross-sectional area, and <span class="math inline">\(\Delta h\)</span> the head difference.</p>
-<p>Two steps to get right:</p>
-<ul>
-<li><span class="math inline">\(Q\)</span> is <code>volume_collected_cm3 / duration_s</code>, in cm³/s</li>
-<li>the answer comes out in cm/s; <strong>multiply by 864 to get m/d</strong></li>
-</ul>
-<div id="c045" class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>area_cm2 <span class="op">=</span> ...</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>flow_cm3_per_s <span class="op">=</span> ...</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>perm[<span class="st">"K_m_per_day"</span>] <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Calculate a centred 30-day rolling mean of discharge. Store the date and value of the largest rolling mean as <code>wettest_30_day_date</code> and <code>wettest_30_day_cfs</code>.</p>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rolling_30 <span class="op">=</span> ...</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>wettest_30_day_date <span class="op">=</span> ...</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>wettest_30_day_cfs <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c046" class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">"K_m_per_day"</span> <span class="kw">in</span> perm.columns</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>by_material <span class="op">=</span> perm.groupby(<span class="st">"material"</span>)[<span class="st">"K_m_per_day"</span>].mean()</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(by_material[<span class="st">"coarse sand"</span>] <span class="op">-</span> <span class="fl">28.7</span>) <span class="op">&lt;</span> <span class="fl">0.5</span>, <span class="ss">f"got </span><span class="sc">{</span>by_material[<span class="st">'coarse sand'</span>]<span class="sc">:.2f}</span><span class="ss">"</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(by_material[<span class="st">"fine sand"</span>] <span class="op">-</span> <span class="fl">4.4</span>) <span class="op">&lt;</span> <span class="fl">0.2</span>, <span class="ss">f"got </span><span class="sc">{</span>by_material[<span class="st">'fine sand'</span>]<span class="sc">:.2f}</span><span class="ss">"</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(by_material[<span class="st">"silty sand"</span>] <span class="op">-</span> <span class="fl">0.66</span>) <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="ss">f"got </span><span class="sc">{</span>by_material[<span class="st">'silty sand'</span>]<span class="sc">:.2f}</span><span class="ss">"</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(by_material.<span class="bu">round</span>(<span class="dv">2</span>).to_string())</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Three orders of magnitude between coarse sand and silty sand. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-27" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> rolling_30.isna().<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">29</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wettest_30_day_date <span class="op">==</span> pd.Timestamp(<span class="st">"2006-08-12"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(wettest_30_day_cfs, <span class="fl">258.2266667</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"wettest sustained month centred on </span><span class="sc">{</span>wettest_30_day_date<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss">: "</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>wettest_30_day_cfs<span class="sc">:.1f}</span><span class="ss"> cfs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>That spread is the single most important number in hydrogeology. Hydraulic conductivity varies over about thirteen orders of magnitude across earth materials — from gravel to unfractured granite — which is why a model calibrated on the wrong lithology is not slightly wrong.</p>
-<hr>
+<div id="cell-28" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">3.8</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ax.plot(flow.index, flow[<span class="st">"discharge_cfs"</span>], color<span class="op">=</span><span class="st">"0.75"</span>, lw<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">"daily"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>ax.plot(rolling_30.index, rolling_30, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"30-day mean"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"date"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"discharge (cfs)"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"A rolling mean separates sustained wet periods from daily peaks"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
-<section id="part-6-a-first-plot" class="level2">
-<h2 class="anchored" data-anchor-id="part-6-a-first-plot">Part 6 — A first plot</h2>
-<p>A DataFrame plots itself. This is not the polished version — Week 8 is about making figures worth showing people — but it is what you use while you are still working out what the data says.</p>
-<div id="c049" class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.8</span>))</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>ax.plot(one_site[<span class="st">"date"</span>], one_site[<span class="st">"depth_to_water_ft"</span>],</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">1.2</span>, marker<span class="op">=</span><span class="st">"."</span>, ms<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()          <span class="co"># depth increases downward; so should the axis</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"depth to water (ft below land surface)"</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Well D-15-13 11CBA — one well, one century"</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Note <code>invert_yaxis()</code>. Plotting depth-below-surface the normal way up draws a falling water table as a rising line, and someone will misread it. When the quantity counts downward, so should the axis.</p>
+<section id="part-6-group-long-data-then-reshape-only-when-needed" class="level2">
+<h2 class="anchored" data-anchor-id="part-6-group-long-data-then-reshape-only-when-needed">Part 6 — Group long data, then reshape only when needed</h2>
+<p>Groundwater measurements remain most compact in long form. First summarise each site without reshaping. Sort by site and date before asking for the first and last measurement.</p>
 <section id="your-turn-6" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-6">YOUR TURN 6</h3>
-<p>Make a scatter plot of the whole well inventory: <code>longitude</code> on the x axis, <code>latitude</code> on the y, with the marker <strong>colour</strong> set by <code>well_depth_ft</code>.</p>
-<p>Store the result of <code>ax.scatter(...)</code> in <code>sc</code> so the check can look at it, and add a colorbar.</p>
-<div id="c051" class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">6</span>))</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> ...</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>fig.colorbar(sc, ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"well depth (ft)"</span>)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"longitude"</span>)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"latitude"</span>)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Tucson basin monitoring wells"</span>)</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>)</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="1">
+<li>Sort the measurements as <code>ordered</code>.</li>
+<li>Build <code>site_summary</code> with the count, first depth, and last depth for every site.</li>
+<li>Add <code>change_ft = last - first</code> and count sites with positive change as <code>n_declining</code>.</li>
+<li>Find the three sites with the most measurements and pivot only those records into <code>wide</code>, with dates as rows and sites as columns.</li>
+</ol>
+<div id="cell-30" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ordered <span class="op">=</span> ...</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>site_summary <span class="op">=</span> ...</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>site_summary[<span class="st">"change_ft"</span>] <span class="op">=</span> ...</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>n_declining <span class="op">=</span> ...</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>top_three <span class="op">=</span> ...</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>wide <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c052" class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sc <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, <span class="st">"assign the result of ax.scatter(...) to sc"</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sc.get_offsets().shape[<span class="dv">0</span>] <span class="op">==</span> <span class="bu">len</span>(wells), <span class="op">\</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"plotted </span><span class="sc">{</span>sc<span class="sc">.</span>get_offsets()<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> points, expected </span><span class="sc">{</span><span class="bu">len</span>(wells)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sc.get_array() <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, <span class="st">"pass c=... so the colour carries the depth"</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(wells)<span class="sc">:,}</span><span class="ss"> wells plotted, coloured by depth. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-31" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> site_summary.shape <span class="op">==</span> (<span class="dv">80</span>, <span class="dv">4</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_declining <span class="op">==</span> <span class="dv">73</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(site_summary[<span class="st">"change_ft"</span>].median(), <span class="fl">46.83</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wide.shape <span class="op">==</span> (<span class="dv">1185</span>, <span class="dv">3</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wide.isna().<span class="bu">sum</span>().<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">2281</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_declining<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(site_summary)<span class="sc">}</span><span class="ss"> sites have positive depth change"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"wide table: </span><span class="sc">{</span>wide<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">; </span><span class="sc">{</span>wide<span class="sc">.</span>isna()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:,}</span><span class="ss"> empty cells"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Think about this before next week:</strong> the deep wells are not scattered at random. They cluster, and the clusters line up with the basin axis and with where the water has been pumped hardest. Making that legible — rather than merely visible — is what Week 8 is about.</p>
-<hr>
+<p>Positive depth change means the water table moved downward. The wide table is useful for aligned comparison, but it is sparse because field visits did not occur on the same dates. Missing cells are absence of measurement, not zero depth.</p>
 </section>
 </section>
 <section id="before-you-leave" class="level2">
 <h2 class="anchored" data-anchor-id="before-you-leave">Before you leave</h2>
 <ol type="1">
-<li><em>Kernel → Restart Kernel and Run All Cells</em></li>
-<li>Fix anything that breaks</li>
-<li>Save</li>
+<li>Restart the kernel and run all cells.</li>
+<li>Confirm that all six CHECK cells pass.</li>
+<li>Save the notebook.</li>
 </ol>
 </section>
 <section id="whats-due" class="level2">
 <h2 class="anchored" data-anchor-id="whats-due">What’s due</h2>
-<ul>
-<li><strong>HW 3 — Iterative groundwater solution</strong>, Wednesday 9/23 at 11:59pm</li>
-<li><strong>Project 1 analysis component</strong> — see the project brief on D2L</li>
-</ul>
+<p><strong>HW 2 — Numerical water balance</strong>, Wednesday 9/23 at 11:59pm through D2L.</p>
 </section>
 <section id="next-week" class="level2">
 <h2 class="anchored" data-anchor-id="next-week">Next week</h2>
-<p>Where data actually comes from: pulling records straight from the USGS API, and dealing with the gaps, duplicates, and outliers that arrive with them.</p>
+<p>You will retrieve hydrologic records and diagnose gaps, duplicates, and outliers. The table and time-series operations in this lab are the tools you will use to do it.</p>
 </section>
 <section id="stuck" class="level2">
 <h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
 <ul>
-<li><code>KeyError: 'well_depth'</code> means the column is spelled differently. Print <code>wells.columns</code> rather than guessing.</li>
-<li><code>SettingWithCopyWarning</code> means you are assigning into something that might be a view. Take a <code>.copy()</code> when you slice.</li>
-<li><code>TypeError: cannot compare ...</code> when combining filters almost always means a missing pair of parentheses around one of the conditions.</li>
-<li>A mean that comes out as <code>NaN</code> means the whole column is <code>NaN</code>; a mean that looks slightly off usually means some rows were skipped. <code>.isna().sum()</code> tells you which.</li>
-<li>Office hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.</li>
+<li>Print <code>.shape</code>, <code>.dtypes</code>, and <code>.index</code> before guessing what an object is.</li>
+<li>If a date slice fails, confirm the index is a sorted <code>DatetimeIndex</code>.</li>
+<li>If a filter drops too many rows, inspect missing values in every filtered column.</li>
+<li>If <code>pivot</code> raises a duplicate-entry error, check the site-date pairs rather than switching immediately to <code>pivot_table</code>.</li>
 </ul>
 
 

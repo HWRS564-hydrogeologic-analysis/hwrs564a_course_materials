@@ -218,7 +218,7 @@ Dr.&nbsp;Andrew Bennett
 <li>Why Python, for <em>this</em> kind of work</li>
 <li>Three ways to run Python — and which one we use when</li>
 <li>Notebooks: cells, the kernel, and the trap everyone falls into</li>
-<li>Your environment: Codespaces and <code>uv</code></li>
+<li>Your tool stack: GitHub, Codespaces, VS Code, Jupyter, and <code>uv</code></li>
 <li>Packages and <code>import</code></li>
 </ol>
 <p>By the end you will have run code, made a variable, and computed a Darcy flux.</p>
@@ -263,7 +263,7 @@ Dr.&nbsp;Andrew Bennett
 </tbody>
 </table>
 <div class="fragment">
-<p>That last row is why this course exists. By week 10 you will be building MODFLOW models from Python — and <code>flopy</code> is <em>the</em> way that’s done now.</p>
+<p>That last row is why this course exists. By week 10 you will be building MODFLOW models from Python, and <code>flopy</code> is the way that’s done now.</p>
 </div>
 </section>
 <section class="slide level2">
@@ -496,6 +496,43 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <div class="fragment due-notice">
 <p>Nothing to install on your own machine. Nothing to break. If your codespace gets into a bad state, delete it and make a new one — that is the <em>point</em>.</p>
 </div>
+<!-- Adapted from old_slides/hwrs564a_sept11.pdf. -->
+</section>
+<section class="slide level2">
+<h2>These tools are different layers</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Its job in this course</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Git</strong></td>
+<td>Records the history of changes to files</td>
+</tr>
+<tr class="even">
+<td><strong>GitHub</strong></td>
+<td>Hosts the shared repository and coordinates copies</td>
+</tr>
+<tr class="odd">
+<td><strong>Codespaces</strong></td>
+<td>Runs the remote Linux computer that holds the repo</td>
+</tr>
+<tr class="even">
+<td><strong>VS Code</strong></td>
+<td>Gives you the editor, terminal, and notebook interface</td>
+</tr>
+<tr class="odd">
+<td><strong>Jupyter kernel</strong></td>
+<td>Runs Python and remembers the current variables</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>When something breaks, name the layer first. A Git sync problem, a Codespaces build problem, and a stopped Jupyter kernel need three different fixes.</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>What defines the environment</h2>
@@ -630,6 +667,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <ul>
 <li>Ran Python three different ways, and know when each is right</li>
 <li>Know that a notebook’s kernel has a history the document doesn’t show</li>
+<li>Can distinguish the repository, remote computer, interface, and Python kernel</li>
 <li>Made variables, imported a module, computed a Darcy flux</li>
 </ul>
 <div class="kicker">
