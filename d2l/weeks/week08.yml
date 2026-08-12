@@ -16,9 +16,10 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Finish the Week 7 lab notebook"
-    url: "labs/week07/week07_lab_timeseries.html"
+  - text: "Complete the Week 7 preparation posted in D2L"
+    url: "slides/week07_tue_datetime.html"
     site_relative: true
+    note: "This link will be updated when the replacement Week 7 topic is finalized."
   - text: "Look at a figure you have made before and ask what its title says"
     url: "https://www.data-to-viz.com/caveats.html"
     note: "If the title could be generated from the axis labels, it is doing no work."
@@ -39,9 +40,7 @@ class_material:
     course_file: "matplotlib_commands2.png"
 
 assignments:
-  - text: "Quiz 6 — on Week 7 material"
-    quiz: "TBD-week08-quiz"
-    note: "In class, Tuesday 10/13."
+  - "*Week 7 quiz details will be added with the replacement Week 7 topic.*"
   - text: "Continue: HW 4 — Tell one hydrologic story with a figure"
     dropbox: "TBD-hw04-dropbox"
     note: "Use this week's figure and map material; due Wednesday 10/21 at 11:59pm."

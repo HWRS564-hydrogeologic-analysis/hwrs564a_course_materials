@@ -1,5 +1,5 @@
 ---
-title: "Introduction to pandas"
+title: "Pandas: labelled data through time"
 subtitle: "HWRS 564a · Week 5 · Tuesday, September 22"
 author: "Dr. Andrew Bennett"
 ---
@@ -11,54 +11,44 @@ Week 5, session 1 of 2
 :::
 
 1. Quiz — five minutes, on numpy and iteration
-2. What a DataFrame is, and why labels beat positions
-3. Reading a CSV, and the four things to check before you trust it
-4. Selecting columns
-5. `.loc` and `.iloc`, and the difference that catches everybody
+2. DataFrames and Series: values with labels
+3. Reading and checking a table
+4. Selecting rows and columns with `.loc` and `.iloc`
+5. Turning date strings into a `DatetimeIndex`
+6. Selecting and resampling a time series
 
-Today's data is real: every USGS monitoring well in the Tucson basin.
+Today's question: how do we get from a CSV to a defensible monthly hydrologic
+record?
 
-# Labels {background-color="#0C234B"}
+# Labels prevent silent mistakes {background-color="#0C234B"}
 
-## The problem with position
+## Position alone does not explain itself
 
 ```python
-data[3, 7]     # ...which well, and which measurement?
+data[3, 7]     # which well, and which measurement?
 ```
 
 ::: {.fragment}
-You wrote that line knowing what column 7 was. Three weeks later you don't, and
-neither does anyone reading your code.
+Insert a column at position 2 and every later index changes. The code still
+runs; the meaning silently moves.
 :::
-
-::: {.fragment}
-Worse: you insert a column at position 2, and every index after it is now
-silently wrong. Nothing errors. The numbers just change.
-:::
-
-## A DataFrame
 
 ```python
 wells.loc["320824110593001", "well_depth_ft"]
 ```
 
 ::: {.fragment}
-Same lookup, and it says what it means. If a column moves, this keeps working.
-If a column disappears, you get a `KeyError` — loudly, at the right place.
+Labels survive reordering. If a required label disappears, pandas raises a
+`KeyError` at the point where the assumption failed.
 :::
 
-::: {.fragment}
-**pandas is numpy with labels on it.** Everything you learned last week still
-applies underneath.
-:::
-
-## The two objects
+## Two objects cover most of pandas
 
 ::: {.columns}
 ::: {.column width="50%"}
 **`Series`**
 
-One column. Values plus an index.
+One labelled sequence.
 
 ```python
 wells["well_depth_ft"]
@@ -68,7 +58,7 @@ wells["well_depth_ft"]
 ::: {.column width="50%"}
 **`DataFrame`**
 
-A dictionary of Series that share an index.
+Columns that share an index.
 
 ```python
 wells[["site_no", "well_depth_ft"]]
@@ -77,97 +67,51 @@ wells[["site_no", "well_depth_ft"]]
 :::
 
 ::: {.fragment}
-One name in brackets gives a Series. A *list* of names gives a DataFrame. That
-is the whole rule, and it explains most of the double brackets you'll see.
+One column name returns a Series. A list of names returns a DataFrame.
 :::
 
-# Reading data {background-color="#AB0520"}
-
-## `read_csv`, with one precaution
+## Read the table, then look before calculating
 
 ```python
 from pathlib import Path
 import pandas as pd
 
-ROOT = next(p for p in Path.cwd().parents if (p / "pyproject.toml").exists())
-wells = pd.read_csv(ROOT / "data" / "tucson_basin_wells.csv",
-                    dtype={"site_no": str})
+ROOT = next(
+    p for p in [Path.cwd(), *Path.cwd().parents]
+    if (p / "pyproject.toml").exists()
+)
+wells = pd.read_csv(
+    ROOT / "data" / "tucson_basin_wells.csv",
+    dtype={"site_no": str},
+)
 ```
 
 ::: {.fragment}
-`dtype={"site_no": str}` is not decoration. Site numbers are 15-digit
-identifiers; pandas would read them as integers, drop leading zeros, and break
-every join you make later — without a warning.
+`site_no` is an identifier, not a number. Reading it as text preserves leading
+zeros and makes later joins reliable.
 :::
 
-::: {.fragment}
-Walking up to find the repo root beats counting `../..`, which works right up
-until you move the file.
-:::
+## Four checks, every time
 
-## Four things to check, every time
-
-::: {.incremental}
-1. `df.dtypes` — is anything a string that should be a number?
-2. `df.isna().sum()` — how much is missing, and where?
-3. `df.describe()` — do the numbers look physical?
-4. `len(df)` — did you get the number of rows you expected?
-:::
+```python
+print(wells.shape)          # did the expected table arrive?
+print(wells.dtypes)         # are identifiers and numbers typed correctly?
+print(wells.isna().sum())   # where is information missing?
+print(wells.describe())     # are ranges physically plausible?
+```
 
 ::: {.fragment .due-notice}
-Thirty seconds. It catches the mistakes that otherwise survive all the way into
-a figure.
+These checks take seconds. They are part of the analysis, not decoration before
+the analysis begins.
 :::
 
-## What that finds in the real thing
+## Your turn: convert and summarise
 
-```{pyodide}
-#| edit: false
-#| autorun: false
-#| min-lines: 10
-import pandas as pd
-
-# a slice of the real inventory, hardcoded so it runs in the browser
-wells = pd.DataFrame({
-    "site_no": ["320000110555701", "320001110584201", "320002110584001",
-                "320002110584201", "320004110572601"],
-    "well_depth_ft": [61.0, 110.0, 835.0, None, 397.0],
-    "land_surface_elev_ft": [2675.0, 2698.0, 2701.0, 2699.0, 2662.0],
-})
-print(wells.dtypes)
-print()
-print(wells.isna().sum())
-```
-
-::: {.fragment}
-One well in five has no depth on file. In the full inventory it is 184 of 1,693
-— and every filter you write on depth will silently drop them.
-:::
-
-## Selecting columns
-
-```{pyodide}
-#| autorun: false
-#| min-lines: 8
-import pandas as pd
-wells = pd.DataFrame({
-    "site_no": ["A", "B", "C"],
-    "well_depth_ft": [61.0, 110.0, 835.0],
-    "land_surface_elev_ft": [2675.0, 2698.0, 2701.0],
-})
-
-print(type(wells["well_depth_ft"]))         # Series
-print(type(wells[["well_depth_ft"]]))       # DataFrame
-print(wells[["site_no", "well_depth_ft"]])
-```
-
-## Your turn: land surface in metres
-
-Add a column `land_surface_elev_m`, then find the mean well depth in feet.
+Add land-surface elevation in metres and find the mean well depth.
 
 ```{pyodide}
 #| setup: true
-#| exercise: ex_col
+#| exercise: ex_columns
 import pandas as pd
 wells = pd.DataFrame({
     "site_no": ["A", "B", "C", "D"],
@@ -178,140 +122,72 @@ FEET_TO_M = 0.3048
 ```
 
 ```{pyodide}
-#| exercise: ex_col
+#| exercise: ex_columns
 wells["land_surface_elev_m"] = ______
-mean_depth = ______
+mean_depth_ft = ______
 print(wells)
-print(f"mean depth: {mean_depth:.1f} ft")
+print(f"mean depth: {mean_depth_ft:.1f} ft")
 ```
 
-::: {.hint exercise="ex_col"}
+::: {.hint exercise="ex_columns"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
-Assigning to a column name that doesn't exist creates it. The arithmetic is
-elementwise, exactly like numpy.
+Assigning to a new column name creates it. Series arithmetic is elementwise.
 :::
 :::
 
-::: {.solution exercise="ex_col"}
+::: {.solution exercise="ex_columns"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```python
 wells["land_surface_elev_m"] = wells["land_surface_elev_ft"] * FEET_TO_M
-mean_depth = wells["well_depth_ft"].mean()
+mean_depth_ft = wells["well_depth_ft"].mean()
 ```
 
-`350.8` ft. Note that `.mean()` **skips missing values silently** — with a
-`None` in the column you would get the mean of the three that remain, and no
-indication that you did.
+The mean is `350.8 ft`.
 :::
 :::
 
-# `.loc` and `.iloc` {background-color="#0C234B"}
+# Select by meaning {background-color="#AB0520"}
 
-## Labels vs. positions
+## `.loc` uses labels; `.iloc` uses positions
 
 ::: {.columns}
 ::: {.column width="50%"}
-**`.loc[]`**
-
-By **label** — the index value and the column name.
+**`.loc[row, column]`**
 
 ```python
-wells.loc["320824110593001",
-          "well_depth_ft"]
+wells.loc["C-22", "well_depth_ft"]
 ```
+
+Use when labels carry meaning.
 :::
 
 ::: {.column width="50%"}
-**`.iloc[]`**
-
-By **integer position**, like numpy.
+**`.iloc[row, column]`**
 
 ```python
-wells.iloc[3, 1]
+wells.iloc[2, 1]
 ```
+
+Use when position is genuinely the question.
 :::
 :::
 
 ::: {.fragment}
-They look interchangeable on a fresh DataFrame only because its index happens to
-be `0, 1, 2, ...`. Set a real index and they part company immediately.
+`.loc` slices include the endpoint. `.iloc` slices follow ordinary Python and
+exclude it.
 :::
 
-## The slice trap
+## Your turn: two kinds of selection
 
-```{pyodide}
-#| edit: false
-#| autorun: false
-#| min-lines: 7
-import pandas as pd
-df = pd.DataFrame({"x": [10, 20, 30, 40, 50, 60]})
-
-print("iloc[2:5] ->", len(df.iloc[2:5]), "rows")
-print("loc[2:5]  ->", len(df.loc[2:5]), "rows")
-```
-
-::: {.fragment}
-**`.loc` slices are inclusive of the endpoint.** Every other slice in Python is
-half-open. This is genuinely inconsistent, it is not going to change, and it
-catches everyone exactly once.
-:::
-
-## Your turn: pull one well
-
-Using `.loc`, get the depth and land surface elevation of well `"C-22"`.
+Get the third row by position and well `C-22` by name.
 
 ```{pyodide}
 #| setup: true
-#| exercise: ex_loc
-import pandas as pd
-wells = pd.DataFrame({
-    "well_depth_ft": [61.0, 110.0, 835.0, 397.0],
-    "land_surface_elev_ft": [2675.0, 2698.0, 2701.0, 2662.0],
-}, index=["A-14", "B-07", "C-22", "D-03"])
-```
-
-```{pyodide}
-#| exercise: ex_loc
-one_well = ______
-print(one_well)
-```
-
-::: {.hint exercise="ex_loc"}
-::: {.callout-note collapse="false"}
-## Hint
-
-`.loc` takes rows first, then columns: `.loc[row_label, column_labels]`. You
-want both columns, so pass a list of the two names — or just the row label on
-its own.
-:::
-:::
-
-::: {.solution exercise="ex_loc"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```python
-one_well = wells.loc["C-22", ["well_depth_ft", "land_surface_elev_ft"]]
-```
-
-`wells.loc["C-22"]` alone works too and gives the whole row. Naming the columns
-explicitly is worth the extra characters when the table is wide — it documents
-what you actually needed.
-:::
-:::
-
-## Your turn: `.loc` or `.iloc`?
-
-The index here is site numbers, not integers. Get the **third row** by position,
-and the well `"C-22"` by name.
-
-```{pyodide}
-#| setup: true
-#| exercise: ex_which
+#| exercise: ex_select
 import pandas as pd
 wells = pd.DataFrame({
     "well_depth_ft": [61.0, 110.0, 835.0, 397.0],
@@ -319,22 +195,22 @@ wells = pd.DataFrame({
 ```
 
 ```{pyodide}
-#| exercise: ex_which
+#| exercise: ex_select
 third_row = wells.______[2]
 by_name = wells.______["C-22"]
-print(f"third row: {third_row['well_depth_ft']}")
-print(f"C-22:      {by_name['well_depth_ft']}")
+print(third_row)
+print(by_name)
 ```
 
-::: {.hint exercise="ex_which"}
+::: {.hint exercise="ex_select"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
-"Third row" is a position. `"C-22"` is a label. One accessor each.
+“Third” is a position. `C-22` is a label.
 :::
 :::
 
-::: {.solution exercise="ex_which"}
+::: {.solution exercise="ex_select"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
@@ -343,32 +219,188 @@ third_row = wells.iloc[2]
 by_name = wells.loc["C-22"]
 ```
 
-Both return `835.0` here — because C-22 *is* the third row. That coincidence is
-exactly why this distinction is easy to get away with being vague about, right
-up until the day you sort the table.
+They happen to return the same value before sorting. The accessors still mean
+different things.
+:::
+:::
+
+# Dates unlock time-series operations {background-color="#0C234B"}
+
+## Strings look like dates but behave like text
+
+```python
+flow = pd.read_csv("flow.csv")
+flow["datetime"].dtype                # object
+```
+
+::: {.fragment}
+Text dates can sort incorrectly, cannot be subtracted, and do not know their
+month or water year.
+:::
+
+```python
+flow = pd.read_csv("flow.csv", parse_dates=["datetime"])
+flow = flow.set_index("datetime").sort_index()
+```
+
+::: {.fragment}
+A `DatetimeIndex` turns time into a selectable and groupable coordinate.
+:::
+
+## Select time using partial date strings
+
+```python
+flow.loc["2006"]
+flow.loc["2006-08"]
+flow.loc["2006-07":"2006-09"]
+```
+
+::: {.fragment}
+The final slice includes all of July through September. The inclusive `.loc`
+rule is useful here.
+:::
+
+::: {.fragment}
+If dates stay in a column, use `.dt`: `levels["date"].dt.month`.
+:::
+
+## Your turn: select the monsoon
+
+Pull July through September 2006 from a daily series.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_dates
+import pandas as pd
+import numpy as np
+idx = pd.date_range("2005-01-01", "2007-12-31", freq="D")
+q = pd.Series(np.abs(np.sin(np.arange(len(idx)) / 58)) * 40, index=idx)
+```
+
+```{pyodide}
+#| exercise: ex_dates
+monsoon = q.loc[______]
+print(monsoon.index.min(), monsoon.index.max(), len(monsoon))
+```
+
+::: {.hint exercise="ex_dates"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Use a slice containing two partial date strings.
+:::
+:::
+
+::: {.solution exercise="ex_dates"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+monsoon = q.loc["2006-07":"2006-09"]
+```
+
+The slice contains 92 daily values.
+:::
+:::
+
+# Resampling changes temporal resolution {background-color="#AB0520"}
+
+## One method, different hydrologic questions
+
+```python
+flow["discharge_cfs"].resample("ME").mean()
+flow["discharge_cfs"].resample("YE").max()
+flow["discharge_cfs"].resample("YE-SEP").mean()
+```
+
+| Question | Aggregation |
+|---|---|
+| Average conditions | `.mean()` |
+| Accumulated depth or volume | `.sum()` |
+| Flood magnitude | `.max()` |
+| Typical value resistant to peaks | `.median()` |
+
+::: {.fragment}
+The code is easy. Choosing the aggregation is the hydrology.
+:::
+
+## The water year ends in September
+
+```python
+water_year_flow = flow["discharge_cfs"].resample("YE-SEP").mean()
+```
+
+::: {.incremental}
+- Water year 2007 runs from 1 October 2006 through 30 September 2007.
+- It is named for the year in which it ends.
+- A partial first or last year must be identified before comparison.
+:::
+
+::: {.fragment .due-notice}
+Do not let a three-month stub become the “driest year” in your analysis.
+:::
+
+## Your turn: calendar year and water year
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_resample
+import pandas as pd
+import numpy as np
+idx = pd.date_range("2005-01-01", "2024-12-31", freq="D")
+q = pd.Series(np.abs(np.sin(np.arange(len(idx)) / 58)) * 40, index=idx)
+```
+
+```{pyodide}
+#| exercise: ex_resample
+calendar = q.resample(______).mean()
+water_year = q.resample(______).mean()
+print(len(calendar), len(water_year))
+```
+
+::: {.hint exercise="ex_resample"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Calendar years end in December; western-US water years end in September.
+:::
+:::
+
+::: {.solution exercise="ex_resample"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+calendar = q.resample("YE").mean()
+water_year = q.resample("YE-SEP").mean()
+```
+
+The water-year result has an extra partial bin because the record starts in
+January rather than October.
 :::
 :::
 
 ## Wrap up {.smaller}
 
 ::: {.kicker}
-What you did today
+What you can now do
 :::
 
-- A DataFrame is numpy with labels, and labels survive a column moving
-- One name gives a Series; a list of names gives a DataFrame
-- `dtype={"site_no": str}` for anything that is an identifier, not a number
-- `.loc` is labels, `.iloc` is positions, and `.loc` slices include the endpoint
+- Read and inspect a labelled table
+- Select by label, position, and time
+- Parse dates once instead of repairing them repeatedly
+- Resample a daily series to a hydrologically meaningful interval
+- Recognise incomplete water-year bins
 
 ::: {.kicker}
 Before Thursday
 :::
 
-- Parts 1–2 of `labs/week05/week05_lab_pandas.ipynb`
+- Parts 1–3 of `labs/week05/week05_lab_pandas.ipynb`
 
 ::: {.kicker}
 Thursday
 :::
 
-Filtering, computing new columns, and a first look at a century of Tucson water
-levels.
+Filtering, grouping, rolling windows, and reshaping one table for a different
+job.

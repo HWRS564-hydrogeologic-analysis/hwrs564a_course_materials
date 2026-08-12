@@ -367,7 +367,7 @@ n_cells = (domain_x / max_cell_size) * (domain_y / max_cell_size)
 came from.
 
 **Resolve the feature you came to look at.** Same argument as choosing a time step,
-and the same argument as choosing a rolling window in Week 7: the discretization
+and the same argument as choosing a rolling window in Week 5: the discretization
 has to be finer than the thing you are trying to see.
 :::
 :::

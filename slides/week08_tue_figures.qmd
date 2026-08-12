@@ -10,7 +10,7 @@ author: "Dr. Andrew Bennett"
 Week 8, session 1 of 2
 :::
 
-1. Quiz — five minutes, on time series
+1. Quiz — details on D2L
 2. Figure, axes, and why `plt.plot` is a trap
 3. Multi-panel layouts, and what sharing an axis claims
 4. Colour: three kinds of colormap, and one to never use

@@ -20,7 +20,7 @@ background:
   - text: "Finish the Week 5 lab notebook"
     url: "labs/week05/week05_lab_pandas.html"
     site_relative: true
-    note: "Boolean filtering comes back immediately this week."
+    note: "Filtering, date parsing, and time-based summaries all return immediately this week."
   - text: "USGS Water Data for the Nation — browse the Sabino Creek gauge"
     url: "https://waterdata.usgs.gov/monitoring-location/09484000/"
     note: "Ten minutes clicking around. You'll pull this record in class."

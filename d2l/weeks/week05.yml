@@ -3,16 +3,15 @@
 # Generate with:  python d2l/generate.py d2l/weeks/week05.yml
 
 week: 5
-title: "Week 5 — Introduction to pandas"
+title: "Week 5 — Pandas and time series"
 dates: "September 22 & 24, 2026"
 
 overview: >
-  pandas is numpy with labels on it, and labels are what stop you from
-  remembering that column 3 is the water level. This week we read our first
-  real dataset — every USGS monitoring well in the Tucson basin, and a century
-  of water levels from the best-monitored of them — and learn to select, filter,
-  and compute new columns from it. You will also read the one Excel file this
-  course will ask you to read, because collaborators will send you them forever.
+  pandas gives numpy values meaningful row and column labels, then adds a rich
+  vocabulary for time. This week we read Tucson well and water-level records,
+  select and filter observations, turn date strings into a DatetimeIndex, and
+  calculate monthly, water-year, grouped, and rolling summaries. By Thursday
+  you can move from a raw labelled table to a defensible hydrologic time series.
 
 time_budget:
   - "3 hours in class"
@@ -27,13 +26,13 @@ background:
     note: "Boolean masks come back this week with labels attached."
 
 class_material:
-  - text: "Tue 9/22 — Slides: Introduction to pandas"
+  - text: "Tue 9/22 — Slides: Pandas — labelled data through time"
     url: "slides/week05_tue_pandas.html"
     site_relative: true
-  - text: "Thu 9/24 — Slides: Filtering, columns, and a first plot"
+  - text: "Thu 9/24 — Slides: Filter, summarise, and reshape"
     url: "slides/week05_thu_filtering.html"
     site_relative: true
-  - text: "Lab notebook — Introduction to pandas"
+  - text: "Lab notebook — Pandas and time series"
     url: "labs/week05/week05_lab_pandas.html"
     site_relative: true
   - text: "Cheat sheet — pandas"
@@ -56,6 +55,8 @@ assignments:
 bonus:
   - text: "pandas — 10 minutes to pandas"
     url: "https://pandas.pydata.org/docs/user_guide/10min.html"
+  - text: "pandas — time series and date functionality"
+    url: "https://pandas.pydata.org/docs/user_guide/timeseries.html"
   - text: "USGS Water Data for the Nation — where this week's data came from"
     url: "https://waterdata.usgs.gov/nwis"
   - text: "Arizona Department of Water Resources — Tucson AMA groundwater"

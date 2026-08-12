@@ -1,14 +1,12 @@
 week: 7
-title: "Week 7 — Timeseries analysis with pandas"
+title: "Week 7 — Topic to be announced"
 dates: "October 6 & 8, 2026"
 overview: >
-  Almost everything in hydrology is a time series, and pandas has a whole second
-  personality for them. Give a DataFrame a DatetimeIndex and you can ask for
-  "2015", "every August", "a 30-day average", or "annual totals by water year"
-  without writing a single loop over dates. This week covers resampling and
-  choosing the right aggregation, the water year and why it starts in October,
-  rolling windows and what centring one costs you, and reshaping between long
-  and wide format.
+  Week 7 is being redesigned. The time-series material formerly taught here is
+  now part of Week 5, so students can select dates, resample records, calculate
+  rolling summaries, and reshape tables as soon as they learn pandas. The
+  replacement Week 7 topic and materials will be announced after the revised
+  course sequence is finalized.
 
 time_budget:
   - "3 hours in class"
@@ -20,20 +18,18 @@ background:
   - text: "Finish the Week 6 lab notebook"
     url: "labs/week06/week06_lab_real_world_data.html"
     site_relative: true
-    note: "Especially Part 5 — we redo that monsoon question properly this week."
+    note: "Complete the cleaning workflow before the replacement Week 7 material begins."
 
 class_material:
-  - text: "Tue 10/6 — Slides: Dates, resampling, and the water year"
+  - text: "Tue 10/6 — Slides: Topic to be announced"
     url: "slides/week07_tue_datetime.html"
     site_relative: true
-  - text: "Thu 10/8 — Slides: Rolling windows, grouping, and reshaping"
+  - text: "Thu 10/8 — Slides: Topic to be announced"
     url: "slides/week07_thu_grouping.html"
     site_relative: true
-  - text: "Lab notebook — Time series with pandas"
+  - text: "Lab notebook — Topic to be announced"
     url: "labs/week07/week07_lab_timeseries.html"
     site_relative: true
-  - text: "Cheat sheet — pandas"
-    course_file: "pandas-cheat-sheet.pdf"
 
 assignments:
   - text: "Quiz 5 — on Week 6 material"
@@ -46,10 +42,4 @@ assignments:
     dropbox: "TBD-hw04-dropbox"
     note: "Available after class Thursday 10/8; due Wednesday 10/21 at 11:59pm."
 
-bonus:
-  - text: "pandas — time series and date functionality"
-    url: "https://pandas.pydata.org/docs/user_guide/timeseries.html"
-  - text: "USGS — what is a water year, and why"
-    url: "https://www.usgs.gov/special-topics/water-science-school/science/water-year"
-  - text: "The North American Monsoon (NOAA)"
-    url: "https://www.weather.gov/twc/monsoon"
+bonus: []

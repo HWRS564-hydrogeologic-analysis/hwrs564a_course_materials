@@ -2,13 +2,13 @@ week: 9
 title: "Week 9 — Statistics, regression, and water chemistry"
 dates: "October 20 & 22, 2026"
 overview: >
-  Two halves this week. Tuesday is regression: fitting a trend is one function
-  call, and everything worth learning is in what you do next — reading the
-  residuals, understanding why a high R-squared is not evidence of a good
-  model, and splitting a time series for validation in a way that doesn't
-  flatter itself. Thursday is major-ion chemistry: converting to meq/L,
-  checking that an analysis balances before you trust it, and reading a Piper
-  diagram of real Tucson basin groundwater.
+  Two halves this week. Tuesday develops regression from the least-squares
+  objective through the slope formula, variance decomposition, standard error,
+  confidence interval, and hypothesis test. We then use residual structure and
+  serial correlation to decide whether that ordinary uncertainty is credible,
+  and compare random with chronological validation using MAE, RMSE, and test
+  R-squared. Thursday is major-ion chemistry: converting to meq/L, checking that
+  an analysis balances, and reading a Piper diagram of Tucson groundwater.
 
 time_budget:
   - "3 hours in class"
@@ -23,7 +23,7 @@ background:
     note: "The residual plots on Tuesday assume you can build a two-panel figure."
 
 class_material:
-  - text: "Tue 10/20 — Slides: Regression, and how much to believe it"
+  - text: "Tue 10/20 — Slides: Regression — estimation, uncertainty, and evidence"
     url: "slides/week09_tue_regression.html"
     site_relative: true
   - text: "Thu 10/22 — Slides: Major-ion chemistry"

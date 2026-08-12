@@ -1,5 +1,5 @@
 ---
-title: "Regression, and how much to believe it"
+title: "Regression: estimation, uncertainty, and evidence"
 subtitle: "HWRS 564a · Week 9 · Tuesday, October 20"
 author: "Dr. Andrew Bennett"
 ---
@@ -10,365 +10,434 @@ author: "Dr. Andrew Bennett"
 Week 9, session 1 of 2
 :::
 
-1. Quiz — five minutes, on matplotlib
-2. Fitting a line, and what every returned number means
-3. What a p-value is actually testing
-4. Residuals, which is where the information is
-5. Why $R^2$ is not a measure of model quality
-6. scikit-learn, and splitting train from test *correctly*
+1. A straight line as a statistical model
+2. What least squares minimises
+3. Where the slope, $R^2$, and standard error come from
+4. Confidence intervals and hypothesis tests
+5. Assumptions—and what time series do to them
+6. Validation that matches the intended prediction
 
-Fitting is one function call. Everything worth learning is in what you do next.
+Fitting is one function call. The mathematics tells you what the result means
+and when its uncertainty is believable.
 
-# Fitting {background-color="#0C234B"}
+# The model {background-color="#0C234B"}
 
-## One call
+## A line describes the conditional mean
+
+$$Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$$
+
+::: {.incremental}
+- $Y_i$: measured depth to water at observation $i$
+- $x_i$: elapsed time in years
+- $\beta_0 + \beta_1x_i$: mean depth predicted at that time
+- $\varepsilon_i$: everything the straight line does not explain
+:::
+
+::: {.fragment}
+$\beta_1$ has units of ft/yr. It describes the average linear change—not every
+month, and not necessarily every era in the record.
+:::
+
+## Least squares chooses the smallest squared residuals
+
+For candidate coefficients $b_0$ and $b_1$,
+
+$$
+\operatorname{RSS}(b_0,b_1)
+= \sum_{i=1}^{n}\left[y_i-(b_0+b_1x_i)\right]^2.
+$$
+
+The ordinary least-squares estimates minimise this quantity:
+
+$$
+\hat\beta_1=
+\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}
+     {\sum_i(x_i-\bar x)^2},
+\qquad
+\hat\beta_0=\bar y-\hat\beta_1\bar x.
+$$
+
+::: {.fragment}
+The slope is **joint variation divided by variation in time**. Squaring makes
+large misses expensive and gives a problem with a closed-form solution.
+:::
+
+## Your turn: calculate an OLS line
+
+Compute $S_{xx}$, $S_{xy}$, the slope, and the intercept.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_ols
+import numpy as np
+x = np.array([0.0, 1.0, 2.0, 3.0])
+y = np.array([10.0, 13.0, 14.0, 19.0])
+```
+
+```{pyodide}
+#| exercise: ex_ols
+x_bar, y_bar = x.mean(), y.mean()
+sxx = ______
+sxy = ______
+slope = ______
+intercept = ______
+print(f"y-hat = {intercept:.1f} + {slope:.1f} x")
+```
+
+::: {.hint exercise="ex_ols"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Centre each variable on its mean. Then `slope = sxy / sxx` and the fitted line
+must pass through $(\bar x, \bar y)$.
+:::
+:::
+
+::: {.solution exercise="ex_ols"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+sxx = ((x - x_bar) ** 2).sum()
+sxy = ((x - x_bar) * (y - y_bar)).sum()
+slope = sxy / sxx
+intercept = y_bar - slope * x_bar
+```
+
+$S_{xx}=5$, $S_{xy}=14$, so $\hat y=9.8+2.8x$.
+:::
+:::
+
+# Fit and goodness of fit {background-color="#AB0520"}
+
+## Residuals are vertical model errors
+
+$$e_i=y_i-\hat y_i$$
 
 ```python
 from scipy import stats
 
-one["years_elapsed"] = (one["date"] - one["date"].min()).dt.days / 365.25
 fit = stats.linregress(one["years_elapsed"], one["depth_to_water_ft"])
-```
-
-::: {.fragment}
-**You cannot regress against a datetime.** Convert to years since the start
-first — then the slope comes out in feet per year, which is the number you
-actually want to report.
-:::
-
-## What comes back
-
-```
-slope       2.081 ft/yr
-intercept  34.79  ft
-r           0.948
-r-squared   0.899
-p-value     1.6e-189
-std error   0.0353 ft/yr
+one["predicted"] = fit.intercept + fit.slope * one["years_elapsed"]
+one["residual"] = one["depth_to_water_ft"] - one["predicted"]
 ```
 
 ::: {.incremental}
-- **slope** — the answer
-- **r-squared** — the fraction of variance the line absorbs
-- **p-value** — probability of a slope this steep if the truth were zero
-- **stderr** — uncertainty *on the slope*
+- With an intercept, $\sum_i e_i=0$: residuals balance above and below the line.
+- Also $\sum_i x_i e_i=0$: residuals have no remaining *linear* association with $x$.
+- Neither property guarantees that residuals are random or independent.
 :::
 
+## $R^2$ compares the line with a mean-only model
+
+$$
+\operatorname{TSS}=\sum_i(y_i-\bar y)^2,
+\qquad
+\operatorname{RSS}=\sum_i e_i^2
+$$
+
+$$
+R^2=1-\frac{\operatorname{RSS}}{\operatorname{TSS}}.
+$$
+
 ::: {.fragment}
-Report `2.081 ± 0.035 ft/yr`. A slope without its uncertainty is half an answer.
-:::
-
-## On p-values
-
-$10^{-189}$ is not a meaningful number. It is a statement that the question was
-never in doubt.
-
-::: {.fragment}
-With 379 measurements, almost **any** real trend is "significant".
+$R^2=0.90$ means the fitted line removes 90% of the squared variation relative
+to predicting $\bar y$ for every observation. It does **not** say that predictions
+are 90% accurate or that the model assumptions hold.
 :::
 
 ::: {.fragment .due-notice}
-Significance answers *"is it distinguishable from zero?"* It does not answer
-*"is it large enough to matter?"* — and the second one is the question water
-managers ask.
+The full 63-year record has $R^2=0.90$; the visually straighter 1950–1990 window
+has $R^2=0.67$. Changing the range changes TSS, so $R^2$ values across different
+samples are not directly comparable.
 :::
 
-<!-- Adapted from old_slides/hwrs564a_sept25.pdf. -->
-## Every hypothesis test has four pieces {.smaller}
-
-| Piece | For the regression slope |
-|---|---|
-| **Test statistic** | estimated slope divided by its standard error |
-| **Null hypothesis** | the true slope is zero |
-| **Alternative** | the true slope is not zero |
-| **Null distribution** | values the statistic would take if the null were true |
-
-::: {.fragment}
-The p-value is the probability, **under the null model**, of a statistic at
-least as extreme as the one observed. It is not the probability that the null
-hypothesis is true.
-:::
-
-## Your turn: report it properly
+## Your turn: reconstruct two fit metrics
 
 ```{pyodide}
 #| setup: true
-#| exercise: ex_report
-slope = 2.0814
-stderr = 0.0353
-r_squared = 0.8993
+#| exercise: ex_metrics
+import numpy as np
+y = np.array([10.0, 13.0, 15.0, 20.0])
+y_hat = np.array([10.0, 12.0, 16.0, 20.0])
 ```
 
 ```{pyodide}
-#| exercise: ex_report
-summary = f"decline of {slope:.2f} ______ {______:.2f} ft/yr (R2 = {r_squared:.2f})"
-print(summary)
+#| exercise: ex_metrics
+residual = ______
+rss = ______
+tss = ______
+r_squared = ______
+rmse = ______
+print(rss, r_squared, rmse)
 ```
 
-::: {.hint exercise="ex_report"}
+::: {.hint exercise="ex_metrics"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
-The uncertainty on the slope is the standard error, not the $R^2$. A plus-minus
-sign is just a character you can type into the string.
+RMSE is $\sqrt{\operatorname{RSS}/n}$. TSS uses deviations from `y.mean()`.
 :::
 :::
 
-::: {.solution exercise="ex_report"}
+::: {.solution exercise="ex_metrics"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```python
-summary = f"decline of {slope:.2f} ± {stderr:.2f} ft/yr (R2 = {r_squared:.2f})"
+residual = y - y_hat
+rss = (residual ** 2).sum()
+tss = ((y - y.mean()) ** 2).sum()
+r_squared = 1 - rss / tss
+rmse = np.sqrt(rss / len(y))
 ```
 
-`decline of 2.08 ± 0.04 ft/yr (R2 = 0.90)`.
-
-Two decimal places, because the third is not supported by the standard error.
-Reporting `2.0814` claims a precision you do not have.
+RSS is 2, $R^2\approx0.962$, and RMSE is about 0.71 measurement units.
 :::
 :::
 
-# Residuals {background-color="#AB0520"}
+# Uncertainty {background-color="#0C234B"}
 
-## Where the information is
+## Standard error begins with unexplained variance
 
-$$\text{residual} = \text{measured} - \text{predicted}$$
+Under the ordinary regression assumptions,
+
+$$
+s^2=\frac{\operatorname{RSS}}{n-2},
+\qquad
+\operatorname{SE}(\hat\beta_1)=
+\frac{s}{\sqrt{\sum_i(x_i-\bar x)^2}}.
+$$
+
+::: {.incremental}
+- More residual scatter increases slope uncertainty.
+- A wider spread in $x$ decreases slope uncertainty.
+- The $n-2$ degrees of freedom pay for estimating two coefficients.
+:::
 
 ::: {.fragment}
-If the model is right, residuals are **patternless noise** around zero.
+For the Tucson well: $\hat\beta_1=2.081$ ft/yr and the ordinary standard error
+is $0.036$ ft/yr.
 :::
+
+## A confidence interval and a test use the same statistic
+
+For $H_0:\beta_1=\beta_{1,0}$,
+
+$$
+t=\frac{\hat\beta_1-\beta_{1,0}}
+        {\operatorname{SE}(\hat\beta_1)},
+\qquad df=n-2.
+$$
+
+The corresponding 95% confidence interval is
+
+$$
+\hat\beta_1 \pm t_{0.975,n-2}\operatorname{SE}(\hat\beta_1).
+$$
 
 ::: {.fragment}
-If they have structure, the model is missing something — and the structure tells
-you what.
+The p-value is the probability, **assuming the null model and its assumptions**,
+of a test statistic at least as extreme as the observed one. It is not the
+probability that the null hypothesis is true.
 :::
 
-## The well that looks well-fitted
+## Your turn: quantify slope uncertainty
 
-$R^2 = 0.90$. Mean residual by decade:
-
+```{pyodide}
+#| setup: true
+#| exercise: ex_ci
+slope = 2.081135
+standard_error = 0.035987
+t_critical = 1.9663
 ```
-1930    +1.9
-1940    -9.6
-1950   -14.6
+
+```{pyodide}
+#| exercise: ex_ci
+lower = ______
+upper = ______
+t_for_zero = ______
+print(f"95% CI: {lower:.3f} to {upper:.3f} ft/yr")
+print(f"t for H0: slope = 0 is {t_for_zero:.1f}")
+```
+
+::: {.hint exercise="ex_ci"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The margin is `t_critical * standard_error`. For a zero-slope null, divide the
+estimated slope by its standard error.
+:::
+:::
+
+::: {.solution exercise="ex_ci"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+lower = slope - t_critical * standard_error
+upper = slope + t_critical * standard_error
+t_for_zero = slope / standard_error
+```
+
+The ordinary 95% interval is 2.010–2.152 ft/yr and $t\approx57.8$.
+The arithmetic is precise; whether the interval is credible depends on the
+assumptions behind the standard error.
+:::
+:::
+
+## Least squares estimates need fewer assumptions than inference
+
+::: {.columns}
+::: {.column width="50%"}
+**For the line to represent the mean**
+
+- The mean relationship is linear
+- Errors average to zero at each $x$
+- Predictors are measured adequately
+:::
+
+::: {.column width="50%"}
+**For the ordinary SE, test, and CI**
+
+- Residuals are independent
+- Residual variance is constant
+- Normal residuals give exact small-sample $t$ inference
+:::
+:::
+
+::: {.fragment .due-notice}
+Normality is not required to calculate the OLS line. It matters for inference,
+especially in small samples. Independence is the assumption time series most
+often violate.
+:::
+
+# Diagnostics {background-color="#AB0520"}
+
+## A high $R^2$ can hide a wrong mean model
+
+Mean residual by decade for the Tucson well:
+
+```text
+1930    +1.9       1970    +9.4
+1940    -9.6       1980    -0.9
+1950   -14.6       1990    -7.8
 1960   -12.5
-1970    +9.4
-1980    -0.9
-1990    -7.8
 ```
 
 ::: {.fragment}
-Below zero for thirty years, well above it in the 1970s, below again after.
-**That is not noise.**
+Decade-long runs on one side of zero indicate curvature or changing regimes.
+One line averages the lightly pumped, agricultural, and later municipal eras
+and reports a rate describing none of them exactly.
 :::
 
-## What the pattern means
+## Serial correlation makes the ordinary CI too confident
+
+For these fitted residuals,
+
+$$\operatorname{corr}(e_i,e_{i-1})=0.986.$$
 
 ::: {.incremental}
-- Slow decline while the basin was lightly pumped
-- Sharp acceleration through the mid-century agricultural era
-- Easing as pumping shifted from irrigation to municipal supply
+- Adjacent residuals carry nearly the same model error.
+- The 379 observations do not provide 379 independent pieces of information.
+- The OLS line can still be calculated, but the ordinary $0.036$ ft/yr standard
+  error is conditional on an assumption the diagnostic rejects.
 :::
 
 ::: {.fragment}
-Three regimes. One straight line averages them and reports a rate describing
-none of them.
+Possible responses include modelling the changing regimes, using errors with a
+time structure, or estimating uncertainty with a time-aware bootstrap or HAC
+standard error.
 :::
 
-::: {.fragment .due-notice}
-**A high $R^2$ with structured residuals means you have fitted the wrong model
-well.** Plot the residuals. Every time.
-:::
-
-## $R^2$ is not model quality {.smaller}
-
-Fit the same well over 1950–1990 — the period where the line fits best by eye:
-
-| Window | slope | $R^2$ |
-|---|---|---|
-| full record, 1931–1994 | 2.08 ft/yr | **0.90** |
-| 1950–1990 only | 2.36 ft/yr | **0.67** |
-
-::: {.fragment}
-$R^2$ went *down* on the better-fitting window.
-:::
-
-::: {.fragment}
-It is the fraction of **this sample's variance** the line absorbs. The full
-record spans a century of decline — enormous variance, easy to explain. A
-40-year window has less range, so the same quality of fit accounts for less of it.
-:::
-
-::: {.fragment}
-**You can raise $R^2$ by widening your window.** That should tell you what it is
-worth as evidence.
-:::
-
-## Your turn: diagnose the fit
+## Your turn: separate estimation from inference
 
 ```{pyodide}
 #| setup: true
-#| exercise: ex_diag
-diagnoses = {
-    "a": "the model is good — R2 is 0.90",
-    "b": "the model is wrong in a structured way, despite the high R2",
-    "c": "there is not enough data to tell",
-    "d": "the data are too noisy to fit",
+#| exercise: ex_diagnose
+choices = {
+    "a": "The slope cannot be calculated because residuals are correlated.",
+    "b": "The line is descriptive, but its ordinary CI is too optimistic.",
+    "c": "R2 = 0.90 proves the independence assumption is close enough.",
+    "d": "A smaller p-value repairs the residual dependence.",
 }
 ```
 
 ```{pyodide}
-#| exercise: ex_diag
-verdict = ______
-print(diagnoses[verdict])
+#| exercise: ex_diagnose
+answer = ______
+print(choices[answer])
 ```
 
-::: {.hint exercise="ex_diag"}
+::: {.hint exercise="ex_diagnose"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
-379 measurements is plenty, and the residuals are large but not random — they
-run in decade-long streaks on one side of zero.
+OLS estimation and ordinary least-squares inference are related but distinct.
+Which claim keeps the fitted line while rejecting unsupported precision?
 :::
 :::
 
-::: {.solution exercise="ex_diag"}
+::: {.solution exercise="ex_diagnose"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```python
-verdict = "b"
+answer = "b"
 ```
 
-The fix is not more data or a fancier fit. It is **fitting the regimes
-separately**, or admitting that a single rate is not the right summary of this
-well.
-
-That is a modelling decision, and it comes from the residual plot rather than
-from any single number.
+The slope remains a computable descriptive summary. The usual standard error,
+p-value, and confidence interval treat residuals as independent, so those
+quantities are too confident here.
 :::
 :::
 
-# scikit-learn {background-color="#0C234B"}
+# Prediction {background-color="#0C234B"}
 
-## Same fit, general interface
+## Prediction metrics answer different questions
 
-```python
-from sklearn.linear_model import LinearRegression
-
-X = one[["years_elapsed"]].values   # 2D: (n_samples, n_features)
-y = one["depth_to_water_ft"].values # 1D
-
-model = LinearRegression().fit(X, y)
-model.coef_[0], model.intercept_
-```
-
-::: {.fragment}
-Identical to `linregress` — same least-squares problem. Worth learning because
-every other model in the library shares this interface.
-:::
-
-::: {.fragment}
-**`X` must be 2D**, even with one feature. `df[["col"]]` gives you that;
-`df["col"]` does not. `ValueError: Expected 2D array, got 1D array instead` is
-the most common scikit-learn error and this is why.
-:::
-
-## The split that lies
-
-```python
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
-```
-
-::: {.fragment}
-`train_test_split` **shuffles**. For a time series that scatters the test set
-*through* the training period, so predicting it means interpolating between
-neighbours you already fitted.
-:::
-
-::: {.fragment}
-Test MAE on the shuffled split: about **2 ft**. Looks excellent.
-:::
-
-## The split that doesn't
-
-Train on 1931–1974, test on 1975–1994:
+$$
+\operatorname{MAE}=\frac{1}{m}\sum_{i=1}^{m}|y_i-\hat y_i|,
+\qquad
+\operatorname{RMSE}=\sqrt{\frac{1}{m}\sum_{i=1}^{m}(y_i-\hat y_i)^2}.
+$$
 
 ::: {.incremental}
-- train slope: **1.92 ft/yr**
-- full-record slope: **2.08 ft/yr**
-- test MAE: **15.4 ft**
+- MAE describes a typical absolute miss in the response units.
+- RMSE penalises large misses more strongly.
+- Test $R^2<0$ means the model predicts worse than the test-set mean.
 :::
 
+## A time split tests extrapolation rather than interpolation
+
+| Validation | Test MAE | Test RMSE | Test $R^2$ |
+|---|---:|---:|---:|
+| Random 75/25 split | 11.3 ft | 13.3 ft | 0.89 |
+| Train before 1975; test after | 15.4 ft | 19.3 ft | −4.81 |
+
 ::: {.fragment}
-Seven times worse, on the same data and the same model.
+Random splitting places test observations between dates already in training.
+The chronological split asks the actual forecasting question and reveals that
+the early linear rate extrapolates poorly into a later pumping regime.
 :::
 
 ::: {.fragment .due-notice}
-**A validation scheme that doesn't match how the model will be used will tell
-you it works.** For time series, split by time.
-:::
-
-## Your turn: pick the split
-
-You want to know whether a trend model can forecast the next decade.
-
-```{pyodide}
-#| setup: true
-#| exercise: ex_split
-strategies = {
-    "a": "train_test_split with test_size=0.25 and shuffle=True",
-    "b": "train on everything before a cutoff year, test on everything after",
-    "c": "fit on all the data and report the R2",
-    "d": "k-fold cross-validation with random folds",
-}
-```
-
-```{pyodide}
-#| exercise: ex_split
-choice = ______
-print(strategies[choice])
-```
-
-::: {.hint exercise="ex_split"}
-::: {.callout-note collapse="false"}
-## Hint
-
-Forecasting means predicting data the model has never seen *and that comes
-after* everything it has seen. Which of these reproduces that situation?
-:::
-:::
-
-::: {.solution exercise="ex_split"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```python
-choice = "b"
-```
-
-Both **a** and **d** shuffle, so the test set is interleaved with training data
-and the model is interpolating, not forecasting. **c** doesn't hold anything
-back at all.
-
-Only **b** reproduces the actual task. Scikit-learn ships `TimeSeriesSplit` for
-the k-fold version of this.
-:::
+Model quality is not a property of the algorithm alone. It is a property of the
+algorithm, the data, the metric, and the validation design together.
 :::
 
 ## Wrap up {.smaller}
 
 ::: {.kicker}
-What you did today
+What you can now explain
 :::
 
-- Convert dates to elapsed years before fitting, so the slope has units
-- Report the slope with its standard error
-- Name the statistic, null, alternative, and null distribution before reading a p-value
-- Plot the residuals — structure there means the model is wrong
-- $R^2$ measures variance absorbed in *this sample*, not model quality
-- Split time series by time, never at random
+- OLS minimises RSS, with slope equal to centred cross-variation over $S_{xx}$
+- $R^2=1-\mathrm{RSS}/\mathrm{TSS}$ compares a line with a mean-only baseline
+- Standard errors, confidence intervals, and tests are model-based quantities
+- Structured and serially correlated residuals undermine ordinary inference
+- MAE, RMSE, and test $R^2$ describe different predictive failures
+- Time-series validation must preserve the direction of time
 
 ::: {.kicker}
 Before Thursday
