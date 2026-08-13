@@ -1,0 +1,38 @@
+{
+	"name": "HWRS564a Course Materials",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {
+			"version": "release",
+			"installTinyTex": false
+		}
+	},
+	"postCreateCommand": "bash postbuild.sh",
+	"postStartCommand": "bash .devcontainer/ensure-environment.sh",
+	"remoteEnv": {
+		"PATH": "${containerWorkspaceFolder}/.venv/bin:${containerEnv:HOME}/.local/bin:${containerEnv:PATH}",
+		"VIRTUAL_ENV": "${containerWorkspaceFolder}/.venv"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-toolsai.jupyter",
+				"quarto.quarto"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+				"python.terminal.activateEnvironment": true,
+				"editor.rulers": [88],
+				"files.trimTrailingWhitespace": true
+			}
+		}
+	},
+	"forwardPorts": [4200],
+	"portsAttributes": {
+		"4200": { "label": "Quarto preview", "onAutoForward": "notify" }
+	}
+}

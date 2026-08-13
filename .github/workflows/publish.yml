@@ -1,0 +1,79 @@
+name: Publish course site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Required for quarto publish to push to the gh-pages branch
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: release
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install Python dependencies
+        run: uv sync
+
+      # Quarto resolves Python from PATH / QUARTO_PYTHON — it does not find a
+      # project .venv on its own. Without this the jupyter engine fails.
+      - name: Put the venv on PATH
+        run: echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      # quarto-live provides the live-revealjs / live-html formats. If
+      # _extensions/ is committed this is a no-op; kept so a fresh clone works.
+      - name: Install the quarto-live extension
+        run: quarto add --no-prompt r-wasm/quarto-live
+
+      # Lint the generated artifacts before publishing so a broken D2L page or
+      # malformed quiz fails the build rather than reaching students.
+      - name: Check slide decks
+        run: uv run python scripts/check_slides.py slides/*.qmd
+
+      - name: Lint D2L page definitions
+        run: uv run python d2l/generate.py d2l/weeks/*.yml --check
+
+      - name: Lint D2L assignment definitions
+        run: uv run python d2l/generate_assignments.py d2l/assignments/hw*.md --check
+
+      - name: Build quiz import files
+        run: uv run python quizzes/build_d2l_csv.py quizzes/*.yml
+
+      # The student notebooks are full of `...` placeholders and are not meant
+      # to execute. Generate the filled copies, then run those — that is what
+      # makes "Restart Kernel and Run All" a property CI enforces.
+      - name: Generate solution notebooks
+        run: uv run python scripts/fill_solutions.py labs/*/*.ipynb
+
+      - name: Execute every lab notebook
+        run: uv run pytest labs/
+        env:
+          QUARTO_PYTHON: ${{ github.workspace }}/.venv/bin/python
+
+      - name: Render and publish
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUARTO_PYTHON: ${{ github.workspace }}/.venv/bin/python
