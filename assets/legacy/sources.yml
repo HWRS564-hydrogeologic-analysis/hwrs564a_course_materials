@@ -1,0 +1,110 @@
+# Figures recovered from prior HWRS 564a slide PDFs.
+# Keep the source deck and page here when an asset is renamed or replaced.
+
+array_dimensions.jpg:
+  source: old_slides/hwrs564a_sept16.pdf
+  page: 29
+  use: "One-, two-, and three-dimensional numpy arrays"
+
+bisection_bracket.png:
+  source: old_slides/hwrs564a_sept4.pdf
+  page: 12
+  use: "Nested brackets in the bisection method"
+
+pandas_label_alignment.jpg:
+  source: old_slides/hwrs564a_sept18.pdf
+  page: 10
+  original_url: https://towardsdatascience.com/preventing-the-death-of-the-dataframe-8bca1c0f83c8
+  use: "Pandas arithmetic aligns Series by index label"
+
+pandas_series_to_dataframe.jpg:
+  source: old_slides/hwrs564a_sept18.pdf
+  page: 12
+  original_url: https://towardsdatascience.com/preventing-the-death-of-the-dataframe-8bca1c0f83c8
+  use: "Aligned Series combine into a DataFrame"
+
+matplotlib_anatomy.png:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 29
+  original_url: https://matplotlib.org/stable/gallery/showcase/anatomy.html
+  retrieval: "Downloaded from the original Matplotlib gallery rather than copied from the PDF"
+  use: "Anatomy of a matplotlib figure and axes"
+
+color_accessibility_original.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 25
+  use: "Original categorical map"
+
+color_accessibility_protanomaly.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 25
+  use: "Categorical map under a protanomaly simulation"
+
+color_accessibility_deuteranomaly.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 25
+  use: "Categorical map under a deuteranomaly simulation"
+
+gis_raster.png:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 51
+  original_url: https://datacarpentry.github.io/organization-geospatial/01-intro-raster-data.html
+  use: "Raster data as a grid of cell values"
+
+gis_vector.png:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 51
+  original_url: https://datacarpentry.github.io/organization-geospatial/02-intro-vector-data.html
+  use: "Vector data as points, lines, and polygons"
+
+modeling_cycle.jpg:
+  source: old_slides/hwrs564a_oct23.pdf
+  page: 7
+  use: "Hydrologic modeling as a cycle of conceptualization and testing"
+
+grid_families.jpg:
+  source: old_slides/hwrs564a_oct23.pdf
+  page: 11
+  use: "Examples of structured and unstructured numerical grids"
+
+boundary_cells.jpg:
+  source: old_slides/hwrs564a_oct23.pdf
+  page: 12
+  use: "No-flow, constant-head, and variable-head cells on a rectangular grid"
+
+visual_search_sevens.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 13
+  use: "Preattentive contrast makes a target digit immediately visible"
+  provenance_note: "Embedded image extracted directly; original external source was not recorded in the PDF."
+
+declutter_before.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 20
+  original_url: https://darkhorsevisualization.com/blog/data-looks-better-naked
+  use: "Cluttered version of a bar chart before progressive removal"
+
+declutter_after.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 20
+  original_url: https://darkhorsevisualization.com/blog/data-looks-better-naked
+  use: "Decluttered version of a bar chart after progressive removal"
+
+colormap_perception.png:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 23
+  original_url: https://doi.org/10.1038/s41467-020-19160-7
+  retrieval: "Downloaded from the publisher's Figure 1 image rather than copied from the PDF"
+  use: "Comparison of grayscale, jet, and perceptually uniform scientific colormaps"
+
+multiple_axes_profiles.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 40
+  original_url: https://doi.org/10.1175/JHM-D-20-0175.1
+  use: "Three model-versus-analytic profiles as an example of multiple matplotlib axes"
+
+yakima_map_network.jpg:
+  source: old_slides/hwrs564a_oct14.pdf
+  page: 46
+  original_url: https://doi.org/10.1175/JHM-D-21-0174.1
+  use: "Yakima River basin map and corresponding stream-network topology"

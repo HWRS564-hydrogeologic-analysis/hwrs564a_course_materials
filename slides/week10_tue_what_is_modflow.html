@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -191,6 +191,9 @@
   </style>
   <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
   <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+  <script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+  <script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+  <link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -264,6 +267,25 @@ Dr.&nbsp;Andrew Bennett
 <div class="fragment">
 <p>Weeks 10 to 14 are as much about <strong>not being fooled by your own model</strong> as about building one.</p>
 </div>
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 7. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Modeling is a cycle, not a one-way build</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><img data-src="../assets/legacy/modeling_cycle.jpg" style="width:85.0%" alt="A modeling cycle linking conceptualization, data collection, simulation and calibration, and hypothesis testing"></p>
+</div><div class="column" style="width:40%;">
+<p>The first simulation is not the finish line.</p>
+<ul>
+<li class="fragment">Compare its behavior with observations</li>
+<li class="fragment">Diagnose which assumption failed</li>
+<li class="fragment">Revise the conceptual model</li>
+<li class="fragment">Test again</li>
+</ul>
+<div class="fragment due-notice">
+<p>A model earns trust through this loop, not through visual polish.</p>
+</div>
+</div></div>
 <!-- Adapted from old_slides/hwrs564a_oct23.pdf. -->
 </section>
 <section class="slide level2">
@@ -313,6 +335,19 @@ Dr.&nbsp;Andrew Bennett
 <div class="fragment">
 <p>A 40 × 60 grid is 2,400 equations. A regional model is millions. <strong>That is why this is a computer’s job</strong> and why Week 4’s iteration material was not a detour.</p>
 </div>
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 11. -->
+</section>
+<section class="slide level2 smaller">
+<h2>The grid can match the question</h2>
+<div class="columns">
+<div class="column" style="width:67%;">
+<p><img data-src="../assets/legacy/grid_families.jpg" style="width:72.0%" alt="Examples of rectangular, triangular, hexagonal, nested, radial, and irregular polygon numerical grids"></p>
+</div><div class="column" style="width:33%;">
+<p>All of these do the same conceptual job: divide a continuous domain into cells where the equations can be balanced.</p>
+<div class="fragment">
+<p>We begin with a rectangular structured grid because it makes indexing, neighbors, and cell dimensions visible.</p>
+</div>
+</div></div>
 </section>
 <section class="slide level2">
 <h2>Your turn: how many unknowns?</h2>
@@ -365,48 +400,38 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
 <h1>Six questions</h1>
-
+<!-- Package tree rebuilt from old_slides/hwrs564a_oct23.pdf, p. 9, using the
+     MODFLOW-2005 packages introduced in this course. -->
 </section>
-<section class="slide level2">
-<h2>MODFLOW has no “model file”</h2>
-<p>It has a <strong>package per question</strong>, and a <code>.nam</code> file listing them.</p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Question</th>
-<th>Package</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>What shape is the domain, over what time?</td>
-<td><code>DIS</code></td>
-</tr>
-<tr class="even">
-<td>Which cells are active, where do we start?</td>
-<td><code>BAS</code></td>
-</tr>
-<tr class="odd">
-<td>How permeable is it?</td>
-<td><code>LPF</code></td>
-</tr>
-<tr class="even">
-<td>How do we solve it?</td>
-<td><code>PCG</code></td>
-</tr>
-<tr class="odd">
-<td>What do we save?</td>
-<td><code>OC</code></td>
-</tr>
-<tr class="even">
-<td>Who pumps, recharges, evaporates?</td>
-<td><code>WEL</code>, <code>RCH</code>, <code>EVT</code>, <code>RIV</code> …</td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
-<p>That table is the mental model for the whole module. Learn it once.</p>
+<section class="slide level2 smaller">
+<h2>The name file connects a family of packages</h2>
+<div class="cell" data-reveal="true" data-fig-width="10" data-fig-height="4.4" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  NAM[".nam&lt;br/&gt;name file"]
+  NAM --&gt; GS["Geometry and state&lt;br/&gt;DIS · BAS"]
+  NAM --&gt; PH["Aquifer physics&lt;br/&gt;LPF"]
+  NAM --&gt; ST["Stresses and boundaries&lt;br/&gt;WEL · RCH · EVT · RIV"]
+  NAM --&gt; SO["Solver&lt;br/&gt;PCG"]
+  NAM --&gt; OU["Output control&lt;br/&gt;OC"]
+
+  classDef hub fill:#0C234B,color:#fff,stroke:#0C234B;
+  classDef pkg fill:#E2E9EB,color:#1a1a1a,stroke:#1E5288;
+  class NAM hub;
+  class GS,PH,ST,SO,OU pkg;
+</pre>
 </div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>There is no single “model file.” The <code>.nam</code> file tells MODFLOW which packages belong to this simulation; each package answers one modeling question.</p>
+</div>
+<p><small>Structure adapted to MODFLOW-2005 from the modular framework documented by the USGS.</small></p>
 </section>
 <section class="slide level2">
 <h2>What an input file looks like</h2>

@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -489,49 +489,43 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>We use <strong>GitHub Codespaces</strong>: a Linux machine in the browser, with the environment already built.</p>
 <ul>
 <li class="fragment">Open the course repo → <em>Code</em> → <em>Codespaces</em> → <em>Create codespace</em></li>
-<li class="fragment">Wait ~2 minutes the first time</li>
+<li class="fragment">Keep the creation log open until it prints <strong>Ready</strong></li>
 <li class="fragment">Python, Jupyter, and every package are already installed</li>
 <li class="fragment">The MODFLOW binaries are already downloaded</li>
 </ul>
 <div class="fragment due-notice">
 <p>Nothing to install on your own machine. Nothing to break. If your codespace gets into a bad state, delete it and make a new one — that is the <em>point</em>.</p>
 </div>
-<!-- Adapted from old_slides/hwrs564a_sept11.pdf. -->
+<!-- Rebuilt from old_slides/hwrs564a_sept11.pdf, pp. 13-20, and
+     old_slides/hwrs564a_sept16.pdf, pp. 3-9. -->
 </section>
 <section class="slide level2">
 <h2>These tools are different layers</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Layer</th>
-<th>Its job in this course</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Git</strong></td>
-<td>Records the history of changes to files</td>
-</tr>
-<tr class="even">
-<td><strong>GitHub</strong></td>
-<td>Hosts the shared repository and coordinates copies</td>
-</tr>
-<tr class="odd">
-<td><strong>Codespaces</strong></td>
-<td>Runs the remote Linux computer that holds the repo</td>
-</tr>
-<tr class="even">
-<td><strong>VS Code</strong></td>
-<td>Gives you the editor, terminal, and notebook interface</td>
-</tr>
-<tr class="odd">
-<td><strong>Jupyter kernel</strong></td>
-<td>Runs Python and remembers the current variables</td>
-</tr>
-</tbody>
-</table>
+<div class="concept-flow">
+<div class="flow-node">
+<p><strong>Notebook cell</strong></p>
+<p>The code you can see</p>
+</div>
+<div class="flow-arrow">
+<p>→</p>
+</div>
+<div class="flow-node">
+<p><strong>Jupyter kernel</strong></p>
+<p>Runs code and remembers variables</p>
+</div>
+<div class="flow-arrow">
+<p>→</p>
+</div>
+<div class="flow-node">
+<p><strong>Project environment</strong></p>
+<p>Python 3.11+ and the packages in <code>pyproject.toml</code></p>
+</div>
+</div>
+<div class="context-strip">
+<p><strong>VS Code</strong> shows the notebook and terminal. A <strong>Codespace</strong> hosts that Linux computer. <strong>Git</strong> records the repo’s history; <strong>GitHub</strong> stores and shares it.</p>
+</div>
 <div class="fragment">
-<p>When something breaks, name the layer first. A Git sync problem, a Codespaces build problem, and a stopped Jupyter kernel need three different fixes.</p>
+<p>When something breaks, name the layer first. A Git sync problem, a Codespaces build problem, a stopped kernel, and a missing package need different fixes.</p>
 </div>
 </section>
 <section class="slide level2">

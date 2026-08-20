@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -358,6 +358,19 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <div class="fragment due-notice">
 <p>Same words, different decisions: <strong>data structure</strong> when building the map, <strong>output format</strong> when exporting the figure.</p>
 </div>
+<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 51. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Raster stores values; vector stores geometry</h2>
+<div class="columns">
+<div class="column" style="width:52%;">
+<p><strong>Raster: one value per cell</strong></p>
+<p><img data-src="../assets/legacy/gis_raster.png" style="width:76.0%" alt="A landscape image enlarged into a grid of numeric raster cells and then colored by cell value"></p>
+</div><div class="column" style="width:48%;">
+<p><strong>Vector: coordinates make features</strong></p>
+<p><img data-src="../assets/legacy/gis_vector.png" style="width:76.0%" alt="Vector points, connected lines, and closed polygons represented by x and y coordinates"></p>
+</div></div>
+<p><small>Legacy source graphics reproduced from the course’s prior GIS introduction.</small></p>
 </section>
 <section class="slide level2">
 <h2>A map is a scatter with two obligations</h2>
@@ -369,6 +382,28 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>At 32°N a degree of longitude is only <span class="math inline">\(\cos(32°) \approx 0.85\)</span> as long as a degree of latitude. Plotting them 1:1 stretches the basin east–west by 18%.</p>
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>ax.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.deg2rad(lat.mean())))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 46. -->
+</section>
+<section class="slide level2 smaller">
+<h2>A map and a network answer different questions</h2>
+<div class="columns">
+<div class="column" style="width:68%;">
+<p><img data-src="../assets/legacy/yakima_map_network.jpg" style="width:98.0%" alt="Yakima River basin elevation map and its corresponding stream-network topology, with gauged locations highlighted in red"></p>
+</div><div class="column" style="width:32%;">
+<p><strong>The map preserves</strong></p>
+<ul>
+<li>location and elevation</li>
+<li>basin shape</li>
+<li>spatial context</li>
+</ul>
+<p><strong>The network preserves</strong></p>
+<ul>
+<li>upstream/downstream order</li>
+<li>junctions and connectivity</li>
+<li>gauged versus ungauged reaches</li>
+</ul>
+</div></div>
+<p><small>Bennett et al.&nbsp;(2022), <em>Journal of Hydrometeorology</em>, Fig. 2.</small></p>
 </section>
 <section class="slide level2">
 <h2>Your turn: fix the aspect</h2>

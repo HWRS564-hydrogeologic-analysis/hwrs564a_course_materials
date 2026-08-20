@@ -39,7 +39,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-8e547040071cf592dc7cfc6331f26ef2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-59c257db3cfdf6564f03842988c1a639.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f09e64199bd3979e1988ebe50f28fa28.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -734,7 +734,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Slides, lab notebooks, and reference material for HWRS 564a. Slides are interactive: the code blocks run in your browser, so you can edit an example and see what changes without leaving the page.</p>
 <p>Graded work is submitted through D2L. This site holds the material; D2L holds the gradebook.</p>
 <div class="due-notice">
-<p><strong>Getting started:</strong> open the <a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials">course repository</a>, click <em>Code → Codespaces → Create codespace</em>, and wait for it to build. Do this before the first class of Week 2.</p>
+<p><strong>Getting started:</strong> open the <a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials">course repository</a>, click <em>Code → Codespaces → Create codespace</em>, and keep the setup log open until it prints <strong>Ready</strong>. The course environment and Jupyter kernel are built automatically. Do this before the first class of Week 2.</p>
 </div>
 </section>
 <section id="schedule" class="level2">
@@ -745,7 +745,6 @@ ul.task-list li input[type="checkbox"] {
 <th>Week</th>
 <th>Dates</th>
 <th>Topic</th>
-<th>Due</th>
 </tr>
 </thead>
 <tbody>
@@ -753,11 +752,9 @@ ul.task-list li input[type="checkbox"] {
 <td>1</td>
 <td>8/24</td>
 <td>Program field trip — no class</td>
-<td></td>
 </tr>
 <tr class="even">
 <td><strong>Module 1 · Python Foundations</strong></td>
-<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -765,29 +762,24 @@ ul.task-list li input[type="checkbox"] {
 <td>2</td>
 <td>8/31</td>
 <td><a href="./slides/week02_tue_getting_started.html">Getting started with Python</a> · <a href="./slides/week02_thu_data_types.html">Data types &amp; sequences</a></td>
-<td></td>
 </tr>
 <tr class="even">
 <td>3</td>
 <td>9/7</td>
 <td><a href="./slides/week03_tue_control_flow.html">Control flow</a> · <a href="./slides/week03_thu_functions.html">Functions and modules</a></td>
-<td>HW 1 · Wed 9/9</td>
 </tr>
 <tr class="odd">
 <td>4</td>
 <td>9/14</td>
 <td><a href="./slides/week04_tue_arrays.html">Arrays with numpy</a> · <a href="./slides/week04_thu_iteration.html">Iterative solutions</a></td>
-<td></td>
 </tr>
 <tr class="even">
 <td>5</td>
 <td>9/21</td>
 <td><a href="./slides/week05_tue_pandas.html">Pandas: labelled data through time</a> · <a href="./slides/week05_thu_filtering.html">Filter, summarise, and reshape</a></td>
-<td>HW 2 · Wed 9/23 · Project 1</td>
 </tr>
 <tr class="odd">
 <td><strong>Module 2 · Data Analysis &amp; Visualization</strong></td>
-<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -795,29 +787,24 @@ ul.task-list li input[type="checkbox"] {
 <td>6</td>
 <td>9/28</td>
 <td><a href="./slides/week06_tue_apis.html">Where data comes from</a> · <a href="./slides/week06_thu_cleaning.html">Gaps, duplicates, outliers</a></td>
-<td></td>
 </tr>
 <tr class="odd">
 <td>7</td>
 <td>10/5</td>
 <td><a href="./slides/week07_tue_inference.html">Uncertainty and hypothesis testing</a> · <a href="./slides/week07_thu_inference_lab.html">Groundwater inference lab</a></td>
-<td>HW 3 · Wed 10/7</td>
 </tr>
 <tr class="even">
 <td>8</td>
 <td>10/12</td>
 <td><a href="./slides/week08_tue_figures.html">Figures worth showing</a> · <a href="./slides/week08_thu_annotation_maps.html">Annotation and maps</a></td>
-<td>Project 2 pt 1</td>
 </tr>
 <tr class="odd">
 <td>9</td>
 <td>10/19</td>
 <td><a href="./slides/week09_tue_regression.html">OLS, one step at a time</a> · <a href="./slides/week09_thu_regression_lab.html">Regression lab</a></td>
-<td>HW 4 · Wed 10/21</td>
 </tr>
 <tr class="even">
 <td><strong>Module 3 · Introduction to MODFLOW &amp; FloPy</strong></td>
-<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -825,35 +812,29 @@ ul.task-list li input[type="checkbox"] {
 <td>10</td>
 <td>10/26</td>
 <td><a href="./slides/week10_tue_what_is_modflow.html">What MODFLOW is</a> · <a href="./slides/week10_thu_running_it.html">Running it</a></td>
-<td>Project 2 pt 2</td>
 </tr>
 <tr class="even">
 <td>11</td>
 <td>11/2</td>
 <td><a href="./slides/week11_tue_inputs_outputs.html">Inputs, outputs, hitting go</a> · <a href="./slides/week11_thu_budgets.html">Budgets</a></td>
-<td>HW 5 · Wed 11/4</td>
 </tr>
 <tr class="odd">
 <td>12</td>
 <td>11/9</td>
 <td><a href="./slides/week12_tue_discretization.html">Discretization</a> · <a href="./slides/week12_thu_unconfined.html">Unconfined flow</a></td>
-<td></td>
 </tr>
 <tr class="even">
 <td>13</td>
 <td>11/16</td>
 <td><a href="./slides/week13_tue_time.html">Time and storage</a> · <a href="./slides/week13_thu_capture_et.html">Capture and ET</a></td>
-<td>HW 6 · Wed 11/18 · Project 3 pt 1</td>
 </tr>
 <tr class="odd">
 <td>14</td>
 <td>11/23</td>
 <td><a href="./slides/week14_tue_layers_rivers.html">Layers, rivers, loading</a> <em>(Tue only)</em></td>
-<td></td>
 </tr>
 <tr class="even">
 <td><strong>Module 4 · Reproducible Workflows</strong></td>
-<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -861,13 +842,11 @@ ul.task-list li input[type="checkbox"] {
 <td>15</td>
 <td>11/30</td>
 <td>Debugging and coding practices</td>
-<td>HW 7 · Wed 12/2 · Project 3 pt 2</td>
 </tr>
 <tr class="even">
 <td>16</td>
 <td>12/7</td>
 <td>Project 3 presentations <em>(Tue only)</em></td>
-<td></td>
 </tr>
 </tbody>
 </table>

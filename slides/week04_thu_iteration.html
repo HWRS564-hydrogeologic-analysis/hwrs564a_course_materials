@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -253,6 +253,19 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwibWluLWxpbmVz
 <div class="fragment">
 <p>The sign flips between 10 and 12. A continuous function that changes sign has a root in between — that is the <strong>intermediate value theorem</strong>, and it is the only thing bisection needs.</p>
 </div>
+<!-- Figure recovered from old_slides/hwrs564a_sept4.pdf, p. 12. -->
+</section>
+<section class="slide level2">
+<h2>Bisection keeps the half with the sign change</h2>
+<div class="columns">
+<div class="column" style="width:43%;">
+<p><img data-src="../assets/legacy/bisection_bracket.png" style="width:78.0%" alt="A nonlinear function with successively smaller brackets closing around its root"></p>
+</div><div class="column" style="width:57%;">
+<p>Start with the outer bracket, evaluate the midpoint, and discard the half whose endpoints have the same sign.</p>
+<div class="fragment">
+<p>Each new brace is half as wide. The estimate improves even when the curve is awkward, because the method depends on a <strong>sign change</strong>, not on the curve’s shape.</p>
+</div>
+</div></div>
 </section>
 <section class="slide level2">
 <h2>The algorithm, in four lines</h2>
@@ -363,17 +376,29 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
 <h1>Marching through time</h1>
-
+<!-- Explicit/implicit comparison rebuilt from old_slides/hwrs564a_sept4.pdf,
+     pp. 19-24, with the linear reservoir used in this course. -->
 </section>
-<section class="slide level2">
-<h2>A linear reservoir</h2>
+<section class="slide level2 smaller">
+<h2>A time step chooses where to evaluate the flux</h2>
 <p><span class="math display">\[\frac{dS}{dt} = -kS \qquad\Longrightarrow\qquad S(t) = S_0 e^{-kt}\]</span></p>
-<div class="fragment">
-<p>We know the answer, which is exactly why it’s worth simulating: you can check the method against the truth.</p>
+<div class="concept-flow">
+<div class="flow-node">
+<p><strong>Explicit: use the storage you know</strong></p>
+<p><span class="math display">\[S_n \xrightarrow{\;kS_n\Delta t\;} S_{n+1}\]</span></p>
+<p><span class="math display">\[S_{n+1}=S_n-kS_n\Delta t\]</span></p>
+</div>
+<div class="flow-arrow">
+<p>↔︎</p>
+</div>
+<div class="flow-node">
+<p><strong>Implicit: use the storage you are solving for</strong></p>
+<p><span class="math display">\[S_n \xrightarrow{\;kS_{n+1}\Delta t\;} S_{n+1}\]</span></p>
+<p><span class="math display">\[S_{n+1}=S_n-kS_{n+1}\Delta t\]</span></p>
+</div>
 </div>
 <div class="fragment">
-<p><strong>Explicit</strong> (forward Euler) — evaluate the rate where you <em>are</em>:</p>
-<p><span class="math display">\[S_{n+1} = S_n - k S_n \Delta t\]</span></p>
+<p>We know the analytic answer, which is exactly why this reservoir is worth simulating: we can separate <strong>accuracy</strong> from <strong>stability</strong>.</p>
 </div>
 </section>
 <section class="slide level2">

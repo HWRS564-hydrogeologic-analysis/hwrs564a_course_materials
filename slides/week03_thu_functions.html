@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -262,11 +262,15 @@ Dr.&nbsp;Andrew Bennett
 <div class="fragment">
 <p>One place to fix. One place to test. And the call site now <em>says what it means</em> instead of making the reader decode arithmetic.</p>
 </div>
+<!-- Rebuilt from old_slides/hwrs564a_sept16.pdf, p. 25, around the current
+     course function rather than the legacy toy example. -->
 </section>
-<section class="slide level2">
+<section class="slide level2 smaller">
 <h2>Anatomy</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="kw">def</span> transmissivity(hydraulic_conductivity, thickness):   <span class="co"># &lt;- header</span></span>
-<span id="cb4-2"><a></a>    <span class="co">"""Transmissivity T = K * b, in m2/d.                # &lt;- docstring</span></span>
+<div class="columns">
+<div class="column" style="width:64%;">
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="kw">def</span> transmissivity(hydraulic_conductivity, thickness):</span>
+<span id="cb4-2"><a></a>    <span class="co">"""Transmissivity T = K * b, in m2/d.</span></span>
 <span id="cb4-3"><a></a></span>
 <span id="cb4-4"><a></a><span class="co">    Parameters</span></span>
 <span id="cb4-5"><a></a><span class="co">    ----------</span></span>
@@ -275,7 +279,15 @@ Dr.&nbsp;Andrew Bennett
 <span id="cb4-8"><a></a><span class="co">    thickness : float</span></span>
 <span id="cb4-9"><a></a><span class="co">        Saturated thickness b, in m.</span></span>
 <span id="cb4-10"><a></a><span class="co">    """</span></span>
-<span id="cb4-11"><a></a>    <span class="cf">return</span> hydraulic_conductivity <span class="op">*</span> thickness            <span class="co"># &lt;- return</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-11"><a></a>    <span class="cf">return</span> hydraulic_conductivity <span class="op">*</span> thickness</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:36%;">
+<ol type="1">
+<li><strong>Header</strong> names the function and its inputs</li>
+<li><strong>Indented body</strong> is the work the function owns</li>
+<li><strong>Docstring</strong> records meaning and units</li>
+<li><strong><code>return</code></strong> hands the result back to the caller</li>
+</ol>
+</div></div>
 <div class="fragment">
 <p>The <strong>docstring</strong> is not optional politeness. It is where the units live, and units are what you will actually forget. <code>help(transmissivity)</code> prints it.</p>
 </div>

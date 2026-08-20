@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -262,6 +262,33 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 </div>
 <div class="fragment">
 <p>This is the most common error you will hit in the next two weeks. It is also one of the most useful — Python is telling you your data isn’t what you thought.</p>
+</div>
+<!-- Rebuilt from old_slides/hwrs564a_sept2-1.pdf, pp. 21-27. -->
+</section>
+<section class="slide level2">
+<h2>A measurement becomes useful in three steps</h2>
+<div class="concept-flow">
+<div class="flow-node">
+<p><strong>Observation</strong></p>
+<p>field sheet says <code>45.7 ft</code></p>
+</div>
+<div class="flow-arrow">
+<p>→</p>
+</div>
+<div class="flow-node">
+<p><strong>Encoded value</strong></p>
+<p><code>"45.7"</code> is text; <code>45.7</code> is a float</p>
+</div>
+<div class="flow-arrow">
+<p>→</p>
+</div>
+<div class="flow-node">
+<p><strong>Allowed operations</strong></p>
+<p>join labels, compare categories, or calculate depth</p>
+</div>
+</div>
+<div class="fragment due-notice">
+<p>The observation did not change. Its <strong>representation</strong> did, and that choice controls what Python can do with it.</p>
 </div>
 </section>
 <section class="slide level2">

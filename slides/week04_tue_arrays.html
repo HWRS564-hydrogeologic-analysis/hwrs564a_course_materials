@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -278,6 +278,14 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 </div>
 <div class="fragment">
 <p>Fixed size, one dtype, a shape. A list has none of those — which is exactly why it can’t be fast.</p>
+</div>
+<!-- Figure recovered from old_slides/hwrs564a_sept16.pdf, p. 29. -->
+</section>
+<section class="slide level2">
+<h2>Shape records one length per axis</h2>
+
+<img data-src="../assets/legacy/array_dimensions.jpg" style="width:82.0%" alt="Examples of one-, two-, and three-dimensional arrays with their axis numbers and shape tuples" class="r-stretch"><div class="fragment">
+<p><code>shape=(4, 3, 2)</code> means four positions on axis 0, three on axis 1, and two on axis 2. <strong>The tuple has one entry for every dimension.</strong></p>
 </div>
 </section></section>
 <section>

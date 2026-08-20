@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -239,6 +239,14 @@ Dr.&nbsp;Andrew Bennett
 <div class="fragment">
 <p>Labels survive reordering. If a required label disappears, pandas raises a <code>KeyError</code> at the point where the assumption failed.</p>
 </div>
+<!-- Figure recovered from old_slides/hwrs564a_sept18.pdf, p. 10. -->
+</section>
+<section class="slide level2">
+<h2>Labels decide which values meet</h2>
+
+<img data-src="../assets/legacy/pandas_label_alignment.jpg" style="width:82.0%" alt="Two pandas Series align on labels B, C, and D before addition, leaving NaN at unmatched labels A and E" class="r-stretch"><div class="fragment">
+<p>Pandas matches <code>B</code> with <code>B</code>, not the second row with the second row. Unmatched labels remain in the result and become <code>NaN</code> instead of silently shifting the data.</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>Two objects cover most of pandas</h2>
@@ -254,6 +262,14 @@ Dr.&nbsp;Andrew Bennett
 </div></div>
 <div class="fragment">
 <p>One column name returns a Series. A list of names returns a DataFrame.</p>
+</div>
+<!-- Figure recovered from old_slides/hwrs564a_sept18.pdf, p. 12. -->
+</section>
+<section class="slide level2">
+<h2>A DataFrame is aligned Series</h2>
+
+<img data-src="../assets/legacy/pandas_series_to_dataframe.jpg" style="width:88.0%" alt="Three labelled Series combining into the columns of one DataFrame" class="r-stretch"><div class="fragment">
+<p>The shared index is what makes the rows cohere. Column names distinguish the three measurements; row labels identify the observation each value belongs to.</p>
 </div>
 </section>
 <section class="slide level2">

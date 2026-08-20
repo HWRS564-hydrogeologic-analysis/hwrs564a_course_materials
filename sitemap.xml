@@ -2,31 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week14/week14_lab_layers_rivers_loading.html</loc>
-    <lastmod>2026-07-28T16:41:38.175Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.884Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week12/week12_lab_discretization_boundaries.html</loc>
-    <lastmod>2026-07-28T16:41:38.175Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.883Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week10/week10_lab_meeting_modflow.html</loc>
-    <lastmod>2026-07-28T16:41:38.175Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.882Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week08/week08_lab_matplotlib.html</loc>
-    <lastmod>2026-08-12T04:13:18.839Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.882Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week06/week06_lab_real_world_data.html</loc>
-    <lastmod>2026-07-28T16:41:38.174Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.881Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week04/week04_lab_arrays_iteration.html</loc>
-    <lastmod>2026-07-28T16:41:38.173Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.880Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week02/week02_lab_python_basics.html</loc>
-    <lastmod>2026-08-12T03:13:51.585Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.879Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week13_tue_time.html</loc>
@@ -34,7 +34,7 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week12_tue_discretization.html</loc>
-    <lastmod>2026-08-12T03:13:51.504Z</lastmod>
+    <lastmod>2026-08-12T23:09:30.663Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week11_tue_inputs_outputs.html</loc>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week10_tue_what_is_modflow.html</loc>
-    <lastmod>2026-08-12T04:12:13.836Z</lastmod>
+    <lastmod>2026-08-12T23:25:52.761Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week09_tue_regression.html</loc>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week08_tue_figures.html</loc>
-    <lastmod>2026-08-12T03:13:51.544Z</lastmod>
+    <lastmod>2026-08-12T23:26:52.378Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week07_tue_inference.html</loc>
@@ -58,15 +58,15 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week06_tue_apis.html</loc>
-    <lastmod>2026-08-11T18:27:43.432Z</lastmod>
+    <lastmod>2026-08-12T23:24:28.624Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week05_tue_pandas.html</loc>
-    <lastmod>2026-08-12T03:20:34.056Z</lastmod>
+    <lastmod>2026-08-12T23:05:12.933Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week04_tue_arrays.html</loc>
-    <lastmod>2026-07-28T16:41:38.182Z</lastmod>
+    <lastmod>2026-08-12T23:09:30.581Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week03_tue_control_flow.html</loc>
@@ -74,23 +74,23 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week02_tue_getting_started.html</loc>
-    <lastmod>2026-08-11T18:35:44.549Z</lastmod>
+    <lastmod>2026-08-13T01:21:51.223Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/index.html</loc>
-    <lastmod>2026-08-12T04:53:06.662Z</lastmod>
+    <lastmod>2026-08-20T18:34:59.337Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week02_thu_data_types.html</loc>
-    <lastmod>2026-07-28T16:41:38.180Z</lastmod>
+    <lastmod>2026-08-12T23:24:06.533Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week03_thu_functions.html</loc>
-    <lastmod>2026-08-11T18:27:43.206Z</lastmod>
+    <lastmod>2026-08-12T23:24:06.574Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week04_thu_iteration.html</loc>
-    <lastmod>2026-08-11T18:27:43.321Z</lastmod>
+    <lastmod>2026-08-12T23:24:28.581Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week05_thu_filtering.html</loc>
@@ -106,7 +106,7 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week08_thu_annotation_maps.html</loc>
-    <lastmod>2026-08-12T04:12:13.797Z</lastmod>
+    <lastmod>2026-08-12T23:25:17.944Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/slides/week09_thu_regression_lab.html</loc>
@@ -134,26 +134,26 @@
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week03/week03_lab_control_flow.html</loc>
-    <lastmod>2026-07-28T16:41:38.173Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.880Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week05/week05_lab_pandas.html</loc>
-    <lastmod>2026-08-12T03:20:34.098Z</lastmod>
+    <lastmod>2026-08-13T01:19:33.587Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week07/week07_lab_inference.html</loc>
-    <lastmod>2026-08-12T15:37:04.934Z</lastmod>
+    <lastmod>2026-08-13T01:19:33.627Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week09/week09_lab_regression.html</loc>
-    <lastmod>2026-08-12T04:14:39.296Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.882Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week11/week11_lab_basin_model.html</loc>
-    <lastmod>2026-07-28T16:41:38.175Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.883Z</lastmod>
   </url>
   <url>
     <loc>https://hwrs564-hydrogeologic-analysis.github.io/hwrs564a_course_materials/labs/week13/week13_lab_transient_stresses.html</loc>
-    <lastmod>2026-07-28T16:41:38.175Z</lastmod>
+    <lastmod>2026-08-13T01:19:25.884Z</lastmod>
   </url>
 </urlset>

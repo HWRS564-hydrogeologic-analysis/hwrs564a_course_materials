@@ -97,7 +97,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-255ca8cb56521e5774044962d9f43efb.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-d7f2d3543ea4d0f835aa9e078cfed26f.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -239,7 +239,7 @@ Dr.&nbsp;Andrew Bennett
 </section>
 <section class="slide level2">
 <h2>Three resolutions</h2>
-<div id="1a39614f" class="cell" data-execution_count="2">
+<div id="ab41f247" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-stdout">
 <pre><code> cell size     cells   well head   min head
       500m       600    655.990m    620.00m
@@ -361,6 +361,25 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <div class="fragment">
 <p><strong><code>ibound = 0</code> is not the same as <code>hk = 0</code>.</strong> An inactive cell is removed from the equations. A zero-conductivity cell is still solved for, still has a head, and still makes your solver miserable.</p>
 </div>
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 12. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Cell status turns a rectangle into a model domain</h2>
+<div class="columns">
+<div class="column" style="width:47%;">
+<p><img data-src="../assets/legacy/boundary_cells.jpg" style="width:88.0%" alt="A rectangular groundwater model grid with no-flow cells outside an aquifer boundary, constant-head cells at an edge, and variable-head cells inside"></p>
+</div><div class="column" style="width:53%;">
+<p>The grid stays rectangular, but the <strong>solved domain does not have to be</strong>.</p>
+<ul>
+<li class="fragment">Grey cells are removed from the equations</li>
+<li class="fragment">Blue cells impose a fixed head</li>
+<li class="fragment">White cells carry the unknown heads</li>
+<li class="fragment">The black line is the conceptual aquifer boundary</li>
+</ul>
+<div class="fragment due-notice">
+<p>Cell status is a modeling decision about the domain, not a cosmetic mask.</p>
+</div>
+</div></div>
 </section>
 <section class="slide level2">
 <h2>Cutting the basin out of the rectangle</h2>
