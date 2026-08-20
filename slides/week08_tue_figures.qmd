@@ -19,6 +19,28 @@ Week 8, session 1 of 2
 The theme: most of what separates a working figure from a bad one is
 **correctness**, not taste.
 
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 13. -->
+## Contrast decides what the eye finds {.smaller}
+
+::: {.columns}
+::: {.column width="43%"}
+How many **7s** are in the field?
+
+::: {.fragment}
+The digits contain the same information. Colour changes the **search task**:
+serial inspection becomes immediate grouping.
+:::
+
+::: {.fragment .due-notice}
+A good figure does not merely contain the answer. It directs attention to it.
+:::
+:::
+
+::: {.column width="57%"}
+![](../assets/legacy/visual_search_sevens.jpg){fig-alt="A field of gray digits with every seven highlighted in red, making the sevens immediately visible" width="88%"}
+:::
+:::
+
 # Figure and axes {background-color="#0C234B"}
 
 ## Two objects
@@ -49,6 +71,29 @@ Almost everything you want is a method on one or the other. Knowing which is
 half of learning matplotlib.
 :::
 
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 29. -->
+## Most visible elements belong to an `Axes` {.smaller}
+
+::: {.columns}
+::: {.column width="66%"}
+![](../assets/legacy/matplotlib_anatomy.png){fig-alt="Annotated matplotlib figure identifying the figure, axes, lines, markers, labels, ticks, legend, grid, and spines" width="72%"}
+:::
+
+::: {.column width="34%"}
+**The `Figure` owns**
+
+- the canvas
+- its size and resolution
+- saving the result
+
+**An `Axes` owns**
+
+- the plotted data
+- limits, ticks, and labels
+- titles, legends, and grids
+:::
+:::
+
 ## `plt.plot` draws somewhere
 
 ```python
@@ -67,26 +112,51 @@ and the bug is invisible in the code.
 extra line and it removes an entire category of confusion.
 :::
 
-## Panels
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, pp. 30-40. -->
+## Panels are an array of `Axes` {.smaller}
 
-```{pyodide}
-#| autorun: false
-#| min-lines: 8
-import matplotlib.pyplot as plt
+::: {.columns}
+::: {.column width="65%"}
+![](../assets/legacy/multiple_axes_profiles.jpg){fig-alt="Three side-by-side soil pressure-head profiles comparing simulated and analytical solutions" width="96%"}
+:::
 
-fig, axes = plt.subplots(2, 2, figsize=(7, 4))
-print(type(axes), axes.shape)
+::: {.column width="35%"}
+```python
+fig, axes = plt.subplots(1, 3,
+                         sharey=True)
 
-for i, ax in enumerate(axes.flat):
-    ax.set_title(f"axes.flat[{i}]", fontsize=9)
-plt.tight_layout()
-plt.show()
+axes[0].plot(...)
+axes[1].plot(...)
+axes[2].plot(...)
 ```
 
-::: {.fragment}
-`subplots(2, 2)` returns a 2 × 2 **array**. `axes.flat` iterates it in reading
-order, which is usually what you want in a loop.
+One figure owns three axes. Each `axes[i]` receives its own data and labels.
 :::
+:::
+
+::: {.fragment}
+With a 2 × 2 layout, `axes` is a 2 × 2 array; `axes.flat` iterates it in reading
+order. The indexing idea does not change.
+:::
+
+<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 20. -->
+## Remove ink that does not carry information {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+**Before: the chart competes with the data**
+
+![](../assets/legacy/declutter_before.jpg){fig-alt="A cluttered bar chart with gradients, shadows, border, grid, redundant legend, and repeated labels" width="88%"}
+:::
+
+::: {.column width="50%"}
+**After: one comparison is emphasized**
+
+![](../assets/legacy/declutter_after.jpg){fig-alt="A clean bar chart with direct labels, minimal decoration, and one bar highlighted" width="73%"}
+:::
+:::
+
+<small>Example adapted from Darkhorse Analytics' “Data Looks Better Naked.”</small>
 
 ## Sharing an axis is a claim
 
@@ -171,29 +241,25 @@ Using a diverging map on sequential data puts a false boundary in the middle of
 your range. Using a sequential map on diverging data hides the zero crossing.
 :::
 
-## Don't use `jet`
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 23. -->
+## `jet` changes apparent structure {.smaller}
 
-```{pyodide}
-#| edit: false
-#| autorun: true
-#| fig-width: 8
-#| fig-height: 2.2
-import matplotlib.pyplot as plt, numpy as np
+::: {.columns}
+::: {.column width="66%"}
+![](../assets/legacy/colormap_perception.png){fig-alt="The same Earth, apple, and portrait shown in grayscale, the jet rainbow colormap, and the perceptually uniform batlow colormap" width="98%"}
+:::
 
-g = np.linspace(0, 1, 256).reshape(1, -1)
-fig, axes = plt.subplots(2, 1, figsize=(8, 1.8))
-for ax, name in zip(axes, ["viridis", "jet"]):
-    ax.imshow(g, aspect="auto", cmap=name)
-    ax.set_xticks([]); ax.set_yticks([])
-    ax.set_ylabel(name, rotation=0, ha="right", va="center")
-plt.tight_layout()
-plt.show()
-```
+::: {.column width="34%"}
+**`jet`** adds bright cyan and yellow bands and dark ends.
+
+**Perceptual maps** vary more steadily, so equal data steps look more nearly equal.
+
+Use `viridis`, `cividis`, or another perceptually uniform map for ordered data.
+:::
+:::
 
 ::: {.fragment}
-`jet` has bright bands at cyan and yellow and dark ends, so **equal steps in the
-data are not equal steps in apparent brightness**. It invents boundaries that
-aren't there and hides ones that are.
+`jet` can invent boundaries that are not in the data and hide ones that are.
 :::
 
 ## Centre a diverging map on zero
@@ -263,6 +329,34 @@ side of it. Without the limits, matplotlib centres on the data midpoint of about
 The cost is that most of the blue half of the colorbar goes unused. That is
 fine: an unused range is honest, a mislabelled midpoint is not.
 :::
+:::
+
+<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 25. -->
+## Colour differences can disappear {.smaller}
+
+::: {.columns}
+::: {.column width="33%"}
+**Original**
+
+![](../assets/legacy/color_accessibility_original.jpg){fig-alt="A United States map divided into red, orange, light green, and dark green regions" width="100%"}
+:::
+
+::: {.column width="33%"}
+**Protanomaly simulation**
+
+![](../assets/legacy/color_accessibility_protanomaly.jpg){fig-alt="The same map under a protanomaly simulation, with several categories becoming difficult to distinguish" width="100%"}
+:::
+
+::: {.column width="33%"}
+**Deuteranomaly simulation**
+
+![](../assets/legacy/color_accessibility_deuteranomaly.jpg){fig-alt="The same map under a deuteranomaly simulation, with several categories becoming difficult to distinguish" width="100%"}
+:::
+:::
+
+::: {.fragment .due-notice}
+If categories differ only by red versus green, some readers receive fewer
+categories than you drew.
 :::
 
 ## Colour cannot be the only signal

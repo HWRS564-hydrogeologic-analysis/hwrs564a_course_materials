@@ -39,26 +39,36 @@ Three things that buys you:
 :::
 
 <!-- Adapted from old_slides/hwrs564a_sept23.pdf. -->
-## A request is an endpoint plus parameters
+## A request is an endpoint plus parameters {.smaller}
 
-```text
-https://waterservices.usgs.gov/nwis/dv/
-    ?sites=09484000
-    &format=json
-    &startDT=2005-01-01
-    &endDT=2024-12-31
-```
+<div class="url-anatomy">
+<span class="url-endpoint">https://waterservices.usgs.gov/nwis/dv/</span><br>
+?<span class="url-site">sites=09484000</span><br>
+&amp;<span class="url-format">format=json</span><br>
+&amp;<span class="url-time">startDT=2005-01-01</span><br>
+&amp;<span class="url-time">endDT=2024-12-31</span>
+</div>
 
-::: {.incremental}
-- The **endpoint** names the service: daily values (`dv`)
-- `?` starts the query; `&` separates its pieces
-- Each `key=value` pair makes one choice explicit
-- Change the values in a loop and the same request scales to many sites
+::: {.columns}
+::: {.column width="50%"}
+**The service**
+
+- blue underline: daily values endpoint (`dv`)
+- `?` starts the query; `&` separates choices
+:::
+
+::: {.column width="50%"}
+**The choices**
+
+- blue: site identifier
+- green: response format
+- red: time window
+:::
 :::
 
 ::: {.fragment}
-A wrapper does not remove this request. It gives the parameters Python names,
-constructs the URL, sends it, and parses the response.
+Change the colored values in a loop and the same request scales to many sites.
+A wrapper gives them Python names, builds the URL, sends it, and parses the response.
 :::
 
 ## Why use a wrapper

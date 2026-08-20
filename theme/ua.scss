@@ -65,6 +65,60 @@ $font-family-monospace: "JetBrains Mono", "Fira Code", "SF Mono", Menlo,
   color: $ua-gray;
 }
 
+// Flat concept diagrams used to rebuild explanatory figures from prior decks.
+// Keep these deliberately simple: one reading direction, one accent, no chrome.
+.reveal .concept-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0.55em;
+  margin: 0.7em 0;
+}
+
+.reveal .concept-flow .flow-node {
+  flex: 1 1 0;
+  background: mix($ua-cool-gray, #fff, 62%);
+  border-top: 5px solid $ua-azurite;
+  padding: 0.55em 0.65em;
+  text-align: center;
+}
+
+.reveal .concept-flow .flow-arrow {
+  align-self: center;
+  color: $ua-red;
+  flex: 0 0 auto;
+  font-size: 1.55em;
+  font-weight: 700;
+}
+
+.reveal .context-strip {
+  border-left: 5px solid $ua-red;
+  margin-top: 0.55em;
+  padding: 0.35em 0.7em;
+}
+
+.reveal .url-anatomy {
+  font-family: $font-family-monospace;
+  font-size: 0.82em;
+  line-height: 1.65;
+  margin: 0.3em 0 0.7em;
+  overflow-wrap: anywhere;
+}
+
+.reveal .url-endpoint {
+  border-bottom: 5px solid $ua-azurite;
+  color: $ua-blue;
+}
+
+.reveal .url-site { background: mix($ua-sky, #fff, 52%); }
+.reveal .url-format { background: mix($ua-leaf, #fff, 60%); }
+.reveal .url-time { background: mix($ua-warm-gray, $ua-red, 84%); }
+
+.reveal .package-tree {
+  font-size: 0.72em;
+  line-height: 1.5;
+  margin: 0;
+}
+
 // ==========================================================================
 //  quarto-live interactive cells
 //

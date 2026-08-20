@@ -59,6 +59,26 @@ root in between — that is the **intermediate value theorem**, and it is the on
 thing bisection needs.
 :::
 
+<!-- Figure recovered from old_slides/hwrs564a_sept4.pdf, p. 12. -->
+## Bisection keeps the half with the sign change
+
+::: {.columns}
+::: {.column width="43%"}
+![](../assets/legacy/bisection_bracket.png){fig-alt="A nonlinear function with successively smaller brackets closing around its root" width="78%"}
+:::
+
+::: {.column width="57%"}
+Start with the outer bracket, evaluate the midpoint, and discard the half whose
+endpoints have the same sign.
+
+::: {.fragment}
+Each new brace is half as wide. The estimate improves even when the curve is
+awkward, because the method depends on a **sign change**, not on the curve's
+shape.
+:::
+:::
+:::
+
 ## The algorithm, in four lines
 
 ::: {.incremental}
@@ -177,19 +197,35 @@ Write your own **once**, so the library isn't magic. Then use the library.
 
 # Marching through time {background-color="#AB0520"}
 
-## A linear reservoir
+<!-- Explicit/implicit comparison rebuilt from old_slides/hwrs564a_sept4.pdf,
+     pp. 19-24, with the linear reservoir used in this course. -->
+## A time step chooses where to evaluate the flux {.smaller}
 
 $$\frac{dS}{dt} = -kS \qquad\Longrightarrow\qquad S(t) = S_0 e^{-kt}$$
 
-::: {.fragment}
-We know the answer, which is exactly why it's worth simulating: you can check
-the method against the truth.
+::: {.concept-flow}
+::: {.flow-node}
+**Explicit: use the storage you know**
+
+$$S_n \xrightarrow{\;kS_n\Delta t\;} S_{n+1}$$
+
+$$S_{n+1}=S_n-kS_n\Delta t$$
+:::
+::: {.flow-arrow}
+↔
+:::
+::: {.flow-node}
+**Implicit: use the storage you are solving for**
+
+$$S_n \xrightarrow{\;kS_{n+1}\Delta t\;} S_{n+1}$$
+
+$$S_{n+1}=S_n-kS_{n+1}\Delta t$$
+:::
 :::
 
 ::: {.fragment}
-**Explicit** (forward Euler) — evaluate the rate where you *are*:
-
-$$S_{n+1} = S_n - k S_n \Delta t$$
+We know the analytic answer, which is exactly why this reservoir is worth
+simulating: we can separate **accuracy** from **stability**.
 :::
 
 ## Your turn: step it forward

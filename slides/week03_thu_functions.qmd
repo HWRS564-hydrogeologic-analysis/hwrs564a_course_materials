@@ -73,11 +73,15 @@ One place to fix. One place to test. And the call site now *says what it means*
 instead of making the reader decode arithmetic.
 :::
 
-## Anatomy
+<!-- Rebuilt from old_slides/hwrs564a_sept16.pdf, p. 25, around the current
+     course function rather than the legacy toy example. -->
+## Anatomy {.smaller}
 
+::: {.columns}
+::: {.column width="64%"}
 ```python
-def transmissivity(hydraulic_conductivity, thickness):   # <- header
-    """Transmissivity T = K * b, in m2/d.                # <- docstring
+def transmissivity(hydraulic_conductivity, thickness):
+    """Transmissivity T = K * b, in m2/d.
 
     Parameters
     ----------
@@ -86,8 +90,17 @@ def transmissivity(hydraulic_conductivity, thickness):   # <- header
     thickness : float
         Saturated thickness b, in m.
     """
-    return hydraulic_conductivity * thickness            # <- return
+    return hydraulic_conductivity * thickness
 ```
+:::
+
+::: {.column width="36%"}
+1. **Header** names the function and its inputs
+2. **Indented body** is the work the function owns
+3. **Docstring** records meaning and units
+4. **`return`** hands the result back to the caller
+:::
+:::
 
 ::: {.fragment}
 The **docstring** is not optional politeness. It is where the units live, and

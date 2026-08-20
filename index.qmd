@@ -14,34 +14,35 @@ gradebook.
 
 ::: {.due-notice}
 **Getting started:** open the [course repository](https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials),
-click *Code → Codespaces → Create codespace*, and wait for it to build. Do this
-before the first class of Week 2.
+click *Code → Codespaces → Create codespace*, and keep the setup log open until
+it prints **Ready**. The course environment and Jupyter kernel are built
+automatically. Do this before the first class of Week 2.
 :::
 
 ## Schedule
 
-| Week | Dates | Topic | Due |
-|------|-------|-------|-----|
-| 1 | 8/24 | Program field trip — no class | |
-| **Module 1 · Python Foundations** | | | |
-| 2 | 8/31 | [Getting started with Python](slides/week02_tue_getting_started.qmd) · [Data types & sequences](slides/week02_thu_data_types.qmd) | |
-| 3 | 9/7 | [Control flow](slides/week03_tue_control_flow.qmd) · [Functions and modules](slides/week03_thu_functions.qmd) | HW 1 · Wed 9/9 |
-| 4 | 9/14 | [Arrays with numpy](slides/week04_tue_arrays.qmd) · [Iterative solutions](slides/week04_thu_iteration.qmd) | |
-| 5 | 9/21 | [Pandas: labelled data through time](slides/week05_tue_pandas.qmd) · [Filter, summarise, and reshape](slides/week05_thu_filtering.qmd) | HW 2 · Wed 9/23 · Project 1 |
-| **Module 2 · Data Analysis & Visualization** | | | |
-| 6 | 9/28 | [Where data comes from](slides/week06_tue_apis.qmd) · [Gaps, duplicates, outliers](slides/week06_thu_cleaning.qmd) | |
-| 7 | 10/5 | [Uncertainty and hypothesis testing](slides/week07_tue_inference.qmd) · [Groundwater inference lab](slides/week07_thu_inference_lab.qmd) | HW 3 · Wed 10/7 |
-| 8 | 10/12 | [Figures worth showing](slides/week08_tue_figures.qmd) · [Annotation and maps](slides/week08_thu_annotation_maps.qmd) | Project 2 pt 1 |
-| 9 | 10/19 | [OLS, one step at a time](slides/week09_tue_regression.qmd) · [Regression lab](slides/week09_thu_regression_lab.qmd) | HW 4 · Wed 10/21 |
-| **Module 3 · Introduction to MODFLOW & FloPy** | | | |
-| 10 | 10/26 | [What MODFLOW is](slides/week10_tue_what_is_modflow.qmd) · [Running it](slides/week10_thu_running_it.qmd) | Project 2 pt 2 |
-| 11 | 11/2 | [Inputs, outputs, hitting go](slides/week11_tue_inputs_outputs.qmd) · [Budgets](slides/week11_thu_budgets.qmd) | HW 5 · Wed 11/4 |
-| 12 | 11/9 | [Discretization](slides/week12_tue_discretization.qmd) · [Unconfined flow](slides/week12_thu_unconfined.qmd) | |
-| 13 | 11/16 | [Time and storage](slides/week13_tue_time.qmd) · [Capture and ET](slides/week13_thu_capture_et.qmd) | HW 6 · Wed 11/18 · Project 3 pt 1 |
-| 14 | 11/23 | [Layers, rivers, loading](slides/week14_tue_layers_rivers.qmd) *(Tue only)* | |
-| **Module 4 · Reproducible Workflows** | | | |
-| 15 | 11/30 | Debugging and coding practices | HW 7 · Wed 12/2 · Project 3 pt 2 |
-| 16 | 12/7 | Project 3 presentations *(Tue only)* | |
+| Week | Dates | Topic |
+|------|-------|-------|
+| 1 | 8/24 | Program field trip — no class |
+| **Module 1 · Python Foundations** | | |
+| 2 | 8/31 | [Getting started with Python](slides/week02_tue_getting_started.qmd) · [Data types & sequences](slides/week02_thu_data_types.qmd) |
+| 3 | 9/7 | [Control flow](slides/week03_tue_control_flow.qmd) · [Functions and modules](slides/week03_thu_functions.qmd) |
+| 4 | 9/14 | [Arrays with numpy](slides/week04_tue_arrays.qmd) · [Iterative solutions](slides/week04_thu_iteration.qmd) |
+| 5 | 9/21 | [Pandas: labelled data through time](slides/week05_tue_pandas.qmd) · [Filter, summarise, and reshape](slides/week05_thu_filtering.qmd) |
+| **Module 2 · Data Analysis & Visualization** | | |
+| 6 | 9/28 | [Where data comes from](slides/week06_tue_apis.qmd) · [Gaps, duplicates, outliers](slides/week06_thu_cleaning.qmd) |
+| 7 | 10/5 | [Uncertainty and hypothesis testing](slides/week07_tue_inference.qmd) · [Groundwater inference lab](slides/week07_thu_inference_lab.qmd) |
+| 8 | 10/12 | [Figures worth showing](slides/week08_tue_figures.qmd) · [Annotation and maps](slides/week08_thu_annotation_maps.qmd) |
+| 9 | 10/19 | [OLS, one step at a time](slides/week09_tue_regression.qmd) · [Regression lab](slides/week09_thu_regression_lab.qmd) |
+| **Module 3 · Introduction to MODFLOW & FloPy** | | |
+| 10 | 10/26 | [What MODFLOW is](slides/week10_tue_what_is_modflow.qmd) · [Running it](slides/week10_thu_running_it.qmd) |
+| 11 | 11/2 | [Inputs, outputs, hitting go](slides/week11_tue_inputs_outputs.qmd) · [Budgets](slides/week11_thu_budgets.qmd) |
+| 12 | 11/9 | [Discretization](slides/week12_tue_discretization.qmd) · [Unconfined flow](slides/week12_thu_unconfined.qmd) |
+| 13 | 11/16 | [Time and storage](slides/week13_tue_time.qmd) · [Capture and ET](slides/week13_thu_capture_et.qmd) |
+| 14 | 11/23 | [Layers, rivers, loading](slides/week14_tue_layers_rivers.qmd) *(Tue only)* |
+| **Module 4 · Reproducible Workflows** | | |
+| 15 | 11/30 | Debugging and coding practices |
+| 16 | 12/7 | Project 3 presentations *(Tue only)* |
 
 ## How class works
 

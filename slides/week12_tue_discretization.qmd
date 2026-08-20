@@ -216,6 +216,30 @@ equations. A zero-conductivity cell is still solved for, still has a head, and
 still makes your solver miserable.
 :::
 
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 12. -->
+## Cell status turns a rectangle into a model domain {.smaller}
+
+::: {.columns}
+::: {.column width="47%"}
+![](../assets/legacy/boundary_cells.jpg){fig-alt="A rectangular groundwater model grid with no-flow cells outside an aquifer boundary, constant-head cells at an edge, and variable-head cells inside" width="88%"}
+:::
+
+::: {.column width="53%"}
+The grid stays rectangular, but the **solved domain does not have to be**.
+
+::: {.incremental}
+- Grey cells are removed from the equations
+- Blue cells impose a fixed head
+- White cells carry the unknown heads
+- The black line is the conceptual aquifer boundary
+:::
+
+::: {.fragment .due-notice}
+Cell status is a modeling decision about the domain, not a cosmetic mask.
+:::
+:::
+:::
+
 ## Cutting the basin out of the rectangle
 
 ```python

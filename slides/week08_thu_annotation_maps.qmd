@@ -140,6 +140,25 @@ Same words, different decisions: **data structure** when building the map,
 **output format** when exporting the figure.
 :::
 
+<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 51. -->
+## Raster stores values; vector stores geometry {.smaller}
+
+::: {.columns}
+::: {.column width="52%"}
+**Raster: one value per cell**
+
+![](../assets/legacy/gis_raster.png){fig-alt="A landscape image enlarged into a grid of numeric raster cells and then colored by cell value" width="76%"}
+:::
+
+::: {.column width="48%"}
+**Vector: coordinates make features**
+
+![](../assets/legacy/gis_vector.png){fig-alt="Vector points, connected lines, and closed polygons represented by x and y coordinates" width="76%"}
+:::
+:::
+
+<small>Legacy source graphics reproduced from the course's prior GIS introduction.</small>
+
 ## A map is a scatter with two obligations
 
 ::: {.incremental}
@@ -155,6 +174,31 @@ degree of latitude. Plotting them 1:1 stretches the basin east–west by 18%.
 ```python
 ax.set_aspect(1 / np.cos(np.deg2rad(lat.mean())))
 ```
+
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 46. -->
+## A map and a network answer different questions {.smaller}
+
+::: {.columns}
+::: {.column width="68%"}
+![](../assets/legacy/yakima_map_network.jpg){fig-alt="Yakima River basin elevation map and its corresponding stream-network topology, with gauged locations highlighted in red" width="98%"}
+:::
+
+::: {.column width="32%"}
+**The map preserves**
+
+- location and elevation
+- basin shape
+- spatial context
+
+**The network preserves**
+
+- upstream/downstream order
+- junctions and connectivity
+- gauged versus ungauged reaches
+:::
+:::
+
+<small>Bennett et al. (2022), *Journal of Hydrometeorology*, Fig. 2.</small>
 
 ## Your turn: fix the aspect
 

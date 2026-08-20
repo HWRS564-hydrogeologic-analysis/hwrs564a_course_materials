@@ -97,6 +97,16 @@ Fixed size, one dtype, a shape. A list has none of those — which is exactly wh
 it can't be fast.
 :::
 
+<!-- Figure recovered from old_slides/hwrs564a_sept16.pdf, p. 29. -->
+## Shape records one length per axis
+
+![](../assets/legacy/array_dimensions.jpg){fig-alt="Examples of one-, two-, and three-dimensional arrays with their axis numbers and shape tuples" width="82%"}
+
+::: {.fragment}
+`shape=(4, 3, 2)` means four positions on axis 0, three on axis 1, and two on
+axis 2. **The tuple has one entry for every dimension.**
+:::
+
 # Arithmetic {background-color="#0C234B"}
 
 ## Elementwise, by default

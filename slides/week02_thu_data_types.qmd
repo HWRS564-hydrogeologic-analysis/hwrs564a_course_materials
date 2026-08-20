@@ -67,6 +67,38 @@ This is the most common error you will hit in the next two weeks. It is also one
 of the most useful — Python is telling you your data isn't what you thought.
 :::
 
+<!-- Rebuilt from old_slides/hwrs564a_sept2-1.pdf, pp. 21-27. -->
+## A measurement becomes useful in three steps
+
+::: {.concept-flow}
+::: {.flow-node}
+**Observation**
+
+field sheet says `45.7 ft`
+:::
+::: {.flow-arrow}
+→
+:::
+::: {.flow-node}
+**Encoded value**
+
+`"45.7"` is text; `45.7` is a float
+:::
+::: {.flow-arrow}
+→
+:::
+::: {.flow-node}
+**Allowed operations**
+
+join labels, compare categories, or calculate depth
+:::
+:::
+
+::: {.fragment .due-notice}
+The observation did not change. Its **representation** did, and that choice
+controls what Python can do with it.
+:::
+
 ## Your turn: fix the type error
 
 The depth was read from a text file, so it's a string. Fix the calculation so it

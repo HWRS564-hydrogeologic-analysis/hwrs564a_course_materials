@@ -88,7 +88,7 @@ def build_water_levels(inventory: pd.DataFrame, n_wells: int = 80) -> pd.DataFra
     """Water-level measurements for the best-monitored wells in the inventory.
 
     Long format — one row per (well, date) — because that is the shape real
-    monitoring data arrives in, and reshaping it is a Week 7 skill.
+    monitoring data arrives in, and reshaping it is a Week 5 skill.
 
     Parameter 72019 is depth to water below land surface, in feet. Note this
     goes through `dataretrieval.waterdata`, not `dataretrieval.nwis`: as of
@@ -134,6 +134,54 @@ def build_water_levels(inventory: pd.DataFrame, n_wells: int = 80) -> pd.DataFra
     return wl.sort_values(["site_no", "date"]).reset_index(drop=True)
 
 
+def build_week07_paired_wells(levels: pd.DataFrame) -> pd.DataFrame:
+    """Instructor-checked paired summaries for the Week 7 inference lab.
+
+    Tucson Water began shifting its potable supply away from reliance on the
+    Central Well Field around 2000-01.  The lab asks a deliberately bounded
+    question: among monitored Tucson-area wells with coverage in both windows,
+    did typical depth to water differ between 1996-2000 and 2002-2006?
+
+    The observational unit is a well, not an individual tape reading.  We use
+    one median per well and period, retain wells observed in at least three
+    distinct years in each period, and leave 2001 out as a transition year.
+    This makes the pairing and the selection rule explicit while keeping data
+    wrangling out of an inference-focused lab.
+    """
+    levels = levels.copy()
+    levels["year"] = pd.to_datetime(levels["date"]).dt.year
+
+    rows: list[dict[str, object]] = []
+    for site_no, group in levels.groupby("site_no"):
+        pre = group[group["year"].between(1996, 2000)]
+        post = group[group["year"].between(2002, 2006)]
+        pre_years = int(pre["year"].nunique())
+        post_years = int(post["year"].nunique())
+        if pre_years < 3 or post_years < 3:
+            continue
+
+        pre_median = float(pre["depth_to_water_ft"].median())
+        post_median = float(post["depth_to_water_ft"].median())
+        rows.append(
+            {
+                "site_no": site_no,
+                "pre_years": pre_years,
+                "post_years": post_years,
+                "pre_measurements": len(pre),
+                "post_measurements": len(post),
+                "pre_median_depth_ft": pre_median,
+                "post_median_depth_ft": post_median,
+                # Positive means the water table was deeper after the shift.
+                "change_depth_ft": post_median - pre_median,
+            }
+        )
+
+    out = pd.DataFrame(rows).sort_values("site_no").reset_index(drop=True)
+    numeric = out.select_dtypes(include="number").columns
+    out[numeric] = out[numeric].round(3)
+    return out
+
+
 def build_sabino_daily() -> pd.DataFrame:
     """Twenty years of daily mean discharge at Sabino Creek.
 
@@ -158,102 +206,6 @@ def build_sabino_daily() -> pd.DataFrame:
     )
     df["discharge_cms"] = (df["discharge_cfs"] * 0.0283168).round(4)
     return df
-
-
-def build_chemistry(inventory: pd.DataFrame, chunk: int = 40) -> pd.DataFrame:
-    """Major-ion chemistry for Tucson basin wells, one row per complete analysis.
-
-    Used in Week 9 for Piper diagrams and ion ratios. `wqchartpy` wants a wide
-    table with one column per ion, so the long results are pivoted here rather
-    than in the lab — reshaping is a Week 7 skill and this is a Week 9 file.
-
-    The samples endpoint times out on a bounding-box query over the whole basin,
-    so this walks the site list in small chunks. It is the slowest thing in this
-    script by a wide margin; that is why the output is committed.
-    """
-    import dataretrieval.waterdata as wd
-
-    pcodes = {
-        "00400": "pH",
-        "00915": "Ca",
-        "00925": "Mg",
-        "00930": "Na",
-        "00935": "K",
-        "00940": "Cl",
-        "00945": "SO4",
-        "00440": "HCO3",
-    }
-
-    sites = ["USGS-" + s for s in inventory["site_no"]]
-    frames = []
-    for i in range(0, len(sites), chunk):
-        try:
-            got, _ = wd.get_samples(
-                monitoring_location_id=sites[i : i + chunk],
-                usgs_pcode=list(pcodes),
-            )
-        except Exception as exc:
-            print(f"  chunk {i // chunk}: {type(exc).__name__}", file=sys.stderr)
-            continue
-        if len(got):
-            frames.append(
-                got[
-                    [
-                        "Location_Identifier",
-                        "Location_Name",
-                        "Location_Latitude",
-                        "Location_Longitude",
-                        "Activity_StartDate",
-                        "USGSpcode",
-                        "Result_Measure",
-                    ]
-                ]
-            )
-    if not frames:
-        raise SystemExit("no chemistry came back — is the samples API reachable?")
-
-    long = pd.concat(frames, ignore_index=True)
-    long["ion"] = long["USGSpcode"].astype(str).str.zfill(5).map(pcodes)
-    long = long.dropna(subset=["ion"])
-
-    wide = (
-        long.pivot_table(
-            index=[
-                "Location_Identifier",
-                "Location_Name",
-                "Location_Latitude",
-                "Location_Longitude",
-                "Activity_StartDate",
-            ],
-            columns="ion",
-            values="Result_Measure",
-            aggfunc="mean",
-        )
-        .reset_index()
-        .rename_axis(columns=None)
-    )
-
-    wide = wide.rename(
-        columns={
-            "Location_Identifier": "site_no",
-            "Location_Name": "station_name",
-            "Location_Latitude": "latitude",
-            "Location_Longitude": "longitude",
-            "Activity_StartDate": "date",
-        }
-    )
-    wide["site_no"] = wide["site_no"].str.removeprefix("USGS-")
-
-    # A Piper diagram needs a complete major-ion analysis; a partial one plots
-    # in the wrong place rather than not at all, which is worse.
-    majors = ["Ca", "Mg", "Na", "K", "Cl", "SO4", "HCO3"]
-    for col in majors + ["pH"]:
-        if col not in wide.columns:
-            wide[col] = pd.NA
-    wide = wide.dropna(subset=majors)
-
-    cols = ["site_no", "station_name", "date", "latitude", "longitude", "pH"] + majors
-    return wide[cols].sort_values(["site_no", "date"]).reset_index(drop=True)
 
 
 def build_grid_top(inventory: pd.DataFrame, nrow: int = 40, ncol: int = 60) -> pd.DataFrame:
@@ -353,9 +305,9 @@ def build_permeameter_xlsx(path: Path) -> None:
 TARGETS = {
     "data/tucson_basin_wells.csv": "NWIS well inventory, Tucson basin",
     "data/tucson_water_levels.csv": "NWIS water-level measurements, best-monitored wells",
+    "data/week07_tucson_paired_wells.csv": "paired well summaries for Week 7 inference",
     "data/cache/nwis_09484000_dv.csv": "Sabino Creek daily discharge (Week 6 offline fallback)",
     "data/week04_permeameter.xlsx": "Constant-head permeameter runs (the one read_excel demo)",
-    "data/tucson_chemistry.csv": "Major-ion chemistry, complete analyses only (Week 9)",
     "data/tucson_grid_top.csv": "Land-surface elevation on the 40x60 model grid (Weeks 11-14)",
 }
 
@@ -386,18 +338,17 @@ def main() -> int:
         f"{levels['site_no'].nunique()} wells -> data/tucson_water_levels.csv"
     )
 
+    print("Week 7 paired well summaries...")
+    paired = build_week07_paired_wells(levels)
+    paired.to_csv(DATA / "week07_tucson_paired_wells.csv", index=False)
+    print(
+        f"  {len(paired)} paired wells -> data/week07_tucson_paired_wells.csv"
+    )
+
     print("Sabino Creek daily discharge...")
     sabino = build_sabino_daily()
     sabino.to_csv(CACHE / f"nwis_{SABINO_GAGE}_dv.csv", index=False)
     print(f"  {len(sabino):,} days -> data/cache/nwis_{SABINO_GAGE}_dv.csv")
-
-    print("Water chemistry (slow — walks the site list in chunks)...")
-    chem = build_chemistry(inventory)
-    chem.to_csv(DATA / "tucson_chemistry.csv", index=False)
-    print(
-        f"  {len(chem):,} complete analyses from {chem['site_no'].nunique()} "
-        "wells -> data/tucson_chemistry.csv"
-    )
 
     print("Model grid top...")
     grid = build_grid_top(inventory)

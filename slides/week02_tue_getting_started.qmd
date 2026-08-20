@@ -288,7 +288,7 @@ environment already built.
 
 ::: {.incremental}
 - Open the course repo → *Code* → *Codespaces* → *Create codespace*
-- Wait ~2 minutes the first time
+- Keep the creation log open until it prints **Ready**
 - Python, Jupyter, and every package are already installed
 - The MODFLOW binaries are already downloaded
 :::
@@ -298,20 +298,42 @@ Nothing to install on your own machine. Nothing to break. If your codespace
 gets into a bad state, delete it and make a new one — that is the *point*.
 :::
 
-<!-- Adapted from old_slides/hwrs564a_sept11.pdf. -->
+<!-- Rebuilt from old_slides/hwrs564a_sept11.pdf, pp. 13-20, and
+     old_slides/hwrs564a_sept16.pdf, pp. 3-9. -->
 ## These tools are different layers
 
-| Layer | Its job in this course |
-|---|---|
-| **Git** | Records the history of changes to files |
-| **GitHub** | Hosts the shared repository and coordinates copies |
-| **Codespaces** | Runs the remote Linux computer that holds the repo |
-| **VS Code** | Gives you the editor, terminal, and notebook interface |
-| **Jupyter kernel** | Runs Python and remembers the current variables |
+::: {.concept-flow}
+::: {.flow-node}
+**Notebook cell**
+
+The code you can see
+:::
+::: {.flow-arrow}
+→
+:::
+::: {.flow-node}
+**Jupyter kernel**
+
+Runs code and remembers variables
+:::
+::: {.flow-arrow}
+→
+:::
+::: {.flow-node}
+**Project environment**
+
+Python 3.11+ and the packages in `pyproject.toml`
+:::
+:::
+
+::: {.context-strip}
+**VS Code** shows the notebook and terminal. A **Codespace** hosts that Linux
+computer. **Git** records the repo's history; **GitHub** stores and shares it.
+:::
 
 ::: {.fragment}
 When something breaks, name the layer first. A Git sync problem, a Codespaces
-build problem, and a stopped Jupyter kernel need three different fixes.
+build problem, a stopped kernel, and a missing package need different fixes.
 :::
 
 ## What defines the environment

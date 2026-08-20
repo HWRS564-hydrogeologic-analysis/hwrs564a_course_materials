@@ -24,7 +24,6 @@ dependencies = [
     "xarray>=2025.7.1",
     # mapping and domain plotting
     "cartopy>=0.25.0",
-    "wqchartpy>=0.1.10",
     # week 9 regression
     "scikit-learn>=1.5",
     # build tooling for slides, quizzes, and D2L pages

@@ -65,6 +65,30 @@ Weeks 10 to 14 are as much about **not being fooled by your own model** as about
 building one.
 :::
 
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 7. -->
+## Modeling is a cycle, not a one-way build {.smaller}
+
+::: {.columns}
+::: {.column width="60%"}
+![](../assets/legacy/modeling_cycle.jpg){fig-alt="A modeling cycle linking conceptualization, data collection, simulation and calibration, and hypothesis testing" width="85%"}
+:::
+
+::: {.column width="40%"}
+The first simulation is not the finish line.
+
+::: {.incremental}
+- Compare its behavior with observations
+- Diagnose which assumption failed
+- Revise the conceptual model
+- Test again
+:::
+
+::: {.fragment .due-notice}
+A model earns trust through this loop, not through visual polish.
+:::
+:::
+:::
+
 <!-- Adapted from old_slides/hwrs564a_oct23.pdf. -->
 ## A model starts as a question, not a grid
 
@@ -117,6 +141,25 @@ A 40 × 60 grid is 2,400 equations. A regional model is millions. **That is why
 this is a computer's job** and why Week 4's iteration material was not a detour.
 :::
 
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 11. -->
+## The grid can match the question {.smaller}
+
+::: {.columns}
+::: {.column width="67%"}
+![](../assets/legacy/grid_families.jpg){fig-alt="Examples of rectangular, triangular, hexagonal, nested, radial, and irregular polygon numerical grids" width="72%"}
+:::
+
+::: {.column width="33%"}
+All of these do the same conceptual job: divide a continuous domain into cells
+where the equations can be balanced.
+
+::: {.fragment}
+We begin with a rectangular structured grid because it makes indexing,
+neighbors, and cell dimensions visible.
+:::
+:::
+:::
+
 ## Your turn: how many unknowns?
 
 A regional model has 3 layers, 500 rows, 800 columns, and runs 240 monthly stress
@@ -166,22 +209,33 @@ why you will spend real time deciding which time steps are worth saving.
 
 # Six questions {background-color="#AB0520"}
 
-## MODFLOW has no "model file"
+<!-- Package tree rebuilt from old_slides/hwrs564a_oct23.pdf, p. 9, using the
+     MODFLOW-2005 packages introduced in this course. -->
+## The name file connects a family of packages {.smaller}
 
-It has a **package per question**, and a `.nam` file listing them.
+```{mermaid}
+%%| fig-width: 10
+%%| fig-height: 4.4
+flowchart LR
+  NAM[".nam<br/>name file"]
+  NAM --> GS["Geometry and state<br/>DIS · BAS"]
+  NAM --> PH["Aquifer physics<br/>LPF"]
+  NAM --> ST["Stresses and boundaries<br/>WEL · RCH · EVT · RIV"]
+  NAM --> SO["Solver<br/>PCG"]
+  NAM --> OU["Output control<br/>OC"]
 
-| Question | Package |
-|---|---|
-| What shape is the domain, over what time? | `DIS` |
-| Which cells are active, where do we start? | `BAS` |
-| How permeable is it? | `LPF` |
-| How do we solve it? | `PCG` |
-| What do we save? | `OC` |
-| Who pumps, recharges, evaporates? | `WEL`, `RCH`, `EVT`, `RIV` … |
+  classDef hub fill:#0C234B,color:#fff,stroke:#0C234B;
+  classDef pkg fill:#E2E9EB,color:#1a1a1a,stroke:#1E5288;
+  class NAM hub;
+  class GS,PH,ST,SO,OU pkg;
+```
 
 ::: {.fragment}
-That table is the mental model for the whole module. Learn it once.
+There is no single "model file." The `.nam` file tells MODFLOW which packages
+belong to this simulation; each package answers one modeling question.
 :::
+
+<small>Structure adapted to MODFLOW-2005 from the modular framework documented by the USGS.</small>
 
 ## What an input file looks like
 

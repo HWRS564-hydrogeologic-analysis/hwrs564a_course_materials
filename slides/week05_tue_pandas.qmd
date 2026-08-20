@@ -42,6 +42,17 @@ Labels survive reordering. If a required label disappears, pandas raises a
 `KeyError` at the point where the assumption failed.
 :::
 
+<!-- Figure recovered from old_slides/hwrs564a_sept18.pdf, p. 10. -->
+## Labels decide which values meet
+
+![](../assets/legacy/pandas_label_alignment.jpg){fig-alt="Two pandas Series align on labels B, C, and D before addition, leaving NaN at unmatched labels A and E" width="82%"}
+
+::: {.fragment}
+Pandas matches `B` with `B`, not the second row with the second row. Unmatched
+labels remain in the result and become `NaN` instead of silently shifting the
+data.
+:::
+
 ## Two objects cover most of pandas
 
 ::: {.columns}
@@ -68,6 +79,16 @@ wells[["site_no", "well_depth_ft"]]
 
 ::: {.fragment}
 One column name returns a Series. A list of names returns a DataFrame.
+:::
+
+<!-- Figure recovered from old_slides/hwrs564a_sept18.pdf, p. 12. -->
+## A DataFrame is aligned Series
+
+![](../assets/legacy/pandas_series_to_dataframe.jpg){fig-alt="Three labelled Series combining into the columns of one DataFrame" width="88%"}
+
+::: {.fragment}
+The shared index is what makes the rows cohere. Column names distinguish the
+three measurements; row labels identify the observation each value belongs to.
 :::
 
 ## Read the table, then look before calculating
