@@ -9,11 +9,26 @@ Hydrology & Atmospheric Sciences.
 
 ## For students
 
-Click **Code → Codespaces → Create codespace on main**. Wait about two minutes
-while `postbuild.sh` builds the Python environment, downloads the MODFLOW
-binaries, and registers the Jupyter kernel.
+Click **Code → Codespaces → Create codespace on main**. Keep the creation log
+open until it prints **Ready**. The container supplies `uv`, then `postbuild.sh`
+creates `.venv` from the committed `uv.lock`, downloads the MODFLOW binaries,
+and registers the Jupyter kernel automatically.
 
-Then open a notebook from `labs/` and select the **Python 3 (hwrs564a)** kernel.
+Then open a notebook from `labs/`. It should already use **Python 3
+(hwrs564a)**; if VS Code asks, select that kernel. New terminals also put the
+course `.venv` first on `PATH`, so `python` and `jupyter` use the same environment.
+
+To verify the setup:
+
+```bash
+uv --version
+python -c "import numpy, pandas, flopy; print('course environment ready')"
+```
+
+If you created a codespace before the current container configuration, run
+**Codespaces: Rebuild Container** from the Command Palette. If setup was
+interrupted, `bash postbuild.sh` safely repairs it; the same check runs
+automatically whenever the container starts.
 
 Nothing to install on your own machine. If your codespace ends up in a broken
 state, delete it and make a new one — that is what they are for.
