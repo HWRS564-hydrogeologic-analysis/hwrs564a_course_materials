@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:3.11
+FROM mcr.microsoft.com/devcontainers/python:3.13
 
 # Use Astral's official image as the source of the uv executables. Pinning the
 # version makes Codespace rebuilds predictable; postbuild.sh retains a fallback
