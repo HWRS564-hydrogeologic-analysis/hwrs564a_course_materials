@@ -151,8 +151,9 @@ print(f"-17 // 5 = {-17 // 5}       floor, not truncation: -3 would be wrong")
 ```
 
 ::: {.fragment}
-`//` matters when you convert coordinates to grid indices — which you will do
-constantly from Week 10 onward.
+`//` matters when you convert coordinates to grid indices, which is a 
+common operation in anayzing MODFLOW data
+
 :::
 
 ## Floats are approximations
@@ -175,7 +176,8 @@ has no exact decimal one.
 
 $$|a - b| < \epsilon$$
 
-This is precisely how you'll decide an iterative solver has converged in Week 4.
+This is how you'll decide an iterative solver has converged in the future,
+and is `epsilon` is generally called the tolerance.
 :::
 
 # Strings {background-color="#0C234B"}
@@ -234,8 +236,8 @@ print(f"minimum: {min(water_levels)}")
 ```
 
 ::: {.fragment}
-**Indexing starts at zero.** `[0]` is the first element. `[-1]` is the last,
-which is genuinely useful — no `len(x) - 1` arithmetic.
+Indexing starts at zero. `[0]` is the first element. `[-1]` is the last,
+which is useful, so you don't need to know the total length.
 :::
 
 ## Slicing
@@ -331,7 +333,7 @@ grid_shape[0] = 5
 ::: {.fragment}
 Use a **tuple** when the collection *is* one thing — a coordinate, a grid shape,
 a row. Use a **list** when it's a growing pile of things. MODFLOW grid shapes
-come back as tuples, and that's not an accident.
+come back as tuples, because they are "fixed" to the model setup.
 :::
 
 ## Dictionaries
@@ -355,7 +357,7 @@ print(list(aquifer.keys()))
 
 ::: {.fragment}
 `aquifer["storativity"]` would raise `KeyError`. `.get()` with a default is how
-you handle data that might be missing — a Week 6 problem you'll meet a lot.
+you handle data that might be missing.
 :::
 
 ## Your turn: build a lookup
@@ -422,7 +424,7 @@ back to `zip()` next week.
 | An ordered pile that grows | `list` | append, sort, slice |
 | One fixed thing with parts | `tuple` | can't be modified by accident |
 | Values you look up by name | `dict` | no index bookkeeping |
-| Numbers you'll do math on | `numpy` array | **Week 4** — element-wise math |
+| Numbers you'll do math on | `numpy` array | coming soon! |
 
 ::: {.fragment}
 Lists are the wrong tool for arithmetic: `[1, 2] * 2` gives `[1, 2, 1, 2]`, not
@@ -451,4 +453,4 @@ Next Tuesday
 :::
 
 Control flow and functions. There's a **quiz** at the start of class on this
-week's material — five minutes, five questions.
+week's material, ~five minutes.
