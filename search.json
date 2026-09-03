@@ -951,7 +951,7 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html",
     "href": "labs/week02/week02_lab_python_basics.html",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "",
     "text": "HWRS 564a · Fall 2026\nThis notebook is the hands-on companion to the Week 2 slides. Work through it in class; finish anything you don’t get to before Thursday.",
     "crumbs": [
@@ -964,7 +964,7 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html#how-to-use-this-notebook",
     "href": "labs/week02/week02_lab_python_basics.html#how-to-use-this-notebook",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "How to use this notebook",
     "text": "How to use this notebook\nRun each cell with Shift+Enter. Cells marked # YOUR TURN have something for you to write. Cells marked # CHECK verify your answer — if they run without complaint, you’re right.\n\nBefore you submit anything all semester: Kernel → Restart Kernel and Run All Cells. A notebook that only works when run out of order is not finished.",
     "crumbs": [
@@ -977,7 +977,7 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html#learning-objectives",
     "href": "labs/week02/week02_lab_python_basics.html#learning-objectives",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "Learning objectives",
     "text": "Learning objectives\nBy the end of this notebook you should be able to:\n\nRun code in a notebook and predict what the kernel is holding\nAssign variables and check their types\nConvert between types, and recognize a TypeError when you cause one\nIndex and slice a list using zero-based, half-open conventions\nChoose between a list, a tuple, and a dictionary\nImport a module and call a function from it",
     "crumbs": [
@@ -990,7 +990,7 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html#part-1-cells-output-and-the-kernel",
     "href": "labs/week02/week02_lab_python_basics.html#part-1-cells-output-and-the-kernel",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "Part 1 — Cells, output, and the kernel",
     "text": "Part 1 — Cells, output, and the kernel\nA cell’s last expression is displayed automatically. Anything earlier needs an explicit print().\n\n2 + 2\n40 + 2\n\nOnly 42 appeared. To see both, print them:\n\nprint(2 + 2)\nprint(40 + 2)\n\n\nThe kernel remembers\nRun the next cell once, then look at the output. Then run it a second time without touching anything else.\n\ncounter = 0  # comment this line out on your second run, then re-run\ncounter = counter + 1\nprint(f\"counter is now {counter}\")\n\nQuestion to think about: the notebook file looks identical either way. What changed?\nThis is why Restart Kernel and Run All is not optional.",
     "crumbs": [
@@ -1001,11 +1001,11 @@
     ]
   },
   {
-    "objectID": "labs/week02/week02_lab_python_basics.html#part-2-variables-and-types",
-    "href": "labs/week02/week02_lab_python_basics.html#part-2-variables-and-types",
-    "title": "Week 2 Lab — Python basics",
-    "section": "Part 2 — Variables and types",
-    "text": "Part 2 — Variables and types\nAssignment binds a name on the left to the value of the expression on the right.\n\nsite_name = \"Santa Cruz Basin\"\nn_layers = 3\nconductivity = 12.4\nis_confined = False\n\nprint(type(site_name))\nprint(type(n_layers))\nprint(type(conductivity))\nprint(type(is_confined))\n\n\nYOUR TURN 1\nThree wells were surveyed. Create variables for:\n\nwell_id — the text \"A-14\"\nscreen_top — the number 44.5 (metres below ground)\nscreen_bottom — the number 61.0\nscreen_length — computed from the two above, not typed in by hand\n\n\n# YOUR TURN\nwell_id = ...\nscreen_top = ...\nscreen_bottom = ...\nscreen_length = ...\n\n\n# CHECK\nassert isinstance(well_id, str), \"well_id should be a string\"\nassert screen_length == 16.5, f\"expected 16.5, got {screen_length}\"\nassert isinstance(screen_length, float), \"screen_length should be a float\"\nprint(f\"Well {well_id} has a {screen_length} m screen. Correct.\")",
+    "objectID": "labs/week02/week02_lab_python_basics.html#variables-and-types",
+    "href": "labs/week02/week02_lab_python_basics.html#variables-and-types",
+    "title": "Week 2 Lab: Python basics",
+    "section": "Variables and types",
+    "text": "Variables and types\nAssignment binds a name on the left to the value of the expression on the right.\n\nsite_name = \"Santa Cruz Basin\"\nn_layers = 3\nconductivity = 12.4\nis_confined = False\n\nprint(type(site_name))\nprint(type(n_layers))\nprint(type(conductivity))\nprint(type(is_confined))\n\n\nYOUR TURN 1\nThree wells were surveyed. Create variables for:\n\nwell_id — the text \"A-14\"\nscreen_top — the number 44.5 (metres below ground)\nscreen_bottom — the number 61.0\nscreen_length — computed from the two above, not typed in by hand\n\n\n# YOUR TURN\nwell_id = ...\nscreen_top = ...\nscreen_bottom = ...\nscreen_length = ...\n\n\n# CHECK\nassert isinstance(well_id, str), \"well_id should be a string\"\nassert screen_length == 16.5, f\"expected 16.5, got {screen_length}\"\nassert isinstance(screen_length, float), \"screen_length should be a float\"\nprint(f\"Well {well_id} has a {screen_length} m screen. Correct.\")",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1014,11 +1014,11 @@
     ]
   },
   {
-    "objectID": "labs/week02/week02_lab_python_basics.html#part-3-type-errors-and-conversion",
-    "href": "labs/week02/week02_lab_python_basics.html#part-3-type-errors-and-conversion",
-    "title": "Week 2 Lab — Python basics",
-    "section": "Part 3 — Type errors and conversion",
-    "text": "Part 3 — Type errors and conversion\nData read from text files arrives as strings, even when it looks numeric. This is the single most common source of confusion in the first month.\n\ndepth_text = \"45.7\"      # as it would arrive from a CSV\nprint(type(depth_text))\n\n# Uncomment the next line and run it. Read the error carefully, then re-comment it.\n# total = depth_text + 12.0\n\nThe traceback ends with:\nTypeError: can only concatenate str (not \"float\") to str\nRead errors bottom-up: the last line says what went wrong, the lines above say where.\n\nYOUR TURN 2\nConvert depth_text so the arithmetic works.\n\n# YOUR TURN\ndepth_text = \"45.7\"\ntotal_depth = ...  # should equal 57.7\n\n\n# CHECK\nassert abs(total_depth - 57.7) &lt; 1e-9, f\"expected 57.7, got {total_depth}\"\nprint(\"Correct.\")\n\n\n\nA conversion that surprises people\n\nprint(int(45.7))          # truncates toward zero — does NOT round\nprint(int(float(\"45.7\")))  # works: str -&gt; float -&gt; int\nprint(round(45.7))         # this is what rounds\n\n# int(\"45.7\") raises ValueError. Try it if you like.",
+    "objectID": "labs/week02/week02_lab_python_basics.html#type-errors-and-conversion",
+    "href": "labs/week02/week02_lab_python_basics.html#type-errors-and-conversion",
+    "title": "Week 2 Lab: Python basics",
+    "section": "Type errors and conversion",
+    "text": "Type errors and conversion\nData read from text files arrives as strings, even when it looks numeric. This is the single most common source of confusion in the first month.\n\ndepth_text = \"45.7\"      # as it would arrive from a CSV\nprint(type(depth_text))\n\n# Uncomment the next line and run it. Read the error carefully, then re-comment it.\n# total = depth_text + 12.0\n\nThe traceback ends with:\nTypeError: can only concatenate str (not \"float\") to str\nRead errors bottom-up: the last line says what went wrong, the lines above say where.\n\nYOUR TURN 2\nConvert depth_text so the arithmetic works.\n\n# YOUR TURN\ndepth_text = \"45.7\"\ntotal_depth = ...  # should equal 57.7\n\n\n# CHECK\nassert abs(total_depth - 57.7) &lt; 1e-9, f\"expected 57.7, got {total_depth}\"\nprint(\"Correct.\")\n\n\n\nA conversion that surprises people\n\nprint(int(45.7))          # truncates toward zero — does NOT round\nprint(int(float(\"45.7\")))  # works: str -&gt; float -&gt; int\nprint(round(45.7))         # this is what rounds\n\n# int(\"45.7\") raises ValueError. Try it if you like.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1027,11 +1027,11 @@
     ]
   },
   {
-    "objectID": "labs/week02/week02_lab_python_basics.html#part-4-floating-point",
-    "href": "labs/week02/week02_lab_python_basics.html#part-4-floating-point",
-    "title": "Week 2 Lab — Python basics",
-    "section": "Part 4 — Floating point",
-    "text": "Part 4 — Floating point\nFloats are binary approximations of decimal numbers.\n\nprint(0.1 + 0.2)\nprint(0.1 + 0.2 == 0.3)\n\nNever compare floats with ==. Compare the magnitude of the difference against a tolerance:\n\\[|a - b| &lt; \\epsilon\\]\nYou’ll use exactly this test in Week 4 to decide when an iterative solver has converged.\n\ntolerance = 1e-9\nprint(abs((0.1 + 0.2) - 0.3) &lt; tolerance)",
+    "objectID": "labs/week02/week02_lab_python_basics.html#strings-text-values",
+    "href": "labs/week02/week02_lab_python_basics.html#strings-text-values",
+    "title": "Week 2 Lab: Python basics",
+    "section": "Strings: text values",
+    "text": "Strings: text values\nA string is text: a sequence of characters enclosed in single or double quotes. Well IDs, site names, and values read from a text file are strings. Python keeps the quotes out of the value itself.\nStrings can be indexed one character at a time. Python starts counting at zero, and negative indices count backward from the end:\n\nwell_id = \"A-14\"\nbasin = 'Santa Cruz Basin'\n\nprint(well_id[0])   # A\nprint(well_id[-1])  # 4\n\nStrings can be combined by adding them, this is known as concatenation.\n\nwell_id + basin\n\nTo combine text with variable values, use an f-string. Put the variable name inside braces; Python substitutes its value when the line runs:\nThe result is still a string. If a string contains a number such as \"45.7\", convert it with float() before doing arithmetic.\n\nmessage = f\"Well {well_id} is in the {basin}.\"\nprint(message)",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1040,11 +1040,11 @@
     ]
   },
   {
-    "objectID": "labs/week02/week02_lab_python_basics.html#part-5-lists-indexing-slicing",
-    "href": "labs/week02/week02_lab_python_basics.html#part-5-lists-indexing-slicing",
-    "title": "Week 2 Lab — Python basics",
-    "section": "Part 5 — Lists, indexing, slicing",
-    "text": "Part 5 — Lists, indexing, slicing\nA year of monthly water-level measurements, January first.\n\nmonthly_head = [\n    415.2, 414.8, 414.1, 413.2, 412.0, 410.6,\n    409.1, 411.7, 413.9, 414.6, 415.0, 415.3,\n]\n\nprint(f\"number of measurements: {len(monthly_head)}\")\nprint(f\"January (index 0):      {monthly_head[0]}\")\nprint(f\"December (index -1):    {monthly_head[-1]}\")\nprint(f\"lowest level:           {min(monthly_head)}\")\n\nSlices are half-open: [start:stop] includes start and excludes stop. So stop - start is always the number of elements you get.\n\nprint(f\"first quarter:  {monthly_head[0:3]}\")\nprint(f\"same thing:     {monthly_head[:3]}\")\nprint(f\"from July on:   {monthly_head[6:]}\")\nprint(f\"last two:       {monthly_head[-2:]}\")\n\n\nYOUR TURN 3\nExtract the monsoon months — July, August, September — into monsoon. Then find the annual range (max minus min) and store it in annual_range.\n\n# YOUR TURN\nmonsoon = ...\nannual_range = ...\n\n\n# CHECK\nassert monsoon == [409.1, 411.7, 413.9], f\"got {monsoon}\"\nassert abs(annual_range - 6.2) &lt; 1e-9, f\"expected 6.2, got {annual_range}\"\nprint(f\"Monsoon months: {monsoon}\")\nprint(f\"Annual range:   {annual_range:.1f} m. Correct.\")\n\nWorth noticing: the minimum is in June and the recovery begins in July. That shape is the monsoon signal in a hydrograph, and you’ll be plotting it in Week 5.",
+    "objectID": "labs/week02/week02_lab_python_basics.html#floating-point",
+    "href": "labs/week02/week02_lab_python_basics.html#floating-point",
+    "title": "Week 2 Lab: Python basics",
+    "section": "Floating point",
+    "text": "Floating point\nFloats are binary approximations of decimal numbers.\n\nprint(0.1 + 0.2)\nprint(0.1 + 0.2 == 0.3)\n\nNever compare floats with ==. Compare the magnitude of the difference against a tolerance:\n\\[|a - b| &lt; \\epsilon\\]\nYou’ll use this test to decide when an iterative solver has converged.\n\ntolerance = 1e-9\nprint(abs((0.1 + 0.2) - 0.3) &lt; tolerance)",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1053,11 +1053,11 @@
     ]
   },
   {
-    "objectID": "labs/week02/week02_lab_python_basics.html#part-6-tuples-and-dictionaries",
-    "href": "labs/week02/week02_lab_python_basics.html#part-6-tuples-and-dictionaries",
-    "title": "Week 2 Lab — Python basics",
-    "section": "Part 6 — Tuples and dictionaries",
-    "text": "Part 6 — Tuples and dictionaries\nA tuple is a fixed collection that represents one thing. A dictionary maps names to values.\n\ngrid_shape = (3, 40, 60)   # layers, rows, columns — a MODFLOW grid\nn_layers, n_rows, n_cols = grid_shape   # unpacking\nprint(f\"{n_layers} layers, {n_rows} rows, {n_cols} columns\")\nprint(f\"total cells: {n_layers * n_rows * n_cols}\")\n\n# grid_shape[0] = 5 would raise TypeError — tuples are immutable\n\n\naquifer = {\n    \"name\": \"Santa Cruz\",\n    \"conductivity\": 12.4,\n    \"porosity\": 0.28,\n    \"confined\": False,\n}\n\nprint(aquifer[\"conductivity\"])\nprint(aquifer.get(\"storativity\", \"not measured\"))   # no KeyError\nprint(f\"keys: {list(aquifer.keys())}\")\n\n\nYOUR TURN 4\nBuild k_by_well, mapping each well ID to its conductivity.\n\nwell_ids = [\"A-14\", \"B-07\", \"C-22\", \"D-03\"]\nconductivities = [12.4, 3.8, 41.0, 7.2]\n\n# YOUR TURN\nk_by_well = ...\n\n\n# CHECK\nassert k_by_well[\"B-07\"] == 3.8, f\"got {k_by_well.get('B-07')}\"\nassert len(k_by_well) == 4, f\"expected 4 entries, got {len(k_by_well)}\"\nprint(f\"B-07 has K = {k_by_well['B-07']} m/d. Correct.\")",
+    "objectID": "labs/week02/week02_lab_python_basics.html#lists-indexing-slicing",
+    "href": "labs/week02/week02_lab_python_basics.html#lists-indexing-slicing",
+    "title": "Week 2 Lab: Python basics",
+    "section": "Lists, indexing, slicing",
+    "text": "Lists, indexing, slicing\nA year of monthly water-level measurements, January first.\n\nmonthly_head = [\n    415.2, 414.8, 414.1, 413.2, 412.0, 410.6,\n    409.1, 411.7, 413.9, 414.6, 415.0, 415.3,\n]\n\nprint(f\"number of measurements: {len(monthly_head)}\")\nprint(f\"January (index 0):      {monthly_head[0]}\")\nprint(f\"December (index -1):    {monthly_head[-1]}\")\nprint(f\"lowest level:           {min(monthly_head)}\")\n\nSlices are half-open: [start:stop] includes start and excludes stop. So stop - start is always the number of elements you get.\n\nprint(f\"first quarter:  {monthly_head[0:3]}\")\nprint(f\"same thing:     {monthly_head[:3]}\")\nprint(f\"from July on:   {monthly_head[6:]}\")\nprint(f\"last two:       {monthly_head[-2:]}\")\n\n\nYOUR TURN 3\nExtract the monsoon months — July, August, September — into monsoon. Then find the annual range (max minus min) and store it in annual_range.\n\n# YOUR TURN\nmonsoon = ...\nannual_range = ...\n\n\n# CHECK\nassert monsoon == [409.1, 411.7, 413.9], f\"got {monsoon}\"\nassert abs(annual_range - 6.2) &lt; 1e-9, f\"expected 6.2, got {annual_range}\"\nprint(f\"Monsoon months: {monsoon}\")\nprint(f\"Annual range:   {annual_range:.1f} m. Correct.\")\n\nWorth noticing: the minimum is in June and the recovery begins in July. That shape is the monsoon signal in a hydrograph, and you’ll be plotting it in Week 5.",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1066,11 +1066,24 @@
     ]
   },
   {
-    "objectID": "labs/week02/week02_lab_python_basics.html#part-7-imports-and-a-real-calculation",
-    "href": "labs/week02/week02_lab_python_basics.html#part-7-imports-and-a-real-calculation",
-    "title": "Week 2 Lab — Python basics",
-    "section": "Part 7 — Imports and a real calculation",
-    "text": "Part 7 — Imports and a real calculation\nPython’s standard library is large but not loaded by default.\n\nimport math\n\nprint(math.sqrt(2))\nprint(math.pi)\nprint(math.log10(1000))\n\n\nYOUR TURN 5 — Darcy’s law\nFor one-dimensional flow through a confined aquifer:\n\\[Q = -KA\\frac{dh}{dl}\\]\nGiven the values below, compute:\n\ngradient — the hydraulic gradient between the wells\nq — the specific discharge, in m/d\nQ — the volumetric flow, in m³/d\n\nIgnore the minus sign; it only records that flow runs downhill.\n\nhead_upstream = 412.5     # m\nhead_downstream = 408.2   # m\ndistance = 850            # m\nK = 12.0                  # m/d\nthickness = 25            # m\nwidth = 1800              # m\n\n# YOUR TURN\ngradient = ...\nq = ...\nQ = ...\n\n\n# CHECK\nassert abs(gradient - 0.005059) &lt; 1e-5, f\"gradient looks wrong: {gradient}\"\nassert abs(q - 0.06071) &lt; 1e-4, f\"q looks wrong: {q}\"\nassert abs(Q - 2731.8) &lt; 1.0, f\"Q looks wrong: {Q}\"\nprint(f\"gradient           = {gradient:.5f}  (dimensionless)\")\nprint(f\"specific discharge = {q:.4f} m/d\")\nprint(f\"volumetric flow    = {Q:.1f} m3/d\")\nprint(\"Correct.\")\n\n\n\nSanity-check your own answer\nQ came out around 2700 m³/d. Is that a lot?\nConvert it to something you have intuition for — litres per second, or acre-feet per year — and decide whether the number is plausible for a basin this size. Getting into this habit now will save you from submitting a MODFLOW model with a 10⁶ m³/d error in Week 12.\n\n# Scratch space — try the unit conversion\nlitres_per_second = Q * 1000 / 86400\nacre_feet_per_year = Q * 365 / 1233.48\n\nprint(f\"{litres_per_second:.1f} L/s\")\nprint(f\"{acre_feet_per_year:.0f} acre-ft/yr\")",
+    "objectID": "labs/week02/week02_lab_python_basics.html#tuples-and-dictionaries",
+    "href": "labs/week02/week02_lab_python_basics.html#tuples-and-dictionaries",
+    "title": "Week 2 Lab: Python basics",
+    "section": "Tuples and dictionaries",
+    "text": "Tuples and dictionaries\nA tuple is a fixed collection that represents one thing. A dictionary maps names to values.\n\ngrid_shape = (3, 40, 60)   # layers, rows, columns — a MODFLOW grid\nn_layers, n_rows, n_cols = grid_shape   # unpacking\nprint(f\"{n_layers} layers, {n_rows} rows, {n_cols} columns\")\nprint(f\"total cells: {n_layers * n_rows * n_cols}\")\n\n# grid_shape[0] = 5 would raise TypeError — tuples are immutable\n\n\naquifer = {\n    \"name\": \"Santa Cruz\",\n    \"conductivity\": 12.4,\n    \"porosity\": 0.28,\n    \"confined\": False,\n}\n\nprint(aquifer[\"conductivity\"])\nprint(aquifer.get(\"storativity\", \"not measured\"))   # no KeyError\nprint(f\"keys: {list(aquifer.keys())}\")\n\n\nYOUR TURN 4\nBuild k_by_well, mapping each well ID to its conductivity.\n\nwell_ids = [\"A-14\", \"B-07\", \"C-22\", \"D-03\"]\nconductivities = [12.4, 3.8, 41.0, 7.2]\n\n# YOUR TURN\nk_by_well = ...\n\n\n# CHECK\nassert k_by_well[\"B-07\"] == 3.8, f\"got {k_by_well.get('B-07')}\"\nassert len(k_by_well) == 4, f\"expected 4 entries, got {len(k_by_well)}\"\nprint(f\"B-07 has K = {k_by_well['B-07']} m/d. Correct.\")",
+    "crumbs": [
+      "Home",
+      "Module 1 · Python Foundations",
+      "Week 2 — Getting started",
+      "Lab · Python basics"
+    ]
+  },
+  {
+    "objectID": "labs/week02/week02_lab_python_basics.html#imports-and-a-real-calculation",
+    "href": "labs/week02/week02_lab_python_basics.html#imports-and-a-real-calculation",
+    "title": "Week 2 Lab: Python basics",
+    "section": "Imports and a real calculation",
+    "text": "Imports and a real calculation\nPython’s standard library is large but not loaded by default.\n\nimport math\n\nprint(math.sqrt(2))\nprint(math.pi)\nprint(math.log10(1000))\n\n\nYOUR TURN 5 - Darcy’s law\nFor one-dimensional flow through a confined aquifer:\n\\[Q = -KA\\frac{dh}{dl}\\]\nHere \\(A\\) is the cross-sectional area perpendicular to flow. The specific discharge is the flow per unit area, \\(q = Q/A\\). Darcy’s law gives \\(q = -K\\,dh/dl\\); because we are reporting the magnitude of flow downhill, use \\(q = K \\times \\text{gradient}\\). Then calculate the volumetric flow with \\(Q = qA\\).\nGiven the values below, compute:\n\ngradient: the hydraulic gradient between the wells\nq: the specific discharge, in m/d\nQ: the volumetric flow, in m³/d\n\n\nhead_upstream = 412.5     # m\nhead_downstream = 408.2   # m\ndistance = 850            # m\nK = 12.0                  # m/d\nthickness = 25            # m\nwidth = 1800              # m\n\n# YOUR TURN\ngradient = ...\narea = thickness * width  # A, cross-sectional area in m2\nq = K * gradient            # specific discharge in m/d\nQ = q * area                # volumetric flow in m3/d\n\n\n# CHECK\nassert abs(gradient - 0.005059) &lt; 1e-5, f\"gradient looks wrong: {gradient}\"\nassert abs(q - 0.06071) &lt; 1e-4, f\"q looks wrong: {q}\"\nassert abs(Q - 2731.8) &lt; 1.0, f\"Q looks wrong: {Q}\"\nprint(f\"gradient           = {gradient:.5f}  (dimensionless)\")\nprint(f\"specific discharge = {q:.4f} m/d\")\nprint(f\"volumetric flow    = {Q:.1f} m3/d\")\nprint(\"Correct.\")\n\n\n\nSanity-check your own answer\nQ came out around 2700 m³/d. Is that a lot?\nConvert it to something you have intuition for, litres per second, or acre-feet per year, and decide whether the number is plausible for a basin this size. Getting into this habit now will save you from submitting a MODFLOW model with a 10⁶ m³/d error at the end of the semester.\n\n# Scratch space — try the unit conversion\nlitres_per_second = Q * 1000 / 86400\nacre_feet_per_year = Q * 365 / 1233.48\n\nprint(f\"{litres_per_second:.1f} L/s\")\nprint(f\"{acre_feet_per_year:.0f} acre-ft/yr\")",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1081,7 +1094,7 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html#before-you-leave",
     "href": "labs/week02/week02_lab_python_basics.html#before-you-leave",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "Before you leave",
     "text": "Before you leave\n\nKernel → Restart Kernel and Run All Cells. Everything should still pass.\nSave the notebook.",
     "crumbs": [
@@ -1094,7 +1107,7 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html#whats-due",
     "href": "labs/week02/week02_lab_python_basics.html#whats-due",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "What’s due",
     "text": "What’s due\nHW 1: My first Jupyter notebook — due Wednesday 9/9 at 11:59pm through D2L.",
     "crumbs": [
@@ -1107,7 +1120,7 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html#next-week",
     "href": "labs/week02/week02_lab_python_basics.html#next-week",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "Next week",
     "text": "Next week\nControl flow and functions. There is a short quiz at the start of Tuesday’s class covering this week’s material.",
     "crumbs": [
@@ -1120,9 +1133,9 @@
   {
     "objectID": "labs/week02/week02_lab_python_basics.html#stuck",
     "href": "labs/week02/week02_lab_python_basics.html#stuck",
-    "title": "Week 2 Lab — Python basics",
+    "title": "Week 2 Lab: Python basics",
     "section": "Stuck?",
-    "text": "Stuck?\n\ntype(x) tells you what something is — check before you guess\nRead tracebacks from the bottom up\nOffice hours: Tuesdays 1:00–2:00, Harshbarger 322B",
+    "text": "Stuck?\n\ntype(x) tells you what something is — check before you guess\nRead tracebacks from the bottom up\nOffice hours: Tuesdays 1:00–2:00",
     "crumbs": [
       "Home",
       "Module 1 · Python Foundations",
@@ -1168,7 +1181,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html",
     "href": "labs/week03/week03_lab_control_flow.html",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "",
     "text": "HWRS 564a · Fall 2026\nLast week you wrote single expressions. This week you write code that decides and code that repeats, and you package it up so you can use it twice.",
     "crumbs": [
@@ -1181,7 +1194,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#how-to-use-this-notebook",
     "href": "labs/week03/week03_lab_control_flow.html#how-to-use-this-notebook",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "How to use this notebook",
     "text": "How to use this notebook\nRun each cell with Shift+Enter. Cells marked # YOUR TURN have something for you to write. Cells marked # CHECK verify your answer — if they run without complaint, you’re right.\n\nBefore you submit anything all semester: Kernel → Restart Kernel and Run All Cells. A notebook that only works when run out of order is not finished.",
     "crumbs": [
@@ -1194,7 +1207,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#learning-objectives",
     "href": "labs/week03/week03_lab_control_flow.html#learning-objectives",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Learning objectives",
     "text": "Learning objectives\nBy the end of this notebook you can:\n\nBranch on a condition with if / elif / else\nRepeat work with a for loop, and accumulate a result as you go\nLoop until a condition is met with while, without hanging your kernel\nWrite a function with arguments, a default, a docstring, and a return value\nGuard a function against input that doesn’t make sense\nBuild a list from another list with a comprehension",
     "crumbs": [
@@ -1207,7 +1220,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#part-1-making-decisions",
     "href": "labs/week03/week03_lab_control_flow.html#part-1-making-decisions",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Part 1 — Making decisions",
     "text": "Part 1 — Making decisions\nA monitoring well is dry if the water level has dropped below the bottom of its screen. Deciding that in code looks like this.\n\nwater_level = 88.4      # m below land surface\nscreen_bottom = 92.0    # m below land surface\n\nif water_level &gt; screen_bottom:\n    print(\"Dry — the water table is below the screen.\")\nelse:\n    print(\"Wet — the well still has water in it.\")\n\nTwo things to notice, because both bite people in week 3:\n\nThe : at the end of the if line is required.\nThe indented block is the body. Python uses indentation the way other languages use braces. Four spaces, consistently.\n\nFor more than two outcomes, chain with elif. Python takes the first branch that is true and skips the rest.\n\ndecline_m = 14.2   # how far the water table has dropped over the record\n\nif decline_m &gt; 30:\n    status = \"severe\"\nelif decline_m &gt; 10:\n    status = \"moderate\"\nelif decline_m &gt; 0:\n    status = \"mild\"\nelse:\n    status = \"stable or recovering\"\n\nprint(f\"A {decline_m} m decline is {status}.\")\n\nOrder matters. If the &gt; 0 test came first, every declining well would be called mild and the other branches would be unreachable.\n\nYOUR TURN 1\nAn unconfined aquifer is being pumped. Write the branching that sets recommendation based on the percentage of saturated thickness already dewatered:\n\n\n\nDewatered\nrecommendation\n\n\n\n\nmore than 50%\n\"stop pumping\"\n\n\nmore than 25%\n\"reduce pumping\"\n\n\nanything else\n\"continue monitoring\"\n\n\n\n\nsaturated_thickness_m = 62.0\ndrawdown_m = 19.5\n\npercent_dewatered = 100 * drawdown_m / saturated_thickness_m\n\n# YOUR TURN\nrecommendation = ...\n\n\n# CHECK\nassert isinstance(recommendation, str), \"recommendation should be a string\"\nassert recommendation == \"reduce pumping\", f\"got {recommendation!r}\"\nprint(f\"{percent_dewatered:.1f}% dewatered -&gt; {recommendation}. Correct.\")\n\n# And the branches you didn't hit, checked by hand:\nfor dd, expected in [(35.0, \"stop pumping\"), (5.0, \"continue monitoring\")]:\n    pct = 100 * dd / saturated_thickness_m\n    print(f\"  a {dd} m drawdown is {pct:.1f}% — should be {expected!r}\")",
     "crumbs": [
@@ -1220,7 +1233,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#part-2-repeating-yourself-properly",
     "href": "labs/week03/week03_lab_control_flow.html#part-2-repeating-yourself-properly",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Part 2 — Repeating yourself, properly",
     "text": "Part 2 — Repeating yourself, properly\nA for loop walks through a sequence, one item at a time.\n\ndepths_to_water = [31.2, 45.8, 88.4, 12.0, 67.3]   # m below land surface\n\nfor depth in depths_to_water:\n    print(f\"water at {depth} m\")\n\nThe usual reason to loop is to accumulate something. Start with an empty container, add to it inside the loop, use it after.\n\ntotal = 0.0\nfor depth in depths_to_water:\n    total = total + depth\n\nprint(f\"sum:  {total}\")\nprint(f\"mean: {total / len(depths_to_water):.2f} m\")\n\nBuilding a list instead of a number follows the same shape:\n\nFEET_PER_METRE = 3.28084\n\ndepths_ft = []\nfor depth in depths_to_water:\n    depths_ft.append(depth * FEET_PER_METRE)\n\nprint(depths_ft)\n\nWhen you need the position as well as the value, use enumerate. When you need to walk two sequences together, use zip. Reach for these before you reach for range(len(...)).\n\nwell_ids = [\"A-14\", \"B-07\", \"C-22\", \"D-03\", \"E-11\"]\n\nfor i, (well, depth) in enumerate(zip(well_ids, depths_to_water)):\n    print(f\"{i}: {well:5s} {depth:6.1f} m\")\n\n\nYOUR TURN 2\nA well goes dry when the water level falls below its screen bottom. Using the two lists below, build dry_wells — a list of the IDs of wells that are dry — and count them in n_dry.\nUse a for loop with zip, an if inside it, and .append().\n\nscreen_bottoms = [40.0, 52.0, 80.0, 35.0, 70.0]   # m below land surface, same order\n\n# YOUR TURN\ndry_wells = ...\nn_dry = ...\n\n\n# CHECK\nassert isinstance(dry_wells, list), \"dry_wells should be a list\"\nassert dry_wells == [\"C-22\"], f\"got {dry_wells}\"\nassert n_dry == 1, f\"expected 1, got {n_dry}\"\nprint(f\"{n_dry} dry well: {dry_wells}. Correct.\")\n\nWorth noticing: C-22 is dry because 88.4 m is below 80.0 m. Depth below land surface counts downward, so bigger means deeper. Half the sign errors in groundwater work come from mixing depth-below-surface with elevation.",
     "crumbs": [
@@ -1233,7 +1246,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#part-3-while-and-how-not-to-hang-your-kernel",
     "href": "labs/week03/week03_lab_control_flow.html#part-3-while-and-how-not-to-hang-your-kernel",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Part 3 — while, and how not to hang your kernel",
     "text": "Part 3 — while, and how not to hang your kernel\nA for loop runs a known number of times. A while loop runs until a condition stops being true — which is what you want when you don’t know how many steps it takes.\n\nstorage = 100.0      # units of water in the reservoir\nk = 0.15             # fraction lost each day\nday = 0\n\nwhile storage &gt; 50.0:\n    storage = storage * (1 - k)\n    day = day + 1\n\nprint(f\"storage fell below half after {day} days ({storage:.1f} left)\")\n\n\nThe one rule: something inside the loop must eventually make the condition false. If storage never shrank, that cell would run forever and you’d have to interrupt the kernel (the ■ button, or Kernel → Interrupt).\n\nBecause it is easy to get that wrong, real iterative code carries a maximum iteration count as a safety net. You will see this exact pattern again in Week 4 when you write a solver, and in Week 12 when MODFLOW refuses to converge.\n\nstorage = 100.0\nday = 0\nMAX_DAYS = 1000\n\nwhile storage &gt; 50.0 and day &lt; MAX_DAYS:\n    storage = storage * (1 - k)\n    day += 1          # `+=` is shorthand for `day = day + 1`\n\nif day == MAX_DAYS:\n    print(\"gave up — did not converge\")\nelse:\n    print(f\"converged in {day} days\")",
     "crumbs": [
@@ -1246,7 +1259,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#part-4-functions",
     "href": "labs/week03/week03_lab_control_flow.html#part-4-functions",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Part 4 — Functions",
     "text": "Part 4 — Functions\nA function names a piece of work so you can do it again without copying it.\n\ndef specific_discharge(hydraulic_conductivity, gradient):\n    \"\"\"Darcy specific discharge q = K * i.\n\n    Parameters\n    ----------\n    hydraulic_conductivity : float\n        K, in m/d.\n    gradient : float\n        Dimensionless hydraulic gradient, dh/dl.\n\n    Returns\n    -------\n    float\n        Specific discharge in m/d.\n    \"\"\"\n    return hydraulic_conductivity * gradient\n\n\nprint(specific_discharge(12.0, 0.005059))\n\nThe anatomy:\n\ndef name(arguments): — the header\nthe docstring in triple quotes, saying what it does and what the units are\nreturn — what the caller gets back\n\nA function with no return gives you None. That is a real and common bug: print shows a value, return hands it back.\n\ndef no_return(x):\n    print(x * 2)          # prints, but hands back nothing\n\nresult = no_return(21)\nprint(f\"result is {result!r} — see the problem?\")\n\nArguments can have defaults, which makes the common case short and the unusual case still possible.\n\ndef volumetric_flow(hydraulic_conductivity, gradient, area, porosity=1.0):\n    \"\"\"Volumetric flow Q = q * A. Pass porosity to get seepage velocity instead.\"\"\"\n    return hydraulic_conductivity * gradient * area / porosity\n\n\nprint(f\"{volumetric_flow(12.0, 0.005059, 45000):.1f} m3/d\")\nprint(f\"{volumetric_flow(12.0, 0.005059, 45000, porosity=0.28):.1f} m3/d of pore flow\")\n\n\nYOUR TURN 3\nWrite transmissivity(hydraulic_conductivity, thickness), which returns \\(T = Kb\\) in m²/d.\nGive it a docstring. It should have no default arguments.\n\n# YOUR TURN\ndef transmissivity(...):\n    ...\n\n\n# CHECK\nassert callable(transmissivity), \"transmissivity should be a function\"\nassert transmissivity.__doc__, \"give it a docstring — you will thank yourself in week 12\"\nassert abs(transmissivity(12.0, 25.0) - 300.0) &lt; 1e-9, \"T = K * b\"\nassert abs(transmissivity(0.4, 110.0) - 44.0) &lt; 1e-9, \"check it works for other numbers too\"\nprint(f\"T = {transmissivity(12.0, 25.0)} m2/d for K = 12 m/d over 25 m. Correct.\")\n\n\n\nYOUR TURN 4 — refuse bad input\nA negative thickness is not a thin aquifer; it is a mistake upstream in someone’s code. A function that silently returns a negative transmissivity lets that mistake travel.\nWrite safe_transmissivity(hydraulic_conductivity, thickness) that behaves like transmissivity but raises ValueError if either argument is negative.\nraise ValueError(\"thickness must be positive, got -5\")\n\n# YOUR TURN\ndef safe_transmissivity(...):\n    ...\n\n\n# CHECK\nassert abs(safe_transmissivity(12.0, 25.0) - 300.0) &lt; 1e-9, \"the normal case still has to work\"\n\nfor bad_args in [(12.0, -25.0), (-12.0, 25.0)]:\n    try:\n        safe_transmissivity(*bad_args)\n    except ValueError:\n        print(f\"  {bad_args} correctly raised ValueError\")\n    else:\n        raise AssertionError(f\"{bad_args} should have raised ValueError\")\n\nprint(\"Correct.\")\n\nThis is the habit worth forming: fail loudly, near the mistake. A model that stops with a clear message costs you two minutes. A model that quietly produces a plausible wrong answer costs you a week.",
     "crumbs": [
@@ -1259,7 +1272,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#part-5-comprehensions",
     "href": "labs/week03/week03_lab_control_flow.html#part-5-comprehensions",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Part 5 — Comprehensions",
     "text": "Part 5 — Comprehensions\nBuilding a list by looping and appending is so common that Python has a shorthand for it. These two cells do exactly the same thing.\n\n# the long way\ndepths_ft = []\nfor depth in depths_to_water:\n    depths_ft.append(depth * FEET_PER_METRE)\n\n# the comprehension\ndepths_ft_2 = [depth * FEET_PER_METRE for depth in depths_to_water]\n\nprint(depths_ft == depths_ft_2)\n\nA comprehension can filter, too — the if goes at the end:\n\ndeep = [d for d in depths_to_water if d &gt; 40]\nprint(deep)\n\nUse one when it fits on a line and reads like a sentence. When it needs two conditions and a nested loop, write the for loop — clever is not the goal.\n\nYOUR TURN 5\nUsing a single comprehension, build deep_well_ids: the IDs of wells whose water level is deeper than 40 m.\nHint: zip(well_ids, depths_to_water) inside a comprehension works the same way it does in a for loop.\n\n# YOUR TURN\ndeep_well_ids = ...\n\n\n# CHECK\nassert deep_well_ids == [\"B-07\", \"C-22\", \"E-11\"], f\"got {deep_well_ids}\"\nassert len(deep_well_ids) == 3\nprint(f\"Wells deeper than 40 m: {deep_well_ids}. Correct.\")",
     "crumbs": [
@@ -1272,7 +1285,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#part-6-putting-it-together",
     "href": "labs/week03/week03_lab_control_flow.html#part-6-putting-it-together",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Part 6 — Putting it together",
     "text": "Part 6 — Putting it together\nEverything above, applied once. Read this cell rather than writing it — it is the shape of code you will be writing by Week 6.\n\nimport math\n\n\ndef well_report(well_id, depth_to_water, screen_bottom, land_surface_elev):\n    \"\"\"Summarize one well's condition as a dictionary.\"\"\"\n    is_dry = depth_to_water &gt; screen_bottom\n    remaining = screen_bottom - depth_to_water\n    return {\n        \"well\": well_id,\n        \"water_elev_m\": round(land_surface_elev - depth_to_water, 2),\n        \"dry\": is_dry,\n        \"screen_remaining_m\": round(remaining, 2) if not is_dry else 0.0,\n    }\n\n\nland_elevs = [730.0, 742.5, 715.0, 760.2, 728.8]\n\nreports = [\n    well_report(w, d, s, e)\n    for w, d, s, e in zip(well_ids, depths_to_water, screen_bottoms, land_elevs)\n]\n\nfor r in reports:\n    flag = \"DRY\" if r[\"dry\"] else \"   \"\n    print(f\"{flag} {r['well']:5s} water at {r['water_elev_m']:7.2f} m elevation, \"\n          f\"{r['screen_remaining_m']:5.1f} m of screen left\")",
     "crumbs": [
@@ -1285,7 +1298,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#before-you-leave",
     "href": "labs/week03/week03_lab_control_flow.html#before-you-leave",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Before you leave",
     "text": "Before you leave\n\nKernel → Restart Kernel and Run All Cells\nFix anything that breaks — the order you happened to run things in is not the order the notebook is in\nSave",
     "crumbs": [
@@ -1298,7 +1311,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#whats-due",
     "href": "labs/week03/week03_lab_control_flow.html#whats-due",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "What’s due",
     "text": "What’s due\nHW 1 — My first Jupyter notebook, Wednesday 9/9 at 11:59pm, through D2L. Submit the .ipynb with outputs kept, so I can see that it ran.",
     "crumbs": [
@@ -1311,7 +1324,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#next-week",
     "href": "labs/week03/week03_lab_control_flow.html#next-week",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Next week",
     "text": "Next week\nnumpy arrays, and using them to solve equations you can’t solve by hand: bisection, and stepping a reservoir forward in time.",
     "crumbs": [
@@ -1324,7 +1337,7 @@
   {
     "objectID": "labs/week03/week03_lab_control_flow.html#stuck",
     "href": "labs/week03/week03_lab_control_flow.html#stuck",
-    "title": "Week 3 Lab — Control flow and functions",
+    "title": "Week 3 Lab: Control flow and functions",
     "section": "Stuck?",
     "text": "Stuck?\n\nRead the last line of the traceback first. It says what went wrong. The lines above say where.\nSyntaxError on a line that looks fine usually means the problem is on the line above — an unclosed bracket or a missing :.\nIndentationError means Python can’t tell where a block starts or stops. Four spaces, always.\nOffice hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.",
     "crumbs": [

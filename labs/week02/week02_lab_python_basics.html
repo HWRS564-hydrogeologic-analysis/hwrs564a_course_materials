@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Week 2 Lab — Python basics – HWRS 564a</title>
+<title>Week 2 Lab: Python basics – HWRS 564a</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -771,27 +771,28 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#the-kernel-remembers" id="toc-the-kernel-remembers" class="nav-link" data-scroll-target="#the-kernel-remembers">The kernel remembers</a></li>
   </ul></li>
-  <li><a href="#part-2-variables-and-types" id="toc-part-2-variables-and-types" class="nav-link" data-scroll-target="#part-2-variables-and-types">Part 2 — Variables and types</a>
+  <li><a href="#variables-and-types" id="toc-variables-and-types" class="nav-link" data-scroll-target="#variables-and-types">Variables and types</a>
   <ul class="collapse">
   <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
   </ul></li>
-  <li><a href="#part-3-type-errors-and-conversion" id="toc-part-3-type-errors-and-conversion" class="nav-link" data-scroll-target="#part-3-type-errors-and-conversion">Part 3 — Type errors and conversion</a>
+  <li><a href="#type-errors-and-conversion" id="toc-type-errors-and-conversion" class="nav-link" data-scroll-target="#type-errors-and-conversion">Type errors and conversion</a>
   <ul class="collapse">
   <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">YOUR TURN 2</a></li>
   <li><a href="#a-conversion-that-surprises-people" id="toc-a-conversion-that-surprises-people" class="nav-link" data-scroll-target="#a-conversion-that-surprises-people">A conversion that surprises people</a></li>
   </ul></li>
-  <li><a href="#part-4-floating-point" id="toc-part-4-floating-point" class="nav-link" data-scroll-target="#part-4-floating-point">Part 4 — Floating point</a></li>
-  <li><a href="#part-5-lists-indexing-slicing" id="toc-part-5-lists-indexing-slicing" class="nav-link" data-scroll-target="#part-5-lists-indexing-slicing">Part 5 — Lists, indexing, slicing</a>
+  <li><a href="#strings-text-values" id="toc-strings-text-values" class="nav-link" data-scroll-target="#strings-text-values">Strings: text values</a></li>
+  <li><a href="#floating-point" id="toc-floating-point" class="nav-link" data-scroll-target="#floating-point">Floating point</a></li>
+  <li><a href="#lists-indexing-slicing" id="toc-lists-indexing-slicing" class="nav-link" data-scroll-target="#lists-indexing-slicing">Lists, indexing, slicing</a>
   <ul class="collapse">
   <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
   </ul></li>
-  <li><a href="#part-6-tuples-and-dictionaries" id="toc-part-6-tuples-and-dictionaries" class="nav-link" data-scroll-target="#part-6-tuples-and-dictionaries">Part 6 — Tuples and dictionaries</a>
+  <li><a href="#tuples-and-dictionaries" id="toc-tuples-and-dictionaries" class="nav-link" data-scroll-target="#tuples-and-dictionaries">Tuples and dictionaries</a>
   <ul class="collapse">
   <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
   </ul></li>
-  <li><a href="#part-7-imports-and-a-real-calculation" id="toc-part-7-imports-and-a-real-calculation" class="nav-link" data-scroll-target="#part-7-imports-and-a-real-calculation">Part 7 — Imports and a real calculation</a>
+  <li><a href="#imports-and-a-real-calculation" id="toc-imports-and-a-real-calculation" class="nav-link" data-scroll-target="#imports-and-a-real-calculation">Imports and a real calculation</a>
   <ul class="collapse">
-  <li><a href="#your-turn-5-darcys-law" id="toc-your-turn-5-darcys-law" class="nav-link" data-scroll-target="#your-turn-5-darcys-law">YOUR TURN 5 — Darcy’s law</a></li>
+  <li><a href="#your-turn-5---darcys-law" id="toc-your-turn-5---darcys-law" class="nav-link" data-scroll-target="#your-turn-5---darcys-law">YOUR TURN 5 - Darcy’s law</a></li>
   <li><a href="#sanity-check-your-own-answer" id="toc-sanity-check-your-own-answer" class="nav-link" data-scroll-target="#sanity-check-your-own-answer">Sanity-check your own answer</a></li>
   </ul></li>
   <li><a href="#before-you-leave" id="toc-before-you-leave" class="nav-link" data-scroll-target="#before-you-leave">Before you leave</a></li>
@@ -806,7 +807,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week02_tue_getting_started.html">Week 2 — Getting started</a></li><li class="breadcrumb-item"><a href="../../labs/week02/week02_lab_python_basics.html">Lab · Python basics</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Week 2 Lab — Python basics</h1>
+<h1 class="title">Week 2 Lab: Python basics</h1>
 </div>
 
 
@@ -870,8 +871,8 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="part-2-variables-and-types" class="level2">
-<h2 class="anchored" data-anchor-id="part-2-variables-and-types">Part 2 — Variables and types</h2>
+<section id="variables-and-types" class="level2">
+<h2 class="anchored" data-anchor-id="variables-and-types">Variables and types</h2>
 <p>Assignment binds a name on the left to the value of the expression on the right.</p>
 <div id="1b43a120" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>site_name <span class="op">=</span> <span class="st">"Santa Cruz Basin"</span></span>
@@ -910,8 +911,8 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="part-3-type-errors-and-conversion" class="level2">
-<h2 class="anchored" data-anchor-id="part-3-type-errors-and-conversion">Part 3 — Type errors and conversion</h2>
+<section id="type-errors-and-conversion" class="level2">
+<h2 class="anchored" data-anchor-id="type-errors-and-conversion">Type errors and conversion</h2>
 <p>Data read from text files arrives as strings, even when it looks numeric. This is the single most common source of confusion in the first month.</p>
 <div id="6a83e109" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>depth_text <span class="op">=</span> <span class="st">"45.7"</span>      <span class="co"># as it would arrive from a CSV</span></span>
@@ -949,160 +950,184 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="part-4-floating-point" class="level2">
-<h2 class="anchored" data-anchor-id="part-4-floating-point">Part 4 — Floating point</h2>
-<p>Floats are binary approximations of decimal numbers.</p>
-<div id="90183619" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="op">==</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="strings-text-values" class="level2">
+<h2 class="anchored" data-anchor-id="strings-text-values">Strings: text values</h2>
+<p>A <strong>string</strong> is text: a sequence of characters enclosed in single or double quotes. Well IDs, site names, and values read from a text file are strings. Python keeps the quotes out of the value itself.</p>
+<p>Strings can be indexed one character at a time. Python starts counting at zero, and negative indices count backward from the end:</p>
+<div id="1e4c95ec" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>well_id <span class="op">=</span> <span class="st">"A-14"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>basin <span class="op">=</span> <span class="st">'Santa Cruz Basin'</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(well_id[<span class="dv">0</span>])   <span class="co"># A</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(well_id[<span class="op">-</span><span class="dv">1</span>])  <span class="co"># 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Never compare floats with <code>==</code>. Compare the magnitude of the difference against a tolerance:</p>
-<p><span class="math display">\[|a - b| &lt; \epsilon\]</span></p>
-<p>You’ll use exactly this test in Week 4 to decide when an iterative solver has converged.</p>
-<div id="69cd49b0" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tolerance <span class="op">=</span> <span class="fl">1e-9</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">abs</span>((<span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span>) <span class="op">-</span> <span class="fl">0.3</span>) <span class="op">&lt;</span> tolerance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Strings can be combined by adding them, this is known as concatenation.</p>
+<div id="57c4eff8" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>well_id <span class="op">+</span> basin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To combine text with variable values, use an <strong>f-string</strong>. Put the variable name inside braces; Python substitutes its value when the line runs:</p>
+<p>The result is still a string. If a string contains a number such as <code>"45.7"</code>, convert it with <code>float()</code> before doing arithmetic.</p>
+<div id="aa167ed8" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="ss">f"Well </span><span class="sc">{</span>well_id<span class="sc">}</span><span class="ss"> is in the </span><span class="sc">{</span>basin<span class="sc">}</span><span class="ss">."</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
-<section id="part-5-lists-indexing-slicing" class="level2">
-<h2 class="anchored" data-anchor-id="part-5-lists-indexing-slicing">Part 5 — Lists, indexing, slicing</h2>
+<section id="floating-point" class="level2">
+<h2 class="anchored" data-anchor-id="floating-point">Floating point</h2>
+<p>Floats are binary approximations of decimal numbers.</p>
+<div id="90183619" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="op">==</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Never compare floats with <code>==</code>. Compare the magnitude of the difference against a tolerance:</p>
+<p><span class="math display">\[|a - b| &lt; \epsilon\]</span></p>
+<p>You’ll use this test to decide when an iterative solver has converged.</p>
+<div id="69cd49b0" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tolerance <span class="op">=</span> <span class="fl">1e-9</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">abs</span>((<span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span>) <span class="op">-</span> <span class="fl">0.3</span>) <span class="op">&lt;</span> tolerance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="lists-indexing-slicing" class="level2">
+<h2 class="anchored" data-anchor-id="lists-indexing-slicing">Lists, indexing, slicing</h2>
 <p>A year of monthly water-level measurements, January first.</p>
 <div id="5b3809de" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>monthly_head <span class="op">=</span> [</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">415.2</span>, <span class="fl">414.8</span>, <span class="fl">414.1</span>, <span class="fl">413.2</span>, <span class="fl">412.0</span>, <span class="fl">410.6</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">409.1</span>, <span class="fl">411.7</span>, <span class="fl">413.9</span>, <span class="fl">414.6</span>, <span class="fl">415.0</span>, <span class="fl">415.3</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"number of measurements: </span><span class="sc">{</span><span class="bu">len</span>(monthly_head)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"January (index 0):      </span><span class="sc">{</span>monthly_head[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"December (index -1):    </span><span class="sc">{</span>monthly_head[<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"lowest level:           </span><span class="sc">{</span><span class="bu">min</span>(monthly_head)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>monthly_head <span class="op">=</span> [</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">415.2</span>, <span class="fl">414.8</span>, <span class="fl">414.1</span>, <span class="fl">413.2</span>, <span class="fl">412.0</span>, <span class="fl">410.6</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fl">409.1</span>, <span class="fl">411.7</span>, <span class="fl">413.9</span>, <span class="fl">414.6</span>, <span class="fl">415.0</span>, <span class="fl">415.3</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"number of measurements: </span><span class="sc">{</span><span class="bu">len</span>(monthly_head)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"January (index 0):      </span><span class="sc">{</span>monthly_head[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"December (index -1):    </span><span class="sc">{</span>monthly_head[<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"lowest level:           </span><span class="sc">{</span><span class="bu">min</span>(monthly_head)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Slices are <strong>half-open</strong>: <code>[start:stop]</code> includes <code>start</code> and excludes <code>stop</code>. So <code>stop - start</code> is always the number of elements you get.</p>
 <div id="73bd021d" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"first quarter:  </span><span class="sc">{</span>monthly_head[<span class="dv">0</span>:<span class="dv">3</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"same thing:     </span><span class="sc">{</span>monthly_head[:<span class="dv">3</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"from July on:   </span><span class="sc">{</span>monthly_head[<span class="dv">6</span>:]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"last two:       </span><span class="sc">{</span>monthly_head[<span class="op">-</span><span class="dv">2</span>:]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"first quarter:  </span><span class="sc">{</span>monthly_head[<span class="dv">0</span>:<span class="dv">3</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"same thing:     </span><span class="sc">{</span>monthly_head[:<span class="dv">3</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"from July on:   </span><span class="sc">{</span>monthly_head[<span class="dv">6</span>:]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"last two:       </span><span class="sc">{</span>monthly_head[<span class="op">-</span><span class="dv">2</span>:]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="your-turn-3" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
 <p>Extract the monsoon months — <strong>July, August, September</strong> — into <code>monsoon</code>. Then find the <strong>annual range</strong> (max minus min) and store it in <code>annual_range</code>.</p>
 <div id="b4c960ce" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>monsoon <span class="op">=</span> ...</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>annual_range <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>monsoon <span class="op">=</span> ...</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>annual_range <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="452a9a4c" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> monsoon <span class="op">==</span> [<span class="fl">409.1</span>, <span class="fl">411.7</span>, <span class="fl">413.9</span>], <span class="ss">f"got </span><span class="sc">{</span>monsoon<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(annual_range <span class="op">-</span> <span class="fl">6.2</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, <span class="ss">f"expected 6.2, got </span><span class="sc">{</span>annual_range<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Monsoon months: </span><span class="sc">{</span>monsoon<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Annual range:   </span><span class="sc">{</span>annual_range<span class="sc">:.1f}</span><span class="ss"> m. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> monsoon <span class="op">==</span> [<span class="fl">409.1</span>, <span class="fl">411.7</span>, <span class="fl">413.9</span>], <span class="ss">f"got </span><span class="sc">{</span>monsoon<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(annual_range <span class="op">-</span> <span class="fl">6.2</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, <span class="ss">f"expected 6.2, got </span><span class="sc">{</span>annual_range<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Monsoon months: </span><span class="sc">{</span>monsoon<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Annual range:   </span><span class="sc">{</span>annual_range<span class="sc">:.1f}</span><span class="ss"> m. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Worth noticing:</strong> the minimum is in June and the recovery begins in July. That shape <em>is</em> the monsoon signal in a hydrograph, and you’ll be plotting it in Week 5.</p>
 <hr>
 </section>
 </section>
-<section id="part-6-tuples-and-dictionaries" class="level2">
-<h2 class="anchored" data-anchor-id="part-6-tuples-and-dictionaries">Part 6 — Tuples and dictionaries</h2>
+<section id="tuples-and-dictionaries" class="level2">
+<h2 class="anchored" data-anchor-id="tuples-and-dictionaries">Tuples and dictionaries</h2>
 <p>A <strong>tuple</strong> is a fixed collection that represents one thing. A <strong>dictionary</strong> maps names to values.</p>
 <div id="1d219334" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>grid_shape <span class="op">=</span> (<span class="dv">3</span>, <span class="dv">40</span>, <span class="dv">60</span>)   <span class="co"># layers, rows, columns — a MODFLOW grid</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>n_layers, n_rows, n_cols <span class="op">=</span> grid_shape   <span class="co"># unpacking</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_layers<span class="sc">}</span><span class="ss"> layers, </span><span class="sc">{</span>n_rows<span class="sc">}</span><span class="ss"> rows, </span><span class="sc">{</span>n_cols<span class="sc">}</span><span class="ss"> columns"</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"total cells: </span><span class="sc">{</span>n_layers <span class="op">*</span> n_rows <span class="op">*</span> n_cols<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># grid_shape[0] = 5 would raise TypeError — tuples are immutable</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>grid_shape <span class="op">=</span> (<span class="dv">3</span>, <span class="dv">40</span>, <span class="dv">60</span>)   <span class="co"># layers, rows, columns — a MODFLOW grid</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>n_layers, n_rows, n_cols <span class="op">=</span> grid_shape   <span class="co"># unpacking</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_layers<span class="sc">}</span><span class="ss"> layers, </span><span class="sc">{</span>n_rows<span class="sc">}</span><span class="ss"> rows, </span><span class="sc">{</span>n_cols<span class="sc">}</span><span class="ss"> columns"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"total cells: </span><span class="sc">{</span>n_layers <span class="op">*</span> n_rows <span class="op">*</span> n_cols<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># grid_shape[0] = 5 would raise TypeError — tuples are immutable</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="379c8595" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>aquifer <span class="op">=</span> {</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Santa Cruz"</span>,</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"conductivity"</span>: <span class="fl">12.4</span>,</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"porosity"</span>: <span class="fl">0.28</span>,</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"confined"</span>: <span class="va">False</span>,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(aquifer[<span class="st">"conductivity"</span>])</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(aquifer.get(<span class="st">"storativity"</span>, <span class="st">"not measured"</span>))   <span class="co"># no KeyError</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"keys: </span><span class="sc">{</span><span class="bu">list</span>(aquifer.keys())<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>aquifer <span class="op">=</span> {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Santa Cruz"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"conductivity"</span>: <span class="fl">12.4</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"porosity"</span>: <span class="fl">0.28</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"confined"</span>: <span class="va">False</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(aquifer[<span class="st">"conductivity"</span>])</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(aquifer.get(<span class="st">"storativity"</span>, <span class="st">"not measured"</span>))   <span class="co"># no KeyError</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"keys: </span><span class="sc">{</span><span class="bu">list</span>(aquifer.keys())<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="your-turn-4" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
 <p>Build <code>k_by_well</code>, mapping each well ID to its conductivity.</p>
 <div id="72cb079e" class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>well_ids <span class="op">=</span> [<span class="st">"A-14"</span>, <span class="st">"B-07"</span>, <span class="st">"C-22"</span>, <span class="st">"D-03"</span>]</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>conductivities <span class="op">=</span> [<span class="fl">12.4</span>, <span class="fl">3.8</span>, <span class="fl">41.0</span>, <span class="fl">7.2</span>]</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>k_by_well <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>well_ids <span class="op">=</span> [<span class="st">"A-14"</span>, <span class="st">"B-07"</span>, <span class="st">"C-22"</span>, <span class="st">"D-03"</span>]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>conductivities <span class="op">=</span> [<span class="fl">12.4</span>, <span class="fl">3.8</span>, <span class="fl">41.0</span>, <span class="fl">7.2</span>]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>k_by_well <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="a060e1d2" class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> k_by_well[<span class="st">"B-07"</span>] <span class="op">==</span> <span class="fl">3.8</span>, <span class="ss">f"got </span><span class="sc">{</span>k_by_well<span class="sc">.</span>get(<span class="st">'B-07'</span>)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(k_by_well) <span class="op">==</span> <span class="dv">4</span>, <span class="ss">f"expected 4 entries, got </span><span class="sc">{</span><span class="bu">len</span>(k_by_well)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"B-07 has K = </span><span class="sc">{</span>k_by_well[<span class="st">'B-07'</span>]<span class="sc">}</span><span class="ss"> m/d. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> k_by_well[<span class="st">"B-07"</span>] <span class="op">==</span> <span class="fl">3.8</span>, <span class="ss">f"got </span><span class="sc">{</span>k_by_well<span class="sc">.</span>get(<span class="st">'B-07'</span>)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(k_by_well) <span class="op">==</span> <span class="dv">4</span>, <span class="ss">f"expected 4 entries, got </span><span class="sc">{</span><span class="bu">len</span>(k_by_well)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"B-07 has K = </span><span class="sc">{</span>k_by_well[<span class="st">'B-07'</span>]<span class="sc">}</span><span class="ss"> m/d. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
 </section>
-<section id="part-7-imports-and-a-real-calculation" class="level2">
-<h2 class="anchored" data-anchor-id="part-7-imports-and-a-real-calculation">Part 7 — Imports and a real calculation</h2>
+<section id="imports-and-a-real-calculation" class="level2">
+<h2 class="anchored" data-anchor-id="imports-and-a-real-calculation">Imports and a real calculation</h2>
 <p>Python’s standard library is large but not loaded by default.</p>
 <div id="c7de7b8c" class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.sqrt(<span class="dv">2</span>))</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.pi)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.log10(<span class="dv">1000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.sqrt(<span class="dv">2</span>))</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.pi)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.log10(<span class="dv">1000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="your-turn-5-darcys-law" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-5-darcys-law">YOUR TURN 5 — Darcy’s law</h3>
+<section id="your-turn-5---darcys-law" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-5---darcys-law">YOUR TURN 5 - Darcy’s law</h3>
 <p>For one-dimensional flow through a confined aquifer:</p>
 <p><span class="math display">\[Q = -KA\frac{dh}{dl}\]</span></p>
+<p>Here <span class="math inline">\(A\)</span> is the cross-sectional area perpendicular to flow. The specific discharge is the flow per unit area, <span class="math inline">\(q = Q/A\)</span>. Darcy’s law gives <span class="math inline">\(q = -K\,dh/dl\)</span>; because we are reporting the magnitude of flow downhill, use <span class="math inline">\(q = K \times \text{gradient}\)</span>. Then calculate the volumetric flow with <span class="math inline">\(Q = qA\)</span>.</p>
 <p>Given the values below, compute:</p>
 <ul>
-<li><code>gradient</code> — the hydraulic gradient between the wells</li>
-<li><code>q</code> — the specific discharge, in m/d</li>
-<li><code>Q</code> — the volumetric flow, in m³/d</li>
+<li><code>gradient</code>: the hydraulic gradient between the wells</li>
+<li><code>q</code>: the specific discharge, in m/d</li>
+<li><code>Q</code>: the volumetric flow, in m³/d</li>
 </ul>
-<p>Ignore the minus sign; it only records that flow runs downhill.</p>
 <div id="83db0194" class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>head_upstream <span class="op">=</span> <span class="fl">412.5</span>     <span class="co"># m</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>head_downstream <span class="op">=</span> <span class="fl">408.2</span>   <span class="co"># m</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>distance <span class="op">=</span> <span class="dv">850</span>            <span class="co"># m</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fl">12.0</span>                  <span class="co"># m/d</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>thickness <span class="op">=</span> <span class="dv">25</span>            <span class="co"># m</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="dv">1800</span>              <span class="co"># m</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>gradient <span class="op">=</span> ...</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> ...</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>head_upstream <span class="op">=</span> <span class="fl">412.5</span>     <span class="co"># m</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>head_downstream <span class="op">=</span> <span class="fl">408.2</span>   <span class="co"># m</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>distance <span class="op">=</span> <span class="dv">850</span>            <span class="co"># m</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fl">12.0</span>                  <span class="co"># m/d</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>thickness <span class="op">=</span> <span class="dv">25</span>            <span class="co"># m</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="dv">1800</span>              <span class="co"># m</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>gradient <span class="op">=</span> ...</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>area <span class="op">=</span> thickness <span class="op">*</span> width  <span class="co"># A, cross-sectional area in m2</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> K <span class="op">*</span> gradient            <span class="co"># specific discharge in m/d</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> q <span class="op">*</span> area                <span class="co"># volumetric flow in m3/d</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="ebf51f8e" class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(gradient <span class="op">-</span> <span class="fl">0.005059</span>) <span class="op">&lt;</span> <span class="fl">1e-5</span>, <span class="ss">f"gradient looks wrong: </span><span class="sc">{</span>gradient<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(q <span class="op">-</span> <span class="fl">0.06071</span>) <span class="op">&lt;</span> <span class="fl">1e-4</span>, <span class="ss">f"q looks wrong: </span><span class="sc">{</span>q<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(Q <span class="op">-</span> <span class="fl">2731.8</span>) <span class="op">&lt;</span> <span class="fl">1.0</span>, <span class="ss">f"Q looks wrong: </span><span class="sc">{</span>Q<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"gradient           = </span><span class="sc">{</span>gradient<span class="sc">:.5f}</span><span class="ss">  (dimensionless)"</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"specific discharge = </span><span class="sc">{</span>q<span class="sc">:.4f}</span><span class="ss"> m/d"</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"volumetric flow    = </span><span class="sc">{</span>Q<span class="sc">:.1f}</span><span class="ss"> m3/d"</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(gradient <span class="op">-</span> <span class="fl">0.005059</span>) <span class="op">&lt;</span> <span class="fl">1e-5</span>, <span class="ss">f"gradient looks wrong: </span><span class="sc">{</span>gradient<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(q <span class="op">-</span> <span class="fl">0.06071</span>) <span class="op">&lt;</span> <span class="fl">1e-4</span>, <span class="ss">f"q looks wrong: </span><span class="sc">{</span>q<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(Q <span class="op">-</span> <span class="fl">2731.8</span>) <span class="op">&lt;</span> <span class="fl">1.0</span>, <span class="ss">f"Q looks wrong: </span><span class="sc">{</span>Q<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"gradient           = </span><span class="sc">{</span>gradient<span class="sc">:.5f}</span><span class="ss">  (dimensionless)"</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"specific discharge = </span><span class="sc">{</span>q<span class="sc">:.4f}</span><span class="ss"> m/d"</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"volumetric flow    = </span><span class="sc">{</span>Q<span class="sc">:.1f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="sanity-check-your-own-answer" class="level3">
 <h3 class="anchored" data-anchor-id="sanity-check-your-own-answer">Sanity-check your own answer</h3>
 <p><code>Q</code> came out around 2700 m³/d.&nbsp;Is that a lot?</p>
-<p>Convert it to something you have intuition for — litres per second, or acre-feet per year — and decide whether the number is plausible for a basin this size. Getting into this habit now will save you from submitting a MODFLOW model with a 10⁶ m³/d error in Week 12.</p>
+<p>Convert it to something you have intuition for, litres per second, or acre-feet per year, and decide whether the number is plausible for a basin this size. Getting into this habit now will save you from submitting a MODFLOW model with a 10⁶ m³/d error at the end of the semester.</p>
 <div id="1277f106" class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scratch space — try the unit conversion</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>litres_per_second <span class="op">=</span> Q <span class="op">*</span> <span class="dv">1000</span> <span class="op">/</span> <span class="dv">86400</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>acre_feet_per_year <span class="op">=</span> Q <span class="op">*</span> <span class="dv">365</span> <span class="op">/</span> <span class="fl">1233.48</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>litres_per_second<span class="sc">:.1f}</span><span class="ss"> L/s"</span>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>acre_feet_per_year<span class="sc">:.0f}</span><span class="ss"> acre-ft/yr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scratch space — try the unit conversion</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>litres_per_second <span class="op">=</span> Q <span class="op">*</span> <span class="dv">1000</span> <span class="op">/</span> <span class="dv">86400</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>acre_feet_per_year <span class="op">=</span> Q <span class="op">*</span> <span class="dv">365</span> <span class="op">/</span> <span class="fl">1233.48</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>litres_per_second<span class="sc">:.1f}</span><span class="ss"> L/s"</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>acre_feet_per_year<span class="sc">:.0f}</span><span class="ss"> acre-ft/yr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
@@ -1127,7 +1152,7 @@ window.Quarto = {
 <ul>
 <li><code>type(x)</code> tells you what something is — check before you guess</li>
 <li>Read tracebacks from the bottom up</li>
-<li>Office hours: Tuesdays 1:00–2:00, Harshbarger 322B</li>
+<li>Office hours: Tuesdays 1:00–2:00</li>
 </ul>
 
 

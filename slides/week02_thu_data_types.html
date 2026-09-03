@@ -348,7 +348,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 </script>
 </div>
 <div class="fragment">
-<p><code>//</code> matters when you convert coordinates to grid indices — which you will do constantly from Week 10 onward.</p>
+<p><code>//</code> matters when you convert coordinates to grid indices, which is a common operation in anayzing MODFLOW data</p>
 </div>
 </section>
 <section class="slide level2">
@@ -367,7 +367,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 <div class="fragment">
 <p><strong>Never test floats with <code>==</code>.</strong> Test whether the difference is small enough:</p>
 <p><span class="math display">\[|a - b| &lt; \epsilon\]</span></p>
-<p>This is precisely how you’ll decide an iterative solver has converged in Week 4.</p>
+<p>This is how you’ll decide an iterative solver has converged in the future, and is <code>epsilon</code> is generally called the tolerance.</p>
 </div>
 </section></section>
 <section>
@@ -420,7 +420,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 </script>
 </div>
 <div class="fragment">
-<p><strong>Indexing starts at zero.</strong> <code>[0]</code> is the first element. <code>[-1]</code> is the last, which is genuinely useful — no <code>len(x) - 1</code> arithmetic.</p>
+<p>Indexing starts at zero. <code>[0]</code> is the first element. <code>[-1]</code> is the last, which is useful, so you don’t need to know the total length.</p>
 </div>
 </section>
 <section class="slide level2">
@@ -514,7 +514,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 <span id="cb4-2"><a></a><span class="co"># TypeError: 'tuple' object does not support item assignment</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
-<p>Use a <strong>tuple</strong> when the collection <em>is</em> one thing — a coordinate, a grid shape, a row. Use a <strong>list</strong> when it’s a growing pile of things. MODFLOW grid shapes come back as tuples, and that’s not an accident.</p>
+<p>Use a <strong>tuple</strong> when the collection <em>is</em> one thing — a coordinate, a grid shape, a row. Use a <strong>list</strong> when it’s a growing pile of things. MODFLOW grid shapes come back as tuples, because they are “fixed” to the model setup.</p>
 </div>
 </section>
 <section class="slide level2">
@@ -529,7 +529,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJtaW4tbGluZXMi
 </script>
 </div>
 <div class="fragment">
-<p><code>aquifer["storativity"]</code> would raise <code>KeyError</code>. <code>.get()</code> with a default is how you handle data that might be missing — a Week 6 problem you’ll meet a lot.</p>
+<p><code>aquifer["storativity"]</code> would raise <code>KeyError</code>. <code>.get()</code> with a default is how you handle data that might be missing.</p>
 </div>
 </section>
 <section class="slide level2">
@@ -599,11 +599,6 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <section class="slide level2 smaller">
 <h2>Choosing a container</h2>
 <table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>You have</th>
@@ -630,7 +625,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <tr class="even">
 <td>Numbers you’ll do math on</td>
 <td><code>numpy</code> array</td>
-<td><strong>Week 4</strong> — element-wise math</td>
+<td>coming soon!</td>
 </tr>
 </tbody>
 </table>
@@ -656,7 +651,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <div class="kicker">
 <p>Next Tuesday</p>
 </div>
-<p>Control flow and functions. There’s a <strong>quiz</strong> at the start of class on this week’s material — five minutes, five questions.</p>
+<p>Control flow and functions. There’s a <strong>quiz</strong> at the start of class on this week’s material, ~five minutes.</p>
 
 
 <script type="pyodide-data">
