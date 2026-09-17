@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Pandas: filter, summarise, and reshape</title>
+  <title>HWRS 564a – Matplotlib from scratch</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,7 +197,7 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Pandas: filter, summarise, and reshape</h1>
+  <h1 class="title">Matplotlib from scratch</h1>
   <p class="subtitle">HWRS 564a · Week 5 · Thursday, September 24</p>
 
 <div class="quarto-title-authors">
@@ -215,63 +215,86 @@ Dr.&nbsp;Andrew Bennett
 <p>Week 5, session 2 of 2</p>
 </div>
 <ol type="1">
-<li>Boolean filters and missing values</li>
-<li>New columns and explicit copies</li>
-<li><code>groupby</code> and <code>.agg()</code></li>
-<li>Rolling windows on a daily record</li>
-<li>Long and wide table shapes</li>
-<li>A first time-series plot</li>
+<li>Start with data, a Figure, and one Axes</li>
+<li>Choose a line, scatter, bar, or histogram for the question</li>
+<li>Add labels, units, titles, and legends deliberately</li>
+<li>Layer related data and build multiple panels</li>
+<li>Save a figure you can use outside the notebook</li>
 </ol>
-<p>The throughline: keep the table long enough to analyse it, then reshape only when the next operation needs a different form.</p>
+<p>By the end, you will be able to build a complete hydrologic figure from an empty code cell and explain what every line does.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Filtering makes assumptions visible</h1>
+<h1>Three objects</h1>
 
 </section>
 <section class="slide level2">
-<h2>A mask is a labelled boolean sequence</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>deep <span class="op">=</span> wells[<span class="st">"well_depth_ft"</span>] <span class="op">&gt;</span> <span class="dv">500</span></span>
-<span id="cb1-2"><a></a>deep_wells <span class="op">=</span> wells.loc[deep].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>northwest <span class="op">=</span> wells.loc[</span>
-<span id="cb2-2"><a></a>    (wells[<span class="st">"latitude"</span>] <span class="op">&gt;</span> <span class="fl">32.3</span>)</span>
-<span id="cb2-3"><a></a>    <span class="op">&amp;</span> (wells[<span class="st">"longitude"</span>] <span class="op">&lt;</span> <span class="op">-</span><span class="fl">111.0</span>)</span>
-<span id="cb2-4"><a></a>].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>Data, Figure, Axes</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a></a></span>
+<span id="cb1-3"><a></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb1-4"><a></a>ax.plot(date, discharge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li class="fragment"><code>&amp;</code> means and; <code>|</code> means or; <code>~</code> means not</li>
-<li class="fragment">each condition needs parentheses</li>
-<li class="fragment"><code>.copy()</code> makes an intentional, independent subset</li>
+<li class="fragment"><strong>Data</strong> are the values and coordinates you want to show</li>
+<li class="fragment"><strong>Figure</strong> is the complete canvas that will be displayed or saved</li>
+<li class="fragment"><strong>Axes</strong> is one plotting area, including its scales and labels</li>
 </ul>
-</section>
-<section class="slide level2">
-<h2>Missing values leave quietly</h2>
-<div>
-<div id="pyodide-1" class="exercise-cell">
-
-</div>
-<script type="pyodide-1-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwibWluLWxpbmVzIjo4LCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IHBhbmRhcyBhcyBwZFxuaW1wb3J0IG51bXB5IGFzIG5wXG5zID0gcGQuU2VyaWVzKFs2MS4wLCBucC5uYW4sIDgzNS4wXSlcbnByaW50KHMgPiA1MDApXG5wcmludChmXCJrZXB0IHsocyA+IDUwMCkuc3VtKCl9IG9mIHtsZW4ocyl9IHJvd3NcIikifQ==
-</script>
-</div>
 <div class="fragment due-notice">
-<p>Every comparison with <code>NaN</code> is <code>False</code>. Inspect missingness before filtering or you will not know which records vanished.</p>
+<p><code>plt.subplots()</code> creates the objects. <code>ax.plot(...)</code> draws into the Axes. Keep those two steps separate and Matplotlib becomes much more predictable.</p>
+</div>
+<p><code>pyplot</code> is imported as <code>plt</code> by convention; here it is the factory. Add <code>figsize=(8, 4)</code> to <code>subplots</code> to set width and height in <strong>inches</strong>.</p>
+</section>
+<section class="slide level2 smaller">
+<h2>Most visible elements belong to the Axes</h2>
+
+<img data-src="../assets/legacy/matplotlib_anatomy.png" style="width:72.0%" alt="Annotated Matplotlib figure identifying the Figure, Axes, lines, markers, labels, ticks, legend, grid, and spines" class="r-stretch"><div class="columns">
+<div class="column" style="width:48%;">
+<p><strong>Figure owns</strong></p>
+<ul>
+<li>the full canvas</li>
+<li>one or more Axes</li>
+<li>layout and file export</li>
+</ul>
+</div><div class="column" style="width:48%;">
+<p><strong>Axes owns</strong></p>
+<ul>
+<li>data marks</li>
+<li>scales and limits</li>
+<li>labels and title</li>
+<li>legend and annotations</li>
+</ul>
+</div></div>
+</section>
+<section class="slide level2">
+<h2>A complete first figure</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb2-2"><a></a></span>
+<span id="cb2-3"><a></a>ax.plot(date, discharge)</span>
+<span id="cb2-4"><a></a>ax.<span class="bu">set</span>(</span>
+<span id="cb2-5"><a></a>    xlabel<span class="op">=</span><span class="st">"date"</span>,</span>
+<span id="cb2-6"><a></a>    ylabel<span class="op">=</span><span class="st">"discharge (ft³/s)"</span>,</span>
+<span id="cb2-7"><a></a>    title<span class="op">=</span><span class="st">"Sabino Creek daily discharge"</span>,</span>
+<span id="cb2-8"><a></a>)</span>
+<span id="cb2-9"><a></a></span>
+<span id="cb2-10"><a></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p>Read it top to bottom: <strong>1 make, 2 draw, 3 label, 4 show</strong>. That four-step recipe is the spine of the entire walkthrough.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: shallow northwest wells</h2>
-<p>Keep wells north of 32.3°, west of −111.0°, and shallower than 200 ft.</p>
-<script type="exercise-setup-ex_filter-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2ZpbHRlciIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBwYW5kYXMgYXMgcGRcbndlbGxzID0gcGQuRGF0YUZyYW1lKHtcbiAgICBcInNpdGVcIjogW1wiQVwiLCBcIkJcIiwgXCJDXCIsIFwiRFwiLCBcIkVcIl0sXG4gICAgXCJsYXRpdHVkZVwiOiBbMzIuMzUsIDMyLjEwLCAzMi40MSwgMzIuMzgsIDMyLjA1XSxcbiAgICBcImxvbmdpdHVkZVwiOiBbLTExMS4wNSwgLTExMC45MCwgLTExMS4xMiwgLTExMC44NSwgLTExMS4yMF0sXG4gICAgXCJkZXB0aF9mdFwiOiBbMTUwLjAsIDkwLjAsIDE4MC4wLCAxMjAuMCwgNjAuMF0sXG59KSJ9
+<h2>Your turn: build the first line plot</h2>
+<script type="exercise-setup-ex_first_plot-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2ZpcnN0X3Bsb3QiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbmltcG9ydCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHRcblxuZGF5ID0gbnAuYXJhbmdlKDEsIDgpXG5kaXNjaGFyZ2UgPSBucC5hcnJheShbNC4yLCA1LjEsIDguNywgMTQuNiwgMTAuMiwgNi44LCA1LjBdKSJ9
 </script>
 <div>
-<div id="pyodide-3" class="exercise-cell">
+<div id="pyodide-2" class="exercise-cell">
 
 </div>
-<script type="pyodide-3-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2ZpbHRlciIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoic2VsZWN0ZWQgPSB3ZWxscy5sb2NbX19fX19fXS5jb3B5KClcbnByaW50KHNlbGVjdGVkKSJ9
+<script type="pyodide-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2ZpcnN0X3Bsb3QiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImZpZywgYXggPSBwbHQuX19fX19fKGZpZ3NpemU9KDgsIDQpKVxuYXguX19fX19fKGRheSwgZGlzY2hhcmdlKVxuYXguc2V0KFxuICAgIHhsYWJlbD1cImRheVwiLFxuICAgIHlsYWJlbD1cImRpc2NoYXJnZSAoZnTCsy9zKVwiLFxuICAgIHRpdGxlPVwiQSBvbmUtd2VlayBzdG9ybSByZXNwb25zZVwiLFxuKVxucGx0LnNob3coKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_filter">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_first_plot">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -281,12 +304,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Join three parenthesised comparisons with <code>&amp;</code>. Western longitudes are negative.</p>
+<p>The factory is <code>subplots</code>; the Axes method for an ordered sequence is <code>plot</code>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_filter">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_first_plot">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -296,74 +319,94 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>selected <span class="op">=</span> wells.loc[</span>
-<span id="cb3-2"><a></a>    (wells[<span class="st">"latitude"</span>] <span class="op">&gt;</span> <span class="fl">32.3</span>)</span>
-<span id="cb3-3"><a></a>    <span class="op">&amp;</span> (wells[<span class="st">"longitude"</span>] <span class="op">&lt;</span> <span class="op">-</span><span class="fl">111.0</span>)</span>
-<span id="cb3-4"><a></a>    <span class="op">&amp;</span> (wells[<span class="st">"depth_ft"</span>] <span class="op">&lt;</span> <span class="dv">200</span>)</span>
-<span id="cb3-5"><a></a>].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Wells A and C meet all three conditions.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb3-2"><a></a>ax.plot(day, discharge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The horizontal coordinate comes first, the vertical value second. Matplotlib connects observations in the order you supply them.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>New columns should say what changed</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>one_site[<span class="st">"decline_ft"</span>] <span class="op">=</span> (</span>
-<span id="cb4-2"><a></a>    one_site[<span class="st">"depth_to_water_ft"</span>]</span>
-<span id="cb4-3"><a></a>    <span class="op">-</span> one_site[<span class="st">"depth_to_water_ft"</span>].iloc[<span class="dv">0</span>]</span>
-<span id="cb4-4"><a></a>)</span>
-<span id="cb4-5"><a></a></span>
-<span id="cb4-6"><a></a>levels[<span class="st">"water_year"</span>] <span class="op">=</span> (</span>
-<span id="cb4-7"><a></a>    levels[<span class="st">"date"</span>].dt.year</span>
-<span id="cb4-8"><a></a>    <span class="op">+</span> (levels[<span class="st">"date"</span>].dt.month <span class="op">&gt;=</span> <span class="dv">10</span>)</span>
-<span id="cb4-9"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>Depth increases downward, so positive <code>decline_ft</code> means a falling water table. Names and units should make that convention explicit.</p>
 </div>
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Grouping asks the same question repeatedly</h1>
+<h1>The mark follows the question</h1>
 
 </section>
-<section class="slide level2">
-<h2>Split, apply, combine</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>levels.groupby(<span class="st">"site_no"</span>)[<span class="st">"depth_to_water_ft"</span>].mean()</span>
-<span id="cb5-2"><a></a>levels.groupby(<span class="st">"water_year"</span>)[<span class="st">"depth_to_water_ft"</span>].median()</span>
-<span id="cb5-3"><a></a>levels.groupby([<span class="st">"site_no"</span>, <span class="st">"water_year"</span>])[<span class="st">"depth_to_water_ft"</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section class="slide level2 smaller">
+<h2>Four methods cover most first plots</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>ax.plot(date, discharge)           <span class="co"># change along an ordered coordinate</span></span>
+<span id="cb4-2"><a></a>ax.scatter(recharge, head_change)  <span class="co"># relationship between two variables</span></span>
+<span id="cb4-3"><a></a>ax.bar(month, recharge_total)      <span class="co"># compare discrete categories</span></span>
+<span id="cb4-4"><a></a>ax.hist(residual, bins<span class="op">=</span><span class="dv">15</span>)         <span class="co"># distribution of one variable</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Mark</th>
+<th>What it implies</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>How did flow change through time?</td>
+<td>line</td>
+<td>order and continuity matter</td>
+</tr>
+<tr class="even">
+<td>Does recharge relate to head change?</td>
+<td>points</td>
+<td>each pair is an observation</td>
+</tr>
+<tr class="odd">
+<td>Which month received more recharge?</td>
+<td>bars</td>
+<td>categories are distinct</td>
+</tr>
+<tr class="even">
+<td>Are residuals symmetric?</td>
+<td>bins</td>
+<td>values form a distribution</td>
+</tr>
+</tbody>
+</table>
 <div class="fragment">
-<p>The important decision is the key: by site, year, month, aquifer, or a category you computed.</p>
+<p>A line says observations have an order and that change between adjacent points is meaningful. Connecting well locations would invent a path with no physical meaning, so independent wells belong in a scatter plot.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2><code>.agg()</code> names several summaries</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>site_summary <span class="op">=</span> levels.groupby(<span class="st">"site_no"</span>)[<span class="st">"depth_to_water_ft"</span>].agg(</span>
-<span id="cb6-2"><a></a>    n<span class="op">=</span><span class="st">"size"</span>,</span>
-<span id="cb6-3"><a></a>    first<span class="op">=</span><span class="st">"first"</span>,</span>
-<span id="cb6-4"><a></a>    last<span class="op">=</span><span class="st">"last"</span>,</span>
-<span id="cb6-5"><a></a>    shallowest<span class="op">=</span><span class="st">"min"</span>,</span>
-<span id="cb6-6"><a></a>    deepest<span class="op">=</span><span class="st">"max"</span>,</span>
-<span id="cb6-7"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>Named outputs produce a readable table in one pass. Sort by date before asking for <code>first</code> or <code>last</code>.</p>
-</div>
+<h2>Style carries meaning</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>ax.plot(date, observed, color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="fl">1.5</span>,</span>
+<span id="cb5-2"><a></a>        label<span class="op">=</span><span class="st">"observed"</span>)</span>
+<span id="cb5-3"><a></a>ax.plot(date, rolling, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">2.5</span>,</span>
+<span id="cb5-4"><a></a>        label<span class="op">=</span><span class="st">"30-day mean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li class="fragment"><code>color</code> separates the two series</li>
+<li class="fragment"><code>lw</code> controls line width</li>
+<li class="fragment"><code>label</code> supplies text for a later legend</li>
+<li class="fragment">a stronger line makes the summary easier to find</li>
+</ul>
+<p>Use one visual difference for a reason. Extra styling can obscure the information.</p>
 </section>
 <section class="slide level2">
-<h2>Your turn: monthly climatology</h2>
-<p>Average all Januaries together, all Februaries together, and so on. Keep the sample count beside the mean.</p>
-<script type="exercise-setup-ex_group-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2dyb3VwIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IHBhbmRhcyBhcyBwZFxuZGF0ZXMgPSBwZC50b19kYXRldGltZShbXCIyMDIwLTAxLTAzXCIsIFwiMjAyMC0wMS0yMFwiLCBcIjIwMjAtMDItMDVcIixcbiAgICAgICAgICAgICAgICAgICAgICAgIFwiMjAyMS0wMS0wN1wiLCBcIjIwMjEtMDItMTJcIiwgXCIyMDIxLTAyLTI4XCJdKVxuZmxvdyA9IHBkLkRhdGFGcmFtZSh7XCJkaXNjaGFyZ2VfY2ZzXCI6IFs0LCA4LCAxMiwgMTAsIDE4LCAyNF19LCBpbmRleD1kYXRlcykifQ==
+<h2>Your turn: choose the right mark</h2>
+<p>The measurements come from different wells. Show the relationship without implying that the wells form a connected path.</p>
+<script type="exercise-setup-ex_scatter-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NjYXR0ZXIiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbmltcG9ydCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHRcblxud2VsbF9kZXB0aF9mdCA9IG5wLmFycmF5KFsxMjAsIDE4MCwgMjQwLCAzMTAsIDQzMCwgNTIwLCA2MTBdKVxuZGVwdGhfdG9fd2F0ZXJfZnQgPSBucC5hcnJheShbMzgsIDUyLCA0OSwgOTEsIDExMCwgMTM2LCAxMjhdKSJ9
 </script>
 <div>
-<div id="pyodide-5" class="exercise-cell">
+<div id="pyodide-4" class="exercise-cell">
 
 </div>
-<script type="pyodide-5-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2dyb3VwIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJjbGltYXRvbG9neSA9IGZsb3cuZ3JvdXBieShfX19fX18pW1wiZGlzY2hhcmdlX2Nmc1wiXS5hZ2coXG4gICAgbWVhbj1cIm1lYW5cIiwgbj1cInNpemVcIlxuKVxucHJpbnQoY2xpbWF0b2xvZ3kpIn0=
+<script type="pyodide-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NjYXR0ZXIiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImZpZywgYXggPSBwbHQuc3VicGxvdHMoZmlnc2l6ZT0oNywgNCkpXG5heC5fX19fX18od2VsbF9kZXB0aF9mdCwgZGVwdGhfdG9fd2F0ZXJfZnQsXG4gICAgICAgICAgIGNvbG9yPVwiIzBDMjM0QlwiLCBlZGdlY29sb3I9XCJ3aGl0ZVwiLCBzPTYwKVxuYXguc2V0KFxuICAgIHhsYWJlbD1cIndlbGwgZGVwdGggKGZ0KVwiLFxuICAgIHlsYWJlbD1cImRlcHRoIHRvIHdhdGVyIChmdClcIixcbiAgICB0aXRsZT1cIkRlZXBlciB3ZWxscyB0ZW5kIHRvIGhhdmUgZGVlcGVyIHdhdGVyIGxldmVsc1wiLFxuKVxucGx0LnNob3coKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_group">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_scatter">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -373,12 +416,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The month number is available from <code>flow.index.month</code>.</p>
+<p>Each x–y pair is an independent well. Use <code>scatter</code>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_group">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_scatter">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -388,10 +431,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>climatology <span class="op">=</span> flow.groupby(flow.index.month)[<span class="st">"discharge_cfs"</span>].agg(</span>
-<span id="cb7-2"><a></a>    mean<span class="op">=</span><span class="st">"mean"</span>, n<span class="op">=</span><span class="st">"size"</span></span>
-<span id="cb7-3"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>groupby(month)</code> collapses across years. <code>resample("ME")</code> would retain every separate month in chronological order.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>ax.scatter(well_depth_ft, depth_to_water_ft,</span>
+<span id="cb6-2"><a></a>           color<span class="op">=</span><span class="st">"#0C234B"</span>, edgecolor<span class="op">=</span><span class="st">"white"</span>, s<span class="op">=</span><span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The points show association without claiming a continuous route from one well to the next. The title states the visible pattern without claiming causation.</p>
 </div>
 </div>
 </div>
@@ -399,46 +441,57 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Rolling windows preserve the daily axis</h1>
+<h1>Physical meaning in labels</h1>
 
 </section>
 <section class="slide level2">
-<h2>Resample or roll?</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>monthly <span class="op">=</span> q.resample(<span class="st">"ME"</span>).mean()</span>
-<span id="cb8-2"><a></a>rolling_30 <span class="op">=</span> q.rolling(<span class="dv">30</span>, center<span class="op">=</span><span class="va">True</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Resample</strong></p>
-<p>Fewer values at a new temporal resolution.</p>
-</div><div class="column" style="width:50%;">
-<p><strong>Rolling</strong></p>
-<p>One smoothed value at nearly every original date.</p>
-</div></div>
+<h2>Labels answer three questions</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>ax.<span class="bu">set</span>(</span>
+<span id="cb7-2"><a></a>    xlabel<span class="op">=</span><span class="st">"date"</span>,                              <span class="co"># coordinate</span></span>
+<span id="cb7-3"><a></a>    ylabel<span class="op">=</span><span class="st">"depth to water (ft below surface)"</span>, <span class="co"># quantity + unit</span></span>
+<span id="cb7-4"><a></a>    title<span class="op">=</span><span class="st">"The water table deepened after 2000"</span>, <span class="co"># message</span></span>
+<span id="cb7-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="1">
+<li class="fragment">What coordinate am I looking along?</li>
+<li class="fragment">What quantity is encoded, and in what unit?</li>
+<li class="fragment">What should I notice?</li>
+</ol>
+<p><code>value</code>, <code>result</code>, and <code>plot of discharge</code> make the reader reconstruct answers the author already knows.</p>
 </section>
 <section class="slide level2">
-<h2>A centred window has honest missing ends</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>rolling_30 <span class="op">=</span> q.rolling(<span class="dv">30</span>, center<span class="op">=</span><span class="va">True</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>The first and last 15 days are missing because half the window lies outside the record.</p>
-</div>
+<h2>Direction is part of the physics</h2>
+<p>Depth below land surface increases downward. A larger number means a deeper water table.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>ax.plot(date, depth_to_water_ft)</span>
+<span id="cb8-2"><a></a>ax.invert_yaxis()</span>
+<span id="cb8-3"><a></a>ax.set_ylabel(<span class="st">"depth to water (ft below land surface)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment due-notice">
-<p>With <code>center=False</code>, each mean is labelled at the end of its window. That is appropriate for forecasting from the past, but it shifts historical features later by half a window.</p>
+<p>Inverting this axis makes downward movement on the page match downward movement of the water table.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: wettest sustained month</h2>
-<script type="exercise-setup-ex_roll-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JvbGwiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgcGFuZGFzIGFzIHBkXG5pbXBvcnQgbnVtcHkgYXMgbnBcbmlkeCA9IHBkLmRhdGVfcmFuZ2UoXCIyMDIwLTAxLTAxXCIsIHBlcmlvZHM9NDAwLCBmcmVxPVwiRFwiKVxucm5nID0gbnAucmFuZG9tLmRlZmF1bHRfcm5nKDcpXG5xID0gcGQuU2VyaWVzKG5wLmFicyhucC5zaW4obnAuYXJhbmdlKDQwMCkgLyA1OCkpICogNDBcbiAgICAgICAgICAgICAgKyBybmcuZ2FtbWEoMSwgMywgNDAwKSwgaW5kZXg9aWR4KSJ9
+<h2>A legend decodes an encoding</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>ax.plot(date, daily, color<span class="op">=</span><span class="st">"0.75"</span>, lw<span class="op">=</span><span class="fl">0.8</span>, label<span class="op">=</span><span class="st">"daily"</span>)</span>
+<span id="cb9-2"><a></a>ax.plot(date, rolling, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"30-day mean"</span>)</span>
+<span id="cb9-3"><a></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The legend appears only after artists have <code>label=</code> values.</p>
+<div class="fragment">
+<p>One line rarely needs a legend because the y-axis label already names it. Two lines need either direct labels or a legend so the visual encoding can be decoded.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: turn defaults into an explanation</h2>
+<script type="exercise-setup-ex_layer-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2xheWVyIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5wXG5pbXBvcnQgbWF0cGxvdGxpYi5weXBsb3QgYXMgcGx0XG5cbmRheSA9IG5wLmFyYW5nZSgxLCA2MSlcbmRhaWx5ID0gNyArIDAuMDU1ICogZGF5ICsgMi4yICogbnAuc2luKGRheSAvIDQpXG5zbW9vdGggPSBucC5jb252b2x2ZShkYWlseSwgbnAub25lcyg5KSAvIDksIG1vZGU9XCJzYW1lXCIpXG5zbW9vdGhbOjRdID0gbnAubmFuXG5zbW9vdGhbLTQ6XSA9IG5wLm5hbiJ9
 </script>
 <div>
-<div id="pyodide-7" class="exercise-cell">
+<div id="pyodide-6" class="exercise-cell">
 
 </div>
-<script type="pyodide-7-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JvbGwiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InJvbGxpbmdfMzAgPSBxLnJvbGxpbmcoX19fX19fLCBjZW50ZXI9X19fX19fKS5tZWFuKClcbndldHRlc3RfZGF0ZSA9IF9fX19fX1xucHJpbnQod2V0dGVzdF9kYXRlLCByb2xsaW5nXzMwLm1heCgpKSJ9
+<script type="pyodide-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2xheWVyIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJmaWcsIGF4ID0gcGx0LnN1YnBsb3RzKGZpZ3NpemU9KDgsIDQpKVxuYXgucGxvdChkYXksIGRhaWx5LCBjb2xvcj1cIjAuNzVcIiwgbHc9MSwgbGFiZWw9XCJkYWlseVwiKVxuYXgucGxvdChkYXksIHNtb290aCwgY29sb3I9XCIjQUIwNTIwXCIsIGx3PV9fX19fXywgbGFiZWw9XCI5LWRheSBtZWFuXCIpXG5heC5zZXQoeGxhYmVsPV9fX19fXywgeWxhYmVsPV9fX19fXywgdGl0bGU9X19fX19fKVxuYXguX19fX19fKGZyYW1lb249RmFsc2UpXG5wbHQuc2hvdygpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_roll">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_layer">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -448,12 +501,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Use a 30-day centred window. <code>.idxmax()</code> returns the date of the maximum.</p>
+<p>Make the summary line wider than the daily line. Labels need quantity and unit; the final method is <code>legend</code>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_roll">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_layer">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -463,9 +516,14 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>rolling_30 <span class="op">=</span> q.rolling(<span class="dv">30</span>, center<span class="op">=</span><span class="va">True</span>).mean()</span>
-<span id="cb10-2"><a></a>wettest_date <span class="op">=</span> rolling_30.idxmax()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>A high daily maximum describes a flood. A high 30-day mean describes sustained wet conditions. They are not interchangeable statistics.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>ax.plot(day, smooth, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">2.5</span>, label<span class="op">=</span><span class="st">"9-day mean"</span>)</span>
+<span id="cb10-2"><a></a>ax.<span class="bu">set</span>(</span>
+<span id="cb10-3"><a></a>    xlabel<span class="op">=</span><span class="st">"day"</span>,</span>
+<span id="cb10-4"><a></a>    ylabel<span class="op">=</span><span class="st">"discharge (ft³/s)"</span>,</span>
+<span id="cb10-5"><a></a>    title<span class="op">=</span><span class="st">"Smoothing reveals a gradual rise in discharge"</span>,</span>
+<span id="cb10-6"><a></a>)</span>
+<span id="cb10-7"><a></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The grey line retains daily variation; the heavier red line carries the trend. Both remain visible, but they no longer compete equally for attention.</p>
 </div>
 </div>
 </div>
@@ -473,55 +531,36 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Reshape for the next operation</h1>
+<h1>One Figure can hold several Axes</h1>
 
 </section>
 <section class="slide level2">
-<h2>Long and wide store the same observations</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Long</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a></a>site  date        depth</span>
-<span id="cb11-2"><a></a>A     2019-04-02   86.4</span>
-<span id="cb11-3"><a></a>A     2020-03-18   88.1</span>
-<span id="cb11-4"><a></a>B     2019-04-02   41.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Compact; natural for filtering and grouping.</p>
-</div><div class="column" style="width:50%;">
-<p><strong>Wide</strong></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a></a>date         A      B</span>
-<span id="cb12-2"><a></a>2019-04-02  86.4   41.2</span>
-<span id="cb12-3"><a></a>2020-03-18  88.1    NaN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Convenient for comparing aligned series.</p>
-</div></div>
-</section>
-<section class="slide level2">
-<h2>Pivot deliberately</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>wide <span class="op">=</span> levels.pivot_table(</span>
-<span id="cb13-2"><a></a>    index<span class="op">=</span><span class="st">"date"</span>,</span>
-<span id="cb13-3"><a></a>    columns<span class="op">=</span><span class="st">"site_no"</span>,</span>
-<span id="cb13-4"><a></a>    values<span class="op">=</span><span class="st">"depth_to_water_ft"</span>,</span>
-<span id="cb13-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2><code>subplots</code> returns an array when you ask for panels</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="dv">4</span>))</span>
+<span id="cb11-2"><a></a></span>
+<span id="cb11-3"><a></a>axes[<span class="dv">0</span>].plot(date, discharge)</span>
+<span id="cb11-4"><a></a>axes[<span class="dv">1</span>].hist(discharge, bins<span class="op">=</span><span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>Irregular field visits make the wide table sparse. Stay long until a plot, matrix operation, or aligned comparison actually needs wide data.</p>
+<p><code>axes[0]</code> and <code>axes[1]</code> are ordinary Axes. Everything learned for <code>ax</code> still works; the only new step is selecting a panel.</p>
 </div>
-<div class="fragment">
-<p><code>pivot_table</code> averages duplicate site-date pairs. Check duplicates first or use <code>pivot</code>, which raises rather than hiding them.</p>
+<div class="fragment due-notice">
+<p>For vertically aligned time series, use <code>plt.subplots(2, 1, sharex=True)</code>. Use <code>sharex=True</code> only when both panels use the same coordinate.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: reshape and count missing cells</h2>
-<script type="exercise-setup-ex_pivot-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Bpdm90IiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IHBhbmRhcyBhcyBwZFxubG9uZyA9IHBkLkRhdGFGcmFtZSh7XG4gICAgXCJzaXRlX25vXCI6IFtcIkFcIiwgXCJBXCIsIFwiQlwiLCBcIkJcIiwgXCJDXCJdLFxuICAgIFwiZGF0ZVwiOiBwZC50b19kYXRldGltZShbXCIyMDE5LTAxLTAxXCIsIFwiMjAyMC0wMS0wMVwiLCBcIjIwMTktMDEtMDFcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIjIwMjEtMDEtMDFcIiwgXCIyMDIwLTAxLTAxXCJdKSxcbiAgICBcImRlcHRoX2Z0XCI6IFszMS4wLCAzMy41LCA4OC4wLCA5MS4yLCA1NS4wXSxcbn0pIn0=
+<h2>Your turn: build two aligned panels</h2>
+<script type="exercise-setup-ex_panels-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3BhbmVscyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBudW1weSBhcyBucFxuaW1wb3J0IG1hdHBsb3RsaWIucHlwbG90IGFzIHBsdFxuXG5kYXkgPSBucC5hcmFuZ2UoMSwgMzEpXG5yYWluID0gbnAuYXJyYXkoWzAsMCwwLDAsOCwxOCw0LDAsMCwwLDAsMCwwLDEyLDIyLDUsMCwwLDAsMCwwLDAsMCw2LDAsMCwwLDAsMCwwXSlcbmZsb3cgPSAzICsgbnAuY29udm9sdmUocmFpbiwgWzAuMDUsIDAuMTYsIDAuMjgsIDAuMjAsIDAuMTBdLCBtb2RlPVwic2FtZVwiKSJ9
 </script>
 <div>
-<div id="pyodide-9" class="exercise-cell">
+<div id="pyodide-8" class="exercise-cell">
 
 </div>
-<script type="pyodide-9-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Bpdm90IiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ3aWRlID0gbG9uZy5waXZvdChpbmRleD1fX19fX18sIGNvbHVtbnM9X19fX19fLCB2YWx1ZXM9XCJkZXB0aF9mdFwiKVxubl9lbXB0eSA9IF9fX19fX1xucHJpbnQod2lkZSlcbnByaW50KG5fZW1wdHkpIn0=
+<script type="pyodide-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3BhbmVscyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZmlnLCBheGVzID0gcGx0LnN1YnBsb3RzKDIsIDEsIGZpZ3NpemU9KDgsIDYpLCBzaGFyZXg9X19fX19fKVxuXG5heGVzWzBdLmJhcihkYXksIHJhaW4sIGNvbG9yPVwiIzEyQTlFMFwiKVxuYXhlc1swXS5zZXQoeWxhYmVsPVwicmFpbiAobW0pXCIsIHRpdGxlPVwiUmFpbmZhbGwgZHJpdmVzIGEgZGVsYXllZCBmbG93IHJlc3BvbnNlXCIpXG5cbmF4ZXNbMV0ucGxvdChkYXksIGZsb3csIGNvbG9yPVwiIzBDMjM0QlwiLCBsdz0yKVxuYXhlc1sxXS5zZXQoeGxhYmVsPVwiZGF5XCIsIHlsYWJlbD1cImRpc2NoYXJnZSAoZnTCsy9zKVwiKVxuXG5maWcuX19fX19fKClcbnBsdC5zaG93KCkifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_pivot">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_panels">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -531,12 +570,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Dates are rows and sites are columns. Sum the boolean missing-value table twice.</p>
+<p>The panels use the same days, so share the x axis. Ask the Figure to repair spacing with <code>tight_layout()</code>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_pivot">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_panels">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -546,54 +585,90 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>wide <span class="op">=</span> <span class="bu">long</span>.pivot(index<span class="op">=</span><span class="st">"date"</span>, columns<span class="op">=</span><span class="st">"site_no"</span>, values<span class="op">=</span><span class="st">"depth_ft"</span>)</span>
-<span id="cb14-2"><a></a>n_empty <span class="op">=</span> wide.isna().<span class="bu">sum</span>().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Five measurements occupy five of nine possible cells; four are missing.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-2"><a></a><span class="co"># ...draw and label both panels...</span></span>
+<span id="cb12-3"><a></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The bars emphasize rainfall totals in distinct days. The line emphasizes the ordered stream response. One Figure connects the cause and response without forcing unlike units onto one y axis.</p>
 </div>
 </div>
 </div>
 </div>
+</section></section>
+<section>
+<section class="title-slide slide level1 center" data-background-color="#0C234B">
+<h1>Figure layout and export</h1>
+
 </section>
 <section class="slide level2">
-<h2>A first time-series plot is a diagnostic</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
-<span id="cb15-2"><a></a>ax.plot(one_site.index, one_site[<span class="st">"depth_to_water_ft"</span>])</span>
-<span id="cb15-3"><a></a>ax.invert_yaxis()</span>
-<span id="cb15-4"><a></a>ax.set_ylabel(<span class="st">"depth to water (ft below land surface)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>When the quantity counts downward, the axis should too. Week 8 turns this working plot into a figure worth showing people.</p>
-</div>
+<h2>Save from the Figure</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>fig.tight_layout()</span>
+<span id="cb13-2"><a></a>fig.savefig(</span>
+<span id="cb13-3"><a></a>    <span class="st">"sabino_flow.png"</span>,</span>
+<span id="cb13-4"><a></a>    dpi<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb13-5"><a></a>    bbox_inches<span class="op">=</span><span class="st">"tight"</span>,</span>
+<span id="cb13-6"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li class="fragment"><code>dpi=200</code> gives a crisp raster image for documents and slides</li>
+<li class="fragment"><code>bbox_inches="tight"</code> trims unused margin without clipping labels</li>
+<li class="fragment"><code>.png</code> is convenient for screens; <code>.pdf</code> preserves vectors for print</li>
+</ul>
+<p>Save <strong>after</strong> every plotting and labeling call so the file matches what you see.</p>
+</section>
+<section class="slide level2 smaller">
+<h2>The reusable recipe</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb14-2"><a></a></span>
+<span id="cb14-3"><a></a><span class="co"># 1. Prepare the values and coordinates</span></span>
+<span id="cb14-4"><a></a>x <span class="op">=</span> ...</span>
+<span id="cb14-5"><a></a>y <span class="op">=</span> ...</span>
+<span id="cb14-6"><a></a></span>
+<span id="cb14-7"><a></a><span class="co"># 2. Make the canvas and plotting area</span></span>
+<span id="cb14-8"><a></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb14-9"><a></a></span>
+<span id="cb14-10"><a></a><span class="co"># 3. Draw marks that match the question</span></span>
+<span id="cb14-11"><a></a>ax.plot(x, y, color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb14-12"><a></a></span>
+<span id="cb14-13"><a></a><span class="co"># 4. State the physical meaning</span></span>
+<span id="cb14-14"><a></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"..."</span>, ylabel<span class="op">=</span><span class="st">"quantity (unit)"</span>, title<span class="op">=</span><span class="st">"message"</span>)</span>
+<span id="cb14-15"><a></a></span>
+<span id="cb14-16"><a></a><span class="co"># 5. Finish</span></span>
+<span id="cb14-17"><a></a>fig.tight_layout()</span>
+<span id="cb14-18"><a></a>fig.savefig(<span class="st">"figure.png"</span>, dpi<span class="op">=</span><span class="dv">200</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span>
+<span id="cb14-19"><a></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section class="slide level2 smaller">
 <h2>Wrap up</h2>
 <div class="kicker">
-<p>What you can now do</p>
+<p>You can now build a figure from an empty cell</p>
 </div>
-<ul>
-<li>Filter while accounting for missing values</li>
-<li>Create explicit derived variables and grouping keys</li>
-<li>Choose among <code>resample</code>, <code>groupby</code>, and <code>rolling</code></li>
-<li>Move between long and wide without confusing absence with zero</li>
-<li>Plot depth-to-water with the physical direction intact</li>
-</ul>
+<ol type="1">
+<li>Import <code>matplotlib.pyplot as plt</code></li>
+<li>Create <code>fig, ax</code> with <code>plt.subplots()</code></li>
+<li>Choose the mark from the analytical question</li>
+<li>Draw with an Axes method such as <code>plot</code>, <code>scatter</code>, <code>bar</code>, or <code>hist</code></li>
+<li>Label coordinates, quantities, units, and the message</li>
+<li>Add a legend only when it decodes multiple series</li>
+<li>Use an array of Axes for related panels</li>
+<li>Save from the Figure</li>
+</ol>
 <div class="kicker">
 <p>What’s due</p>
 </div>
 <ul>
-<li><strong>HW 2 — Numerical water balance</strong>, Wednesday 9/23 at 11:59pm</li>
-<li><strong>Project 1 analysis component</strong> — brief on D2L</li>
+<li><strong>HW 2: Numerical water balance</strong>, Wednesday 9/23 at 11:59pm</li>
+<li><strong>Project 1 analysis component:</strong> brief on D2L</li>
 </ul>
 <div class="kicker">
 <p>Next week</p>
 </div>
-<p>Where real data comes from, and how to diagnose gaps, duplicates, and outliers before they become results.</p>
+<p>Build and verify your first MODFLOW model, then use this same Figure-and-Axes pattern to inspect the simulated head field.</p>
 
 
 <script type="pyodide-data">
 eyJvcHRpb25zIjp7ImVudiI6eyJQTE9UTFlfUkVOREVSRVIiOiJwbG90bHlfbWltZXR5cGUifSwiaW5kZXhVUkwiOiJodHRwczovL2Nkbi5qc2RlbGl2ci5uZXQvcHlvZGlkZS92MC4yOC4xL2Z1bGwvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsicHlvZGlkZV9odHRwIiwibWljcm9waXAiLCJpcHl0aG9uIiwibnVtcHkiLCJtYXRwbG90bGliIiwicGFuZGFzIl19fQ==
 </script>
 <script type="ojs-module-contents">
-eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTkiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl85ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS05LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gU2V0dXAgY2VsbHMgYXJlIGV4ZWN1dGVkIGluIHRoZSBleGVyY2lzZSdzIHByZXBhcmF0aW9uIGVudmlyb25tZW50LiBLZWVwXG4gIC8vIHRoYXQgY29kZSB2aXNpYmxlIGluIHRoZSBlZGl0b3Igc28gc3R1ZGVudHMgY2FuIHNlZSBldmVyeSBzdXBwbGllZFxuICAvLyB2YXJpYWJsZSBpbW1lZGlhdGVseSBpbnN0ZWFkIG9mIGhhdmluZyB0byBpbmZlciBpdCBmcm9tIHRoZSBwcm9tcHQuXG4gIGNvbnN0IHNldHVwU2NyaXB0ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICBgc2NyaXB0W3R5cGU9XFxcImV4ZXJjaXNlLXNldHVwLSR7YmxvY2suYXR0ci5leGVyY2lzZX0tY29udGVudHNcXFwiXWBcbiAgKTtcbiAgY29uc3Qgc2V0dXBDb2RlID0gc2V0dXBTY3JpcHRcbiAgICA/IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNldHVwU2NyaXB0LnRleHRDb250ZW50KSkuY29kZS50cmltRW5kKClcbiAgICA6IFwiXCI7XG4gIGNvbnN0IHZpc2libGVDb2RlID0gc2V0dXBDb2RlID8gYCR7c2V0dXBDb2RlfVxcblxcbiR7YmxvY2suY29kZX1gIDogYmxvY2suY29kZTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS05LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihcbiAgICBweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLFxuICAgIHZpc2libGVDb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfOSA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfOSwge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfOSA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfOS5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS03IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfNyA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtNy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIFNldHVwIGNlbGxzIGFyZSBleGVjdXRlZCBpbiB0aGUgZXhlcmNpc2UncyBwcmVwYXJhdGlvbiBlbnZpcm9ubWVudC4gS2VlcFxuICAvLyB0aGF0IGNvZGUgdmlzaWJsZSBpbiB0aGUgZWRpdG9yIHNvIHN0dWRlbnRzIGNhbiBzZWUgZXZlcnkgc3VwcGxpZWRcbiAgLy8gdmFyaWFibGUgaW1tZWRpYXRlbHkgaW5zdGVhZCBvZiBoYXZpbmcgdG8gaW5mZXIgaXQgZnJvbSB0aGUgcHJvbXB0LlxuICBjb25zdCBzZXR1cFNjcmlwdCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXG4gICAgYHNjcmlwdFt0eXBlPVxcXCJleGVyY2lzZS1zZXR1cC0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9LWNvbnRlbnRzXFxcIl1gXG4gICk7XG4gIGNvbnN0IHNldHVwQ29kZSA9IHNldHVwU2NyaXB0XG4gICAgPyBKU09OLnBhcnNlKGI2NERlY29kZShzZXR1cFNjcmlwdC50ZXh0Q29udGVudCkpLmNvZGUudHJpbUVuZCgpXG4gICAgOiBcIlwiO1xuICBjb25zdCB2aXNpYmxlQ29kZSA9IHNldHVwQ29kZSA/IGAke3NldHVwQ29kZX1cXG5cXG4ke2Jsb2NrLmNvZGV9YCA6IGJsb2NrLmNvZGU7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcInB5b2RpZGUtNy1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IoXG4gICAgcHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSxcbiAgICB2aXNpYmxlQ29kZSxcbiAgICBvcHRpb25zXG4gICk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF9weW9kaWRlX3ZhbHVlXzcgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzcsIHt9KTtcbl9weW9kaWRlX2ZlZWRiYWNrXzcgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBQeW9kaWRlR3JhZGVyKF9weW9kaWRlX3ZhbHVlXzcuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6InB5b2RpZGUtNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3B5b2RpZGVfZWRpdG9yXzUgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBTZXR1cCBjZWxscyBhcmUgZXhlY3V0ZWQgaW4gdGhlIGV4ZXJjaXNlJ3MgcHJlcGFyYXRpb24gZW52aXJvbm1lbnQuIEtlZXBcbiAgLy8gdGhhdCBjb2RlIHZpc2libGUgaW4gdGhlIGVkaXRvciBzbyBzdHVkZW50cyBjYW4gc2VlIGV2ZXJ5IHN1cHBsaWVkXG4gIC8vIHZhcmlhYmxlIGltbWVkaWF0ZWx5IGluc3RlYWQgb2YgaGF2aW5nIHRvIGluZmVyIGl0IGZyb20gdGhlIHByb21wdC5cbiAgY29uc3Qgc2V0dXBTY3JpcHQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFxuICAgIGBzY3JpcHRbdHlwZT1cXFwiZXhlcmNpc2Utc2V0dXAtJHtibG9jay5hdHRyLmV4ZXJjaXNlfS1jb250ZW50c1xcXCJdYFxuICApO1xuICBjb25zdCBzZXR1cENvZGUgPSBzZXR1cFNjcmlwdFxuICAgID8gSlNPTi5wYXJzZShiNjREZWNvZGUoc2V0dXBTY3JpcHQudGV4dENvbnRlbnQpKS5jb2RlLnRyaW1FbmQoKVxuICAgIDogXCJcIjtcbiAgY29uc3QgdmlzaWJsZUNvZGUgPSBzZXR1cENvZGUgPyBgJHtzZXR1cENvZGV9XFxuXFxuJHtibG9jay5jb2RlfWAgOiBibG9jay5jb2RlO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJweW9kaWRlLTUtY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKFxuICAgIHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsXG4gICAgdmlzaWJsZUNvZGUsXG4gICAgb3B0aW9uc1xuICApO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfcHlvZGlkZV92YWx1ZV81ID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl81LCB7fSk7XG5fcHlvZGlkZV9mZWVkYmFja181ID0ge1xuICBjb25zdCB7IFB5b2RpZGVHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgUHlvZGlkZUdyYWRlcihfcHlvZGlkZV92YWx1ZV81LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLTMiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl8zID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gU2V0dXAgY2VsbHMgYXJlIGV4ZWN1dGVkIGluIHRoZSBleGVyY2lzZSdzIHByZXBhcmF0aW9uIGVudmlyb25tZW50LiBLZWVwXG4gIC8vIHRoYXQgY29kZSB2aXNpYmxlIGluIHRoZSBlZGl0b3Igc28gc3R1ZGVudHMgY2FuIHNlZSBldmVyeSBzdXBwbGllZFxuICAvLyB2YXJpYWJsZSBpbW1lZGlhdGVseSBpbnN0ZWFkIG9mIGhhdmluZyB0byBpbmZlciBpdCBmcm9tIHRoZSBwcm9tcHQuXG4gIGNvbnN0IHNldHVwU2NyaXB0ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICBgc2NyaXB0W3R5cGU9XFxcImV4ZXJjaXNlLXNldHVwLSR7YmxvY2suYXR0ci5leGVyY2lzZX0tY29udGVudHNcXFwiXWBcbiAgKTtcbiAgY29uc3Qgc2V0dXBDb2RlID0gc2V0dXBTY3JpcHRcbiAgICA/IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNldHVwU2NyaXB0LnRleHRDb250ZW50KSkuY29kZS50cmltRW5kKClcbiAgICA6IFwiXCI7XG4gIGNvbnN0IHZpc2libGVDb2RlID0gc2V0dXBDb2RlID8gYCR7c2V0dXBDb2RlfVxcblxcbiR7YmxvY2suY29kZX1gIDogYmxvY2suY29kZTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS0zLWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihcbiAgICBweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLFxuICAgIHZpc2libGVDb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfMyA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfMywge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfMyA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfMy5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6Il9weW9kaWRlX3ZhbHVlXzEgPSB7XG4gIGNvbnN0IHsgaGlnaGxpZ2h0UHl0aG9uLCBiNjREZWNvZGV9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXZhbHVhdGlvbiBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHtcbiAgICBpZDogXCJweW9kaWRlLTEtY29udGVudHNcIixcbiAgICBlY2hvOiB0cnVlLFxuICAgIG91dHB1dDogdHJ1ZVxuICB9LCBibG9jay5hdHRyKTtcblxuICAvLyBFdmFsdWF0ZSB0aGUgcHJvdmlkZWQgUHl0aG9uIGNvZGVcbiAgY29uc3QgcmVzdWx0ID0gcHlvZGlkZU9qcy5wcm9jZXNzKHtjb2RlOiBibG9jay5jb2RlLCBvcHRpb25zfSwge30pO1xuXG4gIC8vIEVhcmx5IHlpZWxkIHdoaWxlIHdlIHdhaXQgZm9yIHRoZSBmaXJzdCBldmFsdWF0aW9uIGFuZCByZW5kZXJcbiAgaWYgKG9wdGlvbnMub3V0cHV0ICYmICEoXCIxXCIgaW4gcHlvZGlkZU9qcy5yZW5kZXJlZE9qcykpIHtcbiAgICBjb25zdCBjb250YWluZXIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuICAgIGNvbnN0IHNwaW5uZXIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuXG4gICAgaWYgKG9wdGlvbnMuZWNobykge1xuICAgICAgLy8gU2hvdyBvdXRwdXQgYXMgaGlnaGxpZ2h0ZWQgc291cmNlXG4gICAgICBjb25zdCBwcmVFbGVtID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcInByZVwiKTtcbiAgICAgIGNvbnRhaW5lci5jbGFzc05hbWUgPSBcInNvdXJjZUNvZGVcIjtcbiAgICAgIHByZUVsZW0uY2xhc3NOYW1lID0gXCJzb3VyY2VDb2RlIHB5dGhvblwiO1xuICAgICAgcHJlRWxlbS5hcHBlbmRDaGlsZChoaWdobGlnaHRQeXRob24oYmxvY2suY29kZSkpO1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItZ3JvdyBzcGlubmVyLWdyb3ctc20gbS0yIHBvc2l0aW9uLWFic29sdXRlIHRvcC0wIGVuZC0wXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKHNwaW5uZXIpO1xuICAgICAgY29udGFpbmVyLmFwcGVuZENoaWxkKHByZUVsZW0pO1xuICAgIH0gZWxzZSB7XG4gICAgICBzcGlubmVyLmNsYXNzTmFtZSA9IFwic3Bpbm5lci1ib3JkZXIgc3Bpbm5lci1ib3JkZXItc21cIjtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICB9XG5cbiAgICB5aWVsZCBjb250YWluZXI7XG4gIH1cblxuICBweW9kaWRlT2pzLnJlbmRlcmVkT2pzW1wiMVwiXSA9IHRydWU7XG4gIHlpZWxkIGF3YWl0IHJlc3VsdDtcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJweW9kaWRlT2pzID0ge1xuICBjb25zdCB7XG4gICAgUHlvZGlkZUV2YWx1YXRvcixcbiAgICBQeW9kaWRlRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUHl0aG9uLFxuICAgIHN0YXJ0UHlvZGlkZVdvcmtlcixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoLFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gUHlvZGlkZSBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBsZXQgcHlvZGlkZVByb21pc2UgPSAoYXN5bmMgKCkgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgUHlvZGlkZWA7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHN0YXJ0UHlvZGlkZVdvcmtlcihkYXRhLm9wdGlvbnMpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiBtaWNyb3BpcGA7XG4gICAgYXdhaXQgcHlvZGlkZS5sb2FkUGFja2FnZShcIm1pY3JvcGlwXCIpO1xuICAgIGNvbnN0IG1pY3JvcGlwID0gYXdhaXQgcHlvZGlkZS5weWltcG9ydChcIm1pY3JvcGlwXCIpO1xuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIG1pY3JvcGlwLmluc3RhbGwocGtnKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcbiAgICBhd2FpdCBtaWNyb3BpcC5kZXN0cm95KCk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCBweW9kaWRlLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKGUubmFtZSAhPT0gXCJFcnJub0Vycm9yXCIpIHRocm93IGU7XG4gICAgICAgICAgaWYgKGUuZXJybm8gIT09IDIwKSB7XG4gICAgICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yICR7ZS5lcnJub30gXCIke2Vycm9yVGV4dH1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHRyeSB7XG4gICAgICAgIHJldHVybiBhd2FpdCBweW9kaWRlLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICBjb25zdCBlcnJvclRleHQgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuVVRGOFRvU3RyaW5nKGVycm9yVGV4dFB0cik7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICB9XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFB5b2RpZGUgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUHl0aG9uKHB5b2RpZGUpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHB5b2RpZGU7XG4gIH0pKCkuY2F0Y2goKGVycikgPT4ge1xuICAgIHN0YXR1c1RleHQuc3R5bGUuY29sb3IgPSBcInZhcigtLWV4ZXJjaXNlLWVkaXRvci1obC1lciwgI0FEMDAwMClcIjtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gZXJyLm1lc3NhZ2U7XG4gICAgLy9pbmRpY2F0b3JDb250YWluZXIucXVlcnlTZWxlY3RvcihcIi5zcGlubmVyLWdyb3dcIikuY2xhc3NMaXN0LmFkZChcImQtbm9uZVwiKTtcbiAgICB0aHJvdyBlcnI7XG4gIH0pO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCBweW9kaWRlID0gYXdhaXQgcHlvZGlkZVByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFB5b2RpZGVFdmFsdWF0b3IocHlvZGlkZSwgY29udGV4dCk7XG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHlvZGlkZVByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gICAgcHJvY2VzcyxcbiAgfTtcbn1cbiJ9XX0=
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTgiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl84ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS04LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gU2V0dXAgY2VsbHMgYXJlIGV4ZWN1dGVkIGluIHRoZSBleGVyY2lzZSdzIHByZXBhcmF0aW9uIGVudmlyb25tZW50LiBLZWVwXG4gIC8vIHRoYXQgY29kZSB2aXNpYmxlIGluIHRoZSBlZGl0b3Igc28gc3R1ZGVudHMgY2FuIHNlZSBldmVyeSBzdXBwbGllZFxuICAvLyB2YXJpYWJsZSBpbW1lZGlhdGVseSBpbnN0ZWFkIG9mIGhhdmluZyB0byBpbmZlciBpdCBmcm9tIHRoZSBwcm9tcHQuXG4gIGNvbnN0IHNldHVwU2NyaXB0ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICBgc2NyaXB0W3R5cGU9XFxcImV4ZXJjaXNlLXNldHVwLSR7YmxvY2suYXR0ci5leGVyY2lzZX0tY29udGVudHNcXFwiXWBcbiAgKTtcbiAgY29uc3Qgc2V0dXBDb2RlID0gc2V0dXBTY3JpcHRcbiAgICA/IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNldHVwU2NyaXB0LnRleHRDb250ZW50KSkuY29kZS50cmltRW5kKClcbiAgICA6IFwiXCI7XG4gIGNvbnN0IHZpc2libGVDb2RlID0gc2V0dXBDb2RlID8gYCR7c2V0dXBDb2RlfVxcblxcbiR7YmxvY2suY29kZX1gIDogYmxvY2suY29kZTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS04LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihcbiAgICBweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLFxuICAgIHZpc2libGVDb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfOCA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfOCwge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfOCA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfOC5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfNiA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtNi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIFNldHVwIGNlbGxzIGFyZSBleGVjdXRlZCBpbiB0aGUgZXhlcmNpc2UncyBwcmVwYXJhdGlvbiBlbnZpcm9ubWVudC4gS2VlcFxuICAvLyB0aGF0IGNvZGUgdmlzaWJsZSBpbiB0aGUgZWRpdG9yIHNvIHN0dWRlbnRzIGNhbiBzZWUgZXZlcnkgc3VwcGxpZWRcbiAgLy8gdmFyaWFibGUgaW1tZWRpYXRlbHkgaW5zdGVhZCBvZiBoYXZpbmcgdG8gaW5mZXIgaXQgZnJvbSB0aGUgcHJvbXB0LlxuICBjb25zdCBzZXR1cFNjcmlwdCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXG4gICAgYHNjcmlwdFt0eXBlPVxcXCJleGVyY2lzZS1zZXR1cC0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9LWNvbnRlbnRzXFxcIl1gXG4gICk7XG4gIGNvbnN0IHNldHVwQ29kZSA9IHNldHVwU2NyaXB0XG4gICAgPyBKU09OLnBhcnNlKGI2NERlY29kZShzZXR1cFNjcmlwdC50ZXh0Q29udGVudCkpLmNvZGUudHJpbUVuZCgpXG4gICAgOiBcIlwiO1xuICBjb25zdCB2aXNpYmxlQ29kZSA9IHNldHVwQ29kZSA/IGAke3NldHVwQ29kZX1cXG5cXG4ke2Jsb2NrLmNvZGV9YCA6IGJsb2NrLmNvZGU7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcInB5b2RpZGUtNi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IoXG4gICAgcHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSxcbiAgICB2aXNpYmxlQ29kZSxcbiAgICBvcHRpb25zXG4gICk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF9weW9kaWRlX3ZhbHVlXzYgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzYsIHt9KTtcbl9weW9kaWRlX2ZlZWRiYWNrXzYgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBQeW9kaWRlR3JhZGVyKF9weW9kaWRlX3ZhbHVlXzYuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6InB5b2RpZGUtNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3B5b2RpZGVfZWRpdG9yXzQgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBTZXR1cCBjZWxscyBhcmUgZXhlY3V0ZWQgaW4gdGhlIGV4ZXJjaXNlJ3MgcHJlcGFyYXRpb24gZW52aXJvbm1lbnQuIEtlZXBcbiAgLy8gdGhhdCBjb2RlIHZpc2libGUgaW4gdGhlIGVkaXRvciBzbyBzdHVkZW50cyBjYW4gc2VlIGV2ZXJ5IHN1cHBsaWVkXG4gIC8vIHZhcmlhYmxlIGltbWVkaWF0ZWx5IGluc3RlYWQgb2YgaGF2aW5nIHRvIGluZmVyIGl0IGZyb20gdGhlIHByb21wdC5cbiAgY29uc3Qgc2V0dXBTY3JpcHQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFxuICAgIGBzY3JpcHRbdHlwZT1cXFwiZXhlcmNpc2Utc2V0dXAtJHtibG9jay5hdHRyLmV4ZXJjaXNlfS1jb250ZW50c1xcXCJdYFxuICApO1xuICBjb25zdCBzZXR1cENvZGUgPSBzZXR1cFNjcmlwdFxuICAgID8gSlNPTi5wYXJzZShiNjREZWNvZGUoc2V0dXBTY3JpcHQudGV4dENvbnRlbnQpKS5jb2RlLnRyaW1FbmQoKVxuICAgIDogXCJcIjtcbiAgY29uc3QgdmlzaWJsZUNvZGUgPSBzZXR1cENvZGUgPyBgJHtzZXR1cENvZGV9XFxuXFxuJHtibG9jay5jb2RlfWAgOiBibG9jay5jb2RlO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJweW9kaWRlLTQtY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKFxuICAgIHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsXG4gICAgdmlzaWJsZUNvZGUsXG4gICAgb3B0aW9uc1xuICApO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfcHlvZGlkZV92YWx1ZV80ID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl80LCB7fSk7XG5fcHlvZGlkZV9mZWVkYmFja180ID0ge1xuICBjb25zdCB7IFB5b2RpZGVHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgUHlvZGlkZUdyYWRlcihfcHlvZGlkZV92YWx1ZV80LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS0yLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gU2V0dXAgY2VsbHMgYXJlIGV4ZWN1dGVkIGluIHRoZSBleGVyY2lzZSdzIHByZXBhcmF0aW9uIGVudmlyb25tZW50LiBLZWVwXG4gIC8vIHRoYXQgY29kZSB2aXNpYmxlIGluIHRoZSBlZGl0b3Igc28gc3R1ZGVudHMgY2FuIHNlZSBldmVyeSBzdXBwbGllZFxuICAvLyB2YXJpYWJsZSBpbW1lZGlhdGVseSBpbnN0ZWFkIG9mIGhhdmluZyB0byBpbmZlciBpdCBmcm9tIHRoZSBwcm9tcHQuXG4gIGNvbnN0IHNldHVwU2NyaXB0ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICBgc2NyaXB0W3R5cGU9XFxcImV4ZXJjaXNlLXNldHVwLSR7YmxvY2suYXR0ci5leGVyY2lzZX0tY29udGVudHNcXFwiXWBcbiAgKTtcbiAgY29uc3Qgc2V0dXBDb2RlID0gc2V0dXBTY3JpcHRcbiAgICA/IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNldHVwU2NyaXB0LnRleHRDb250ZW50KSkuY29kZS50cmltRW5kKClcbiAgICA6IFwiXCI7XG4gIGNvbnN0IHZpc2libGVDb2RlID0gc2V0dXBDb2RlID8gYCR7c2V0dXBDb2RlfVxcblxcbiR7YmxvY2suY29kZX1gIDogYmxvY2suY29kZTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS0yLWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihcbiAgICBweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLFxuICAgIHZpc2libGVDb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfMiA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfMiwge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfMiA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfMi5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS1wcmVsdWRlIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoicHlvZGlkZU9qcyA9IHtcbiAgY29uc3Qge1xuICAgIFB5b2RpZGVFdmFsdWF0b3IsXG4gICAgUHlvZGlkZUVudmlyb25tZW50TWFuYWdlcixcbiAgICBzZXR1cFB5dGhvbixcbiAgICBzdGFydFB5b2RpZGVXb3JrZXIsXG4gICAgYjY0RGVjb2RlLFxuICAgIGNvbGxhcHNlUGF0aCxcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIFB5b2RpZGUgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgbGV0IHB5b2RpZGVQcm9taXNlID0gKGFzeW5jICgpID0+IHtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIFB5b2RpZGVgO1xuICAgIGNvbnN0IHB5b2RpZGUgPSBhd2FpdCBzdGFydFB5b2RpZGVXb3JrZXIoZGF0YS5vcHRpb25zKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcGFja2FnZTogbWljcm9waXBgO1xuICAgIGF3YWl0IHB5b2RpZGUubG9hZFBhY2thZ2UoXCJtaWNyb3BpcFwiKTtcbiAgICBjb25zdCBtaWNyb3BpcCA9IGF3YWl0IHB5b2RpZGUucHlpbXBvcnQoXCJtaWNyb3BpcFwiKTtcbiAgICBhd2FpdCBkYXRhLnBhY2thZ2VzLnBrZ3MubWFwKChwa2cpID0+ICgpID0+IHtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcGFja2FnZTogJHtwa2d9YDtcbiAgICAgIHJldHVybiBtaWNyb3BpcC5pbnN0YWxsKHBrZyk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG4gICAgYXdhaXQgbWljcm9waXAuZGVzdHJveSgpO1xuXG4gICAgLy8gRG93bmxvYWQgYW5kIGluc3RhbGwgcmVzb3VyY2VzXG4gICAgYXdhaXQgZmlsZXMubWFwKChmaWxlKSA9PiBhc3luYyAoKSA9PiB7XG4gICAgICBjb25zdCBuYW1lID0gZmlsZS5zdWJzdHJpbmcoZmlsZS5sYXN0SW5kZXhPZignLycpICsgMSk7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHJlc291cmNlOiAke25hbWV9YDtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZmV0Y2goZmlsZSk7XG4gICAgICBpZiAoIXJlc3BvbnNlLm9rKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgQ2FuJ3QgZG93bmxvYWQgXFxgJHtmaWxlfVxcYC4gRXJyb3IgJHtyZXNwb25zZS5zdGF0dXN9OiBcIiR7cmVzcG9uc2Uuc3RhdHVzVGV4dH1cIi5gKTtcbiAgICAgIH1cbiAgICAgIGNvbnN0IGRhdGEgPSBhd2FpdCByZXNwb25zZS5hcnJheUJ1ZmZlcigpO1xuXG4gICAgICAvLyBTdG9yZSBVUkxzIGluIHRoZSBjd2Qgd2l0aG91dCBhbnkgc3ViZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgaWYgKGZpbGUuaW5jbHVkZXMoXCI6Ly9cIikpIHtcbiAgICAgICAgZmlsZSA9IG5hbWU7XG4gICAgICB9XG5cbiAgICAgIC8vIENvbGxhcHNlIGhpZ2hlciBkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBmaWxlID0gY29sbGFwc2VQYXRoKGZpbGUpO1xuXG4gICAgICAvLyBDcmVhdGUgZGlyZWN0b3J5IHRyZWUsIGlnbm9yaW5nIFwiZGlyZWN0b3J5IGV4aXN0c1wiIFZGUyBlcnJvcnNcbiAgICAgIGNvbnN0IHBhcnRzID0gZmlsZS5zcGxpdCgnLycpLnNsaWNlKDAsIC0xKTtcbiAgICAgIGxldCBwYXRoID0gJyc7XG4gICAgICB3aGlsZSAocGFydHMubGVuZ3RoID4gMCkge1xuICAgICAgICBwYXRoICs9IHBhcnRzLnNoaWZ0KCkgKyAnLyc7XG4gICAgICAgIHRyeSB7XG4gICAgICAgICAgYXdhaXQgcHlvZGlkZS5GUy5ta2RpcihwYXRoKTtcbiAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICAgIGlmIChlLmVycm5vICE9PSAyMCkge1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0UHRyID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLl9zdHJlcnJvcihlLmVycm5vKTtcbiAgICAgICAgICAgIGNvbnN0IGVycm9yVGV4dCA9IGF3YWl0IHB5b2RpZGUuX21vZHVsZS5VVEY4VG9TdHJpbmcoZXJyb3JUZXh0UHRyKTtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICB9XG5cbiAgICAgIC8vIFdyaXRlIHRoaXMgZmlsZSB0byB0aGUgVkZTXG4gICAgICB0cnkge1xuICAgICAgICByZXR1cm4gYXdhaXQgcHlvZGlkZS5GUy53cml0ZUZpbGUoZmlsZSwgbmV3IFVpbnQ4QXJyYXkoZGF0YSkpO1xuICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICBpZiAoZS5uYW1lICE9PSBcIkVycm5vRXJyb3JcIikgdGhyb3cgZTtcbiAgICAgICAgY29uc3QgZXJyb3JUZXh0UHRyID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLl9zdHJlcnJvcihlLmVycm5vKTtcbiAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYEZpbGVzeXN0ZW0gRXJyb3IgJHtlLmVycm5vfSBcIiR7ZXJyb3JUZXh0fVwiLmApO1xuICAgICAgfVxuICAgIH0pLnJlZHVjZSgoY3VyLCBuZXh0KSA9PiBjdXIudGhlbihuZXh0KSwgUHJvbWlzZS5yZXNvbHZlKCkpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBQeW9kaWRlIGVudmlyb25tZW50IHNldHVwYDtcbiAgICBhd2FpdCBzZXR1cFB5dGhvbihweW9kaWRlKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiBweW9kaWRlO1xuICB9KSgpLmNhdGNoKChlcnIpID0+IHtcbiAgICBzdGF0dXNUZXh0LnN0eWxlLmNvbG9yID0gXCJ2YXIoLS1leGVyY2lzZS1lZGl0b3ItaGwtZXIsICNBRDAwMDApXCI7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGVyci5tZXNzYWdlO1xuICAgIC8vaW5kaWNhdG9yQ29udGFpbmVyLnF1ZXJ5U2VsZWN0b3IoXCIuc3Bpbm5lci1ncm93XCIpLmNsYXNzTGlzdC5hZGQoXCJkLW5vbmVcIik7XG4gICAgdGhyb3cgZXJyO1xuICB9KTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHB5b2RpZGVQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBQeW9kaWRlRXZhbHVhdG9yKHB5b2RpZGUsIGNvbnRleHQpO1xuICAgIGF3YWl0IGV2YWx1YXRvci5wcm9jZXNzKGlucHV0cyk7XG4gICAgcmV0dXJuIGV2YWx1YXRvci5jb250YWluZXI7XG4gIH1cblxuICByZXR1cm4ge1xuICAgIHB5b2RpZGVQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICAgIHByb2Nlc3MsXG4gIH07XG59XG4ifV19
 </script>
 <div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
 <div id="exercise-loading-status" class="d-flex gap-2">

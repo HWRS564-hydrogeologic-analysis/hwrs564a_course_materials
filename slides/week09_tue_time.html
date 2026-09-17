@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – What MODFLOW is, and why</title>
+  <title>HWRS 564a – Time, storage, and stress periods</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -191,17 +191,14 @@
   </style>
   <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
   <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-  <script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
-  <script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
-  <link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">What MODFLOW is, and why</h1>
-  <p class="subtitle">HWRS 564a · Week 10 · Tuesday, October 27</p>
+  <h1 class="title">Time, storage, and stress periods</h1>
+  <p class="subtitle">HWRS 564a · Week 9 · Tuesday, October 20</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -215,155 +212,61 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 10, session 1 of 2</p>
+<p>Week 9, session 1 of 2</p>
 </div>
 <ol type="1">
-<li>Quiz — five minutes, on regression</li>
-<li>What changes when you build a model</li>
-<li>The conceptual model that comes before the grid</li>
-<li>The equation MODFLOW solves, and how it discretizes it</li>
-<li>Six questions, six packages</li>
-<li>FloPy, and why you never edit an input file by hand</li>
+<li>Quiz — five minutes, on discretization and boundaries</li>
+<li>The question steady state cannot answer</li>
+<li>Stress periods and time steps</li>
+<li><code>sy</code> and <code>ss</code>, and why they differ by a factor of a thousand</li>
+<li>Why every transient run starts with a steady-state period</li>
 </ol>
-<p>For nine weeks you inferred what the aquifer was doing from observations. From today you build something that has to obey conservation of mass.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Why a model</h1>
+<h1>What steady state misses</h1>
 
 </section>
 <section class="slide level2">
-<h2>What observations cannot tell you</h2>
-<ul>
-<li class="fragment">A hydrograph tells you the water table fell</li>
-<li class="fragment">It does not tell you <strong>where the water went</strong></li>
-<li class="fragment">A trend line describes how an observation changed through time</li>
-<li class="fragment">It does not tell you <strong>how much</strong> moves along it</li>
-</ul>
-<div class="fragment due-notice">
-<p>A model is the only tool that closes a <strong>water budget</strong>. That is what it is for — not prediction, not pretty maps. Accounting.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>The question a model answers</h2>
-<blockquote>
-<p><em>Of the 20,000 m³/d this wellfield produces, how much is recharge, how much is water taken out of storage, and how much is flow captured from the river?</em></p>
-</blockquote>
-<div class="fragment">
-<p>Nobody can measure that. Every term is a flux across a surface you cannot instrument.</p>
-</div>
-<div class="fragment">
-<p>A model computes all of them, and they are forced to sum to zero. <strong>That constraint is the whole value.</strong></p>
-</div>
-</section>
-<section class="slide level2">
-<h2>What you give up</h2>
-<ul>
-<li class="fragment">A model needs parameters you have not measured</li>
-<li class="fragment">It needs boundary conditions you invented</li>
-<li class="fragment">It will produce an answer regardless of whether any of that is right</li>
-<li class="fragment">And it will look equally confident either way</li>
-</ul>
-<div class="fragment">
-<p>Weeks 10 to 14 are as much about <strong>not being fooled by your own model</strong> as about building one.</p>
-</div>
-<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 7. -->
-</section>
-<section class="slide level2 smaller">
-<h2>Modeling is a cycle, not a one-way build</h2>
+<h2>Two different questions</h2>
 <div class="columns">
-<div class="column" style="width:60%;">
-<p><img data-src="../assets/legacy/modeling_cycle.jpg" style="width:85.0%" alt="A modeling cycle linking conceptualization, data collection, simulation and calibration, and hypothesis testing"></p>
-</div><div class="column" style="width:40%;">
-<p>The first simulation is not the finish line.</p>
-<ul>
-<li class="fragment">Compare its behavior with observations</li>
-<li class="fragment">Diagnose which assumption failed</li>
-<li class="fragment">Revise the conceptual model</li>
-<li class="fragment">Test again</li>
-</ul>
-<div class="fragment due-notice">
-<p>A model earns trust through this loop, not through visual polish.</p>
-</div>
+<div class="column" style="width:50%;">
+<p><strong>Steady state</strong></p>
+<p><em>What does the aquifer settle down to if this pumping never changes?</em></p>
+<p>Useful. Not what anyone asks.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Transient</strong></p>
+<p><em>When does the water table reach the pump intake?</em></p>
+<p><em>How much of what we pump this year is coming out of storage?</em></p>
 </div></div>
-<!-- Adapted from old_slides/hwrs564a_oct23.pdf. -->
-</section>
-<section class="slide level2">
-<h2>A model starts as a question, not a grid</h2>
-<p>Before opening FloPy, write down four things:</p>
-<ol type="1">
-<li class="fragment"><strong>Purpose</strong> — what decision or flux must the model inform?</li>
-<li class="fragment"><strong>System and boundaries</strong> — what is inside, and what crosses the edges?</li>
-<li class="fragment"><strong>Inputs and outputs</strong> — what is imposed, and what will be compared to data?</li>
-<li class="fragment"><strong>Use test</strong> — what result would change your conclusion?</li>
-</ol>
 <div class="fragment due-notice">
-<p>The grid, packages, and solver are an implementation of that conceptual model. If the question is vague, a finer grid only gives a more detailed vague answer.</p>
+<p>The second set needs time in the model — and storage properties, which a steady-state run does not even require you to supply.</p>
 </div>
-</section></section>
-<section>
-<section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>The equation</h1>
-
 </section>
 <section class="slide level2">
-<h2>Groundwater flow, in one line</h2>
-<p><span class="math display">\[\frac{\partial}{\partial x}\left(K_x \frac{\partial h}{\partial x}\right) +
-\frac{\partial}{\partial y}\left(K_y \frac{\partial h}{\partial y}\right) +
-\frac{\partial}{\partial z}\left(K_z \frac{\partial h}{\partial z}\right)
-+ W = S_s \frac{\partial h}{\partial t}\]</span></p>
-<div class="fragment">
-<p>Darcy’s law plus conservation of mass. You have met both.</p>
-</div>
-<div class="fragment">
+<h2>Stress periods and time steps</h2>
 <ul>
-<li>left: flow in and out through the faces of a control volume</li>
-<li><span class="math inline">\(W\)</span>: sources and sinks — wells, recharge, ET</li>
-<li>right: change in storage</li>
+<li class="fragment">A <strong>stress period</strong> is an interval over which every stress is constant. Change the pumping rate, you need a new period.</li>
+<li class="fragment">A <strong>time step</strong> is a solver interval <em>within</em> a period. More steps means a better transient response and a slower run.</li>
 </ul>
-</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>perlen <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fl">30.0</span>] <span class="op">+</span> [<span class="fl">365.0</span>] <span class="op">*</span> <span class="dv">10</span>     <span class="co"># length of each period</span></span>
+<span id="cb1-2"><a></a>nstp   <span class="op">=</span> [<span class="dv">1</span>,   <span class="dv">30</span>]   <span class="op">+</span> [<span class="dv">4</span>] <span class="op">*</span> <span class="dv">10</span>         <span class="co"># steps within each</span></span>
+<span id="cb1-3"><a></a>steady <span class="op">=</span> [<span class="va">True</span>] <span class="op">+</span> [<span class="va">False</span>] <span class="op">*</span> <span class="dv">11</span>          <span class="co"># one flag per period</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section class="slide level2">
-<h2>Discretizing it</h2>
-<p>MODFLOW replaces the derivatives with differences between <strong>cells</strong>.</p>
-<ul>
-<li class="fragment">Split the aquifer into a grid of boxes</li>
-<li class="fragment">Write the balance for each box: inflow − outflow = change in storage</li>
-<li class="fragment">One equation per cell, one unknown head per cell</li>
-<li class="fragment">Solve the resulting linear system</li>
-</ul>
-<div class="fragment">
-<p>A 40 × 60 grid is 2,400 equations. A regional model is millions. <strong>That is why this is a computer’s job</strong> and why Week 4’s iteration material was not a detour.</p>
-</div>
-<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 11. -->
-</section>
-<section class="slide level2 smaller">
-<h2>The grid can match the question</h2>
-<div class="columns">
-<div class="column" style="width:67%;">
-<p><img data-src="../assets/legacy/grid_families.jpg" style="width:72.0%" alt="Examples of rectangular, triangular, hexagonal, nested, radial, and irregular polygon numerical grids"></p>
-</div><div class="column" style="width:33%;">
-<p>All of these do the same conceptual job: divide a continuous domain into cells where the equations can be balanced.</p>
-<div class="fragment">
-<p>We begin with a rectangular structured grid because it makes indexing, neighbors, and cell dimensions visible.</p>
-</div>
-</div></div>
-</section>
-<section class="slide level2">
-<h2>Your turn: how many unknowns?</h2>
-<p>A regional model has 3 layers, 500 rows, 800 columns, and runs 240 monthly stress periods.</p>
-<script type="exercise-setup-ex_size-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NpemUiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJubGF5LCBucm93LCBuY29sID0gMywgNTAwLCA4MDBcbm5wZXIgPSAyNDAifQ==
+<h2>Your turn: read the discretization</h2>
+<script type="exercise-setup-ex_time-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3RpbWUiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJwZXJsZW4gPSBbMS4wLCAzMC4wXSArIFszNjUuMF0gKiAxMFxubnN0cCA9IFsxLCAzMF0gKyBbNF0gKiAxMFxuc3RlYWR5ID0gW1RydWVdICsgW0ZhbHNlXSAqIDExIn0=
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NpemUiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImNlbGxzID0gX19fX19fXG5lcXVhdGlvbnNfcGVyX3NvbHZlID0gY2VsbHNcbnRvdGFsX3NvbHZlcyA9IF9fX19fX1xucHJpbnQoZlwie2NlbGxzOix9IGNlbGxzXCIpXG5wcmludChmXCJ7Y2VsbHMgKiBucGVyOix9IGhlYWQgdmFsdWVzIGluIHRoZSBvdXRwdXRcIikifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3RpbWUiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6Im5fcGVyaW9kcyA9IF9fX19fX1xubl9zdGVwcyA9IF9fX19fX1xuc2ltdWxhdGVkX2RheXMgPSBfX19fX19cbnByaW50KGZcIntuX3BlcmlvZHN9IHN0cmVzcyBwZXJpb2RzLCB7bl9zdGVwc30gdGltZSBzdGVwc1wiKVxucHJpbnQoZlwie3NpbXVsYXRlZF9kYXlzOiwuMGZ9IHRyYW5zaWVudCBkYXlzID0ge3NpbXVsYXRlZF9kYXlzIC8gMzY1Oi4xZn0geWVhcnNcIikifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_size">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_time">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -373,12 +276,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>One unknown head per cell per time. The number of cells is the product of the three grid dimensions.</p>
+<p>The transient days are the <code>perlen</code> values whose <code>steady</code> flag is <code>False</code>. <code>zip</code> pairs them up.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_size">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_time">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -388,97 +291,84 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>cells <span class="op">=</span> nlay <span class="op">*</span> nrow <span class="op">*</span> ncol</span>
-<span id="cb1-2"><a></a>total_solves <span class="op">=</span> nper</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>1.2 million cells, and 288 million head values written to disk over the run. At 8 bytes each that is 2.3 GB of output from a single model.</p>
-<p><strong>This is why Week 8’s habit of thinking about file size was not pedantry</strong>, and why you will spend real time deciding which time steps are worth saving.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>n_periods <span class="op">=</span> <span class="bu">len</span>(perlen)</span>
+<span id="cb2-2"><a></a>n_steps <span class="op">=</span> <span class="bu">sum</span>(nstp)</span>
+<span id="cb2-3"><a></a>simulated_days <span class="op">=</span> <span class="bu">sum</span>(p <span class="cf">for</span> p, s <span class="kw">in</span> <span class="bu">zip</span>(perlen, steady) <span class="cf">if</span> <span class="kw">not</span> s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>12 periods, 71 steps, 3,680 days — just over ten years.</p>
+<p><strong>Note the odd 30-day period with daily steps.</strong> The interesting part of a transient response happens at the start, and a quarterly time step walks straight over it. Fine early steps cost almost nothing.</p>
 </div>
 </div>
 </div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Resolve what you came to see</h2>
+<div class="fragment">
+<p>Choosing time steps is the same problem as choosing cell size, and it has the same answer: <strong>finer than the feature you are trying to observe.</strong></p>
+</div>
+<div class="fragment">
+<p>A well switching on produces most of its head change in days. Sample it quarterly and your hydrograph starts at the answer.</p>
 </div>
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Six questions</h1>
-<!-- Package tree rebuilt from old_slides/hwrs564a_oct23.pdf, p. 9, using the
-     MODFLOW-2005 packages introduced in this course. -->
-</section>
-<section class="slide level2 smaller">
-<h2>The name file connects a family of packages</h2>
-<div class="cell" data-reveal="true" data-fig-width="10" data-fig-height="4.4" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-  NAM[".nam&lt;br/&gt;name file"]
-  NAM --&gt; GS["Geometry and state&lt;br/&gt;DIS · BAS"]
-  NAM --&gt; PH["Aquifer physics&lt;br/&gt;LPF"]
-  NAM --&gt; ST["Stresses and boundaries&lt;br/&gt;WEL · RCH · EVT · RIV"]
-  NAM --&gt; SO["Solver&lt;br/&gt;PCG"]
-  NAM --&gt; OU["Output control&lt;br/&gt;OC"]
+<h1>Storage</h1>
 
-  classDef hub fill:#0C234B,color:#fff,stroke:#0C234B;
-  classDef pkg fill:#E2E9EB,color:#1a1a1a,stroke:#1E5288;
-  class NAM hub;
-  class GS,PH,ST,SO,OU pkg;
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<div class="fragment">
-<p>There is no single “model file.” The <code>.nam</code> file tells MODFLOW which packages belong to this simulation; each package answers one modeling question.</p>
-</div>
-<p><small>Structure adapted to MODFLOW-2005 from the modular framework documented by the USGS.</small></p>
 </section>
 <section class="slide level2">
-<h2>What an input file looks like</h2>
-<pre><code># DIS package for MODFLOW-2005, generated by Flopy.
-         1        10        20         1         4         2
-         0
-       100.0
-       100.0
-       100.0
-     1.0         1         1.000000      TR</code></pre>
+<h2>Two properties, three orders of magnitude apart</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Symbol</th>
+<th>Applies when</th>
+<th>Typical</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Specific yield</strong></td>
+<td><code>sy</code></td>
+<td>unconfined — pores drain</td>
+<td>0.05 – 0.30</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>Specific storage</strong></td>
+<td><code>ss</code></td>
+<td>confined — water expands, matrix compresses</td>
+<td>1e-6 – 1e-4</td>
+<td>1/m</td>
+</tr>
+</tbody>
+</table>
 <div class="fragment">
-<p>Column-formatted Fortran. No names, no comments, position is everything.</p>
-</div>
-<div class="fragment due-notice">
-<p><strong>You will never write one of these by hand.</strong> But you will read one when a model misbehaves, and knowing that FloPy generated it — rather than it being magic — is what makes that possible.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>FloPy writes them for you</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">import</span> flopy</span>
-<span id="cb3-2"><a></a></span>
-<span id="cb3-3"><a></a>mf <span class="op">=</span> flopy.modflow.Modflow(<span class="st">"basin"</span>, model_ws<span class="op">=</span>ws, exe_name<span class="op">=</span>mf2005)</span>
-<span id="cb3-4"><a></a></span>
-<span id="cb3-5"><a></a>flopy.modflow.ModflowDis(mf, nlay<span class="op">=</span><span class="dv">1</span>, nrow<span class="op">=</span><span class="dv">10</span>, ncol<span class="op">=</span><span class="dv">20</span>,</span>
-<span id="cb3-6"><a></a>                         delr<span class="op">=</span><span class="fl">100.0</span>, delc<span class="op">=</span><span class="fl">100.0</span>,</span>
-<span id="cb3-7"><a></a>                         top<span class="op">=</span><span class="fl">100.0</span>, botm<span class="op">=</span><span class="fl">0.0</span>,</span>
-<span id="cb3-8"><a></a>                         nper<span class="op">=</span><span class="dv">1</span>, steady<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-9"><a></a>mf.write_input()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>Named arguments, defaults, and a <code>ValueError</code> when you get it wrong — instead of a Fortran read error on line 4 of a file you didn’t write.</p>
+<p>A confined aquifer releases almost no water per metre of decline. That is why confined drawdown propagates so far, so fast.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: elevations, not thicknesses</h2>
-<p><code>top</code> and <code>botm</code> are <strong>elevations above datum</strong>. An aquifer whose top is at 600 m and which is 200 m thick has what <code>botm</code>?</p>
-<script type="exercise-setup-ex_botm-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2JvdG0iLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ0b3AgPSA2MDAuMFxudGhpY2tuZXNzID0gMjAwLjAifQ==
+<h2>Your turn: how much water is in there?</h2>
+<script type="exercise-setup-ex_storage-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3N0b3JhZ2UiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJzeSwgc3MgPSAwLjE1LCAxZS01XG5jZWxsX2FyZWEgPSAyNTAuMCAqIDI1MC4wXG50aGlja25lc3MgPSAyMDAuMCJ9
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2JvdG0iLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImJvdG0gPSBfX19fX19cbnByaW50KGZcInRvcCB7dG9wfSBtLCBib3RtIHtib3RtfSBtLCB0aGlja25lc3Mge3RvcCAtIGJvdG19IG1cIikifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3N0b3JhZ2UiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InVuY29uZmluZWQgPSBfX19fX19cbmNvbmZpbmVkID0gX19fX19fXG5wcmludChmXCJyZWxlYXNlZCBieSAxIG0gb2YgZGVjbGluZSBpbiBvbmUgY2VsbDpcIilcbnByaW50KGZcIiAgdW5jb25maW5lZCB7dW5jb25maW5lZDo5LC4xZn0gbTNcIilcbnByaW50KGZcIiAgY29uZmluZWQgICB7Y29uZmluZWQ6OSwuMWZ9IG0zXCIpXG5wcmludChmXCIgIHJhdGlvICAgICAge3VuY29uZmluZWQgLyBjb25maW5lZDo5LC4wZn14XCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_botm">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_storage">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -488,12 +378,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>If <code>botm</code> were 200 the layer would be 400 m thick. Elevations decrease downward.</p>
+<p>Specific yield is dimensionless — multiply by area alone. Specific <em>storage</em> is per metre of aquifer, so it needs the thickness too.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_botm">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_storage">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -503,29 +393,59 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>botm <span class="op">=</span> top <span class="op">-</span> thickness</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>400.0</code>. Passing the thickness directly gives a layer 400 m thick, or — if you put the thickness in <code>top</code> — a layer with <strong>negative</strong> thickness and an error message that mentions neither argument.</p>
-<p>This is the single most common mistake in a first FloPy model.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>unconfined <span class="op">=</span> sy <span class="op">*</span> cell_area</span>
+<span id="cb3-2"><a></a>confined <span class="op">=</span> ss <span class="op">*</span> cell_area <span class="op">*</span> thickness</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>9,375 m³ against 125 m³ — a factor of <strong>75</strong>.</p>
+<p>The ratio is <code>sy / (ss × b)</code>, so it depends on thickness: a thin confined aquifer is even more extreme. What it means is that <strong>the same well drains an unconfined aquifer over years and a confined one over days</strong>, before either has to start capturing flow from elsewhere.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: is the binary there?</h2>
-<p>MODFLOW is a compiled program, not a Python package. Check for it first.</p>
-<script type="exercise-setup-ex_check-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NoZWNrIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY2xhc3MgRmFrZVBhdGg6XG4gICAgZGVmIF9faW5pdF9fKHNlbGYsIGV4aXN0cyk6IHNlbGYuX2V4aXN0cyA9IGV4aXN0c1xuICAgIGRlZiBleGlzdHMoc2VsZik6IHJldHVybiBzZWxmLl9leGlzdHNcbiAgICBkZWYgX19zdHJfXyhzZWxmKTogcmV0dXJuIFwiL3dvcmtzcGFjZXMvY291cnNlL21vZGZsb3cvbWYyMDA1XCJcblxubWZfZXhlID0gRmFrZVBhdGgoZXhpc3RzPUZhbHNlKSJ9
+<h2>An upper bound worth computing</h2>
+<p>Across all 2,400 cells, 1 m of decline in our confined aquifer releases <strong>300,000 m³</strong>.</p>
+<div class="fragment">
+<p>At 20,000 m³/d, that is <strong>15 days</strong> of pumping.</p>
+</div>
+<div class="fragment">
+<p>And that is an upper bound, because nothing like the whole aquifer drops a metre — drawdown is concentrated near the well.</p>
+</div>
+<div class="fragment due-notice">
+<p>So a confined aquifer reaches something close to steady state quickly. <strong>The Week 7 steady-state model was answering a question about the near future</strong>, which is worth knowing before you dismiss it.</p>
+</div>
+</section></section>
+<section>
+<section class="title-slide slide level1 center" data-background-color="#0C234B">
+<h1>The steady-state warm-up</h1>
+
+</section>
+<section class="slide level2">
+<h2>Why period 0 has no pumping</h2>
+<p>A transient model needs an initial head field. Any field you invent is <strong>out of equilibrium with the boundaries</strong>.</p>
+<ul>
+<li class="fragment">So the model spends its first years relaxing toward balance</li>
+<li class="fragment">And you cannot tell that artificial drift from the response you came to measure</li>
+</ul>
+<div class="fragment">
+<p>Run one steady-state period first, with no pumping. Its heads are <em>already</em> in equilibrium. Everything after that is the response to the stress you added.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: build the well schedule</h2>
+<p>The well is off in period 0 and pumps 20,000 m³/d from period 1 onward.</p>
+<script type="exercise-setup-ex_schedule-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NjaGVkdWxlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiTlBFUiA9IDEyXG5QVU1QX1JBVEUgPSAyMDAwMC4wXG5XRUxMX0xBWSwgV0VMTF9ST1csIFdFTExfQ09MID0gMCwgMjAsIDMwIn0=
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NoZWNrIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpZiBfX19fX186XG4gICAgcHJpbnQoXCJNT0RGTE9XIGZvdW5kIOKAlCBjYXJyeSBvblwiKVxuZWxzZTpcbiAgICBwcmludChmXCJNT0RGTE9XIGJpbmFyeSBub3QgZm91bmQgYXQge21mX2V4ZX0uXCIpXG4gICAgcHJpbnQoXCJSdW4gLi9wb3N0YnVpbGQuc2ggZnJvbSBhIHRlcm1pbmFsLlwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NjaGVkdWxlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ3ZWxfc3BkID0ge1xuICAgIHA6IFtbV0VMTF9MQVksIFdFTExfUk9XLCBXRUxMX0NPTCwgX19fX19fXV1cbiAgICBmb3IgcCBpbiByYW5nZShOUEVSKVxufVxucHJpbnQoZlwicGVyaW9kIDAgcmF0ZToge3dlbF9zcGRbMF1bMF1bM106LC4wZn0gbTMvZFwiKVxucHJpbnQoZlwicGVyaW9kIDEgcmF0ZToge3dlbF9zcGRbMV1bMF1bM106LC4wZn0gbTMvZFwiKVxucHJpbnQoZlwicGVyaW9kcyBkZWZpbmVkOiB7bGVuKHdlbF9zcGQpfVwiKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_check">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_schedule">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -535,12 +455,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p><code>Path.exists()</code> is a method, so it needs calling. In the lab this becomes an <code>assert</code> with that message attached.</p>
+<p>A conditional expression: zero if it’s period 0, otherwise the negative pumping rate. Remember negative means extraction.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_check">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_schedule">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -550,13 +470,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="cf">if</span> mf_exe.exists():</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In the lab you write it as an assertion:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="cf">assert</span> MF_EXE.exists(), (</span>
-<span id="cb6-2"><a></a>    <span class="ss">f"MODFLOW binary not found at </span><span class="sc">{</span>MF_EXE<span class="sc">}</span><span class="ss">. Your codespace may not have "</span></span>
-<span id="cb6-3"><a></a>    <span class="st">"finished building — run ./postbuild.sh from a terminal."</span></span>
-<span id="cb6-4"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>That single line converts a <code>FileNotFoundError</code> from somewhere inside FloPy into an instruction. <strong>Every MODFLOW notebook you write starts with it.</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="fl">0.0</span> <span class="cf">if</span> p <span class="op">==</span> <span class="dv">0</span> <span class="cf">else</span> <span class="op">-</span>PUMP_RATE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that the dictionary has an entry for <strong>every</strong> period. If you skip one, FloPy silently reuses the previous period’s data — which is convenient when you mean it and a very quiet bug when you don’t.</p>
+<p>Build these with a comprehension over <code>range(NPER)</code> and you cannot get it wrong.</p>
 </div>
 </div>
 </div>
@@ -568,23 +484,22 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>A model exists to close a water budget you cannot measure</li>
-<li>Define the purpose, system, boundaries, and use test before building the grid</li>
-<li>MODFLOW discretizes the flow equation into one equation per cell</li>
-<li>Six questions, six packages, and a <code>.nam</code> file listing them</li>
-<li><code>top</code> and <code>botm</code> are elevations</li>
-<li>Check the binary before anything else</li>
+<li>Steady state answers “what settles down to”; transient answers “when”</li>
+<li>Stress periods hold stresses constant; time steps subdivide them</li>
+<li><code>sy</code> and <code>ss</code> differ by a factor of <code>sy / (ss·b)</code> — about 75 here</li>
+<li>15 days of storage in a confined aquifer, as an upper bound</li>
+<li>Start every transient run with a no-pumping steady-state period</li>
 </ul>
 <div class="kicker">
 <p>Before Thursday</p>
 </div>
 <ul>
-<li>Parts 1–2 of <code>labs/week10/week10_lab_meeting_modflow.ipynb</code></li>
+<li>Parts 1–3 of <code>labs/week09/week09_lab_transient_stresses.ipynb</code></li>
 </ul>
 <div class="kicker">
 <p>Thursday</p>
 </div>
-<p>Running one, and the three ways of finding out whether the answer means anything.</p>
+<p>Reading a hydrograph out of the model, depletion versus capture, and evapotranspiration.</p>
 
 
 <script type="pyodide-data">

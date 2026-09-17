@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Boundaries, unconfined flow, and dry cells</title>
+  <title>HWRS 564a – Layers, rivers, and inheriting a model</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Boundaries, unconfined flow, and dry cells</h1>
-  <p class="subtitle">HWRS 564a · Week 12 · Thursday, November 12</p>
+  <h1 class="title">Layers, rivers, and inheriting a model</h1>
+  <p class="subtitle">HWRS 564a · Week 10 · Tuesday, October 27</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,62 +212,84 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 12, session 2 of 2</p>
+<p>Week 10, session 1 of 2</p>
 </div>
 <ol type="1">
-<li><code>laytyp</code>: confined and convertible</li>
-<li>Why the nonlinear problem stops converging</li>
-<li>The solver settings worth adjusting</li>
-<li>Dry cells, and why they are a failure rather than a result</li>
+<li>Multiple layers, and why <code>vka</code> is a separate argument</li>
+<li>Rivers, and why they are not constant heads</li>
+<li>Loading a model somebody else built</li>
+<li>Changing one thing, and comparing</li>
 </ol>
+<p>The last two are how groundwater modelling actually starts in practice.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Confined or not</h1>
+<h1>Layers</h1>
 
 </section>
 <section class="slide level2">
-<h2>The difference is one argument</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong><code>laytyp=0</code> — confined</strong></p>
-<p><span class="math display">\[T = Kb\]</span></p>
-<p><span class="math inline">\(b\)</span> is fixed. The equations are <strong>linear</strong>. One pass of the solver.</p>
-</div><div class="column" style="width:50%;">
-<p><strong><code>laytyp=1</code> — convertible</strong></p>
-<p><span class="math display">\[T = K(h - z_{bot})\]</span></p>
-<p><span class="math inline">\(T\)</span> depends on the head you are solving for. <strong>Nonlinear</strong>. Iterate.</p>
-</div></div>
-<div class="fragment due-notice">
-<p>This is a <strong>statement about the aquifer</strong>, not a numerical convenience. Convertible is right when the water table <em>is</em> the top of the saturated zone.</p>
+<h2>Aquifers are not one thing</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Elevation</th>
+<th>Material</th>
+<th><code>hk</code> (m/d)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>600 – 520 m</td>
+<td>upper basin fill</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>520 – 480 m</td>
+<td><strong>clay</strong></td>
+<td>0.05</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>480 – 400 m</td>
+<td>lower basin fill</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>flopy.modflow.ModflowDis(mf, nlay<span class="op">=</span><span class="dv">3</span>, ..., top<span class="op">=</span><span class="fl">600.0</span>, botm<span class="op">=</span>[<span class="fl">520.0</span>, <span class="fl">480.0</span>, <span class="fl">400.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p><code>botm</code> takes a <strong>list</strong> — one bottom per layer. <code>top</code> stays a single surface: the top of layer 1.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Which is why pumping is worse unconfined</h2>
+<h2><code>hk</code> and <code>vka</code> are different arguments</h2>
 <ul>
-<li class="fragment">Pumping lowers head</li>
-<li class="fragment">Lower head means less saturated thickness</li>
-<li class="fragment">Less thickness means lower transmissivity</li>
-<li class="fragment">Lower transmissivity means <strong>more</strong> drawdown for the same rate</li>
+<li class="fragment"><code>hk</code> is horizontal conductivity</li>
+<li class="fragment"><code>vka</code> is vertical</li>
+<li class="fragment">In layered sediments they differ by 10 to 100 — deposition makes horizontal flow easier</li>
 </ul>
 <div class="fragment">
-<p>A feedback loop, and the reason unconfined cones are deeper and narrower than confined ones for the same well.</p>
+<p>That ratio is the <strong>anisotropy</strong>, and it is what makes a confining unit confine.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: transmissivity as head falls</h2>
-<script type="exercise-setup-ex_transmissivity-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3RyYW5zbWlzc2l2aXR5IiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaGsgPSAxMi4wXG56X2JvdCA9IDQwMC4wXG5oZWFkcyA9IFs2NjAuMCwgNjQwLjAsIDYyMC4wLCA2MDAuMF0ifQ==
+<h2>Your turn: vertical resistance</h2>
+<p>Resistance to vertical flow through a layer is its thickness divided by its vertical conductivity.</p>
+<script type="exercise-setup-ex_resist-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Jlc2lzdCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InRoaWNrbmVzcyA9IHtcInVwcGVyIHNhbmRcIjogODAuMCwgXCJjbGF5XCI6IDQwLjAsIFwibG93ZXIgc2FuZFwiOiA4MC4wfVxudmthID0ge1widXBwZXIgc2FuZFwiOiAxLjUsIFwiY2xheVwiOiAwLjAwNSwgXCJsb3dlciBzYW5kXCI6IDIuNX0ifQ==
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3RyYW5zbWlzc2l2aXR5IiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJmb3IgaCBpbiBoZWFkczpcbiAgICBUID0gX19fX19fXG4gICAgcHJpbnQoZlwiaGVhZCB7aDo2LjBmfSBtICAtPiAgc2F0dXJhdGVkIHRoaWNrbmVzcyB7aCAtIHpfYm90OjUuMGZ9IG0gIC0+ICBUID0ge1Q6Ny4wZn0gbTIvZFwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Jlc2lzdCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoicmVzaXN0YW5jZSA9IHtuYW1lOiBfX19fX18gZm9yIG5hbWUgaW4gdGhpY2tuZXNzfVxuZm9yIG5hbWUsIHIgaW4gcmVzaXN0YW5jZS5pdGVtcygpOlxuICAgIHByaW50KGZcIntuYW1lOjEyc30ge3I6OSwuMGZ9IGRheXNcIilcbnByaW50KGZcIlxcbmNsYXkgaXMge3Jlc2lzdGFuY2VbJ2NsYXknXSAvIHJlc2lzdGFuY2VbJ3VwcGVyIHNhbmQnXTosLjBmfXggXCJcbiAgICAgIGZcInRoZSByZXNpc3RhbmNlIG9mIHRoZSBzYW5kIGFib3ZlIGl0XCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_transmissivity">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_resist">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -277,12 +299,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Transmissivity is conductivity times saturated thickness, and the saturated thickness is head minus the layer bottom.</p>
+<p>Thickness over vertical conductivity, for each name. Both dictionaries share their keys.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_transmissivity">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_resist">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -292,96 +314,55 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>T <span class="op">=</span> hk <span class="op">*</span> (h <span class="op">-</span> z_bot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>3,120 down to 2,400 m²/d — a 23% loss of transmissivity for 60 m of decline.</p>
-<p><strong>And that is the whole difficulty.</strong> MODFLOW cannot compute <span class="math inline">\(T\)</span> until it knows <span class="math inline">\(h\)</span>, and it cannot compute <span class="math inline">\(h\)</span> without <span class="math inline">\(T\)</span>. So it guesses, solves, recomputes, and solves again — which is Week 4’s iteration material, on 2,400 coupled equations.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>resistance <span class="op">=</span> {name: thickness[name] <span class="op">/</span> vka[name] <span class="cf">for</span> name <span class="kw">in</span> thickness}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>8,000 days for the clay against 53 for the upper sand — <strong>150 times</strong> the resistance, from a layer half the thickness.</p>
+<p><strong>That is what a confining unit is</strong>: not an impermeable barrier, but a layer whose resistance dominates the vertical path. Water still crosses it. It just takes a long time, and the head difference across it can be large.</p>
 </div>
 </div>
 </div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Which the model confirms</h2>
+
+<img data-src="week10_tue_layers_rivers_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
+<p>The well pumps from <strong>layer 2</strong>, under the clay. Head difference across the clay at the wellfield: <strong>{python} f”{vdiff:.1f}“</strong> m.</p>
+</div>
+<div class="fragment">
+<p>A single-layer model would have averaged all three units into one transmissivity and had nothing to say about which aquifer the water came from — which is exactly what a well-permit application asks.</p>
 </div>
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>When it won’t converge</h1>
+<h1>Rivers</h1>
 
 </section>
 <section class="slide level2">
-<h2>Same basin, one argument different</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>flopy.modflow.ModflowLpf(mf, hk<span class="op">=</span><span class="fl">12.0</span>, laytyp<span class="op">=</span><span class="dv">1</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>FAILED TO MEET SOLVER CONVERGENCE CRITERIA            1  TIME(S)</code></pre>
-<div class="fragment">
-<p>Exactly the model that converged last week, now failing. <strong>This is the normal condition of groundwater modelling</strong>, not a sign you did something wrong.</p>
+<h2>Not a constant head</h2>
+<p><code>RIV</code> takes <code>[layer, row, col, stage, cond, rbot]</code>.</p>
+<ul>
+<li class="fragment">head <strong>above</strong> <code>stage</code> → the aquifer drains to the river</li>
+<li class="fragment">head between <code>stage</code> and <code>rbot</code> → the river leaks in, proportionally</li>
+<li class="fragment">head <strong>below <code>rbot</code></strong> → leakage stops increasing. The river is <strong>disconnected</strong></li>
+</ul>
+<div class="fragment due-notice">
+<p>That last case is the point. A constant head at the river would supply unlimited water forever — which is why using one makes <strong>any</strong> pumping scenario look sustainable.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>The two causes</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>A bad starting guess</strong></p>
-<p><code>strt</code> was a flat 660 m against boundaries of 620 and 680.</p>
-<p>So the first transmissivity estimate is wrong everywhere.</p>
-</div><div class="column" style="width:50%;">
-<p><strong>A solver that gives up</strong></p>
-<p><code>mxiter=20</code> by default — twenty chances to settle a transmissivity that keeps moving.</p>
-</div></div>
-<div class="fragment">
-<p>In the lab you try the first on its own. <strong>It is not enough.</strong> Debugging a solver is a search over several settings, not a sequence of fixes that each help.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>The four arguments worth adjusting</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Default</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>mxiter</code></td>
-<td>20</td>
-<td><strong>outer</strong> iterations — recomputes transmissivity</td>
-</tr>
-<tr class="even">
-<td><code>iter1</code></td>
-<td>30</td>
-<td>inner iterations per outer one</td>
-</tr>
-<tr class="odd">
-<td><code>hclose</code></td>
-<td>1e-3</td>
-<td>head-change tolerance for “converged”</td>
-</tr>
-<tr class="even">
-<td><code>relax</code></td>
-<td>1.0</td>
-<td>damps oscillation between iterations</td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
-<p>For a nonlinear problem, <strong><code>mxiter</code> is usually the one</strong>.</p>
-</div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>flopy.modflow.ModflowPcg(mf, mxiter<span class="op">=</span><span class="dv">200</span>, iter1<span class="op">=</span><span class="dv">50</span>,</span>
-<span id="cb4-2"><a></a>                         hclose<span class="op">=</span><span class="fl">1e-3</span>, rclose<span class="op">=</span><span class="fl">1e2</span>, relax<span class="op">=</span><span class="fl">0.98</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section class="slide level2">
-<h2>Your turn: which knob?</h2>
-<p>A convertible-layer model fails with the message above. You have one change to try first.</p>
-<script type="exercise-setup-ex_knob-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2tub2IiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJjaG9pY2VzID0ge1xuICAgIFwiYVwiOiBcInJhaXNlIG14aXRlciBmcm9tIDIwIHRvIDIwMFwiLFxuICAgIFwiYlwiOiBcImxvd2VyIGhjbG9zZSBmcm9tIDFlLTMgdG8gMWUtOVwiLFxuICAgIFwiY1wiOiBcInJlZHVjZSB0aGUgcHVtcGluZyByYXRlIHVudGlsIGl0IGNvbnZlcmdlc1wiLFxuICAgIFwiZFwiOiBcInN3aXRjaCBsYXl0eXAgYmFjayB0byAwXCIsXG59In0=
+<h2>Your turn: connected or not?</h2>
+<script type="exercise-setup-ex_riv-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JpdiIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InN0YWdlLCByYm90LCBjb25kID0gNjY1LjAsIDY2MC4wLCA1MDAuMFxuYXF1aWZlcl9oZWFkcyA9IFs2NjguMCwgNjYzLjAsIDY1OC4wLCA2NDAuMF0ifQ==
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2tub2IiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImZpcnN0X3RyeSA9IF9fX19fX1xucHJpbnQoY2hvaWNlc1tmaXJzdF90cnldKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JpdiIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZm9yIGggaW4gYXF1aWZlcl9oZWFkczpcbiAgICBpZiBoID4gc3RhZ2U6XG4gICAgICAgIGZsb3cgPSBjb25kICogKHN0YWdlIC0gaCkgICAgICAgICAgIyBuZWdhdGl2ZTogYXF1aWZlciAtPiByaXZlclxuICAgIGVsaWYgaCA+IHJib3Q6XG4gICAgICAgIGZsb3cgPSBjb25kICogKHN0YWdlIC0gaCkgICAgICAgICAgIyBwb3NpdGl2ZTogcml2ZXIgLT4gYXF1aWZlclxuICAgIGVsc2U6XG4gICAgICAgIGZsb3cgPSBfX19fX18gICAgICAgICAgICAgICAgICAgICAgICMgZGlzY29ubmVjdGVkOiBjYXBwZWRcbiAgICBwcmludChmXCJoZWFkIHtoOjYuMWZ9IG0gIC0+ICByaXZlciBmbG93IHtmbG93Ois5LjFmfSBtMy9kXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_knob">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_riv">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -391,12 +372,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The problem is that transmissivity keeps changing between outer iterations. Which setting controls how many outer iterations it gets?</p>
+<p>Once the water table drops below the streambed bottom, the driving head stops growing — it is fixed at <code>stage - rbot</code>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_knob">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_riv">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -406,63 +387,82 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>first_try <span class="op">=</span> <span class="st">"a"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>mxiter</code> controls the outer loop, which is exactly what a nonlinear problem needs more of.</p>
-<p><strong><code>b</code> makes it worse</strong> — a tighter tolerance is harder to reach, not easier. <strong><code>c</code> changes the question</strong> you were asked, which is sometimes necessary but is not a fix. <strong><code>d</code> changes the physics</strong> to something you have reason to believe is wrong.</p>
-<p>Only <code>a</code> leaves the problem alone and gives the solver a fair chance at it.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>flow <span class="op">=</span> cond <span class="op">*</span> (stage <span class="op">-</span> rbot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>2,500 m³/d, and it stays there whether head is 658 m or 640 m.</p>
+<p><strong>That cap is the whole difference from a constant head.</strong> Pump harder and a constant-head river gives you more, without limit. A real river runs out — and then the extra water has to come from storage or from somewhere else, which is what the budget will show you.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Converged is not correct</h2>
-<div class="fragment">
-<p>All you have established is that the solver found a <strong>self-consistent</strong> answer.</p>
-</div>
-<div class="fragment">
-<p>Whether it is the <em>right</em> answer depends on the boundary conditions, the conductivity field, and the recharge — none of which the solver knows anything about.</p>
-</div>
-<div class="fragment due-notice">
-<p>Check the budget discrepancy too. And then check whether the answer is physically sensible, which no number can do for you.</p>
 </div>
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Dry cells</h1>
+<h1>Inheriting a model</h1>
 
 </section>
 <section class="slide level2">
-<h2>What happens when a cell empties</h2>
-<p>If head in a convertible cell falls below the layer bottom, there is no saturated thickness left. MODFLOW marks the cell <strong>dry</strong>, sets its head to <code>-1e30</code>, and removes it from the solution.</p>
-
-<img data-src="week12_thu_unconfined_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"></section>
-<section class="slide level2">
-<h2>The sentinel value problem, again</h2>
-<p>One <code>-1e30</code> destroys the entire colour scale.</p>
+<h2>How this usually starts</h2>
+<p>You will almost never build from nothing. You will be handed a directory of input files by a consultant, an agency, or a graduate student who left.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>inherited <span class="op">=</span> flopy.modflow.Modflow.load(</span>
+<span id="cb4-2"><a></a>    <span class="st">"layered.nam"</span>, model_ws<span class="op">=</span>ws, exe_name<span class="op">=</span>mf2005,</span>
+<span id="cb4-3"><a></a>    verbose<span class="op">=</span><span class="va">False</span>, check<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-4"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>Exactly what <code>-999</code> did to the water-level series in <strong>Week 6</strong>. Same lesson, different decade of software.</p>
-</div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>dry_mask <span class="op">=</span> head[<span class="dv">0</span>] <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1e29</span></span>
-<span id="cb6-2"><a></a>head_masked <span class="op">=</span> np.where(dry_mask, np.nan, head[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>And note: <code>1e30</code> <strong>positive</strong> means <em>inactive</em> (<code>ibound = 0</code>). <code>-1e30</code> means <em>dry</em>. Different problems, similar-looking numbers.</p>
+<p>The <code>.nam</code> file is the index — one line per package. <strong>That is what you point <code>load()</code> at.</strong></p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: mask them</h2>
-<script type="exercise-setup-ex_dry-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RyeSIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBudW1weSBhcyBucFxuaGVhZCA9IG5wLmFycmF5KFtbNjY1LjIsIDY2NC4xLCAtMWUzMCwgLTFlMzAsIDY2MS4wXSxcbiAgICAgICAgICAgICAgICAgWzY2NC44LCA2NjMuMiwgLTFlMzAsIDY2MC40LCA2NTkuOV1dKSJ9
+<h2>Two habits that will save you</h2>
+<div class="fragment">
+<p><strong>Inspect before you modify.</strong> How many river cells, what rate is the well, what is the clay conductivity. You cannot sensibly change what you have not read.</p>
+</div>
+<div class="fragment">
+<p><strong><code>change_model_ws()</code> before <code>write_input()</code>:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>alt.change_model_ws(<span class="bu">str</span>(NEW_DIR))</span>
+<span id="cb5-2"><a></a>alt.write_input()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Without it you overwrite the original with your modified version, and there is no undo.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Change one thing</h2>
+<p>The clay’s vertical conductivity was a guess — nobody measured it. So test it: <strong>20× leakier</strong>.</p>
+<div id="f6bb2c20" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-stdout">
+<pre><code>                                      original  20x leakier
+head difference across the clay          7.97m        4.12m
+net river contribution (m3/d)           25,238       34,525
+change in river contribution                         +36.8%</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Both models converged. Both closed their budgets. <strong>They disagree about how much of the well’s water comes out of the river.</strong></p>
+</div>
+</section>
+<section class="slide level2">
+<h2>And the river is where it matters</h2>
+<ul>
+<li class="fragment">The riparian vegetation is at the river</li>
+<li class="fragment">The downstream water right is at the river</li>
+<li class="fragment">The clay conductivity is known to maybe a factor of ten</li>
+</ul>
+<div class="fragment due-notice">
+<p>The honest report is not to pick one. It is: <em>at a clay conductivity of 0.005 m/d the well captures X from the river; at 0.1 m/d it captures Y; we do not know the clay conductivity to better than that range.</em></p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: which is the defensible claim?</h2>
+<script type="exercise-setup-ex_claim-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NsYWltIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY2xhaW1zID0ge1xuICAgIFwiYVwiOiBcInRoZSB3ZWxsIGNhcHR1cmVzIDQsMjAwIG0zL2QgZnJvbSB0aGUgcml2ZXJcIixcbiAgICBcImJcIjogXCJ0aGUgd2VsbCBjYXB0dXJlcyBiZXR3ZWVuIDQsMjAwIGFuZCA1LDYwMCBtMy9kLCBkZXBlbmRpbmcgb24gY2xheSBjb25kdWN0aXZpdHlcIixcbiAgICBcImNcIjogXCJ0aGUgbW9kZWwgc2hvd3MgdGhlIHdlbGwgaGFzIG5vIGVmZmVjdCBvbiB0aGUgcml2ZXJcIixcbiAgICBcImRcIjogXCJ0aGUgbW9kZWwgaXMgY2FsaWJyYXRlZCwgc28gaXRzIGFuc3dlciBpcyBjb3JyZWN0XCIsXG59In0=
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RyeSIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZHJ5ID0gX19fX19fXG5tYXNrZWQgPSBfX19fX19cbnByaW50KGZcIntkcnkuc3VtKCl9IG9mIHtoZWFkLnNpemV9IGNlbGxzIGRyeVwiKVxucHJpbnQoZlwid2V0LWNlbGwgcmFuZ2U6IHtucC5uYW5taW4obWFza2VkKTouMWZ9IHRvIHtucC5uYW5tYXgobWFza2VkKTouMWZ9IG1cIikifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NsYWltIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJkZWZlbnNpYmxlID0gX19fX19fXG5wcmludChjbGFpbXNbZGVmZW5zaWJsZV0pIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_dry">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_claim">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -472,12 +472,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Compare against a threshold near the sentinel rather than to <code>-1e30</code> exactly — never test a float with <code>==</code>. Then <code>np.where</code> to substitute <code>np.nan</code>.</p>
+<p>You ran two models that both converged and disagreed. What can you honestly say given both results?</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_dry">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_claim">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -487,27 +487,26 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>dry <span class="op">=</span> head <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1e29</span></span>
-<span id="cb7-2"><a></a>masked <span class="op">=</span> np.where(dry, np.nan, head)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Three dry cells; the wet ones run 659.9 to 665.2 m.</p>
-<p>Note <code>&lt; -1e29</code> rather than <code>== -1e30</code>. Same rule as Week 2: <strong>never test a float for equality.</strong> MODFLOW’s sentinel is configurable via <code>hnoflo</code>, so the exact value is not something to rely on either.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>defensible <span class="op">=</span> <span class="st">"b"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>A single model run is a hypothesis. A pair of runs that bracket what you don’t know is a result.</strong></p>
+<p><code>a</code> reports one arbitrary member of a range as if it were the answer. <code>d</code> is worse: calibration produces <em>one consistent explanation</em>, and several different parameter sets will fit your observations equally well while disagreeing about the future.</p>
+<p>That bracketing is what Project 3 asks you to produce, and it is the difference between a modelling report that survives review and one that comes back.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section class="slide level2">
-<h2>A dry cell is a failure</h2>
-<ul>
-<li class="fragment">Once dry, a cell stops conducting — so its neighbours dry too</li>
-<li class="fragment">MODFLOW-2005 <strong>cannot rewet</strong> a dry cell unless you enable the wetting capability, which is itself unstable</li>
-<li class="fragment">The failure propagates, and the budget goes with it</li>
-</ul>
-<div class="fragment due-notice">
-<p>If you find dry cells, the honest reading is: the pumping is unphysical, the layer bottom is too shallow, you needed more layers, or you should be using <strong>MODFLOW-NWT</strong>, which handles dewatering properly.</p>
+<h2>A note on scale</h2>
+<p>The model you just loaded had seven packages and 96 kB of input.</p>
+<div class="fragment">
+<p>The <strong>Pinal AMA model</strong> used in Project 3 has around 400 MB: 212 MB of ET arrays, 100 MB of recharge, 12 MB of well records, and a multi-node-well package for individual pumps. Distributed separately — it is too large for the course repo.</p>
 </div>
 <div class="fragment">
-<p>“Report the heads with the dry cells masked out” is not on that list.</p>
+<p>What does not change: <code>load()</code> still reads it, <code>change_model_ws()</code> still saves you, the <code>.list</code> budget is still the first thing to read, and <strong>a run that converges is still not a run that is right</strong>.</p>
+</div>
+<div class="fragment">
+<p>What changes is minutes per run instead of seconds — which makes changing one thing at a time stop being good practice and start being the only workable method.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
@@ -516,23 +515,21 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li><code>laytyp</code> is a claim about the aquifer, and <code>1</code> makes the problem nonlinear</li>
-<li>Unconfined pumping feeds back on itself through transmissivity</li>
-<li><code>mxiter</code> first; a better initial condition helps but rarely suffices</li>
-<li>Converged is not correct</li>
-<li>A dry cell is a modelling failure, not a result</li>
+<li><code>botm</code> is a list; <code>vka</code> is separate from <code>hk</code> and makes confining units confine</li>
+<li>A river caps its leakage once disconnected; a constant head never does</li>
+<li><code>load()</code> from the <code>.nam</code>, inspect before modifying, <code>change_model_ws()</code> first</li>
+<li>Two runs that bracket an unknown parameter beat one run that hides it</li>
 </ul>
 <div class="kicker">
 <p>What’s due</p>
 </div>
 <ul>
-<li><strong>HW 10 — First MODFLOW model</strong>, Wednesday 11/18 at 11:59pm</li>
-<li>Finish the Week 12 lab before Tuesday</li>
+<li><strong>HW 5 — Where does the pumped water come from?</strong>, Wednesday 11/4 at 11:59pm</li>
 </ul>
 <div class="kicker">
 <p>Next week</p>
 </div>
-<p>Time: stress periods, storage, and stresses that switch on.</p>
+<p>Thursday is a guided lab and model-comparison workshop. Next week, the model inputs and observations become a real-world data retrieval and cleaning problem.</p>
 
 
 <script type="pyodide-data">

@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Time, storage, and stress periods</title>
+  <title>HWRS 564a – Budgets, and what a model is worth</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Time, storage, and stress periods</h1>
-  <p class="subtitle">HWRS 564a · Week 13 · Tuesday, November 17</p>
+  <h1 class="title">Budgets, and what a model is worth</h1>
+  <p class="subtitle">HWRS 564a · Week 7 · Thursday, October 8</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,61 +212,81 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 13, session 1 of 2</p>
+<p>Week 7, session 2 of 2</p>
 </div>
 <ol type="1">
-<li>Quiz — five minutes, on discretization and boundaries</li>
-<li>The question steady state cannot answer</li>
-<li>Stress periods and time steps</li>
-<li><code>sy</code> and <code>ss</code>, and why they differ by a factor of a thousand</li>
-<li>Why every transient run starts with a steady-state period</li>
+<li>The water budget, term by term</li>
+<li>Depletion and capture — the distinction that regulation is built on</li>
+<li>Comparing your model with real measurements</li>
+<li>Why it doesn’t match, and why that is the useful part</li>
 </ol>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>What steady state misses</h1>
+<h1>The budget</h1>
 
 </section>
 <section class="slide level2">
-<h2>Two different questions</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Steady state</strong></p>
-<p><em>What does the aquifer settle down to if this pumping never changes?</em></p>
-<p>Useful. Not what anyone asks.</p>
-</div><div class="column" style="width:50%;">
-<p><strong>Transient</strong></p>
-<p><em>When does the water table reach the pump intake?</em></p>
-<p><em>How much of what we pump this year is coming out of storage?</em></p>
-</div></div>
-<div class="fragment due-notice">
-<p>The second set needs time in the model — and storage properties, which a steady-state run does not even require you to supply.</p>
+<h2>Four terms, one basin</h2>
+<p>Tuesday’s model: 20,000 m³/d wellfield, uniform recharge, constant heads on the east and west edges.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>m³/d</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>recharge in</td>
+<td>+17,400</td>
+</tr>
+<tr class="even">
+<td>net constant-head in</td>
+<td>+2,600</td>
+</tr>
+<tr class="odd">
+<td><strong>wells out</strong></td>
+<td><strong>−20,000</strong></td>
+</tr>
+<tr class="even">
+<td>discrepancy</td>
+<td>0.00 %</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>And here is the sentence that took a model to write: <em>of the 20,000 m³/d pumped, 17,400 comes from recharge and 2,600 is captured from flow that would otherwise have left the basin.</em></p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Stress periods and time steps</h2>
-<ul>
-<li class="fragment">A <strong>stress period</strong> is an interval over which every stress is constant. Change the pumping rate, you need a new period.</li>
-<li class="fragment">A <strong>time step</strong> is a solver interval <em>within</em> a period. More steps means a better transient response and a slower run.</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>perlen <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fl">30.0</span>] <span class="op">+</span> [<span class="fl">365.0</span>] <span class="op">*</span> <span class="dv">10</span>     <span class="co"># length of each period</span></span>
-<span id="cb1-2"><a></a>nstp   <span class="op">=</span> [<span class="dv">1</span>,   <span class="dv">30</span>]   <span class="op">+</span> [<span class="dv">4</span>] <span class="op">*</span> <span class="dv">10</span>         <span class="co"># steps within each</span></span>
-<span id="cb1-3"><a></a>steady <span class="op">=</span> [<span class="va">True</span>] <span class="op">+</span> [<span class="va">False</span>] <span class="op">*</span> <span class="dv">11</span>          <span class="co"># one flag per period</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>You predicted that number</h2>
+<p>Before running anything, in Tuesday’s lab:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>n_active_cells <span class="op">=</span> (ibound <span class="op">&gt;</span> <span class="dv">0</span>).<span class="bu">sum</span>()            <span class="co"># 2320, not 2400</span></span>
+<span id="cb1-2"><a></a>total_recharge <span class="op">=</span> RECHARGE <span class="op">*</span> n_active_cells <span class="op">*</span> DELR <span class="op">*</span> DELC</span>
+<span id="cb1-3"><a></a>deficit <span class="op">=</span> <span class="op">-</span>WELL_Q <span class="op">-</span> total_recharge             <span class="co"># 2600</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p><strong>Recharge landing on a constant-head cell is discarded</strong> — MODFLOW applies <code>RCH</code> only where <code>ibound &gt; 0</code>. That is 80 cells and 600 m³/d.</p>
+</div>
+<div class="fragment due-notice">
+<p>Predicting the budget before you run is how you find out that your model is doing something you did not intend. The 600 m³/d is small; the <em>habit</em> is not.</p>
+</div>
 </section>
 <section class="slide level2">
-<h2>Your turn: read the discretization</h2>
-<script type="exercise-setup-ex_time-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3RpbWUiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJwZXJsZW4gPSBbMS4wLCAzMC4wXSArIFszNjUuMF0gKiAxMFxubnN0cCA9IFsxLCAzMF0gKyBbNF0gKiAxMFxuc3RlYWR5ID0gW1RydWVdICsgW0ZhbHNlXSAqIDExIn0=
+<h2>Your turn: close a budget</h2>
+<p>A model reports these terms. One is missing — work out what it must be.</p>
+<script type="exercise-setup-ex_close-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nsb3NlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoicmVjaGFyZ2VfaW4gPSAxNzQwMC4wXG5jb25zdGFudF9oZWFkX2luID0gMTMxNzc0LjZcbmNvbnN0YW50X2hlYWRfb3V0ID0gMTI5MTc0LjZcbndlbGxzX291dCA9IDIwMDAwLjAifQ==
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3RpbWUiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6Im5fcGVyaW9kcyA9IF9fX19fX1xubl9zdGVwcyA9IF9fX19fX1xuc2ltdWxhdGVkX2RheXMgPSBfX19fX19cbnByaW50KGZcIntuX3BlcmlvZHN9IHN0cmVzcyBwZXJpb2RzLCB7bl9zdGVwc30gdGltZSBzdGVwc1wiKVxucHJpbnQoZlwie3NpbXVsYXRlZF9kYXlzOiwuMGZ9IHRyYW5zaWVudCBkYXlzID0ge3NpbXVsYXRlZF9kYXlzIC8gMzY1Oi4xZn0geWVhcnNcIikifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nsb3NlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ0b3RhbF9pbiA9IF9fX19fX1xudG90YWxfb3V0ID0gX19fX19fXG5kaXNjcmVwYW5jeV9wY3QgPSAxMDAgKiAodG90YWxfaW4gLSB0b3RhbF9vdXQpIC8gKCh0b3RhbF9pbiArIHRvdGFsX291dCkgLyAyKVxucHJpbnQoZlwiaW4ge3RvdGFsX2luOiwuMWZ9ICBvdXQge3RvdGFsX291dDosLjFmfSAgZGlzY3JlcGFuY3kge2Rpc2NyZXBhbmN5X3BjdDorLjRmfSAlXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_time">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_close">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -276,12 +296,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The transient days are the <code>perlen</code> values whose <code>steady</code> flag is <code>False</code>. <code>zip</code> pairs them up.</p>
+<p>Every <code>_in</code> term goes on one side, every <code>_out</code> term on the other. There are two of each.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_time">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_close">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -291,84 +311,62 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>n_periods <span class="op">=</span> <span class="bu">len</span>(perlen)</span>
-<span id="cb2-2"><a></a>n_steps <span class="op">=</span> <span class="bu">sum</span>(nstp)</span>
-<span id="cb2-3"><a></a>simulated_days <span class="op">=</span> <span class="bu">sum</span>(p <span class="cf">for</span> p, s <span class="kw">in</span> <span class="bu">zip</span>(perlen, steady) <span class="cf">if</span> <span class="kw">not</span> s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>12 periods, 71 steps, 3,680 days — just over ten years.</p>
-<p><strong>Note the odd 30-day period with daily steps.</strong> The interesting part of a transient response happens at the start, and a quarterly time step walks straight over it. Fine early steps cost almost nothing.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>total_in <span class="op">=</span> recharge_in <span class="op">+</span> constant_head_in</span>
+<span id="cb2-2"><a></a>total_out <span class="op">=</span> constant_head_out <span class="op">+</span> wells_out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>149,174.6 both ways, discrepancy zero.</p>
+<p>Notice how <strong>large the constant-head terms are</strong> — 131,000 m³/d flowing through the domain, against 20,000 pumped. The regional throughflow dwarfs the well, and the budget is the only place you see that. It is also a warning: if your boundary conditions are wrong, they are wrong about the biggest number in the model.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Resolve what you came to see</h2>
-<div class="fragment">
-<p>Choosing time steps is the same problem as choosing cell size, and it has the same answer: <strong>finer than the feature you are trying to observe.</strong></p>
-</div>
-<div class="fragment">
-<p>A well switching on produces most of its head change in days. Sample it quarterly and your hydrograph starts at the answer.</p>
 </div>
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Storage</h1>
+<h1>Depletion vs capture</h1>
 
 </section>
 <section class="slide level2">
-<h2>Two properties, three orders of magnitude apart</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Property</th>
-<th>Symbol</th>
-<th>Applies when</th>
-<th>Typical</th>
-<th>Units</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Specific yield</strong></td>
-<td><code>sy</code></td>
-<td>unconfined — pores drain</td>
-<td>0.05 – 0.30</td>
-<td>—</td>
-</tr>
-<tr class="even">
-<td><strong>Specific storage</strong></td>
-<td><code>ss</code></td>
-<td>confined — water expands, matrix compresses</td>
-<td>1e-6 – 1e-4</td>
-<td>1/m</td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
-<p>A confined aquifer releases almost no water per metre of decline. That is why confined drawdown propagates so far, so fast.</p>
+<h2>Two ways to produce water</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Depletion</strong></p>
+<p>Water taken out of storage.</p>
+<p>A one-off withdrawal from the aquifer’s stock. Not renewable.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Capture</strong></p>
+<p>Recharge or throughflow diverted to the well.</p>
+<p>Renewable — but it was going somewhere, and now it isn’t.</p>
+</div></div>
+<div class="fragment due-notice">
+<p><strong>Neither is free.</strong> “Safe yield” regulation is an argument about how much capture is acceptable and whose water it was.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: how much water is in there?</h2>
-<script type="exercise-setup-ex_storage-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3N0b3JhZ2UiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJzeSwgc3MgPSAwLjE1LCAxZS01XG5jZWxsX2FyZWEgPSAyNTAuMCAqIDI1MC4wXG50aGlja25lc3MgPSAyMDAuMCJ9
+<h2>In this model</h2>
+<ul>
+<li class="fragment">Storage is zero — it is steady state, nothing is changing</li>
+<li class="fragment">So 100% of the well’s yield is <strong>capture</strong></li>
+<li class="fragment">17,400 m³/d of captured recharge</li>
+<li class="fragment">2,600 m³/d of throughflow that no longer leaves to the north-west</li>
+</ul>
+<div class="fragment">
+<p>Downstream of this basin, somebody is 2,600 m³/d short and has no way to measure why. Week 9 adds storage and the picture gets more interesting.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: whose water is it?</h2>
+<script type="exercise-setup-ex_capture-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NhcHR1cmUiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJzY2VuYXJpb3MgPSB7XG4gICAgXCJhXCI6IFwic3RvcmFnZSDigJQgYSBvbmUtb2ZmIHdpdGhkcmF3YWwgZnJvbSB0aGUgYXF1aWZlcidzIHN0b2NrXCIsXG4gICAgXCJiXCI6IFwiY2FwdHVyZSDigJQgcmVjaGFyZ2UgdGhhdCB3b3VsZCBoYXZlIGZsb3dlZCB0byB0aGUgcml2ZXJcIixcbiAgICBcImNcIjogXCJjYXB0dXJlIOKAlCB0aHJvdWdoZmxvdyB0aGF0IHdvdWxkIGhhdmUgbGVmdCB0aGUgYmFzaW5cIixcbn0ifQ==
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3N0b3JhZ2UiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InVuY29uZmluZWQgPSBfX19fX19cbmNvbmZpbmVkID0gX19fX19fXG5wcmludChmXCJyZWxlYXNlZCBieSAxIG0gb2YgZGVjbGluZSBpbiBvbmUgY2VsbDpcIilcbnByaW50KGZcIiAgdW5jb25maW5lZCB7dW5jb25maW5lZDo5LC4xZn0gbTNcIilcbnByaW50KGZcIiAgY29uZmluZWQgICB7Y29uZmluZWQ6OSwuMWZ9IG0zXCIpXG5wcmludChmXCIgIHJhdGlvICAgICAge3VuY29uZmluZWQgLyBjb25maW5lZDo5LC4wZn14XCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NhcHR1cmUiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6IiMgQSBuZXcgd2VsbCBzdGFydHMgcHVtcGluZy4gQWZ0ZXIgNTAgeWVhcnMgdGhlIGFxdWlmZXIgaGFzIHJlLWVxdWlsaWJyYXRlZFxuIyBhbmQgaGVhZHMgYXJlIHN0ZWFkeSBhZ2Fpbi4gV2hlcmUgaXMgaXRzIHdhdGVyIGNvbWluZyBmcm9tP1xuYW5zd2VyID0gX19fX19fXG5wcmludChzY2VuYXJpb3NbYW5zd2VyXSkifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_storage">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_capture">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -378,12 +376,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Specific yield is dimensionless — multiply by area alone. Specific <em>storage</em> is per metre of aquifer, so it needs the thickness too.</p>
+<p>At steady state, by definition, storage is not changing. So the water cannot be coming out of storage.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_storage">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_capture">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -393,59 +391,48 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>unconfined <span class="op">=</span> sy <span class="op">*</span> cell_area</span>
-<span id="cb3-2"><a></a>confined <span class="op">=</span> ss <span class="op">*</span> cell_area <span class="op">*</span> thickness</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>9,375 m³ against 125 m³ — a factor of <strong>75</strong>.</p>
-<p>The ratio is <code>sy / (ss × b)</code>, so it depends on thickness: a thin confined aquifer is even more extreme. What it means is that <strong>the same well drains an unconfined aquifer over years and a confined one over days</strong>, before either has to start capturing flow from elsewhere.</p>
+<p><code>"b"</code> or <code>"c"</code> — either is right; the point is that it is <strong>not</strong> <code>"a"</code>.</p>
+<p>Once heads are steady, storage contributes exactly zero by definition. Every litre the well produces is being taken from somewhere else in the budget: a river, a spring, a wetland, a neighbour’s throughflow, or evapotranspiration that no longer happens.</p>
+<p><strong>A well at steady state is not “using up” an aquifer. It is redirecting a flux.</strong> Which flux, and to whose cost, is what the budget tells you and nothing else does.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>An upper bound worth computing</h2>
-<p>Across all 2,400 cells, 1 m of decline in our confined aquifer releases <strong>300,000 m³</strong>.</p>
-<div class="fragment">
-<p>At 20,000 m³/d, that is <strong>15 days</strong> of pumping.</p>
-</div>
-<div class="fragment">
-<p>And that is an upper bound, because nothing like the whole aquifer drops a metre — drawdown is concentrated near the well.</p>
-</div>
-<div class="fragment due-notice">
-<p>So a confined aquifer reaches something close to steady state quickly. <strong>The Week 11 steady-state model was answering a question about the near future</strong>, which is worth knowing before you dismiss it.</p>
 </div>
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>The steady-state warm-up</h1>
+<h1>Comparing with reality</h1>
 
 </section>
 <section class="slide level2">
-<h2>Why period 0 has no pumping</h2>
-<p>A transient model needs an initial head field. Any field you invent is <strong>out of equilibrium with the boundaries</strong>.</p>
-<ul>
-<li class="fragment">So the model spends its first years relaxing toward balance</li>
-<li class="fragment">And you cannot tell that artificial drift from the response you came to measure</li>
-</ul>
+<h2>Head is not depth to water</h2>
+<p>MODFLOW reports head as an <strong>elevation</strong>. A well measures <strong>depth below land surface</strong>.</p>
+<p><span class="math display">\[\text{depth to water} = \text{land surface} - \text{head}\]</span></p>
 <div class="fragment">
-<p>Run one steady-state period first, with no pumping. Its heads are <em>already</em> in equilibrium. Everything after that is the response to the stress you added.</p>
+<p>Which means every comparison with a real measurement depends on a land-surface array MODFLOW knows nothing about.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: build the well schedule</h2>
-<p>The well is off in period 0 and pumps 20,000 m³/d from period 1 onward.</p>
-<script type="exercise-setup-ex_schedule-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NjaGVkdWxlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiTlBFUiA9IDEyXG5QVU1QX1JBVEUgPSAyMDAwMC4wXG5XRUxMX0xBWSwgV0VMTF9ST1csIFdFTExfQ09MID0gMCwgMjAsIDMwIn0=
+<h2>The comparison</h2>
+
+<img data-src="week07_thu_budgets_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
+<p>Medians: modelled <strong>{python} f”{np.median(dtw_model):.0f}“</strong> m, observed <strong>{python} f”{observed.median():.0f}“</strong> m. The model is biased deep by well over a hundred metres.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: convert head to depth</h2>
+<script type="exercise-setup-ex_dtw-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2R0dyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImxhbmRfc3VyZmFjZV9tID0gNzQ1LjAgICAgICMgYXQgdGhpcyB3ZWxsJ3MgbG9jYXRpb25cbm1vZGVsbGVkX2hlYWRfbSA9IDY2MS42XG5vYnNlcnZlZF9kZXB0aF9tID0gNTguMCJ9
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NjaGVkdWxlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ3ZWxfc3BkID0ge1xuICAgIHA6IFtbV0VMTF9MQVksIFdFTExfUk9XLCBXRUxMX0NPTCwgX19fX19fXV1cbiAgICBmb3IgcCBpbiByYW5nZShOUEVSKVxufVxucHJpbnQoZlwicGVyaW9kIDAgcmF0ZToge3dlbF9zcGRbMF1bMF1bM106LC4wZn0gbTMvZFwiKVxucHJpbnQoZlwicGVyaW9kIDEgcmF0ZToge3dlbF9zcGRbMV1bMF1bM106LC4wZn0gbTMvZFwiKVxucHJpbnQoZlwicGVyaW9kcyBkZWZpbmVkOiB7bGVuKHdlbF9zcGQpfVwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2R0dyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibW9kZWxsZWRfZGVwdGggPSBfX19fX19cbnJlc2lkdWFsID0gX19fX19fXG5wcmludChmXCJtb2RlbGxlZCBkZXB0aCB0byB3YXRlciB7bW9kZWxsZWRfZGVwdGg6LjFmfSBtXCIpXG5wcmludChmXCJvYnNlcnZlZCAgICAgICAgICAgICAgICB7b2JzZXJ2ZWRfZGVwdGhfbTouMWZ9IG1cIilcbnByaW50KGZcInJlc2lkdWFsIChtb2RlbCAtIG9icykgIHtyZXNpZHVhbDorLjFmfSBtXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_schedule">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_dtw">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -455,12 +442,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>A conditional expression: zero if it’s period 0, otherwise the negative pumping rate. Remember negative means extraction.</p>
+<p>Depth counts downward from the land surface, so it is the land surface <em>minus</em> the head. The residual convention is modelled minus observed, as in Week 12.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_schedule">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_dtw">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -470,12 +457,36 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="fl">0.0</span> <span class="cf">if</span> p <span class="op">==</span> <span class="dv">0</span> <span class="cf">else</span> <span class="op">-</span>PUMP_RATE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note that the dictionary has an entry for <strong>every</strong> period. If you skip one, FloPy silently reuses the previous period’s data — which is convenient when you mean it and a very quiet bug when you don’t.</p>
-<p>Build these with a comprehension over <code>range(NPER)</code> and you cannot get it wrong.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>modelled_depth <span class="op">=</span> land_surface_m <span class="op">-</span> modelled_head_m</span>
+<span id="cb3-2"><a></a>residual <span class="op">=</span> modelled_depth <span class="op">-</span> observed_depth_m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>83.4 m modelled against 58.0 m observed — the model puts the water table <strong>25 m too deep</strong> at this well.</p>
+<p>Note that a 25 m head residual is only 0.3% of the elevations involved, which is why you must never assess a groundwater model by comparing <em>heads</em> as numbers. Compare <strong>residuals</strong>, and compare them against the head <em>range</em> across the domain — 80 m here, so 25 m is over a quarter of the signal.</p>
 </div>
 </div>
 </div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Three reasons, none of them bugs</h2>
+<ol type="1">
+<li class="fragment"><strong>The boundary heads were invented.</strong> 620 m and 700 m, chosen to give a plausible gradient. They set the entire head field.</li>
+<li class="fragment"><strong>The monitored wells are not a random sample.</strong> They cluster where people pump — the valley floor — which is where water is shallowest.</li>
+<li class="fragment"><strong>Uniform <code>K</code> and uniform recharge.</strong> The real basin has neither.</li>
+</ol>
+<div class="fragment">
+<p>Reason 2 is the subtle one, and it is the Week 13 sampling problem again. You are comparing a whole-domain distribution with a biased sample of it.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>What to do about it</h2>
+<div class="fragment">
+<p><strong>Calibration</strong>: adjust the things you guessed until the model reproduces what you measured — at the <em>locations you measured it</em>, not across the whole domain.</p>
+</div>
+<div class="fragment">
+<p>And then be honest about what that gets you. A calibrated model is <strong>one consistent explanation</strong> of the observations, not the truth. Several different parameter sets will fit equally well and disagree about the future.</p>
+</div>
+<div class="fragment due-notice">
+<p>That is what Project 3 is about, and why it asks for a comparison of scenarios rather than a single prediction.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
@@ -484,22 +495,22 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>Steady state answers “what settles down to”; transient answers “when”</li>
-<li>Stress periods hold stresses constant; time steps subdivide them</li>
-<li><code>sy</code> and <code>ss</code> differ by a factor of <code>sy / (ss·b)</code> — about 75 here</li>
-<li>15 days of storage in a confined aquifer, as an upper bound</li>
-<li>Start every transient run with a no-pumping steady-state period</li>
+<li>Read a budget term by term, and predicted it before running</li>
+<li>Distinguished depletion from capture, and why regulation cares</li>
+<li>Compared modelled depth to water with 80 real wells</li>
+<li>Found a large bias, and named three reasons for it</li>
 </ul>
 <div class="kicker">
-<p>Before Thursday</p>
+<p>What’s due</p>
 </div>
 <ul>
-<li>Parts 1–3 of <code>labs/week13/week13_lab_transient_stresses.ipynb</code></li>
+<li><strong>HW 3 — From labelled data to a verified first model</strong>, Wednesday 10/7 at 11:59pm</li>
+<li>Finish the Week 7 lab before Tuesday</li>
 </ul>
 <div class="kicker">
-<p>Thursday</p>
+<p>Next week</p>
 </div>
-<p>Reading a hydrograph out of the model, depletion versus capture, and evapotranspiration.</p>
+<p>Discretization and boundary conditions — and what happens when you take the confining layer off this model.</p>
 
 
 <script type="pyodide-data">

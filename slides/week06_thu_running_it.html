@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Annotation, maps, and saving</title>
+  <title>HWRS 564a – Running it, and believing it</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Annotation, maps, and saving</h1>
-  <p class="subtitle">HWRS 564a · Week 8 · Thursday, October 15</p>
+  <h1 class="title">Running it, and believing it</h1>
+  <p class="subtitle">HWRS 564a · Week 6 · Thursday, October 1</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,81 +212,56 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 8, session 2 of 2</p>
+<p>Week 6, session 2 of 2</p>
 </div>
 <ol type="1">
-<li>Annotation: spending the reader’s attention deliberately</li>
-<li>Titles that say something</li>
-<li>Maps from latitude and longitude, without lying about shape</li>
-<li>Two meanings of vector vs.&nbsp;raster, then <code>figsize</code> and <code>dpi</code></li>
-<li>The panel that keeps a figure honest</li>
+<li><code>write_input</code>, <code>run_model</code>, and the argument everyone omits</li>
+<li>Testing against a solution you already know</li>
+<li>The <code>.list</code> file, and the number that tells you it went wrong</li>
+<li>The water budget</li>
 </ol>
+<p>By the end you will know the three checks that go on every model run you ever do.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Annotation</h1>
+<h1>Running it</h1>
 
 </section>
 <section class="slide level2">
-<h2>A reader looks for a few seconds</h2>
-<p>Annotation is how you spend those seconds on the thing you care about, rather than leaving the reader to search for it.</p>
-<ul>
-<li class="fragment"><strong><code>ax.axhline</code> / <code>axvline</code></strong> — a reference value</li>
-<li class="fragment"><strong><code>ax.axvspan</code></strong> — a period that means something</li>
-<li class="fragment"><strong><code>ax.annotate</code></strong> — an arrow to one point</li>
-<li class="fragment"><strong><code>ax.text</code></strong> — a label anywhere</li>
-</ul>
-</section>
-<section class="slide level2">
-<h2>All four at once</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>ax.axhline(baseline, color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">":"</span>)</span>
-<span id="cb1-2"><a></a>ax.text(x0, baseline <span class="op">-</span> <span class="dv">4</span>, <span class="st">"level when records began"</span>, color<span class="op">=</span><span class="st">"grey"</span>)</span>
-<span id="cb1-3"><a></a></span>
-<span id="cb1-4"><a></a>ax.axvspan(pd.Timestamp(<span class="st">"1950-01-01"</span>), pd.Timestamp(<span class="st">"1980-01-01"</span>),</span>
-<span id="cb1-5"><a></a>           color<span class="op">=</span><span class="st">"#81D3EB"</span>, alpha<span class="op">=</span><span class="fl">0.18</span>)</span>
-<span id="cb1-6"><a></a>ax.text(pd.Timestamp(<span class="st">"1952-01-01"</span>), <span class="dv">30</span>, <span class="st">"peak agricultural pumping"</span>)</span>
-<span id="cb1-7"><a></a></span>
-<span id="cb1-8"><a></a>ax.annotate(<span class="ss">f"</span><span class="sc">{</span>deepest<span class="sc">:.0f}</span><span class="ss"> ft"</span>, xy<span class="op">=</span>(date, deepest),</span>
-<span id="cb1-9"><a></a>            xytext<span class="op">=</span>(<span class="op">-</span><span class="dv">70</span>, <span class="dv">26</span>), textcoords<span class="op">=</span><span class="st">"offset points"</span>,</span>
-<span id="cb1-10"><a></a>            arrowprops<span class="op">=</span><span class="bu">dict</span>(arrowstyle<span class="op">=</span><span class="st">"-&gt;"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>Two lines</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>mf.write_input()</span>
+<span id="cb1-2"><a></a>success, buff <span class="op">=</span> mf.run_model(silent<span class="op">=</span><span class="va">True</span>, report<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p><code>textcoords="offset points"</code> positions the label <strong>relative to the point</strong>, in typographic points. That way it stays put when the axis limits change.</p>
+<p><code>write_input()</code> turns the FloPy objects into a dozen text files. <code>run_model()</code> shells out to the compiled binary and captures its output.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Titles are the most wasted line</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Wasted</strong></p>
-<blockquote>
-<p>Depth to water vs.&nbsp;time</p>
-</blockquote>
-<p>Names the axes. The reader can already see the axes.</p>
-</div><div class="column" style="width:50%;">
-<p><strong>Useful</strong></p>
-<blockquote>
-<p>Well D-15-13 11CBA: 110 ft of decline over 63 years of record</p>
-</blockquote>
-<p>States the finding.</p>
-</div></div>
+<h2>The three details</h2>
+<ol type="1">
+<li class="fragment"><strong>FloPy does not raise when a model fails.</strong> It returns <code>(success, buff)</code> and carries on</li>
+<li class="fragment"><strong><code>report=True</code> is not optional</strong> — with <code>silent=True</code> alone, <code>buff</code> comes back <strong>empty</strong></li>
+<li class="fragment"><code>silent=True</code> only suppresses the console echo; the full log always goes to the <code>.list</code> file</li>
+</ol>
 <div class="fragment due-notice">
-<p>If your title could be generated automatically from the axis labels, it is doing no work. <strong>Say what the figure shows.</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="cf">assert</span> success, <span class="st">"MODFLOW did not converge:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(buff[<span class="op">-</span><span class="dv">20</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Every run. Every time. Without <code>report=True</code> that message is blank.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: mark the monsoon</h2>
-<script type="exercise-setup-ex_annot-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Fubm90IiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IG1hdHBsb3RsaWIucHlwbG90IGFzIHBsdFxuY2xpbSA9IFszMi4wLCAzMS4xLCAxNy44LCA1LjEsIDAuNiwgMC4zLCAxOC41LCAyMy40LCA3LjksIDMuMCwgMS44LCA5LjhdXG5tb250aHMgPSBsaXN0KHJhbmdlKDEsIDEzKSkifQ==
+<h2>Your turn: spot what’s missing</h2>
+<p>This code runs a model and reports success — and it has a bug that will cost somebody a day.</p>
+<script type="exercise-setup-ex_bug-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6Im9wdGlvbnMgPSB7XG4gICAgXCJhXCI6IFwicnVuX21vZGVsIGlzIG1pc3NpbmcgcmVwb3J0PVRydWUsIHNvIGJ1ZmYgd2lsbCBiZSBlbXB0eVwiLFxuICAgIFwiYlwiOiBcIndyaXRlX2lucHV0IHNob3VsZCBjb21lIGFmdGVyIHJ1bl9tb2RlbFwiLFxuICAgIFwiY1wiOiBcInNpbGVudD1UcnVlIHN1cHByZXNzZXMgdGhlIC5saXN0IGZpbGVcIixcbiAgICBcImRcIjogXCJ0aGVyZSBpcyBubyBidWdcIixcbn0ifQ==
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Fubm90IiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJmaWcsIGF4ID0gcGx0LnN1YnBsb3RzKGZpZ3NpemU9KDgsIDMuMikpXG5heC5iYXIobW9udGhzLCBjbGltLCBjb2xvcj1cIiMxRTUyODhcIiwgYWxwaGE9MC44NSlcbmF4LmF4dnNwYW4oNS41LCA5LjUsIGNvbG9yPVwiIzgxRDNFQlwiLCBhbHBoYT0wLjI1KVxuYXgudGV4dCg3LjUsIDI4LCBfX19fX18sIGhhPVwiY2VudGVyXCIsIGNvbG9yPVwiIzFFNTI4OFwiKVxuYXguc2V0X3RpdGxlKF9fX19fXylcbmF4LnNldF95bGFiZWwoXCJtZWFuIGRhaWx5IGRpc2NoYXJnZSAoY2ZzKVwiKVxucGx0LnNob3coKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiIyBtZi53cml0ZV9pbnB1dCgpXG4jIHN1Y2Nlc3MsIGJ1ZmYgPSBtZi5ydW5fbW9kZWwoc2lsZW50PVRydWUpXG4jIGFzc2VydCBzdWNjZXNzLCBcImRpZCBub3QgY29udmVyZ2U6XFxuXCIgKyBcIlxcblwiLmpvaW4oYnVmZlstMjA6XSlcblxuYW5zd2VyID0gX19fX19fXG5wcmludChvcHRpb25zW2Fuc3dlcl0pIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_annot">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_bug">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -296,12 +271,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The label is one word. The title should state what the two peaks and the gap between them <em>mean</em> — not “discharge by month”.</p>
+<p>The assertion is correct in shape. Think about what will actually be <em>in</em> the message when it fires.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_annot">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_bug">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -311,9 +286,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>ax.text(<span class="fl">7.5</span>, <span class="dv">28</span>, <span class="st">"monsoon"</span>, ha<span class="op">=</span><span class="st">"center"</span>, color<span class="op">=</span><span class="st">"#1E5288"</span>)</span>
-<span id="cb2-2"><a></a>ax.set_title(<span class="st">"Sabino Creek peaks twice a year, with a dry foresummer between"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Two peaks with different causes: January is winter frontal storms, July–August is monsoon convection. A title saying “monthly discharge” leaves the reader to notice that themselves, and most won’t.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>answer <span class="op">=</span> <span class="st">"a"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The code is right in every visible way and the failure message will be empty. That is the worst kind of bug: it only shows up when something else has already gone wrong, at which point you have no diagnostic and no idea why.</p>
+<p><code>silent=True</code> does <strong>not</strong> suppress the <code>.list</code> file — that is always written, and it is where the real diagnosis lives.</p>
 </div>
 </div>
 </div>
@@ -321,104 +296,62 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Maps</h1>
-<!-- Adapted from old_slides/hwrs564a_oct14.pdf. -->
+<h1>Test what you can predict</h1>
+
 </section>
-<section class="slide level2 smaller">
-<h2>Raster and vector describe two different decisions</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Context</th>
-<th>Raster</th>
-<th>Vector</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>GIS data</strong></td>
-<td>A grid of cells: elevation, temperature, recharge</td>
-<td>Points, lines, and polygons: wells, rivers, basin boundaries</td>
-</tr>
-<tr class="even">
-<td><strong>Saved figures</strong></td>
-<td>Pixels: PNG or JPEG</td>
-<td>Drawing instructions: PDF or SVG</td>
-</tr>
-</tbody>
-</table>
+<section class="slide level2">
+<h2>The most important habit in the module</h2>
+<p>Before you trust a model on a problem you cannot solve by hand, <strong>run it on one you can.</strong></p>
 <div class="fragment">
-<p>A vector basin boundary can be plotted over a raster elevation grid, then the whole figure can be saved as either a raster PNG or a vector PDF.</p>
+<p>One layer, two constant heads, no stresses. The solution is a straight line.</p>
 </div>
+</section>
+<section class="slide level2">
+<h2>Does it hold?</h2>
+
+<img data-src="week06_thu_running_it_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
+<p>Agreement to within floating-point noise — the right panel is in <strong>picometres</strong>. Grid, units, boundary handling and solver are all confirmed.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Why that matters</h2>
+<ul>
+<li class="fragment">Now, when a later result surprises you, the surprise is about the <strong>physics you added</strong></li>
+<li class="fragment">Not about whether you set the model up correctly</li>
+<li class="fragment">Which are very different debugging problems</li>
+</ul>
 <div class="fragment due-notice">
-<p>Same words, different decisions: <strong>data structure</strong> when building the map, <strong>output format</strong> when exporting the figure.</p>
+<p>This is the same habit used for Week 4’s iterative solver: validate against something you already know before trusting the case you cannot solve by hand.</p>
 </div>
-<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 51. -->
-</section>
-<section class="slide level2 smaller">
-<h2>Raster stores values; vector stores geometry</h2>
-<div class="columns">
-<div class="column" style="width:52%;">
-<p><strong>Raster: one value per cell</strong></p>
-<p><img data-src="../assets/legacy/gis_raster.png" style="width:76.0%" alt="A landscape image enlarged into a grid of numeric raster cells and then colored by cell value"></p>
-</div><div class="column" style="width:48%;">
-<p><strong>Vector: coordinates make features</strong></p>
-<p><img data-src="../assets/legacy/gis_vector.png" style="width:76.0%" alt="Vector points, connected lines, and closed polygons represented by x and y coordinates"></p>
-</div></div>
-<p><small>Legacy source graphics reproduced from the course’s prior GIS introduction.</small></p>
 </section>
 <section class="slide level2">
-<h2>A map is a scatter with two obligations</h2>
-<ol type="1">
-<li class="fragment">The <strong>aspect ratio</strong> has to be right</li>
-<li class="fragment">The reader has to be able to tell <strong>where they are</strong></li>
-</ol>
+<h2>But check the arithmetic too</h2>
+<p>Darcy’s law over the 2,000 m domain says <strong>5,000 m³/d</strong>. MODFLOW’s budget says <strong>5,263 m³/d</strong>.</p>
 <div class="fragment">
-<p>At 32°N a degree of longitude is only <span class="math inline">\(\cos(32°) \approx 0.85\)</span> as long as a degree of latitude. Plotting them 1:1 stretches the basin east–west by 18%.</p>
+<p>A 5% gap. Small enough to look like rounding, large enough to matter.</p>
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>ax.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.deg2rad(lat.mean())))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 46. -->
-</section>
-<section class="slide level2 smaller">
-<h2>A map and a network answer different questions</h2>
-<div class="columns">
-<div class="column" style="width:68%;">
-<p><img data-src="../assets/legacy/yakima_map_network.jpg" style="width:98.0%" alt="Yakima River basin elevation map and its corresponding stream-network topology, with gauged locations highlighted in red"></p>
-</div><div class="column" style="width:32%;">
-<p><strong>The map preserves</strong></p>
-<ul>
-<li>location and elevation</li>
-<li>basin shape</li>
-<li>spatial context</li>
-</ul>
-<p><strong>The network preserves</strong></p>
-<ul>
-<li>upstream/downstream order</li>
-<li>junctions and connectivity</li>
-<li>gauged versus ungauged reaches</li>
-</ul>
-</div></div>
-<p><small>Bennett et al.&nbsp;(2022), <em>Journal of Hydrometeorology</em>, Fig. 2.</small></p>
+<div class="fragment">
+<p><strong>A constant head is specified at the cell <em>centre</em>, not at the model edge.</strong> The flow path is 19 cells, not 20 — 1,900 m, not 2,000.</p>
+</div>
+<div class="fragment">
+<p><span class="math inline">\(10 \times \dfrac{10}{1900} \times 100{,}000 = 5263\)</span> m³/d.&nbsp;Exact.</p>
+</div>
 </section>
 <section class="slide level2">
-<h2>Your turn: fix the aspect</h2>
-<script type="exercise-setup-ex_aspect-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2FzcGVjdCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHQsIG51bXB5IGFzIG5wXG5ybmcgPSBucC5yYW5kb20uZGVmYXVsdF9ybmcoOClcbmxhdCA9IDMyLjAgKyBybmcucmFuZG9tKDMwMCkgKiAwLjQ1XG5sb24gPSAtMTExLjIgKyBybmcucmFuZG9tKDMwMCkgKiAwLjQ1In0=
+<h2>Your turn: the half-cell</h2>
+<p>Same idea on a different grid: 250 m cells, 60 columns, heads of 700 m and 620 m at the two boundary columns.</p>
+<script type="exercise-setup-ex_halfcell-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hhbGZjZWxsIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibmNvbCA9IDYwXG5kZWxyID0gMjUwLjBcbmVhc3RfaGVhZCwgd2VzdF9oZWFkID0gNzAwLjAsIDYyMC4wIn0=
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2FzcGVjdCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZmlnLCBheCA9IHBsdC5zdWJwbG90cyhmaWdzaXplPSg1LCA1KSlcbmF4LnNjYXR0ZXIobG9uLCBsYXQsIHM9NiwgY29sb3I9XCIjQUIwNTIwXCIsIGFscGhhPTAuNilcbmF4LnNldF9hc3BlY3QoX19fX19fKVxuYXguc2V0X3hsYWJlbChcImxvbmdpdHVkZVwiKVxuYXguc2V0X3lsYWJlbChcImxhdGl0dWRlXCIpXG5wbHQuc2hvdygpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hhbGZjZWxsIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJuYWl2ZV9kaXN0YW5jZSA9IF9fX19fX1xudHJ1ZV9kaXN0YW5jZSA9IF9fX19fX1xucHJpbnQoZlwibmFpdmUgZ3JhZGllbnQgeyhlYXN0X2hlYWQgLSB3ZXN0X2hlYWQpIC8gbmFpdmVfZGlzdGFuY2U6LjZmfVwiKVxucHJpbnQoZlwidHJ1ZSBncmFkaWVudCAgeyhlYXN0X2hlYWQgLSB3ZXN0X2hlYWQpIC8gdHJ1ZV9kaXN0YW5jZTouNmZ9XCIpXG5wcmludChmXCJlcnJvciAgICAgICAgICB7MTAwICogKG5haXZlX2Rpc3RhbmNlIC8gdHJ1ZV9kaXN0YW5jZSAtIDEpOi4yZn0gJVwiKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_aspect">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_halfcell">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -428,12 +361,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p><code>np.deg2rad</code> converts degrees to radians, which is what <code>np.cos</code> expects. The aspect you want is one divided by that cosine.</p>
+<p>The naive distance is the full domain width. The true one is centre-to-centre — one cell shorter.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_aspect">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_halfcell">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -443,9 +376,10 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>ax.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.deg2rad(lat.mean())))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>About 1.18. For a small area that correction is honest and sufficient.</p>
-<p>For anything larger — or when you need a projection, a scale bar, or a basemap — use <code>cartopy</code>. Two warnings from the lab: <strong><code>plt.tight_layout()</code> crashes on a cartopy axis</strong>, and <strong>coastlines and basemaps download shapefiles</strong>, which fails in a fresh codespace with no network.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>naive_distance <span class="op">=</span> ncol <span class="op">*</span> delr</span>
+<span id="cb4-2"><a></a>true_distance <span class="op">=</span> (ncol <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> delr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>15,000 m versus 14,750 m — a 1.7% error. Smaller than the 10-column case, because the half-cell at each end is a smaller share of a longer domain.</p>
+<p><strong>The practical rule: a boundary condition sits half a cell inside the edge you drew.</strong> On a 250 m grid that is 125 m of slop, and it is the first thing to check when a modelled gradient won’t match an observed one.</p>
 </div>
 </div>
 </div>
@@ -453,61 +387,48 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Saving</h1>
+<h1>The <code>.list</code> file</h1>
 
 </section>
 <section class="slide level2">
-<h2>Four arguments that matter</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">6.5</span>, <span class="dv">4</span>))     <span class="co"># INCHES</span></span>
-<span id="cb5-2"><a></a>fig.savefig(<span class="st">"fig.png"</span>, dpi<span class="op">=</span><span class="dv">300</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span>
-<span id="cb5-3"><a></a>fig.savefig(<span class="st">"fig.pdf"</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li class="fragment"><strong><code>figsize</code></strong> in inches — sets how big the text is <em>relative to</em> the data</li>
-<li class="fragment"><strong><code>dpi=300</code></strong> for raster; 72 looks fine on screen and terrible on paper</li>
-<li class="fragment"><strong><code>bbox_inches="tight"</code></strong> crops whitespace, stops a long label being cut off</li>
-<li class="fragment"><strong><code>.pdf</code> / <code>.svg</code></strong> for papers — vector, sharp at any zoom, usually smaller</li>
-</ul>
-</section>
-<section class="slide level2">
-<h2>Why <code>figsize</code> is not “how big”</h2>
+<h2>Where a failure explains itself</h2>
+<pre><code>FAILED TO MEET SOLVER CONVERGENCE CRITERIA            1  TIME(S)
+BUDGET PERCENT DISCREPANCY IS -162.7401
+STOPPING SIMULATION</code></pre>
 <div class="fragment">
-<p>Set <code>figsize=(12, 8)</code>, save it, then scale it to 3 inches wide in Word. <strong>Every font scales down with it</strong> and the axis labels become unreadable.</p>
+<p>Two separate facts. The solver gave up, <strong>and</strong> water is not being conserved by a factor of more than two.</p>
 </div>
 <div class="fragment">
-<p>Set <code>figsize</code> to the <strong>final printed width</strong> — a single journal column is about 3.5 inches, a full page about 7 — and the 10-point font you specified is 10 points on the page.</p>
-</div>
-<div class="fragment due-notice">
-<p>The most common reason a figure looks amateurish is that it was made at the wrong size and resized afterwards.</p>
+<p>The second number is the one to look at first. A converged model with a 5% discrepancy is also broken — it just didn’t say so.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>The panel that keeps you honest</h2>
-<div class="columns">
-<div class="column" style="width:55%;">
-<p>Median depth across all wells looks like a clean basin-wide signal.</p>
-<p>Underneath it, the <strong>number of wells measured each year</strong>.</p>
-</div><div class="column" style="width:45%;">
-<p>2007 → 2008: median jumps 71 → 242 ft.</p>
-<p>The aquifer did not drop 170 feet. The well count went 3 → 5, and the three were shallow.</p>
-</div></div>
+<h2>Reading the budget</h2>
+<pre><code>           IN:                          OUT:
+     STORAGE =      0.0000        STORAGE =      0.0000
+CONSTANT HEAD =   5263.1582  CONSTANT HEAD =   5263.1582
+    TOTAL IN =   5263.1582      TOTAL OUT =   5263.1582
+    IN - OUT =      0.0000
+PERCENT DISCREPANCY =   0.00</code></pre>
 <div class="fragment">
-<p><strong>That entire feature is a sampling artifact</strong>, and it is invisible without the bottom panel.</p>
+<p>Every term, in and out, and the discrepancy at the bottom. <strong>Read this every time</strong> — it is the only place the model tells you where the water went.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: what does this figure need?</h2>
-<script type="exercise-setup-ex_honest-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hvbmVzdCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImNsYWltcyA9IHtcbiAgICBcImFcIjogXCJhIHNtb290aGVkIHRyZW5kIGxpbmUgdGhyb3VnaCB0aGUgbWVkaWFuXCIsXG4gICAgXCJiXCI6IFwiYSBzZWNvbmQgcGFuZWwgc2hvd2luZyBob3cgbWFueSB3ZWxscyB3ZXJlIG1lYXN1cmVkIGVhY2ggeWVhclwiLFxuICAgIFwiY1wiOiBcImVycm9yIGJhcnMgZnJvbSB0aGUgc3RhbmRhcmQgZGV2aWF0aW9uIGFjcm9zcyB3ZWxsc1wiLFxuICAgIFwiZFwiOiBcImEgbGFyZ2VyIGZvbnQgc2l6ZVwiLFxufSJ9
+<h2>Your turn: is this budget acceptable?</h2>
+<p>Four models converged. Which of their budgets would you report?</p>
+<script type="exercise-setup-ex_budget-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZGdldCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InJ1bnMgPSB7XG4gICAgXCJBXCI6IDAuMDAsXG4gICAgXCJCXCI6IC0wLjA0LFxuICAgIFwiQ1wiOiAzLjEwLFxuICAgIFwiRFwiOiAtMTYyLjc0LFxufSJ9
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hvbmVzdCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibmVlZGVkID0gX19fX19fXG5wcmludChjbGFpbXNbbmVlZGVkXSkifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZGdldCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiYWNjZXB0YWJsZSA9IFtuYW1lIGZvciBuYW1lLCBwY3QgaW4gcnVucy5pdGVtcygpIGlmIF9fX19fX11cbnByaW50KGZcImFjY2VwdGFibGU6IHthY2NlcHRhYmxlfVwiKVxucHJpbnQoZlwicmVqZWN0ZWQ6ICAge1tuIGZvciBuIGluIHJ1bnMgaWYgbiBub3QgaW4gYWNjZXB0YWJsZV19XCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_honest">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_budget">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -517,12 +438,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The problem is not that the median is imprecise. The problem is that it is computed over a <em>different set of wells</em> every year.</p>
+<p>The convention is well under 1% in absolute value. <code>abs()</code> matters — the sign tells you which way it is off, not whether it is acceptable.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_honest">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_budget">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -532,38 +453,46 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>needed <span class="op">=</span> <span class="st">"b"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Error bars would describe the spread <em>among the wells measured</em>, which does not help — the issue is which wells those are. A trend line would smooth the artifact into something even more convincing.</p>
-<p>Only the sample size exposes it. <strong>Put <code>n</code> next to any aggregate computed over a changing population</strong>, and let the reader discount the years where it collapses.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>acceptable <span class="op">=</span> [name <span class="cf">for</span> name, pct <span class="kw">in</span> runs.items() <span class="cf">if</span> <span class="bu">abs</span>(pct) <span class="op">&lt;</span> <span class="fl">1.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>A</code> and <code>B</code>. <code>C</code> at 3.1% has converged and is still losing water somewhere — usually a boundary condition doing something you did not intend. <code>D</code> did not converge at all.</p>
+<p><strong>A converged model with a 3% discrepancy is not a slightly worse answer than one at 0.04% — it is an answer with an unexplained flux in it</strong>, and until you find that flux you do not know which of your budget terms is wrong.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
+<section class="slide level2">
+<h2>Two formats for the same number</h2>
+<pre><code> PERCENT DISCREPANCY =   -162.74   PERCENT DISCREPANCY =   -162.74
+ BUDGET PERCENT DISCREPANCY IS -162.7401</code></pre>
+<div class="fragment">
+<p>One uses <code>=</code> and repeats itself in two columns; the other uses <code>IS</code>.</p>
+</div>
+<div class="fragment">
+<p>Splitting on <code>"="</code> works on the first and crashes on the second. <strong>Take the last whitespace-separated token</strong> and both work — the kind of thing real file formats always do to you.</p>
+</div>
+</section>
 <section class="slide level2 smaller">
 <h2>Wrap up</h2>
 <div class="kicker">
-<p>What you did today</p>
+<p>The three checks, on every run</p>
 </div>
-<ul>
-<li>Annotate the thing you want looked at; don’t leave the reader to search</li>
-<li>A title that could be generated from the axis labels is doing no work</li>
-<li>Correct the aspect on any lat/lon map</li>
-<li>Distinguish GIS raster/vector data from raster/vector output formats</li>
-<li><code>figsize</code> in final printed inches, <code>dpi=300</code>, <code>bbox_inches="tight"</code></li>
-<li>Show the sample size when the sample changes</li>
-</ul>
+<ol type="1">
+<li><strong><code>success</code></strong> — with <code>report=True</code>, or the message is empty</li>
+<li><strong>Percent discrepancy</strong> — near zero, or the answer is not conserving mass</li>
+<li><strong>A case you can predict</strong> — before trusting one you can’t</li>
+</ol>
 <div class="kicker">
 <p>What’s due</p>
 </div>
 <ul>
-<li><strong>HW 6 — Timeseries aggregation</strong>, Wednesday 10/14 at 11:59pm</li>
-<li><strong>Project 2 analysis, part 1</strong></li>
+<li><strong>HW 3 — From labelled data to a verified first model</strong>, Wednesday 10/7 at 11:59pm</li>
+<li>Finish the Week 6 lab before Tuesday</li>
 </ul>
 <div class="kicker">
 <p>Next week</p>
 </div>
-<p>Regression — deriving the least-squares line, then spending a full class diagnosing and interpreting it.</p>
+<p>The real basin: a wellfield, recharge, and a head field you cannot work out by hand.</p>
 
 
 <script type="pyodide-data">

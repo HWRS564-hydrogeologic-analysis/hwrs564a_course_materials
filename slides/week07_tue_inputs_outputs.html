@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Hydrographs, capture, and ET</title>
+  <title>HWRS 564a – Inputs, outputs, and hitting go</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Hydrographs, capture, and ET</h1>
-  <p class="subtitle">HWRS 564a · Week 13 · Thursday, November 19</p>
+  <h1 class="title">Inputs, outputs, and hitting go</h1>
+  <p class="subtitle">HWRS 564a · Week 7 · Tuesday, October 6</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,54 +212,77 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 13, session 2 of 2</p>
+<p>Week 7, session 1 of 2</p>
 </div>
 <ol type="1">
-<li>Reading a hydrograph out of the <code>.hds</code> file</li>
-<li>How fast a confined aquifer gets to steady state</li>
-<li>Depletion and capture, from the budget</li>
-<li>Evapotranspiration and the extinction depth</li>
+<li>The six questions every MODFLOW model has to answer</li>
+<li>Writing them down as FloPy packages</li>
+<li>Running the model — and checking that it actually ran</li>
+<li>Reading heads back out and looking at them</li>
 </ol>
+<p>By the end you will have built, run, and mapped a 2D steady-state model of a basin with a pumping well in it.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>A modelled hydrograph</h1>
+<h1>What a model needs</h1>
 
 </section>
 <section class="slide level2">
-<h2>Ten years at the wellfield</h2>
-
-<img data-src="week13_thu_capture_et_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
-<p>Total drawdown <strong>{python} f”{drawdown[-1]:.1f}“</strong> m over ten years, and <strong>{python} f”{np.interp(1.0, years, pct):.0f}%“</strong> of it in the first year.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>How to get that series</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>hds <span class="op">=</span> flopy.utils.HeadFile(ws <span class="op">/</span> <span class="st">"t.hds"</span>)</span>
-<span id="cb1-2"><a></a>times <span class="op">=</span> np.array(hds.get_times())</span>
-<span id="cb1-3"><a></a></span>
-<span id="cb1-4"><a></a>well_head <span class="op">=</span> np.array([</span>
-<span id="cb1-5"><a></a>    hds.get_data(totim<span class="op">=</span>t)[<span class="dv">0</span>, WELL_ROW, WELL_COL] <span class="cf">for</span> t <span class="kw">in</span> times</span>
-<span id="cb1-6"><a></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>Six questions, six packages</h2>
+<p>MODFLOW does not have a “model file.” It has a <strong>package per question</strong>.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Package</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>What shape is the domain, and in what units?</td>
+<td><code>DIS</code></td>
+</tr>
+<tr class="even">
+<td>Which cells are active, and where do we start?</td>
+<td><code>BAS</code></td>
+</tr>
+<tr class="odd">
+<td>How permeable is it?</td>
+<td><code>LPF</code></td>
+</tr>
+<tr class="even">
+<td>Who is pumping?</td>
+<td><code>WEL</code></td>
+</tr>
+<tr class="odd">
+<td>What comes in from above?</td>
+<td><code>RCH</code></td>
+</tr>
+<tr class="even">
+<td>How do we solve, and what do we save?</td>
+<td><code>PCG</code>, <code>OC</code></td>
+</tr>
+</tbody>
+</table>
 <div class="fragment">
-<p>One <code>get_data</code> call per output time, indexing the cell you care about. <code>get_times()</code> tells you what is in the file — <strong>which is only what <code>OC</code> was told to save</strong>.</p>
+<p>That table <em>is</em> the mental model. Every model you build for the rest of the semester is these six answers, occasionally plus a seventh.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: convert to years</h2>
-<p>The steady-state period occupies day 0 to day 1, so pumping starts at day 1.</p>
-<script type="exercise-setup-ex_years-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3llYXJzIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5wXG50aW1lcyA9IG5wLmFycmF5KFsxLjAsIDIuMCwgMy4wLCAzMS4wLCAxMjIuMjUsIDM2ODEuMF0pIn0=
+<h2>Your turn: size the grid</h2>
+<p>Our basin is discretized at 250 m cells, 40 rows by 60 columns, one layer. Work out how big the domain actually is, in kilometres.</p>
+<script type="exercise-setup-ex_grid-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2dyaWQiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJubGF5LCBucm93LCBuY29sID0gMSwgNDAsIDYwXG5kZWxyID0gZGVsYyA9IDI1MC4wICAgICAjIGNlbGwgc2l6ZSwgbWV0cmVzIn0=
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3llYXJzIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ5ZWFycyA9IF9fX19fX1xuZm9yIHQsIHkgaW4gemlwKHRpbWVzLCB5ZWFycyk6XG4gICAgcHJpbnQoZlwiZGF5IHt0OjguMmZ9ICAtPiAge3k6Ny4zZn0geWVhcnMgc2luY2UgcHVtcGluZyBiZWdhblwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2dyaWQiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6IndpZHRoX2ttID0gX19fX19fXG5oZWlnaHRfa20gPSBfX19fX19cbnByaW50KGZcInt3aWR0aF9rbX0ga20gZWFzdC13ZXN0IGJ5IHtoZWlnaHRfa219IGttIG5vcnRoLXNvdXRoXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_years">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_grid">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -269,12 +292,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Subtract the day pumping started, then divide by the days in a year. Numpy does both elementwise.</p>
+<p><code>delr</code> is the width of a column, so the east-west extent is set by <code>ncol</code>. Metres to kilometres is a factor of 1000.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_years">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_grid">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -284,8 +307,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>years <span class="op">=</span> (times <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">/</span> <span class="fl">365.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The first output lands at exactly 0 years — the end of the steady-state period, before any pumping. <strong>That is your baseline</strong>, and forgetting to subtract it is how you end up reporting a drawdown that includes a year of nothing happening.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>width_km <span class="op">=</span> ncol <span class="op">*</span> delr <span class="op">/</span> <span class="dv">1000</span></span>
+<span id="cb1-2"><a></a>height_km <span class="op">=</span> nrow <span class="op">*</span> delc <span class="op">/</span> <span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>15 km by 10 km, in 2400 cells. Worth doing this arithmetic <em>before</em> you run anything — a grid that turns out to be 15 m across is a mistake you want to catch now, not after a twenty-minute solve.</p>
 </div>
 </div>
 </div>
@@ -293,75 +317,93 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Depletion and capture</h1>
+<h1>Writing it down</h1>
 
 </section>
 <section class="slide level2">
-<h2>Where the water comes from, over time</h2>
-<div id="6b4f07bd" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-stdout">
-<pre><code>                                    m3/d  % of pumping
-net storage, end of the first month      5,190.6         26.0%
-net storage, end of year 10                  0.0          0.0%</code></pre>
-</div>
-</div>
+<h2>Discretization</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>mf <span class="op">=</span> flopy.modflow.Modflow(<span class="st">"scbasin"</span>, model_ws<span class="op">=</span>ws, exe_name<span class="op">=</span>mf2005)</span>
+<span id="cb2-2"><a></a></span>
+<span id="cb2-3"><a></a>flopy.modflow.ModflowDis(</span>
+<span id="cb2-4"><a></a>    mf, nlay<span class="op">=</span><span class="dv">1</span>, nrow<span class="op">=</span><span class="dv">40</span>, ncol<span class="op">=</span><span class="dv">60</span>,</span>
+<span id="cb2-5"><a></a>    delr<span class="op">=</span><span class="fl">250.0</span>, delc<span class="op">=</span><span class="fl">250.0</span>,      <span class="co"># cell size</span></span>
+<span id="cb2-6"><a></a>    top<span class="op">=</span><span class="fl">420.0</span>, botm<span class="op">=</span><span class="fl">340.0</span>,       <span class="co"># elevations, not thicknesses</span></span>
+<span id="cb2-7"><a></a>    nper<span class="op">=</span><span class="dv">1</span>, steady<span class="op">=</span><span class="va">True</span>,         <span class="co"># one steady-state stress period</span></span>
+<span id="cb2-8"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>After one month, <strong>about a quarter</strong> of the well’s yield is water taken out of storage. By year ten, storage contributes essentially nothing.</p>
+<p><code>top</code> and <code>botm</code> are <strong>elevations</strong>, not thicknesses. Getting this backwards produces a model with negative thickness that fails in a way the error message does not explain.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>The distinction regulation is built on</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Depletion</strong></p>
-<p>Water out of storage. A one-off withdrawal from the aquifer’s stock.</p>
-</div><div class="column" style="width:50%;">
-<p><strong>Capture</strong></p>
-<p>Recharge or throughflow diverted to the well. Renewable — but it was going somewhere.</p>
-</div></div>
-<div class="fragment due-notice">
-<p><strong>The source changes over time</strong>, and only the budget shows it. That is the most policy-relevant output a transient model produces.</p>
+<h2>Boundaries and starting heads</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>ibound <span class="op">=</span> np.ones((<span class="dv">1</span>, <span class="dv">40</span>, <span class="dv">60</span>), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb3-2"><a></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>        <span class="co"># constant head upgradient</span></span>
+<span id="cb3-3"><a></a>ibound[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>       <span class="co"># constant head downgradient</span></span>
+<span id="cb3-4"><a></a></span>
+<span id="cb3-5"><a></a>strt <span class="op">=</span> np.full((<span class="dv">1</span>, <span class="dv">40</span>, <span class="dv">60</span>), <span class="fl">412.0</span>)</span>
+<span id="cb3-6"><a></a>strt[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">402.0</span></span>
+<span id="cb3-7"><a></a></span>
+<span id="cb3-8"><a></a>flopy.modflow.ModflowBas(mf, ibound<span class="op">=</span>ibound, strt<span class="op">=</span>strt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p><code>ibound</code>: <code>1</code> active, <code>0</code> inactive, <strong><code>-1</code> constant head</strong>. In a steady-state run <code>strt</code> is only a starting guess <em>except</em> in the <code>-1</code> cells, where it is the boundary condition itself.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>One detail about budget blocks</h2>
-<p>MODFLOW writes <strong>one budget block per stress period</strong>, at the end of it — not one per time step.</p>
+<h2>Stresses</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>flopy.modflow.ModflowLpf(mf, hk<span class="op">=</span><span class="fl">12.0</span>, laytyp<span class="op">=</span><span class="dv">1</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
+<span id="cb4-2"><a></a>flopy.modflow.ModflowWel(</span>
+<span id="cb4-3"><a></a>    mf, stress_period_data<span class="op">=</span>{<span class="dv">0</span>: [[<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="op">-</span><span class="fl">4000.0</span>]]}, ipakcb<span class="op">=</span><span class="dv">53</span></span>
+<span id="cb4-4"><a></a>)</span>
+<span id="cb4-5"><a></a>flopy.modflow.ModflowRch(mf, rech<span class="op">=</span><span class="fl">1.4e-4</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>So 12 periods gives 12 blocks, even with 71 head snapshots saved.</p>
-</div>
-<div class="fragment">
-<p>If you want a budget time series at finer resolution, you read the <strong>cell budget file</strong> (<code>.cbc</code>), not the <code>.list</code>. The listing is a summary.</p>
+<p>The well entry is <code>[layer, row, column, rate]</code>, zero-indexed, and <strong>negative is extraction</strong>. A sign error here is the single most common way to end up presenting a mound where you meant a cone.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: classify the sources</h2>
-<script type="exercise-setup-ex_source-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NvdXJjZSIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImJ1ZGdldCA9IHtcbiAgICBcIlNUT1JBR0VcIjogICAgICAge1wiaW5cIjogNTE5MC42LCBcIm91dFwiOiAwLjB9LFxuICAgIFwiUkVDSEFSR0VcIjogICAgICB7XCJpblwiOiAxNzQwMC4wLCBcIm91dFwiOiAwLjB9LFxuICAgIFwiQ09OU1RBTlQgSEVBRFwiOiB7XCJpblwiOiAxMzE3NzQuNiwgXCJvdXRcIjogMTI5MTc0LjZ9LFxuICAgIFwiV0VMTFNcIjogICAgICAgICB7XCJpblwiOiAwLjAsIFwib3V0XCI6IDIwMDAwLjB9LFxufSJ9
+<h2>Your turn: the pumping rate</h2>
+<p>A water provider reports the well pumps <strong>730 acre-feet per year</strong>. MODFLOW wants m³/day, negative for extraction.</p>
+<script type="exercise-setup-ex_rate-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JhdGUiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJhY3JlX2ZlZXRfcGVyX3llYXIgPSA3MzAuMFxuTTNfUEVSX0FDUkVfRk9PVCA9IDEyMzMuNDhcbkRBWVNfUEVSX1lFQVIgPSAzNjUuMCJ9
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NvdXJjZSIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZGVmIG5ldCh0ZXJtKTpcbiAgICByZXR1cm4gYnVkZ2V0W3Rlcm1dW1wiaW5cIl0gLSBidWRnZXRbdGVybV1bXCJvdXRcIl1cblxuZGVwbGV0aW9uID0gX19fX19fXG5jYXB0dXJlID0gX19fX19fXG5wcmludChmXCJkZXBsZXRpb24gKGZyb20gc3RvcmFnZSkge2RlcGxldGlvbjo5LC4xZn0gbTMvZFwiKVxucHJpbnQoZlwiY2FwdHVyZSAoZXZlcnl0aGluZyBlbHNlKXtjYXB0dXJlOjksLjFmfSBtMy9kXCIpXG5wcmludChmXCJ0b3RhbCAgICAgICAgICAgICAgICAgICAge2RlcGxldGlvbiArIGNhcHR1cmU6OSwuMWZ9IG0zL2RcIikifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JhdGUiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InJhdGVfbTNfcGVyX2RheSA9IF9fX19fX1xucHJpbnQoZlwiV0VMIHJhdGU6IHtyYXRlX20zX3Blcl9kYXk6LjFmfSBtMy9kXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_source">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_rate">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Hint</strong></p>
+<p><strong>Hint 1</strong></p>
 </div>
 <div class="callout-content">
-<p>Depletion is the storage term alone. Capture is recharge plus the <em>net</em> constant-head contribution. They should sum to the pumping rate.</p>
+<p>Convert the volume first, then divide by the number of days.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_source">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_rate">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hint 2</strong></p>
+</div>
+<div class="callout-content">
+<p>Don’t forget the sign. MODFLOW reads a positive <code>WEL</code> rate as <em>injection</em>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_rate">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -371,10 +413,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>depletion <span class="op">=</span> net(<span class="st">"STORAGE"</span>)</span>
-<span id="cb4-2"><a></a>capture <span class="op">=</span> net(<span class="st">"RECHARGE"</span>) <span class="op">+</span> net(<span class="st">"CONSTANT HEAD"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>5,191 plus 20,000 — which sums to 25,191, not 20,000.</p>
-<p><strong>That is not an error in your arithmetic</strong>; it means the aquifer is still adjusting and heads are still falling, so more is entering than the well removes. Steady state is where these balance, and this snapshot is a month into a ten-year approach.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>rate_m3_per_day <span class="op">=</span> <span class="op">-</span>acre_feet_per_year <span class="op">*</span> M3_PER_ACRE_FOOT <span class="op">/</span> DAYS_PER_YEAR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>About <code>-2466.9</code> m³/d.&nbsp;Roughly 60% of the 4000 m³/d we are about to simulate — so expect a correspondingly shallower cone.</p>
 </div>
 </div>
 </div>
@@ -382,52 +422,65 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Evapotranspiration</h1>
+<h1>Hitting go</h1>
 
 </section>
 <section class="slide level2">
-<h2>ET depends on how deep the water is</h2>
-<p><code>EVT</code> removes water at a rate that falls with depth to water.</p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>surf</code></td>
-<td>elevation at which ET is at its maximum</td>
-</tr>
-<tr class="even">
-<td><code>evtr</code></td>
-<td>that maximum rate, m/d</td>
-</tr>
-<tr class="odd">
-<td><code>exdp</code></td>
-<td><strong>extinction depth</strong> — where ET reaches zero</td>
-</tr>
-</tbody>
-</table>
+<h2>Run it, then check that it ran</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>mf.write_input()</span>
+<span id="cb6-2"><a></a>success, buff <span class="op">=</span> mf.run_model(silent<span class="op">=</span><span class="va">True</span>, report<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-3"><a></a></span>
+<span id="cb6-4"><a></a><span class="cf">assert</span> success, <span class="st">"MODFLOW did not converge:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(buff[<span class="op">-</span><span class="dv">20</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>Between <code>surf</code> and <code>surf − exdp</code>, MODFLOW interpolates linearly. Below, ET stops.</p>
+<p><strong>FloPy does not raise when a model fails to converge.</strong> It returns <code>(success, buff)</code> and carries on. If you ignore <code>success</code>, you will happily plot the last thing that landed in the <code>.hds</code> file and present it as a result.</p>
+</div>
+<div class="fragment due-notice">
+<p>Every model you run in this course, from here to Week 15, gets that <code>assert</code>.</p>
+</div>
+<div class="fragment">
+<p><strong><code>report=True</code> is not optional.</strong> With <code>silent=True</code> alone FloPy hands back an empty <code>buff</code>, so the assertion fires with no diagnostic in it — the one moment you needed one.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: the ET rate at depth</h2>
-<script type="exercise-setup-ex_et-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2V0IiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoic3VyZiA9IDcwMC4wICAgICAgICAjIG1cbmV2dHIgPSAzLjBlLTMgICAgICAgIyBtL2QgYXQgbWF4aW11bVxuZXhkcCA9IDguMCAgICAgICAgICAjIG0gZXh0aW5jdGlvbiBkZXB0aFxuaGVhZHMgPSBbNzAwLjAsIDY5Ni4wLCA2OTIuMCwgNjg1LjBdIn0=
+<h2>Head distribution</h2>
+
+<img data-src="week07_tue_inputs_outputs_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><p>Contours in metres; the red cell is the well.</p>
+</section>
+<section class="slide level2">
+<h2>The cone, in cross-section</h2>
+
+<img data-src="week07_tue_inputs_outputs_files/figure-revealjs/cell-4-output-1.png" class="r-stretch"><p>Solid vs.&nbsp;dashed, not just red vs.&nbsp;blue — about one student per cohort has a colour vision deficiency.</p>
+</section>
+<section class="slide level2">
+<h2>What the numbers say</h2>
+<div id="89a56841" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-stdout">
+<pre><code>head at the well cell        407.25 m
+head at the same column,     410.42 m
+  five rows north
+drawdown at the well           3.16 m
+domain head range            402.00 - 412.38 m</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Always read the numbers before you trust the picture. A colourmap will make <em>any</em> array look like a plausible aquifer.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: is that drawdown a lot?</h2>
+<p>The aquifer is 80 m thick and the well cell sits at the head printed above. Express the drawdown as a percentage of saturated thickness.</p>
+<script type="exercise-setup-ex_dd-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RkIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaGVhZF9hdF93ZWxsID0gNDA3LjI1XG5oZWFkX3VuZGlzdHVyYmVkID0gNDEwLjQyXG5hcXVpZmVyX2JvdHRvbSA9IDM0MC4wIn0=
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2V0IiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJmb3IgaCBpbiBoZWFkczpcbiAgICBkZXB0aCA9IHN1cmYgLSBoXG4gICAgcmF0ZSA9IF9fX19fX1xuICAgIHByaW50KGZcImhlYWQge2g6Ni4xZn0gbSAgZGVwdGgge2RlcHRoOjUuMWZ9IG0gIEVUIHtyYXRlOi41Zn0gbS9kXCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RkIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJkcmF3ZG93biA9IF9fX19fX1xucGVyY2VudF9vZl90aGlja25lc3MgPSBfX19fX19cbnByaW50KGZcIntkcmF3ZG93bjouMmZ9IG0sIHtwZXJjZW50X29mX3RoaWNrbmVzczouMWZ9JSBvZiBzYXR1cmF0ZWQgdGhpY2tuZXNzXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_et">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_dd">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -437,12 +490,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Linear from <code>evtr</code> at zero depth to zero at <code>exdp</code>, and it stays at zero beyond. <code>max(0.0, ...)</code> handles the last case.</p>
+<p>Saturated thickness is the undisturbed head minus the aquifer bottom, not the 80 m you were told — that is the <em>geologic</em> thickness.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_et">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_dd">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -452,26 +505,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>rate <span class="op">=</span> <span class="bu">max</span>(<span class="fl">0.0</span>, evtr <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> depth <span class="op">/</span> exdp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>3.0e-3 at the surface, half that at 4 m, a quarter at 6 m, and <strong>zero</strong> at 8 m and beyond.</p>
-<p>The <code>max(0.0, ...)</code> matters: without it, a water table 15 m down would give a <em>negative</em> ET rate, which MODFLOW would read as water being added.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>drawdown <span class="op">=</span> head_undisturbed <span class="op">-</span> head_at_well</span>
+<span id="cb8-2"><a></a>percent_of_thickness <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> drawdown <span class="op">/</span> (head_undisturbed <span class="op">-</span> aquifer_bottom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>3.17 m, about 4.5% — small enough that the confined approximation holds. Above roughly 25% you should be asking whether <code>laytyp=1</code> is doing real work.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>The feedback that matters</h2>
-<ol type="1">
-<li class="fragment">Pumping lowers the water table</li>
-<li class="fragment">A lower water table means less ET</li>
-<li class="fragment">Less ET means more water left in the aquifer</li>
-</ol>
-<div class="fragment due-notice">
-<p>So <strong>a fraction of what a well produces is not new water at all</strong> — it is water that would otherwise have been transpired by the vegetation along the river.</p>
-</div>
-<div class="fragment">
-<p>That is not an accounting curiosity. It is the mechanism behind riparian habitat loss along the Santa Cruz, and a model without an <code>EVT</code> package cannot represent it.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
@@ -480,23 +519,21 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>Pull a hydrograph out of <code>.hds</code> with <code>get_times()</code> and <code>get_data(totim=...)</code></li>
-<li>A confined aquifer reaches most of its drawdown in the first year</li>
-<li>Depletion versus capture, and that the mix changes over time</li>
-<li>Budget blocks are per stress period, not per time step</li>
-<li>ET falls linearly to zero at the extinction depth, and pumping reduces it</li>
+<li>Named the six questions a MODFLOW model answers, and the package for each</li>
+<li>Built a 2D steady-state model and ran it from Python</li>
+<li>Checked <code>success</code> before believing a single number</li>
+<li>Read heads out of the <code>.hds</code> file and mapped them</li>
 </ul>
 <div class="kicker">
 <p>What’s due</p>
 </div>
 <ul>
-<li><strong>HW 11 — 2D steady-state model</strong>, Wednesday 11/25 at 11:59pm</li>
-<li><strong>Project 3 analysis, part 1</strong></li>
+<li><strong>HW 3 — From labelled data to a verified first model</strong>, Wednesday 10/7 at 11:59pm</li>
 </ul>
 <div class="kicker">
-<p>Next week</p>
+<p>Thursday</p>
 </div>
-<p>Layers, rivers, and loading a model somebody else built. <strong>Tuesday only</strong> — Thursday is Thanksgiving.</p>
+<p>Reading the budget file, and what to do when the model <em>doesn’t</em> converge.</p>
 
 
 <script type="pyodide-data">

@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Groundwater inference lab</title>
+  <title>HWRS 564a – Inference and regression lab</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Groundwater inference lab</h1>
-  <p class="subtitle">HWRS 564a · Week 7 · Thursday, October 8</p>
+  <h1 class="title">Inference and regression lab</h1>
+  <p class="subtitle">HWRS 564a · Week 12 · Thursday, November 12</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -210,8 +210,9 @@ Dr.&nbsp;Andrew Bennett
 
 </section>
 <section class="slide level2">
-<h2>Today’s one question</h2>
+<h2>Today’s two related questions</h2>
 <p>Among Tucson-area wells monitored in both windows, how did median depth to water change from <strong>1996–2000</strong> to <strong>2002–2006</strong>?</p>
+<p>For one long-record well, what linear rate describes change through time, and do the residuals support treating that rate as a stable trend?</p>
 <div class="kicker">
 <p>One well, one paired change</p>
 </div>
@@ -219,14 +220,15 @@ Dr.&nbsp;Andrew Bennett
 </section>
 <section class="slide level2">
 <h2>What you will finish</h2>
-<p>In the notebook:</p>
+<p>In one notebook:</p>
 <ol type="1">
 <li>calculate the mean paired change;</li>
 <li>show all 18 changes in a plot;</li>
-<li>build the sign-flip null distribution and p-value; and</li>
-<li>bootstrap an interval and write a four-sentence conclusion.</li>
+<li>build the sign-flip null distribution and p-value;</li>
+<li>fit a simple linear trend in ft/year; and</li>
+<li>inspect residuals and write a bounded conclusion.</li>
 </ol>
-<p>No test selection and no new dataset cleaning today.</p>
+<p>No test-selection survey, full OLS derivation, or machine-learning workflow today. The point is the shared reasoning, not a catalogue of methods.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
@@ -271,7 +273,7 @@ Dr.&nbsp;Andrew Bennett
 </section>
 <section class="slide level2">
 <h2>What is already done for you</h2>
-<p><code>data/week07_tucson_paired_wells.csv</code> is cleaned and instructor-checked.</p>
+<p><code>data/week12_tucson_paired_wells.csv</code> is cleaned and instructor-checked.</p>
 <p>Each row contains one well’s:</p>
 <ul>
 <li>pre-period median depth;</li>
@@ -283,7 +285,7 @@ Dr.&nbsp;Andrew Bennett
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Four checkpoints</h1>
+<h1>Five checkpoints</h1>
 
 </section>
 <section class="slide level2">
@@ -307,23 +309,24 @@ Dr.&nbsp;Andrew Bennett
 </div>
 </section>
 <section class="slide level2">
-<h2>3 — Bootstrap · target: 65 minutes</h2>
-<p>Within each repetition:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>sample <span class="op">=</span> rng.choice(change, size<span class="op">=</span>n_wells, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-2"><a></a>boot_means[i] <span class="op">=</span> sample.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Keep the 2.5th and 97.5th percentiles.</p>
-<div class="fragment due-notice">
-<p>Permutation asks about a no-effect world. Bootstrap asks how the effect estimate varies across repeated samples. Do not interchange the two distributions.</p>
-</div>
+<h2>3 — Interpret the test · target: 50 minutes</h2>
+<p>State the +12.47-ft effect before the p-value. Read the p-value as the frequency of results this extreme under the no-effect, exchangeable-sign model—not as the probability that the null is true.</p>
 </section>
 <section class="slide level2">
-<h2>4 — Conclusion · target: 75 minutes</h2>
-<p>Write four sentences:</p>
+<h2>4 — Fit a trend · target: 65 minutes</h2>
+<p>For the long-record well, convert dates to elapsed years and fit:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>fit <span class="op">=</span> stats.linregress(years_elapsed, depth_ft)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Report <code>fit.slope</code> in ft/year. Positive depth means a declining water table.</p>
+</section>
+<section class="slide level2">
+<h2>5 — Diagnose and conclude · target: 75 minutes</h2>
+<p>Plot residuals against time. Look for curvature, changing spread, long runs of one sign, and influential observations before interpreting <code>fit.pvalue</code>.</p>
+<p>Write one short conclusion for each analysis. Across the two conclusions:</p>
 <ol type="1">
 <li>result, direction, and feet;</li>
-<li>bootstrap interval and permutation p-value;</li>
-<li>wells as the unit and within-well label exchangeability; and</li>
-<li>one limitation on representativeness or causality.</li>
+<li>permutation p-value or trend evidence, as appropriate;</li>
+<li>wells as the unit for the paired comparison and time dependence for the trend;</li>
+<li>one limitation on representativeness, stability, prediction, or causality.</li>
 </ol>
 <div class="fragment">
 <p>Write <strong>+12.47 ft deeper</strong>, not just <strong>significant</strong>.</p>
@@ -339,7 +342,7 @@ Dr.&nbsp;Andrew Bennett
 <blockquote>
 <p>Across 18 paired monitoring wells, median depth to water was on average 12.47 ft greater in 2002–2006 than in 1996–2000.</p>
 </blockquote>
-<p>Then add the interval, p-value, assumption, and limitation.</p>
+<p>Then add the p-value, assumption, and limitation.</p>
 </section>
 <section class="slide level2">
 <h2>A sentence you may not write</h2>
@@ -354,10 +357,11 @@ Dr.&nbsp;Andrew Bennett
 <li>Restart the kernel and run every completed cell in order.</li>
 <li>Confirm that positive always means deeper.</li>
 <li>Make sure the sample size is stated as 18 <strong>wells</strong>.</li>
-<li>Read the conclusion without looking at the code.</li>
+<li>Confirm the trend slope is reported in <strong>ft/year</strong>, not ft/day.</li>
+<li>Read both conclusions without looking at the code.</li>
 </ol>
 <div class="due-notice">
-<p>HW 4 repeats this paired workflow on another cleaned groundwater dataset. Week 8 adds one polished evidence figure; it does not add another statistical design.</p>
+<p>The assessment asks for one paired comparison and one simple trend—not the longer standalone regression clinic. Week 13 turns one result into a polished evidence figure; it does not add another statistical design.</p>
 </div>
 
 

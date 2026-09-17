@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Discretization</title>
+  <title>HWRS 564a – Hydrographs, capture, and ET</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Discretization</h1>
-  <p class="subtitle">HWRS 564a · Week 12 · Tuesday, November 10</p>
+  <h1 class="title">Hydrographs, capture, and ET</h1>
+  <p class="subtitle">HWRS 564a · Week 9 · Thursday, October 22</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,86 +212,54 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 12, session 1 of 2</p>
+<p>Week 9, session 2 of 2</p>
 </div>
 <ol type="1">
-<li>Quiz — five minutes, on MODFLOW basics</li>
-<li>Choosing a cell size, and testing whether it mattered</li>
-<li>The one number that never converges</li>
-<li><code>ibound</code>, and domains that aren’t rectangles</li>
-<li>Connectivity, which nothing checks for you</li>
+<li>Reading a hydrograph out of the <code>.hds</code> file</li>
+<li>How fast a confined aquifer gets to steady state</li>
+<li>Depletion and capture, from the budget</li>
+<li>Evapotranspiration and the extinction depth</li>
 </ol>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Grid convergence</h1>
+<h1>A modelled hydrograph</h1>
 
 </section>
 <section class="slide level2">
-<h2>You picked 250 m because I said so</h2>
-<p><strong>A number that changes when you refine the grid is a number about your grid, not about the aquifer.</strong></p>
-<div class="fragment">
-<p>The test: run the same physical problem at two resolutions and see whether the answer moves.</p>
-</div>
-<div class="fragment">
-<p>Note <em>physical</em> problem. The well goes at the same <strong>location</strong>, not the same cell index — 7,500 m east and 5,000 m south, whatever that is in cells.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Three resolutions</h2>
-<div id="ab41f247" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-stdout">
-<pre><code> cell size     cells   well head   min head
-      500m       600    655.990m    620.00m
-      250m     2,400    654.365m    620.00m
-      125m     9,600    653.101m    620.00m</code></pre>
-</div>
-</div>
-<div class="fragment">
-<p>The minimum head does not move at all — it is a boundary condition. The <strong>well head keeps falling</strong>.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Which is expected</h2>
+<h2>Ten years at the wellfield</h2>
 
-<img data-src="week12_tue_discretization_files/figure-revealjs/cell-4-output-1.png" class="r-stretch"></section>
-<section class="slide level2">
-<h2>Why it never converges</h2>
-<p>Head near a well varies <strong>logarithmically</strong> with distance:</p>
-<p><span class="math display">\[h(r) = h_0 + \frac{Q}{2\pi T}\ln\frac{r}{r_0}\]</span></p>
-<div class="fragment">
-<p>So the <em>average</em> head over a cell containing a well depends on how big that cell is — forever. Halve the cell and the average goes deeper.</p>
-</div>
-<div class="fragment due-notice">
-<p><strong>The head in a pumping cell is not a water level in a well.</strong> Reporting it as one is among the most common errors in groundwater modelling reports.</p>
+<img data-src="week09_thu_capture_et_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
+<p>Total drawdown <strong>{python} f”{drawdown[-1]:.1f}“</strong> m over ten years, and <strong>{python} f”{np.interp(1.0, years, pct):.0f}%“</strong> of it in the first year.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>What does converge</h2>
-<ul>
-<li class="fragment">Regional heads away from the well</li>
-<li class="fragment">The <strong>water budget</strong> — every term</li>
-<li class="fragment">The shape and extent of the cone</li>
-</ul>
+<h2>How to get that series</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>hds <span class="op">=</span> flopy.utils.HeadFile(ws <span class="op">/</span> <span class="st">"t.hds"</span>)</span>
+<span id="cb1-2"><a></a>times <span class="op">=</span> np.array(hds.get_times())</span>
+<span id="cb1-3"><a></a></span>
+<span id="cb1-4"><a></a>well_head <span class="op">=</span> np.array([</span>
+<span id="cb1-5"><a></a>    hds.get_data(totim<span class="op">=</span>t)[<span class="dv">0</span>, WELL_ROW, WELL_COL] <span class="cf">for</span> t <span class="kw">in</span> times</span>
+<span id="cb1-6"><a></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>Those are the numbers you report. If you need a pumping water level you apply an analytical correction, refine locally, or say you can’t.</p>
+<p>One <code>get_data</code> call per output time, indexing the cell you care about. <code>get_times()</code> tells you what is in the file — <strong>which is only what <code>OC</code> was told to save</strong>.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: is this converging?</h2>
-<p>Three runs of the same problem. Decide whether the grid is fine enough.</p>
-<script type="exercise-setup-ex_converge-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaGVhZHMgPSB7NTAwLjA6IDY1My4wOTMsIDI1MC4wOiA2NTQuMzYwLCAxMjUuMDogNjU0Ljk4N30ifQ==
+<h2>Your turn: convert to years</h2>
+<p>The steady-state period occupies day 0 to day 1, so pumping starts at day 1.</p>
+<script type="exercise-setup-ex_years-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3llYXJzIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5wXG50aW1lcyA9IG5wLmFycmF5KFsxLjAsIDIuMCwgMy4wLCAzMS4wLCAxMjIuMjUsIDM2ODEuMF0pIn0=
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJjaGFuZ2VfMSA9IGhlYWRzWzI1MC4wXSAtIGhlYWRzWzUwMC4wXVxuY2hhbmdlXzIgPSBfX19fX19cbmNvbnZlcmdpbmcgPSBfX19fX19cbnByaW50KGZcIjUwMCAtPiAyNTAgbSA6IHtjaGFuZ2VfMTorLjNmfSBtXCIpXG5wcmludChmXCIyNTAgLT4gMTI1IG0gOiB7Y2hhbmdlXzI6Ky4zZn0gbVwiKVxucHJpbnQoZlwiY2hhbmdlcyBzaHJpbmtpbmc/IHtjb252ZXJnaW5nfVwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3llYXJzIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ5ZWFycyA9IF9fX19fX1xuZm9yIHQsIHkgaW4gemlwKHRpbWVzLCB5ZWFycyk6XG4gICAgcHJpbnQoZlwiZGF5IHt0OjguMmZ9ICAtPiAge3k6Ny4zZn0geWVhcnMgc2luY2UgcHVtcGluZyBiZWdhblwiKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_converge">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_years">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -301,12 +269,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Converging means each successive change is smaller in magnitude than the last. <code>abs()</code> both of them before comparing.</p>
+<p>Subtract the day pumping started, then divide by the days in a year. Numpy does both elementwise.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_converge">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_years">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -316,10 +284,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>change_2 <span class="op">=</span> heads[<span class="fl">125.0</span>] <span class="op">-</span> heads[<span class="fl">250.0</span>]</span>
-<span id="cb2-2"><a></a>converging <span class="op">=</span> <span class="bu">abs</span>(change_2) <span class="op">&lt;</span> <span class="bu">abs</span>(change_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>+1.267</code> then <code>+0.627</code> — halving each time, so yes, the sequence is converging, just to a value it never quite reaches.</p>
-<p><strong>Had the second change been larger than the first</strong>, the grid would be too coarse to be saying anything at all, and the right response is to refine until the changes shrink — not to pick whichever answer you like.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>years <span class="op">=</span> (times <span class="op">-</span> <span class="fl">1.0</span>) <span class="op">/</span> <span class="fl">365.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The first output lands at exactly 0 years — the end of the steady-state period, before any pumping. <strong>That is your baseline</strong>, and forgetting to subtract it is how you end up reporting a drawdown that includes a year of nothing happening.</p>
 </div>
 </div>
 </div>
@@ -327,103 +293,60 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1><code>ibound</code></h1>
+<h1>Depletion and capture</h1>
 
 </section>
 <section class="slide level2">
-<h2>Three values, three meanings</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Value</th>
-<th>Meaning</th>
-<th>Head is</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>1</code></td>
-<td>active</td>
-<td>solved for</td>
-</tr>
-<tr class="even">
-<td><code>0</code></td>
-<td><strong>inactive</strong> — not in the model</td>
-<td>never computed</td>
-</tr>
-<tr class="odd">
-<td><code>-1</code></td>
-<td>constant head</td>
-<td>fixed at <code>strt</code>, forever</td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
-<p><strong><code>ibound = 0</code> is not the same as <code>hk = 0</code>.</strong> An inactive cell is removed from the equations. A zero-conductivity cell is still solved for, still has a head, and still makes your solver miserable.</p>
+<h2>Where the water comes from, over time</h2>
+<div id="8138f7a4" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-stdout">
+<pre><code>                                    m3/d  % of pumping
+net storage, end of the first month      5,190.6         26.0%
+net storage, end of year 10                  0.0          0.0%</code></pre>
 </div>
-<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 12. -->
+</div>
+<div class="fragment">
+<p>After one month, <strong>about a quarter</strong> of the well’s yield is water taken out of storage. By year ten, storage contributes essentially nothing.</p>
+</div>
 </section>
-<section class="slide level2 smaller">
-<h2>Cell status turns a rectangle into a model domain</h2>
+<section class="slide level2">
+<h2>The distinction regulation is built on</h2>
 <div class="columns">
-<div class="column" style="width:47%;">
-<p><img data-src="../assets/legacy/boundary_cells.jpg" style="width:88.0%" alt="A rectangular groundwater model grid with no-flow cells outside an aquifer boundary, constant-head cells at an edge, and variable-head cells inside"></p>
-</div><div class="column" style="width:53%;">
-<p>The grid stays rectangular, but the <strong>solved domain does not have to be</strong>.</p>
-<ul>
-<li class="fragment">Grey cells are removed from the equations</li>
-<li class="fragment">Blue cells impose a fixed head</li>
-<li class="fragment">White cells carry the unknown heads</li>
-<li class="fragment">The black line is the conceptual aquifer boundary</li>
-</ul>
-<div class="fragment due-notice">
-<p>Cell status is a modeling decision about the domain, not a cosmetic mask.</p>
-</div>
+<div class="column" style="width:50%;">
+<p><strong>Depletion</strong></p>
+<p>Water out of storage. A one-off withdrawal from the aquifer’s stock.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Capture</strong></p>
+<p>Recharge or throughflow diverted to the well. Renewable — but it was going somewhere.</p>
 </div></div>
-</section>
-<section class="slide level2">
-<h2>Cutting the basin out of the rectangle</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>ibound <span class="op">=</span> np.ones((<span class="dv">1</span>, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb3-2"><a></a>ibound[<span class="dv">0</span>][land_surface <span class="op">&gt;</span> <span class="fl">850.0</span>] <span class="op">=</span> <span class="dv">0</span>     <span class="co"># bedrock, not basin fill</span></span>
-<span id="cb3-3"><a></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
-<span id="cb3-4"><a></a>ibound[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>387 cells inactive — 16% of the grid. The domain is now basin-shaped.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>And the problem that creates</h2>
-
-<img data-src="week12_tue_discretization_files/figure-revealjs/cell-5-output-1.png" class="r-stretch"><div class="fragment">
-<p>The southern three rows became a wall with nothing behind it.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>MODFLOW would not tell you</h2>
-<ul>
-<li class="fragment">It runs</li>
-<li class="fragment">It solves the remaining domain</li>
-<li class="fragment">It computes nothing for rows 37–39</li>
-<li class="fragment">It reports a <strong>closed budget</strong> — because a region exchanging no water is trivially in balance</li>
-</ul>
 <div class="fragment due-notice">
-<p><strong>Checking connectivity is your job.</strong> Nothing in the software does it for you, and a zero discrepancy will not warn you.</p>
+<p><strong>The source changes over time</strong>, and only the budget shows it. That is the most policy-relevant output a transient model produces.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: find the blocked rows</h2>
-<script type="exercise-setup-ex_connect-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbiMgYWN0aXZlLWNlbGwgY291bnRzIGZvciBhIDEwLXJvdyB0b3kgZG9tYWluXG5hY3RpdmVfcGVyX3JvdyA9IG5wLmFycmF5KFsxMiwgMTQsIDE1LCAxNSwgMTUsIDEzLCA4LCAwLCAwLCAwXSkifQ==
+<h2>One detail about budget blocks</h2>
+<p>MODFLOW writes <strong>one budget block per stress period</strong>, at the end of it — not one per time step.</p>
+<div class="fragment">
+<p>So 12 periods gives 12 blocks, even with 71 head snapshots saved.</p>
+</div>
+<div class="fragment">
+<p>If you want a budget time series at finer resolution, you read the <strong>cell budget file</strong> (<code>.cbc</code>), not the <code>.list</code>. The listing is a summary.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: classify the sources</h2>
+<script type="exercise-setup-ex_source-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NvdXJjZSIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImJ1ZGdldCA9IHtcbiAgICBcIlNUT1JBR0VcIjogICAgICAge1wiaW5cIjogNTE5MC42LCBcIm91dFwiOiAwLjB9LFxuICAgIFwiUkVDSEFSR0VcIjogICAgICB7XCJpblwiOiAxNzQwMC4wLCBcIm91dFwiOiAwLjB9LFxuICAgIFwiQ09OU1RBTlQgSEVBRFwiOiB7XCJpblwiOiAxMzE3NzQuNiwgXCJvdXRcIjogMTI5MTc0LjZ9LFxuICAgIFwiV0VMTFNcIjogICAgICAgICB7XCJpblwiOiAwLjAsIFwib3V0XCI6IDIwMDAwLjB9LFxufSJ9
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImJsb2NrZWQgPSBfX19fX19cbndoaWNoID0gX19fX19fXG5wcmludChmXCJ7YmxvY2tlZH0gcm93cyBhcmUgZnVsbHkgaW5hY3RpdmU6IHJvd3Mge3doaWNofVwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3NvdXJjZSIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZGVmIG5ldCh0ZXJtKTpcbiAgICByZXR1cm4gYnVkZ2V0W3Rlcm1dW1wiaW5cIl0gLSBidWRnZXRbdGVybV1bXCJvdXRcIl1cblxuZGVwbGV0aW9uID0gX19fX19fXG5jYXB0dXJlID0gX19fX19fXG5wcmludChmXCJkZXBsZXRpb24gKGZyb20gc3RvcmFnZSkge2RlcGxldGlvbjo5LC4xZn0gbTMvZFwiKVxucHJpbnQoZlwiY2FwdHVyZSAoZXZlcnl0aGluZyBlbHNlKXtjYXB0dXJlOjksLjFmfSBtMy9kXCIpXG5wcmludChmXCJ0b3RhbCAgICAgICAgICAgICAgICAgICAge2RlcGxldGlvbiArIGNhcHR1cmU6OSwuMWZ9IG0zL2RcIikifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_connect">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_source">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -433,12 +356,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Summing a boolean array counts the <code>True</code>s. <code>np.where(condition)[0]</code> gives the indices where it holds.</p>
+<p>Depletion is the storage term alone. Capture is recharge plus the <em>net</em> constant-head contribution. They should sum to the pumping rate.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_connect">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_source">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -448,30 +371,63 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>blocked <span class="op">=</span> <span class="bu">int</span>((active_per_row <span class="op">==</span> <span class="dv">0</span>).<span class="bu">sum</span>())</span>
-<span id="cb4-2"><a></a>which <span class="op">=</span> np.where(active_per_row <span class="op">==</span> <span class="dv">0</span>)[<span class="dv">0</span>].tolist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Three rows, 7 through 9.</p>
-<p>The fix in the lab is to raise the bedrock cutoff until every row reaches a boundary. Note what that means: <strong>you changed a geological decision because of a numerical problem.</strong> Sometimes right, sometimes the start of a model answering a different question — but either way it goes in the report, not in your head.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>depletion <span class="op">=</span> net(<span class="st">"STORAGE"</span>)</span>
+<span id="cb4-2"><a></a>capture <span class="op">=</span> net(<span class="st">"RECHARGE"</span>) <span class="op">+</span> net(<span class="st">"CONSTANT HEAD"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>5,191 plus 20,000 — which sums to 25,191, not 20,000.</p>
+<p><strong>That is not an error in your arithmetic</strong>; it means the aquifer is still adjusting and heads are still falling, so more is entering than the well removes. Steady state is where these balance, and this snapshot is a month into a ten-year approach.</p>
 </div>
 </div>
 </div>
+</div>
+</section></section>
+<section>
+<section class="title-slide slide level1 center" data-background-color="#0C234B">
+<h1>Evapotranspiration</h1>
+
+</section>
+<section class="slide level2">
+<h2>ET depends on how deep the water is</h2>
+<p><code>EVT</code> removes water at a rate that falls with depth to water.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>surf</code></td>
+<td>elevation at which ET is at its maximum</td>
+</tr>
+<tr class="even">
+<td><code>evtr</code></td>
+<td>that maximum rate, m/d</td>
+</tr>
+<tr class="odd">
+<td><code>exdp</code></td>
+<td><strong>extinction depth</strong> — where ET reaches zero</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>Between <code>surf</code> and <code>surf − exdp</code>, MODFLOW interpolates linearly. Below, ET stops.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: pick a cell size</h2>
-<p>You need to resolve a cone of depression about 2 km across, and the domain is 15 km by 10 km. Cells must be square.</p>
-<script type="exercise-setup-ex_cellsize-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NlbGxzaXplIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY29uZV93aWR0aF9tID0gMjAwMC4wXG5kb21haW5feCwgZG9tYWluX3kgPSAxNTAwMC4wLCAxMDAwMC4wXG5jZWxsc19hY3Jvc3NfY29uZSA9IDggICAgICAgICMgYSBydWxlIG9mIHRodW1iOiBhdCBsZWFzdCA4IGNlbGxzIGFjcm9zcyBhIGZlYXR1cmUifQ==
+<h2>Your turn: the ET rate at depth</h2>
+<script type="exercise-setup-ex_et-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2V0IiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoic3VyZiA9IDcwMC4wICAgICAgICAjIG1cbmV2dHIgPSAzLjBlLTMgICAgICAgIyBtL2QgYXQgbWF4aW11bVxuZXhkcCA9IDguMCAgICAgICAgICAjIG0gZXh0aW5jdGlvbiBkZXB0aFxuaGVhZHMgPSBbNzAwLjAsIDY5Ni4wLCA2OTIuMCwgNjg1LjBdIn0=
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NlbGxzaXplIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJtYXhfY2VsbF9zaXplID0gX19fX19fXG5uX2NlbGxzID0gX19fX19fXG5wcmludChmXCJjZWxsIHNpemUgbm8gbGFyZ2VyIHRoYW4ge21heF9jZWxsX3NpemU6LjBmfSBtXCIpXG5wcmludChmXCJ0aGF0IGlzIHtuX2NlbGxzOiwuMGZ9IGNlbGxzIGluIG9uZSBsYXllclwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2V0IiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJmb3IgaCBpbiBoZWFkczpcbiAgICBkZXB0aCA9IHN1cmYgLSBoXG4gICAgcmF0ZSA9IF9fX19fX1xuICAgIHByaW50KGZcImhlYWQge2g6Ni4xZn0gbSAgZGVwdGgge2RlcHRoOjUuMWZ9IG0gIEVUIHtyYXRlOi41Zn0gbS9kXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_cellsize">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_et">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -481,12 +437,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>If you need 8 cells across a 2 km feature, each cell can be at most 2000/8 across. Then count how many fit in the domain.</p>
+<p>Linear from <code>evtr</code> at zero depth to zero at <code>exdp</code>, and it stays at zero beyond. <code>max(0.0, ...)</code> handles the last case.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_cellsize">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_et">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -496,13 +452,26 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>max_cell_size <span class="op">=</span> cone_width_m <span class="op">/</span> cells_across_cone</span>
-<span id="cb5-2"><a></a>n_cells <span class="op">=</span> (domain_x <span class="op">/</span> max_cell_size) <span class="op">*</span> (domain_y <span class="op">/</span> max_cell_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>250 m cells, 2,400 of them — which is where the number I handed you in Week 11 came from.</p>
-<p><strong>Resolve the feature you came to look at.</strong> Same argument as choosing a time step, and the same argument as choosing a rolling window in Week 5: the discretization has to be finer than the thing you are trying to see.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>rate <span class="op">=</span> <span class="bu">max</span>(<span class="fl">0.0</span>, evtr <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> depth <span class="op">/</span> exdp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>3.0e-3 at the surface, half that at 4 m, a quarter at 6 m, and <strong>zero</strong> at 8 m and beyond.</p>
+<p>The <code>max(0.0, ...)</code> matters: without it, a water table 15 m down would give a <em>negative</em> ET rate, which MODFLOW would read as water being added.</p>
 </div>
 </div>
 </div>
+</div>
+</section>
+<section class="slide level2">
+<h2>The feedback that matters</h2>
+<ol type="1">
+<li class="fragment">Pumping lowers the water table</li>
+<li class="fragment">A lower water table means less ET</li>
+<li class="fragment">Less ET means more water left in the aquifer</li>
+</ol>
+<div class="fragment due-notice">
+<p>So <strong>a fraction of what a well produces is not new water at all</strong> — it is water that would otherwise have been transpired by the vegetation along the river.</p>
+</div>
+<div class="fragment">
+<p>That is not an accounting curiosity. It is the mechanism behind riparian habitat loss along the Santa Cruz, and a model without an <code>EVT</code> package cannot represent it.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
@@ -511,21 +480,23 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>Test the answer against cell size; a number that moves is about your grid</li>
-<li>The pumping-cell head never converges, and is not a well water level</li>
-<li><code>ibound</code>: 1 active, 0 inactive, −1 constant head — and 0 is not <code>hk = 0</code></li>
-<li>A disconnected region still reports a closed budget</li>
+<li>Pull a hydrograph out of <code>.hds</code> with <code>get_times()</code> and <code>get_data(totim=...)</code></li>
+<li>A confined aquifer reaches most of its drawdown in the first year</li>
+<li>Depletion versus capture, and that the mix changes over time</li>
+<li>Budget blocks are per stress period, not per time step</li>
+<li>ET falls linearly to zero at the extinction depth, and pumping reduces it</li>
 </ul>
 <div class="kicker">
-<p>Before Thursday</p>
+<p>What’s due</p>
 </div>
 <ul>
-<li>Parts 1–3 of <code>labs/week12/week12_lab_discretization_boundaries.ipynb</code></li>
+<li><strong>HW 4 — Build and stress-test a basin model</strong>, Wednesday 10/21 at 11:59pm</li>
+<li><strong>Project 2 analysis, part 2</strong></li>
 </ul>
 <div class="kicker">
-<p>Thursday</p>
+<p>Next week</p>
 </div>
-<p>Taking the confining layer off, and the model that stops converging.</p>
+<p>Layers, rivers, and loading a model somebody else built, followed by a guided Thursday workshop using an inherited model.</p>
 
 
 <script type="pyodide-data">

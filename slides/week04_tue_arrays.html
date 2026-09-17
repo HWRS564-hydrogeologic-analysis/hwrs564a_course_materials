@@ -221,7 +221,7 @@ Dr.&nbsp;Andrew Bennett
 <li>Two dimensions, and what <code>axis=</code> actually means</li>
 <li>Indexing, slicing, and boolean masks</li>
 </ol>
-<p>By the end you will be manipulating a model grid the way you will be doing it from Week 10 onward.</p>
+<p>By the end you will be manipulating a model grid the way you will be doing it from Week 6 onward.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
@@ -258,7 +258,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwibWluLWxpbmVz
 <section class="slide level2">
 <h2>Why you should care in <em>this</em> course</h2>
 <ul>
-<li class="fragment">A Week 11 model grid is 40 × 60 — small</li>
+<li class="fragment">A Week 7 model grid is 40 × 60 — small</li>
 <li class="fragment">A basin model is 500 × 800 × 12 layers ≈ 5 million cells</li>
 <li class="fragment">The solver touches every one of them, every iteration, every time step</li>
 </ul>
@@ -453,7 +453,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <span id="cb4-3"><a></a>heads[:, <span class="dv">3</span>]      <span class="co"># a whole column</span></span>
 <span id="cb4-4"><a></a>heads[:<span class="dv">2</span>, :<span class="dv">2</span>]    <span class="co"># the top-left 2x2 block</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>Row first, then column — the same order MODFLOW uses for <code>[layer, row, column]</code>. Getting used to it now saves you in Week 11.</p>
+<p>Row first, then column — the same order MODFLOW uses for <code>[layer, row, column]</code>. Getting used to it now saves you in Week 7.</p>
 </div>
 <div class="fragment">
 <p>Slices are half-open: <code>[:2]</code> gives you rows 0 and 1, not 0 through 2.</p>

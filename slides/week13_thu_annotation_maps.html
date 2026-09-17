@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Layers, rivers, and inheriting a model</title>
+  <title>HWRS 564a – Annotation, maps, and saving</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Layers, rivers, and inheriting a model</h1>
-  <p class="subtitle">HWRS 564a · Week 14 · Tuesday, November 24</p>
+  <h1 class="title">Annotation, maps, and saving</h1>
+  <p class="subtitle">HWRS 564a · Week 13 · Thursday, November 19</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,84 +212,81 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 14, one session only — Thanksgiving is Thursday</p>
+<p>Week 13, session 2 of 2</p>
 </div>
 <ol type="1">
-<li>Multiple layers, and why <code>vka</code> is a separate argument</li>
-<li>Rivers, and why they are not constant heads</li>
-<li>Loading a model somebody else built</li>
-<li>Changing one thing, and comparing</li>
+<li>Annotation: spending the reader’s attention deliberately</li>
+<li>Titles that say something</li>
+<li>Maps from latitude and longitude, without lying about shape</li>
+<li>Two meanings of vector vs.&nbsp;raster, then <code>figsize</code> and <code>dpi</code></li>
+<li>The panel that keeps a figure honest</li>
 </ol>
-<p>The last two are how groundwater modelling actually starts in practice.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Layers</h1>
+<h1>Annotation</h1>
 
 </section>
 <section class="slide level2">
-<h2>Aquifers are not one thing</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Layer</th>
-<th>Elevation</th>
-<th>Material</th>
-<th><code>hk</code> (m/d)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>600 – 520 m</td>
-<td>upper basin fill</td>
-<td>15</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>520 – 480 m</td>
-<td><strong>clay</strong></td>
-<td>0.05</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>480 – 400 m</td>
-<td>lower basin fill</td>
-<td>25</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>flopy.modflow.ModflowDis(mf, nlay<span class="op">=</span><span class="dv">3</span>, ..., top<span class="op">=</span><span class="fl">600.0</span>, botm<span class="op">=</span>[<span class="fl">520.0</span>, <span class="fl">480.0</span>, <span class="fl">400.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p><code>botm</code> takes a <strong>list</strong> — one bottom per layer. <code>top</code> stays a single surface: the top of layer 1.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2><code>hk</code> and <code>vka</code> are different arguments</h2>
+<h2>A reader looks for a few seconds</h2>
+<p>Annotation is how you spend those seconds on the thing you care about, rather than leaving the reader to search for it.</p>
 <ul>
-<li class="fragment"><code>hk</code> is horizontal conductivity</li>
-<li class="fragment"><code>vka</code> is vertical</li>
-<li class="fragment">In layered sediments they differ by 10 to 100 — deposition makes horizontal flow easier</li>
+<li class="fragment"><strong><code>ax.axhline</code> / <code>axvline</code></strong> — a reference value</li>
+<li class="fragment"><strong><code>ax.axvspan</code></strong> — a period that means something</li>
+<li class="fragment"><strong><code>ax.annotate</code></strong> — an arrow to one point</li>
+<li class="fragment"><strong><code>ax.text</code></strong> — a label anywhere</li>
 </ul>
+</section>
+<section class="slide level2">
+<h2>All four at once</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>ax.axhline(baseline, color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">":"</span>)</span>
+<span id="cb1-2"><a></a>ax.text(x0, baseline <span class="op">-</span> <span class="dv">4</span>, <span class="st">"level when records began"</span>, color<span class="op">=</span><span class="st">"grey"</span>)</span>
+<span id="cb1-3"><a></a></span>
+<span id="cb1-4"><a></a>ax.axvspan(pd.Timestamp(<span class="st">"1950-01-01"</span>), pd.Timestamp(<span class="st">"1980-01-01"</span>),</span>
+<span id="cb1-5"><a></a>           color<span class="op">=</span><span class="st">"#81D3EB"</span>, alpha<span class="op">=</span><span class="fl">0.18</span>)</span>
+<span id="cb1-6"><a></a>ax.text(pd.Timestamp(<span class="st">"1952-01-01"</span>), <span class="dv">30</span>, <span class="st">"peak agricultural pumping"</span>)</span>
+<span id="cb1-7"><a></a></span>
+<span id="cb1-8"><a></a>ax.annotate(<span class="ss">f"</span><span class="sc">{</span>deepest<span class="sc">:.0f}</span><span class="ss"> ft"</span>, xy<span class="op">=</span>(date, deepest),</span>
+<span id="cb1-9"><a></a>            xytext<span class="op">=</span>(<span class="op">-</span><span class="dv">70</span>, <span class="dv">26</span>), textcoords<span class="op">=</span><span class="st">"offset points"</span>,</span>
+<span id="cb1-10"><a></a>            arrowprops<span class="op">=</span><span class="bu">dict</span>(arrowstyle<span class="op">=</span><span class="st">"-&gt;"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>That ratio is the <strong>anisotropy</strong>, and it is what makes a confining unit confine.</p>
+<p><code>textcoords="offset points"</code> positions the label <strong>relative to the point</strong>, in typographic points. That way it stays put when the axis limits change.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: vertical resistance</h2>
-<p>Resistance to vertical flow through a layer is its thickness divided by its vertical conductivity.</p>
-<script type="exercise-setup-ex_resist-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Jlc2lzdCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InRoaWNrbmVzcyA9IHtcInVwcGVyIHNhbmRcIjogODAuMCwgXCJjbGF5XCI6IDQwLjAsIFwibG93ZXIgc2FuZFwiOiA4MC4wfVxudmthID0ge1widXBwZXIgc2FuZFwiOiAxLjUsIFwiY2xheVwiOiAwLjAwNSwgXCJsb3dlciBzYW5kXCI6IDIuNX0ifQ==
+<h2>Titles are the most wasted line</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Wasted</strong></p>
+<blockquote>
+<p>Depth to water vs.&nbsp;time</p>
+</blockquote>
+<p>Names the axes. The reader can already see the axes.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Useful</strong></p>
+<blockquote>
+<p>Well D-15-13 11CBA: 110 ft of decline over 63 years of record</p>
+</blockquote>
+<p>States the finding.</p>
+</div></div>
+<div class="fragment due-notice">
+<p>If your title could be generated automatically from the axis labels, it is doing no work. <strong>Say what the figure shows.</strong></p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: mark the monsoon</h2>
+<script type="exercise-setup-ex_annot-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Fubm90IiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IG1hdHBsb3RsaWIucHlwbG90IGFzIHBsdFxuY2xpbSA9IFszMi4wLCAzMS4xLCAxNy44LCA1LjEsIDAuNiwgMC4zLCAxOC41LCAyMy40LCA3LjksIDMuMCwgMS44LCA5LjhdXG5tb250aHMgPSBsaXN0KHJhbmdlKDEsIDEzKSkifQ==
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3Jlc2lzdCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoicmVzaXN0YW5jZSA9IHtuYW1lOiBfX19fX18gZm9yIG5hbWUgaW4gdGhpY2tuZXNzfVxuZm9yIG5hbWUsIHIgaW4gcmVzaXN0YW5jZS5pdGVtcygpOlxuICAgIHByaW50KGZcIntuYW1lOjEyc30ge3I6OSwuMGZ9IGRheXNcIilcbnByaW50KGZcIlxcbmNsYXkgaXMge3Jlc2lzdGFuY2VbJ2NsYXknXSAvIHJlc2lzdGFuY2VbJ3VwcGVyIHNhbmQnXTosLjBmfXggXCJcbiAgICAgIGZcInRoZSByZXNpc3RhbmNlIG9mIHRoZSBzYW5kIGFib3ZlIGl0XCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Fubm90IiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJmaWcsIGF4ID0gcGx0LnN1YnBsb3RzKGZpZ3NpemU9KDgsIDMuMikpXG5heC5iYXIobW9udGhzLCBjbGltLCBjb2xvcj1cIiMxRTUyODhcIiwgYWxwaGE9MC44NSlcbmF4LmF4dnNwYW4oNS41LCA5LjUsIGNvbG9yPVwiIzgxRDNFQlwiLCBhbHBoYT0wLjI1KVxuYXgudGV4dCg3LjUsIDI4LCBfX19fX18sIGhhPVwiY2VudGVyXCIsIGNvbG9yPVwiIzFFNTI4OFwiKVxuYXguc2V0X3RpdGxlKF9fX19fXylcbmF4LnNldF95bGFiZWwoXCJtZWFuIGRhaWx5IGRpc2NoYXJnZSAoY2ZzKVwiKVxucGx0LnNob3coKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_resist">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_annot">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -299,12 +296,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Thickness over vertical conductivity, for each name. Both dictionaries share their keys.</p>
+<p>The label is one word. The title should state what the two peaks and the gap between them <em>mean</em> — not “discharge by month”.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_resist">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_annot">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -314,55 +311,114 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>resistance <span class="op">=</span> {name: thickness[name] <span class="op">/</span> vka[name] <span class="cf">for</span> name <span class="kw">in</span> thickness}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>8,000 days for the clay against 53 for the upper sand — <strong>150 times</strong> the resistance, from a layer half the thickness.</p>
-<p><strong>That is what a confining unit is</strong>: not an impermeable barrier, but a layer whose resistance dominates the vertical path. Water still crosses it. It just takes a long time, and the head difference across it can be large.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>ax.text(<span class="fl">7.5</span>, <span class="dv">28</span>, <span class="st">"monsoon"</span>, ha<span class="op">=</span><span class="st">"center"</span>, color<span class="op">=</span><span class="st">"#1E5288"</span>)</span>
+<span id="cb2-2"><a></a>ax.set_title(<span class="st">"Sabino Creek peaks twice a year, with a dry foresummer between"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Two peaks with different causes: January is winter frontal storms, July–August is monsoon convection. A title saying “monthly discharge” leaves the reader to notice that themselves, and most won’t.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Which the model confirms</h2>
-
-<img data-src="week14_tue_layers_rivers_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
-<p>The well pumps from <strong>layer 2</strong>, under the clay. Head difference across the clay at the wellfield: <strong>{python} f”{vdiff:.1f}“</strong> m.</p>
-</div>
-<div class="fragment">
-<p>A single-layer model would have averaged all three units into one transmissivity and had nothing to say about which aquifer the water came from — which is exactly what a well-permit application asks.</p>
 </div>
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Rivers</h1>
-
+<h1>Maps</h1>
+<!-- Adapted from old_slides/hwrs564a_oct14.pdf. -->
 </section>
-<section class="slide level2">
-<h2>Not a constant head</h2>
-<p><code>RIV</code> takes <code>[layer, row, col, stage, cond, rbot]</code>.</p>
-<ul>
-<li class="fragment">head <strong>above</strong> <code>stage</code> → the aquifer drains to the river</li>
-<li class="fragment">head between <code>stage</code> and <code>rbot</code> → the river leaks in, proportionally</li>
-<li class="fragment">head <strong>below <code>rbot</code></strong> → leakage stops increasing. The river is <strong>disconnected</strong></li>
-</ul>
-<div class="fragment due-notice">
-<p>That last case is the point. A constant head at the river would supply unlimited water forever — which is why using one makes <strong>any</strong> pumping scenario look sustainable.</p>
+<section class="slide level2 smaller">
+<h2>Raster and vector describe two different decisions</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Context</th>
+<th>Raster</th>
+<th>Vector</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>GIS data</strong></td>
+<td>A grid of cells: elevation, temperature, recharge</td>
+<td>Points, lines, and polygons: wells, rivers, basin boundaries</td>
+</tr>
+<tr class="even">
+<td><strong>Saved figures</strong></td>
+<td>Pixels: PNG or JPEG</td>
+<td>Drawing instructions: PDF or SVG</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>A vector basin boundary can be plotted over a raster elevation grid, then the whole figure can be saved as either a raster PNG or a vector PDF.</p>
 </div>
+<div class="fragment due-notice">
+<p>Same words, different decisions: <strong>data structure</strong> when building the map, <strong>output format</strong> when exporting the figure.</p>
+</div>
+<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 51. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Raster stores values; vector stores geometry</h2>
+<div class="columns">
+<div class="column" style="width:52%;">
+<p><strong>Raster: one value per cell</strong></p>
+<p><img data-src="../assets/legacy/gis_raster.png" style="width:76.0%" alt="A landscape image enlarged into a grid of numeric raster cells and then colored by cell value"></p>
+</div><div class="column" style="width:48%;">
+<p><strong>Vector: coordinates make features</strong></p>
+<p><img data-src="../assets/legacy/gis_vector.png" style="width:76.0%" alt="Vector points, connected lines, and closed polygons represented by x and y coordinates"></p>
+</div></div>
+<p><small>Legacy source graphics reproduced from the course’s prior GIS introduction.</small></p>
 </section>
 <section class="slide level2">
-<h2>Your turn: connected or not?</h2>
-<script type="exercise-setup-ex_riv-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JpdiIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InN0YWdlLCByYm90LCBjb25kID0gNjY1LjAsIDY2MC4wLCA1MDAuMFxuYXF1aWZlcl9oZWFkcyA9IFs2NjguMCwgNjYzLjAsIDY1OC4wLCA2NDAuMF0ifQ==
+<h2>A map is a scatter with two obligations</h2>
+<ol type="1">
+<li class="fragment">The <strong>aspect ratio</strong> has to be right</li>
+<li class="fragment">The reader has to be able to tell <strong>where they are</strong></li>
+</ol>
+<div class="fragment">
+<p>At 32°N a degree of longitude is only <span class="math inline">\(\cos(32°) \approx 0.85\)</span> as long as a degree of latitude. Plotting them 1:1 stretches the basin east–west by 18%.</p>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>ax.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.deg2rad(lat.mean())))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 46. -->
+</section>
+<section class="slide level2 smaller">
+<h2>A map and a network answer different questions</h2>
+<div class="columns">
+<div class="column" style="width:68%;">
+<p><img data-src="../assets/legacy/yakima_map_network.jpg" style="width:98.0%" alt="Yakima River basin elevation map and its corresponding stream-network topology, with gauged locations highlighted in red"></p>
+</div><div class="column" style="width:32%;">
+<p><strong>The map preserves</strong></p>
+<ul>
+<li>location and elevation</li>
+<li>basin shape</li>
+<li>spatial context</li>
+</ul>
+<p><strong>The network preserves</strong></p>
+<ul>
+<li>upstream/downstream order</li>
+<li>junctions and connectivity</li>
+<li>gauged versus ungauged reaches</li>
+</ul>
+</div></div>
+<p><small>Bennett et al.&nbsp;(2022), <em>Journal of Hydrometeorology</em>, Fig. 2.</small></p>
+</section>
+<section class="slide level2">
+<h2>Your turn: fix the aspect</h2>
+<script type="exercise-setup-ex_aspect-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2FzcGVjdCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHQsIG51bXB5IGFzIG5wXG5ybmcgPSBucC5yYW5kb20uZGVmYXVsdF9ybmcoOClcbmxhdCA9IDMyLjAgKyBybmcucmFuZG9tKDMwMCkgKiAwLjQ1XG5sb24gPSAtMTExLjIgKyBybmcucmFuZG9tKDMwMCkgKiAwLjQ1In0=
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3JpdiIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZm9yIGggaW4gYXF1aWZlcl9oZWFkczpcbiAgICBpZiBoID4gc3RhZ2U6XG4gICAgICAgIGZsb3cgPSBjb25kICogKHN0YWdlIC0gaCkgICAgICAgICAgIyBuZWdhdGl2ZTogYXF1aWZlciAtPiByaXZlclxuICAgIGVsaWYgaCA+IHJib3Q6XG4gICAgICAgIGZsb3cgPSBjb25kICogKHN0YWdlIC0gaCkgICAgICAgICAgIyBwb3NpdGl2ZTogcml2ZXIgLT4gYXF1aWZlclxuICAgIGVsc2U6XG4gICAgICAgIGZsb3cgPSBfX19fX18gICAgICAgICAgICAgICAgICAgICAgICMgZGlzY29ubmVjdGVkOiBjYXBwZWRcbiAgICBwcmludChmXCJoZWFkIHtoOjYuMWZ9IG0gIC0+ICByaXZlciBmbG93IHtmbG93Ois5LjFmfSBtMy9kXCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2FzcGVjdCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZmlnLCBheCA9IHBsdC5zdWJwbG90cyhmaWdzaXplPSg1LCA1KSlcbmF4LnNjYXR0ZXIobG9uLCBsYXQsIHM9NiwgY29sb3I9XCIjQUIwNTIwXCIsIGFscGhhPTAuNilcbmF4LnNldF9hc3BlY3QoX19fX19fKVxuYXguc2V0X3hsYWJlbChcImxvbmdpdHVkZVwiKVxuYXguc2V0X3lsYWJlbChcImxhdGl0dWRlXCIpXG5wbHQuc2hvdygpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_riv">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_aspect">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -372,12 +428,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Once the water table drops below the streambed bottom, the driving head stops growing — it is fixed at <code>stage - rbot</code>.</p>
+<p><code>np.deg2rad</code> converts degrees to radians, which is what <code>np.cos</code> expects. The aspect you want is one divided by that cosine.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_riv">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_aspect">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -387,9 +443,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>flow <span class="op">=</span> cond <span class="op">*</span> (stage <span class="op">-</span> rbot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>2,500 m³/d, and it stays there whether head is 658 m or 640 m.</p>
-<p><strong>That cap is the whole difference from a constant head.</strong> Pump harder and a constant-head river gives you more, without limit. A real river runs out — and then the extra water has to come from storage or from somewhere else, which is what the budget will show you.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>ax.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.deg2rad(lat.mean())))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>About 1.18. For a small area that correction is honest and sufficient.</p>
+<p>For anything larger — or when you need a projection, a scale bar, or a basemap — use <code>cartopy</code>. Two warnings from the lab: <strong><code>plt.tight_layout()</code> crashes on a cartopy axis</strong>, and <strong>coastlines and basemaps download shapefiles</strong>, which fails in a fresh codespace with no network.</p>
 </div>
 </div>
 </div>
@@ -397,72 +453,61 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Inheriting a model</h1>
+<h1>Saving</h1>
 
 </section>
 <section class="slide level2">
-<h2>How this usually starts</h2>
-<p>You will almost never build from nothing. You will be handed a directory of input files by a consultant, an agency, or a graduate student who left.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>inherited <span class="op">=</span> flopy.modflow.Modflow.load(</span>
-<span id="cb4-2"><a></a>    <span class="st">"layered.nam"</span>, model_ws<span class="op">=</span>ws, exe_name<span class="op">=</span>mf2005,</span>
-<span id="cb4-3"><a></a>    verbose<span class="op">=</span><span class="va">False</span>, check<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb4-4"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>The <code>.nam</code> file is the index — one line per package. <strong>That is what you point <code>load()</code> at.</strong></p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Two habits that will save you</h2>
-<div class="fragment">
-<p><strong>Inspect before you modify.</strong> How many river cells, what rate is the well, what is the clay conductivity. You cannot sensibly change what you have not read.</p>
-</div>
-<div class="fragment">
-<p><strong><code>change_model_ws()</code> before <code>write_input()</code>:</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>alt.change_model_ws(<span class="bu">str</span>(NEW_DIR))</span>
-<span id="cb5-2"><a></a>alt.write_input()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Without it you overwrite the original with your modified version, and there is no undo.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Change one thing</h2>
-<p>The clay’s vertical conductivity was a guess — nobody measured it. So test it: <strong>20× leakier</strong>.</p>
-<div id="8e577055" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-stdout">
-<pre><code>                                      original  20x leakier
-head difference across the clay          7.97m        4.12m
-net river contribution (m3/d)           25,238       34,525
-change in river contribution                         +36.8%</code></pre>
-</div>
-</div>
-<div class="fragment">
-<p>Both models converged. Both closed their budgets. <strong>They disagree about how much of the well’s water comes out of the river.</strong></p>
-</div>
-</section>
-<section class="slide level2">
-<h2>And the river is where it matters</h2>
+<h2>Four arguments that matter</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">6.5</span>, <span class="dv">4</span>))     <span class="co"># INCHES</span></span>
+<span id="cb5-2"><a></a>fig.savefig(<span class="st">"fig.png"</span>, dpi<span class="op">=</span><span class="dv">300</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span>
+<span id="cb5-3"><a></a>fig.savefig(<span class="st">"fig.pdf"</span>, bbox_inches<span class="op">=</span><span class="st">"tight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li class="fragment">The riparian vegetation is at the river</li>
-<li class="fragment">The downstream water right is at the river</li>
-<li class="fragment">The clay conductivity is known to maybe a factor of ten</li>
+<li class="fragment"><strong><code>figsize</code></strong> in inches — sets how big the text is <em>relative to</em> the data</li>
+<li class="fragment"><strong><code>dpi=300</code></strong> for raster; 72 looks fine on screen and terrible on paper</li>
+<li class="fragment"><strong><code>bbox_inches="tight"</code></strong> crops whitespace, stops a long label being cut off</li>
+<li class="fragment"><strong><code>.pdf</code> / <code>.svg</code></strong> for papers — vector, sharp at any zoom, usually smaller</li>
 </ul>
+</section>
+<section class="slide level2">
+<h2>Why <code>figsize</code> is not “how big”</h2>
+<div class="fragment">
+<p>Set <code>figsize=(12, 8)</code>, save it, then scale it to 3 inches wide in Word. <strong>Every font scales down with it</strong> and the axis labels become unreadable.</p>
+</div>
+<div class="fragment">
+<p>Set <code>figsize</code> to the <strong>final printed width</strong> — a single journal column is about 3.5 inches, a full page about 7 — and the 10-point font you specified is 10 points on the page.</p>
+</div>
 <div class="fragment due-notice">
-<p>The honest report is not to pick one. It is: <em>at a clay conductivity of 0.005 m/d the well captures X from the river; at 0.1 m/d it captures Y; we do not know the clay conductivity to better than that range.</em></p>
+<p>The most common reason a figure looks amateurish is that it was made at the wrong size and resized afterwards.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: which is the defensible claim?</h2>
-<script type="exercise-setup-ex_claim-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NsYWltIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY2xhaW1zID0ge1xuICAgIFwiYVwiOiBcInRoZSB3ZWxsIGNhcHR1cmVzIDQsMjAwIG0zL2QgZnJvbSB0aGUgcml2ZXJcIixcbiAgICBcImJcIjogXCJ0aGUgd2VsbCBjYXB0dXJlcyBiZXR3ZWVuIDQsMjAwIGFuZCA1LDYwMCBtMy9kLCBkZXBlbmRpbmcgb24gY2xheSBjb25kdWN0aXZpdHlcIixcbiAgICBcImNcIjogXCJ0aGUgbW9kZWwgc2hvd3MgdGhlIHdlbGwgaGFzIG5vIGVmZmVjdCBvbiB0aGUgcml2ZXJcIixcbiAgICBcImRcIjogXCJ0aGUgbW9kZWwgaXMgY2FsaWJyYXRlZCwgc28gaXRzIGFuc3dlciBpcyBjb3JyZWN0XCIsXG59In0=
+<h2>The panel that keeps you honest</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p>Median depth across all wells looks like a clean basin-wide signal.</p>
+<p>Underneath it, the <strong>number of wells measured each year</strong>.</p>
+</div><div class="column" style="width:45%;">
+<p>2007 → 2008: median jumps 71 → 242 ft.</p>
+<p>The aquifer did not drop 170 feet. The well count went 3 → 5, and the three were shallow.</p>
+</div></div>
+<div class="fragment">
+<p><strong>That entire feature is a sampling artifact</strong>, and it is invisible without the bottom panel.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: what does this figure need?</h2>
+<script type="exercise-setup-ex_honest-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hvbmVzdCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImNsYWltcyA9IHtcbiAgICBcImFcIjogXCJhIHNtb290aGVkIHRyZW5kIGxpbmUgdGhyb3VnaCB0aGUgbWVkaWFuXCIsXG4gICAgXCJiXCI6IFwiYSBzZWNvbmQgcGFuZWwgc2hvd2luZyBob3cgbWFueSB3ZWxscyB3ZXJlIG1lYXN1cmVkIGVhY2ggeWVhclwiLFxuICAgIFwiY1wiOiBcImVycm9yIGJhcnMgZnJvbSB0aGUgc3RhbmRhcmQgZGV2aWF0aW9uIGFjcm9zcyB3ZWxsc1wiLFxuICAgIFwiZFwiOiBcImEgbGFyZ2VyIGZvbnQgc2l6ZVwiLFxufSJ9
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NsYWltIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJkZWZlbnNpYmxlID0gX19fX19fXG5wcmludChjbGFpbXNbZGVmZW5zaWJsZV0pIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hvbmVzdCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibmVlZGVkID0gX19fX19fXG5wcmludChjbGFpbXNbbmVlZGVkXSkifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_claim">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_honest">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -472,12 +517,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>You ran two models that both converged and disagreed. What can you honestly say given both results?</p>
+<p>The problem is not that the median is imprecise. The problem is that it is computed over a <em>different set of wells</em> every year.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_claim">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_honest">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -487,26 +532,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>defensible <span class="op">=</span> <span class="st">"b"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>A single model run is a hypothesis. A pair of runs that bracket what you don’t know is a result.</strong></p>
-<p><code>a</code> reports one arbitrary member of a range as if it were the answer. <code>d</code> is worse: calibration produces <em>one consistent explanation</em>, and several different parameter sets will fit your observations equally well while disagreeing about the future.</p>
-<p>That bracketing is what Project 3 asks you to produce, and it is the difference between a modelling report that survives review and one that comes back.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>needed <span class="op">=</span> <span class="st">"b"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Error bars would describe the spread <em>among the wells measured</em>, which does not help — the issue is which wells those are. A trend line would smooth the artifact into something even more convincing.</p>
+<p>Only the sample size exposes it. <strong>Put <code>n</code> next to any aggregate computed over a changing population</strong>, and let the reader discount the years where it collapses.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>A note on scale</h2>
-<p>The model you just loaded had seven packages and 96 kB of input.</p>
-<div class="fragment">
-<p>The <strong>Pinal AMA model</strong> used in Project 3 has around 400 MB: 212 MB of ET arrays, 100 MB of recharge, 12 MB of well records, and a multi-node-well package for individual pumps. Distributed separately — it is too large for the course repo.</p>
-</div>
-<div class="fragment">
-<p>What does not change: <code>load()</code> still reads it, <code>change_model_ws()</code> still saves you, the <code>.list</code> budget is still the first thing to read, and <strong>a run that converges is still not a run that is right</strong>.</p>
-</div>
-<div class="fragment">
-<p>What changes is minutes per run instead of seconds — which makes changing one thing at a time stop being good practice and start being the only workable method.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
@@ -515,22 +546,24 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li><code>botm</code> is a list; <code>vka</code> is separate from <code>hk</code> and makes confining units confine</li>
-<li>A river caps its leakage once disconnected; a constant head never does</li>
-<li><code>load()</code> from the <code>.nam</code>, inspect before modifying, <code>change_model_ws()</code> first</li>
-<li>Two runs that bracket an unknown parameter beat one run that hides it</li>
+<li>Annotate the thing you want looked at; don’t leave the reader to search</li>
+<li>A title that could be generated from the axis labels is doing no work</li>
+<li>Correct the aspect on any lat/lon map</li>
+<li>Distinguish GIS raster/vector data from raster/vector output formats</li>
+<li><code>figsize</code> in final printed inches, <code>dpi=300</code>, <code>bbox_inches="tight"</code></li>
+<li>Show the sample size when the sample changes</li>
 </ul>
 <div class="kicker">
 <p>What’s due</p>
 </div>
 <ul>
-<li><strong>HW 12 — Applying fluxes to a MODFLOW model</strong>, Wednesday 12/2 at 11:59pm</li>
+<li><strong>HW 6 — Build, audit, and evaluate a groundwater dataset</strong>, Wednesday 11/18</li>
+<li><strong>Project 3 analysis, part 1</strong></li>
 </ul>
 <div class="kicker">
 <p>Next week</p>
 </div>
-<p>Reading tracebacks and debugging, and getting code out of notebooks — with five weeks of MODFLOW behind you to supply the bugs.</p>
-<p>Have a good Thanksgiving.</p>
+<p>Thanksgiving recess — no class Tuesday or Thursday and no course work due.</p>
 
 
 <script type="pyodide-data">

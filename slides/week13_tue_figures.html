@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Running it, and believing it</title>
+  <title>HWRS 564a – Figures worth showing people</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Running it, and believing it</h1>
-  <p class="subtitle">HWRS 564a · Week 10 · Thursday, October 29</p>
+  <h1 class="title">Figures worth showing people</h1>
+  <p class="subtitle">HWRS 564a · Week 13 · Tuesday, November 17</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,56 +212,149 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 10, session 2 of 2</p>
+<p>Week 13, session 1 of 2</p>
 </div>
 <ol type="1">
-<li><code>write_input</code>, <code>run_model</code>, and the argument everyone omits</li>
-<li>Testing against a solution you already know</li>
-<li>The <code>.list</code> file, and the number that tells you it went wrong</li>
-<li>The water budget</li>
+<li>Quiz — details on D2L</li>
+<li>Figure, axes, and why <code>plt.plot</code> is a trap</li>
+<li>Multi-panel layouts, and what sharing an axis claims</li>
+<li>Colour: three kinds of colormap, and one to never use</li>
+<li>Why colour can never be the only signal</li>
 </ol>
-<p>By the end you will know the three checks that go on every model run you ever do.</p>
+<p>The theme: most of what separates a working figure from a bad one is <strong>correctness</strong>, not taste.</p>
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 13. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Contrast decides what the eye finds</h2>
+<div class="columns">
+<div class="column" style="width:43%;">
+<p>How many <strong>7s</strong> are in the field?</p>
+<div class="fragment">
+<p>The digits contain the same information. Colour changes the <strong>search task</strong>: serial inspection becomes immediate grouping.</p>
+</div>
+<div class="fragment due-notice">
+<p>A good figure does not merely contain the answer. It directs attention to it.</p>
+</div>
+</div><div class="column" style="width:57%;">
+<p><img data-src="../assets/legacy/visual_search_sevens.jpg" style="width:88.0%" alt="A field of gray digits with every seven highlighted in red, making the sevens immediately visible"></p>
+</div></div>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Running it</h1>
+<h1>Figure and axes</h1>
 
 </section>
 <section class="slide level2">
-<h2>Two lines</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>mf.write_input()</span>
-<span id="cb1-2"><a></a>success, buff <span class="op">=</span> mf.run_model(silent<span class="op">=</span><span class="va">True</span>, report<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>Two objects</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong><code>fig</code></strong> — the page.</p>
+<p>Size, resolution, saving.</p>
+</div><div class="column" style="width:50%;">
+<p><strong><code>ax</code></strong> — one set of axes on it.</p>
+<p>Lines, labels, limits.</p>
+</div></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb1-2"><a></a>ax.plot(x, y)</span>
+<span id="cb1-3"><a></a>ax.set_ylabel(<span class="st">"head (m)"</span>)</span>
+<span id="cb1-4"><a></a>fig.savefig(<span class="st">"out.png"</span>, dpi<span class="op">=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p><code>write_input()</code> turns the FloPy objects into a dozen text files. <code>run_model()</code> shells out to the compiled binary and captures its output.</p>
+<p>Almost everything you want is a method on one or the other. Knowing which is half of learning matplotlib.</p>
 </div>
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 29. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Most visible elements belong to an <code>Axes</code></h2>
+<div class="columns">
+<div class="column" style="width:66%;">
+<p><img data-src="../assets/legacy/matplotlib_anatomy.png" style="width:72.0%" alt="Annotated matplotlib figure identifying the figure, axes, lines, markers, labels, ticks, legend, grid, and spines"></p>
+</div><div class="column" style="width:34%;">
+<p><strong>The <code>Figure</code> owns</strong></p>
+<ul>
+<li>the canvas</li>
+<li>its size and resolution</li>
+<li>saving the result</li>
+</ul>
+<p><strong>An <code>Axes</code> owns</strong></p>
+<ul>
+<li>the plotted data</li>
+<li>limits, ticks, and labels</li>
+<li>titles, legends, and grids</li>
+</ul>
+</div></div>
 </section>
 <section class="slide level2">
-<h2>The three details</h2>
-<ol type="1">
-<li class="fragment"><strong>FloPy does not raise when a model fails.</strong> It returns <code>(success, buff)</code> and carries on</li>
-<li class="fragment"><strong><code>report=True</code> is not optional</strong> — with <code>silent=True</code> alone, <code>buff</code> comes back <strong>empty</strong></li>
-<li class="fragment"><code>silent=True</code> only suppresses the console echo; the full log always goes to the <code>.list</code> file</li>
-</ol>
+<h2><code>plt.plot</code> draws somewhere</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>plt.plot(x, y)        <span class="co"># ...on whatever axes matplotlib touched last</span></span>
+<span id="cb2-2"><a></a>ax.plot(x, y)         <span class="co"># ...here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p>With one plot per cell, they behave identically. With two figures, a loop, or a function that makes a plot, the <code>plt.</code> version starts drawing on the wrong axes and the bug is invisible in the code.</p>
+</div>
 <div class="fragment due-notice">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="cf">assert</span> success, <span class="st">"MODFLOW did not converge:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(buff[<span class="op">-</span><span class="dv">20</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Every run. Every time. Without <code>report=True</code> that message is blank.</p>
+<p><strong>Always <code>fig, ax = plt.subplots()</code> first, then <code>ax.something()</code>.</strong> It is one extra line and it removes an entire category of confusion.</p>
+</div>
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, pp. 30-40. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Panels are an array of <code>Axes</code></h2>
+<div class="columns">
+<div class="column" style="width:65%;">
+<p><img data-src="../assets/legacy/multiple_axes_profiles.jpg" style="width:96.0%" alt="Three side-by-side soil pressure-head profiles comparing simulated and analytical solutions"></p>
+</div><div class="column" style="width:35%;">
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>,</span>
+<span id="cb3-2"><a></a>                         sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-3"><a></a></span>
+<span id="cb3-4"><a></a>axes[<span class="dv">0</span>].plot(...)</span>
+<span id="cb3-5"><a></a>axes[<span class="dv">1</span>].plot(...)</span>
+<span id="cb3-6"><a></a>axes[<span class="dv">2</span>].plot(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>One figure owns three axes. Each <code>axes[i]</code> receives its own data and labels.</p>
+</div></div>
+<div class="fragment">
+<p>With a 2 × 2 layout, <code>axes</code> is a 2 × 2 array; <code>axes.flat</code> iterates it in reading order. The indexing idea does not change.</p>
+</div>
+<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 20. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Remove ink that does not carry information</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Before: the chart competes with the data</strong></p>
+<p><img data-src="../assets/legacy/declutter_before.jpg" style="width:88.0%" alt="A cluttered bar chart with gradients, shadows, border, grid, redundant legend, and repeated labels"></p>
+</div><div class="column" style="width:50%;">
+<p><strong>After: one comparison is emphasized</strong></p>
+<p><img data-src="../assets/legacy/declutter_after.jpg" style="width:73.0%" alt="A clean bar chart with direct labels, minimal decoration, and one bar highlighted"></p>
+</div></div>
+<p><small>Example adapted from Darkhorse Analytics’ “Data Looks Better Naked.”</small></p>
+</section>
+<section class="slide level2">
+<h2>Sharing an axis is a claim</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, sharey<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li class="fragment"><strong><code>sharey=True</code></strong> puts every panel on the same scale, so the panels are comparable</li>
+<li class="fragment"><strong><code>sharey=False</code></strong> lets each panel fill its own range</li>
+</ul>
+<div class="fragment">
+<p>Three wells with 6 ft, 110 ft, and 30 ft of decline look <strong>identical</strong> on independent axes. Sharing the axis is what makes the comparison honest.</p>
+</div>
+<div class="fragment">
+<p>And don’t share when the quantities aren’t comparable — that makes one panel look flat for no reason.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: spot what’s missing</h2>
-<p>This code runs a model and reports success — and it has a bug that will cost somebody a day.</p>
-<script type="exercise-setup-ex_bug-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6Im9wdGlvbnMgPSB7XG4gICAgXCJhXCI6IFwicnVuX21vZGVsIGlzIG1pc3NpbmcgcmVwb3J0PVRydWUsIHNvIGJ1ZmYgd2lsbCBiZSBlbXB0eVwiLFxuICAgIFwiYlwiOiBcIndyaXRlX2lucHV0IHNob3VsZCBjb21lIGFmdGVyIHJ1bl9tb2RlbFwiLFxuICAgIFwiY1wiOiBcInNpbGVudD1UcnVlIHN1cHByZXNzZXMgdGhlIC5saXN0IGZpbGVcIixcbiAgICBcImRcIjogXCJ0aGVyZSBpcyBubyBidWdcIixcbn0ifQ==
+<h2>Your turn: two stacked panels</h2>
+<p>Discharge on top, its 7-day mean below, sharing the x axis so they line up.</p>
+<script type="exercise-setup-ex_panels-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3BhbmVscyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHQsIG51bXB5IGFzIG5wLCBwYW5kYXMgYXMgcGRcbmlkeCA9IHBkLmRhdGVfcmFuZ2UoXCIyMDA2LTAxLTAxXCIsIHBlcmlvZHM9MzY1LCBmcmVxPVwiRFwiKVxucm5nID0gbnAucmFuZG9tLmRlZmF1bHRfcm5nKDgpXG5xID0gcGQuU2VyaWVzKG5wLmFicyhucC5zaW4obnAuYXJhbmdlKDM2NSkgLyA1OCkpICogNDAgKyBybmcuZ2FtbWEoMSwgMywgMzY1KSwgaW5kZXg9aWR4KSJ9
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiIyBtZi53cml0ZV9pbnB1dCgpXG4jIHN1Y2Nlc3MsIGJ1ZmYgPSBtZi5ydW5fbW9kZWwoc2lsZW50PVRydWUpXG4jIGFzc2VydCBzdWNjZXNzLCBcImRpZCBub3QgY29udmVyZ2U6XFxuXCIgKyBcIlxcblwiLmpvaW4oYnVmZlstMjA6XSlcblxuYW5zd2VyID0gX19fX19fXG5wcmludChvcHRpb25zW2Fuc3dlcl0pIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3BhbmVscyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiZmlnLCBheGVzID0gcGx0LnN1YnBsb3RzKDIsIDEsIGZpZ3NpemU9KDgsIDQpLCBzaGFyZXg9X19fX19fKVxuYXhlc1swXS5wbG90KHEuaW5kZXgsIHEsIGNvbG9yPVwiI0FCMDUyMFwiLCBsdz0wLjgpXG5heGVzWzBdLnNldF95bGFiZWwoX19fX19fKVxuYXhlc1sxXS5wbG90KHEuaW5kZXgsIHEucm9sbGluZyg3LCBjZW50ZXI9VHJ1ZSkubWVhbigpLCBjb2xvcj1cIiMwQzIzNEJcIiwgbHc9MS42KVxuYXhlc1sxXS5zZXRfeWxhYmVsKFwiNy1kYXkgbWVhbiAoY2ZzKVwiKVxucGx0LnRpZ2h0X2xheW91dCgpXG5wbHQuc2hvdygpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_bug">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_panels">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -271,12 +364,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The assertion is correct in shape. Think about what will actually be <em>in</em> the message when it fires.</p>
+<p>Sharing takes a boolean. The label needs the quantity <em>and</em> its unit.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_bug">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_panels">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -286,9 +379,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>answer <span class="op">=</span> <span class="st">"a"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The code is right in every visible way and the failure message will be empty. That is the worst kind of bug: it only shows up when something else has already gone wrong, at which point you have no diagnostic and no idea why.</p>
-<p><code>silent=True</code> does <strong>not</strong> suppress the <code>.list</code> file — that is always written, and it is where the real diagnosis lives.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-2"><a></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"daily discharge (cfs)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>With <code>sharex=True</code> the top panel’s tick labels disappear automatically, which is what you want — one set of dates for both panels, and more room for the data.</p>
 </div>
 </div>
 </div>
@@ -296,62 +389,78 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Test what you can predict</h1>
+<h1>Colour</h1>
 
 </section>
 <section class="slide level2">
-<h2>The most important habit in the module</h2>
-<p>Before you trust a model on a problem you cannot solve by hand, <strong>run it on one you can.</strong></p>
+<h2>Three kinds, three jobs</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Data</th>
+<th>Colormap</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>runs one way, low to high</td>
+<td><strong>sequential</strong> — <code>viridis</code>, <code>Blues</code></td>
+</tr>
+<tr class="even">
+<td>has a meaningful middle</td>
+<td><strong>diverging</strong> — <code>RdBu</code>, <code>coolwarm</code></td>
+</tr>
+<tr class="odd">
+<td>unordered categories</td>
+<td><strong>qualitative</strong> — <code>tab10</code></td>
+</tr>
+</tbody>
+</table>
 <div class="fragment">
-<p>One layer, two constant heads, no stresses. The solution is a straight line.</p>
+<p>Using a diverging map on sequential data puts a false boundary in the middle of your range. Using a sequential map on diverging data hides the zero crossing.</p>
+</div>
+<!-- Figure recovered from old_slides/hwrs564a_oct14.pdf, p. 23. -->
+</section>
+<section class="slide level2 smaller">
+<h2><code>jet</code> changes apparent structure</h2>
+<div class="columns">
+<div class="column" style="width:66%;">
+<p><img data-src="../assets/legacy/colormap_perception.png" style="width:98.0%" alt="The same Earth, apple, and portrait shown in grayscale, the jet rainbow colormap, and the perceptually uniform batlow colormap"></p>
+</div><div class="column" style="width:34%;">
+<p><strong><code>jet</code></strong> adds bright cyan and yellow bands and dark ends.</p>
+<p><strong>Perceptual maps</strong> vary more steadily, so equal data steps look more nearly equal.</p>
+<p>Use <code>viridis</code>, <code>cividis</code>, or another perceptually uniform map for ordered data.</p>
+</div></div>
+<div class="fragment">
+<p><code>jet</code> can invent boundaries that are not in the data and hide ones that are.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Does it hold?</h2>
-
-<img data-src="week10_thu_running_it_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
-<p>Agreement to within floating-point noise — the right panel is in <strong>picometres</strong>. Grid, units, boundary handling and solver are all confirmed.</p>
+<h2>Centre a diverging map on zero</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>limit <span class="op">=</span> change[<span class="st">"ft"</span>].<span class="bu">abs</span>().<span class="bu">max</span>()</span>
+<span id="cb6-2"><a></a>ax.scatter(..., cmap<span class="op">=</span><span class="st">"RdBu_r"</span>, vmin<span class="op">=-</span>limit, vmax<span class="op">=</span>limit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p>Leave <code>vmin</code>/<code>vmax</code> off and matplotlib centres on the <strong>midpoint of your data</strong>. With changes from −6 to +111 ft, the neutral colour lands at +52 — so wells that dropped fifty feet render as “unchanged”.</p>
 </div>
-</section>
-<section class="slide level2">
-<h2>Why that matters</h2>
-<ul>
-<li class="fragment">Now, when a later result surprises you, the surprise is about the <strong>physics you added</strong></li>
-<li class="fragment">Not about whether you set the model up correctly</li>
-<li class="fragment">Which are very different debugging problems</li>
-</ul>
 <div class="fragment due-notice">
-<p>This is the same argument as Week 9’s: validate against something you already know before you trust the thing you don’t.</p>
+<p>A diverging colormap that isn’t centred on zero says the opposite of what you mean, in a way that looks completely normal.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>But check the arithmetic too</h2>
-<p>Darcy’s law over the 2,000 m domain says <strong>5,000 m³/d</strong>. MODFLOW’s budget says <strong>5,263 m³/d</strong>.</p>
-<div class="fragment">
-<p>A 5% gap. Small enough to look like rounding, large enough to matter.</p>
-</div>
-<div class="fragment">
-<p><strong>A constant head is specified at the cell <em>centre</em>, not at the model edge.</strong> The flow path is 19 cells, not 20 — 1,900 m, not 2,000.</p>
-</div>
-<div class="fragment">
-<p><span class="math inline">\(10 \times \dfrac{10}{1900} \times 100{,}000 = 5263\)</span> m³/d.&nbsp;Exact.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Your turn: the half-cell</h2>
-<p>Same idea on a different grid: 250 m cells, 60 columns, heads of 700 m and 620 m at the two boundary columns.</p>
-<script type="exercise-setup-ex_halfcell-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hhbGZjZWxsIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibmNvbCA9IDYwXG5kZWxyID0gMjUwLjBcbmVhc3RfaGVhZCwgd2VzdF9oZWFkID0gNzAwLjAsIDYyMC4wIn0=
+<h2>Your turn: centre the colormap</h2>
+<p>These changes run from −6 to +111 ft. Make zero the neutral colour.</p>
+<script type="exercise-setup-ex_diverge-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RpdmVyZ2UiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbWF0cGxvdGxpYi5weXBsb3QgYXMgcGx0LCBudW1weSBhcyBucFxucm5nID0gbnAucmFuZG9tLmRlZmF1bHRfcm5nKDg4KVxubG9uID0gLTExMS4yICsgcm5nLnJhbmRvbSg2MCkgKiAwLjQ1XG5sYXQgPSAzMi4wICsgcm5nLnJhbmRvbSg2MCkgKiAwLjQ1XG5jaGFuZ2UgPSBucC5jb25jYXRlbmF0ZShbcm5nLnVuaWZvcm0oLTYsIDAsIDcpLCBybmcudW5pZm9ybSgwLCAxMTEsIDUzKV0pIn0=
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2hhbGZjZWxsIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJuYWl2ZV9kaXN0YW5jZSA9IF9fX19fX1xudHJ1ZV9kaXN0YW5jZSA9IF9fX19fX1xucHJpbnQoZlwibmFpdmUgZ3JhZGllbnQgeyhlYXN0X2hlYWQgLSB3ZXN0X2hlYWQpIC8gbmFpdmVfZGlzdGFuY2U6LjZmfVwiKVxucHJpbnQoZlwidHJ1ZSBncmFkaWVudCAgeyhlYXN0X2hlYWQgLSB3ZXN0X2hlYWQpIC8gdHJ1ZV9kaXN0YW5jZTouNmZ9XCIpXG5wcmludChmXCJlcnJvciAgICAgICAgICB7MTAwICogKG5haXZlX2Rpc3RhbmNlIC8gdHJ1ZV9kaXN0YW5jZSAtIDEpOi4yZn0gJVwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RpdmVyZ2UiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImxpbWl0ID0gX19fX19fXG5cbmZpZywgYXggPSBwbHQuc3VicGxvdHMoZmlnc2l6ZT0oNS41LCA0LjUpKVxuc2MgPSBheC5zY2F0dGVyKGxvbiwgbGF0LCBjPWNoYW5nZSwgY21hcD1cIlJkQnVfclwiLCB2bWluPV9fX19fXywgdm1heD1fX19fX18sIHM9NDApXG5maWcuY29sb3JiYXIoc2MsIGF4PWF4LCBsYWJlbD1cImNoYW5nZSBpbiBkZXB0aCB0byB3YXRlciAoZnQpXCIpXG5wbHQuc2hvdygpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_halfcell">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_diverge">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -361,12 +470,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The naive distance is the full domain width. The true one is centre-to-centre — one cell shorter.</p>
+<p>You want the limits symmetric about zero, so both come from the <em>largest absolute</em> value in the data.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_halfcell">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_diverge">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -376,59 +485,64 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>naive_distance <span class="op">=</span> ncol <span class="op">*</span> delr</span>
-<span id="cb4-2"><a></a>true_distance <span class="op">=</span> (ncol <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> delr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>15,000 m versus 14,750 m — a 1.7% error. Smaller than the 10-column case, because the half-cell at each end is a smaller share of a longer domain.</p>
-<p><strong>The practical rule: a boundary condition sits half a cell inside the edge you drew.</strong> On a 250 m grid that is 125 m of slop, and it is the first thing to check when a modelled gradient won’t match an observed one.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>limit <span class="op">=</span> np.<span class="bu">abs</span>(change).<span class="bu">max</span>()</span>
+<span id="cb7-2"><a></a>sc <span class="op">=</span> ax.scatter(..., vmin<span class="op">=-</span>limit, vmax<span class="op">=</span>limit, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now white means zero and the seven recovering wells are visibly on the other side of it. Without the limits, matplotlib centres on the data midpoint of about +52 ft — so a well that dropped fifty feet renders white and reads as unchanged.</p>
+<p>The cost is that most of the blue half of the colorbar goes unused. That is fine: an unused range is honest, a mislabelled midpoint is not.</p>
 </div>
 </div>
 </div>
 </div>
-</section></section>
-<section>
-<section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>The <code>.list</code> file</h1>
-
+<!-- Figures recovered from old_slides/hwrs564a_oct14.pdf, p. 25. -->
 </section>
-<section class="slide level2">
-<h2>Where a failure explains itself</h2>
-<pre><code>FAILED TO MEET SOLVER CONVERGENCE CRITERIA            1  TIME(S)
-BUDGET PERCENT DISCREPANCY IS -162.7401
-STOPPING SIMULATION</code></pre>
-<div class="fragment">
-<p>Two separate facts. The solver gave up, <strong>and</strong> water is not being conserved by a factor of more than two.</p>
-</div>
-<div class="fragment">
-<p>The second number is the one to look at first. A converged model with a 5% discrepancy is also broken — it just didn’t say so.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Reading the budget</h2>
-<pre><code>           IN:                          OUT:
-     STORAGE =      0.0000        STORAGE =      0.0000
-CONSTANT HEAD =   5263.1582  CONSTANT HEAD =   5263.1582
-    TOTAL IN =   5263.1582      TOTAL OUT =   5263.1582
-    IN - OUT =      0.0000
-PERCENT DISCREPANCY =   0.00</code></pre>
-<div class="fragment">
-<p>Every term, in and out, and the discrepancy at the bottom. <strong>Read this every time</strong> — it is the only place the model tells you where the water went.</p>
+<section class="slide level2 smaller">
+<h2>Colour differences can disappear</h2>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><strong>Original</strong></p>
+<p><img data-src="../assets/legacy/color_accessibility_original.jpg" style="width:100.0%" alt="A United States map divided into red, orange, light green, and dark green regions"></p>
+</div><div class="column" style="width:33%;">
+<p><strong>Protanomaly simulation</strong></p>
+<p><img data-src="../assets/legacy/color_accessibility_protanomaly.jpg" style="width:100.0%" alt="The same map under a protanomaly simulation, with several categories becoming difficult to distinguish"></p>
+</div><div class="column" style="width:33%;">
+<p><strong>Deuteranomaly simulation</strong></p>
+<p><img data-src="../assets/legacy/color_accessibility_deuteranomaly.jpg" style="width:100.0%" alt="The same map under a deuteranomaly simulation, with several categories becoming difficult to distinguish"></p>
+</div></div>
+<div class="fragment due-notice">
+<p>If categories differ only by red versus green, some readers receive fewer categories than you drew.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: is this budget acceptable?</h2>
-<p>Four models converged. Which of their budgets would you report?</p>
-<script type="exercise-setup-ex_budget-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZGdldCIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InJ1bnMgPSB7XG4gICAgXCJBXCI6IDAuMDAsXG4gICAgXCJCXCI6IC0wLjA0LFxuICAgIFwiQ1wiOiAzLjEwLFxuICAgIFwiRFwiOiAtMTYyLjc0LFxufSJ9
+<h2>Colour cannot be the only signal</h2>
+<ul>
+<li class="fragment">About one reader in twelve has a colour vision deficiency</li>
+<li class="fragment">Deuteranopia makes red and green nearly identical</li>
+<li class="fragment">Projectors and photocopiers do their own damage</li>
+</ul>
+<div class="fragment">
+<p><strong>Encode every distinction at least twice.</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>ax.plot(x, a, color<span class="op">=</span><span class="st">"#AB0520"</span>, ls<span class="op">=</span><span class="st">"-"</span>,  marker<span class="op">=</span><span class="st">"o"</span>, label<span class="op">=</span><span class="st">"pumped"</span>)</span>
+<span id="cb8-2"><a></a>ax.plot(x, b, color<span class="op">=</span><span class="st">"#0C234B"</span>, ls<span class="op">=</span><span class="st">"--"</span>, marker<span class="op">=</span><span class="st">"s"</span>, label<span class="op">=</span><span class="st">"control"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>Two extra keyword arguments. The figure now works in greyscale, on a bad projector, and for everyone in the room.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: make it readable</h2>
+<p>This uses red and green, and nothing else, to tell two series apart.</p>
+<script type="exercise-setup-ex_color-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbG9yIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaW1wb3J0IG1hdHBsb3RsaWIucHlwbG90IGFzIHBsdCwgbnVtcHkgYXMgbnBcbnllYXJzID0gbnAuYXJhbmdlKDIwMDUsIDIwMjUpXG5ybmcgPSBucC5yYW5kb20uZGVmYXVsdF9ybmcoNTY0KVxuYSA9IDQwICsgbnAuY3Vtc3VtKHJuZy5ub3JtYWwoMS4yLCAyLjAsIDIwKSlcbmIgPSA0MCArIG5wLmN1bXN1bShybmcubm9ybWFsKDAuMywgMi4wLCAyMCkpIn0=
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2J1ZGdldCIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiYWNjZXB0YWJsZSA9IFtuYW1lIGZvciBuYW1lLCBwY3QgaW4gcnVucy5pdGVtcygpIGlmIF9fX19fX11cbnByaW50KGZcImFjY2VwdGFibGU6IHthY2NlcHRhYmxlfVwiKVxucHJpbnQoZlwicmVqZWN0ZWQ6ICAge1tuIGZvciBuIGluIHJ1bnMgaWYgbiBub3QgaW4gYWNjZXB0YWJsZV19XCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbG9yIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJmaWcsIGF4ID0gcGx0LnN1YnBsb3RzKGZpZ3NpemU9KDgsIDMuMikpXG5heC5wbG90KHllYXJzLCBhLCBjb2xvcj1cIiNBQjA1MjBcIiwgbHM9XCItXCIsICBfX19fX18sIGxhYmVsPVwiaGVhdmlseSBwdW1wZWRcIilcbmF4LnBsb3QoeWVhcnMsIGIsIGNvbG9yPVwiIzBDMjM0QlwiLCBscz1fX19fX18sIG1hcmtlcj1cInNcIiwgbGFiZWw9XCJsaWdodGx5IHB1bXBlZFwiKVxuYXgubGVnZW5kKGZyYW1lb249RmFsc2UpXG5heC5zZXRfeWxhYmVsKFwiZGVwdGggdG8gd2F0ZXIgKGZ0KVwiKVxucGx0LnNob3coKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_budget">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_color">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -438,12 +552,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>The convention is well under 1% in absolute value. <code>abs()</code> matters — the sign tells you which way it is off, not whether it is acceptable.</p>
+<p>The first line needs a marker; the second needs a dash pattern that differs from the first. <code>"--"</code>, <code>"-."</code>, and <code>":"</code> are all available.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_budget">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_color">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -453,47 +567,36 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>acceptable <span class="op">=</span> [name <span class="cf">for</span> name, pct <span class="kw">in</span> runs.items() <span class="cf">if</span> <span class="bu">abs</span>(pct) <span class="op">&lt;</span> <span class="fl">1.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>A</code> and <code>B</code>. <code>C</code> at 3.1% has converged and is still losing water somewhere — usually a boundary condition doing something you did not intend. <code>D</code> did not converge at all.</p>
-<p><strong>A converged model with a 3% discrepancy is not a slightly worse answer than one at 0.04% — it is an answer with an unexplained flux in it</strong>, and until you find that flux you do not know which of your budget terms is wrong.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>ax.plot(years, a, color<span class="op">=</span><span class="st">"#AB0520"</span>, ls<span class="op">=</span><span class="st">"-"</span>,  marker<span class="op">=</span><span class="st">"o"</span>, label<span class="op">=</span><span class="st">"heavily pumped"</span>)</span>
+<span id="cb9-2"><a></a>ax.plot(years, b, color<span class="op">=</span><span class="st">"#0C234B"</span>, ls<span class="op">=</span><span class="st">"--"</span>, marker<span class="op">=</span><span class="st">"s"</span>, label<span class="op">=</span><span class="st">"lightly pumped"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note the colours also changed — UA red and blue differ in <em>lightness</em>, not just hue, so they survive a greyscale print. Red and green are nearly the same lightness, which is why that pair fails twice over.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Two formats for the same number</h2>
-<pre><code> PERCENT DISCREPANCY =   -162.74   PERCENT DISCREPANCY =   -162.74
- BUDGET PERCENT DISCREPANCY IS -162.7401</code></pre>
-<div class="fragment">
-<p>One uses <code>=</code> and repeats itself in two columns; the other uses <code>IS</code>.</p>
-</div>
-<div class="fragment">
-<p>Splitting on <code>"="</code> works on the first and crashes on the second. <strong>Take the last whitespace-separated token</strong> and both work — the kind of thing real file formats always do to you.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
 <h2>Wrap up</h2>
 <div class="kicker">
-<p>The three checks, on every run</p>
-</div>
-<ol type="1">
-<li><strong><code>success</code></strong> — with <code>report=True</code>, or the message is empty</li>
-<li><strong>Percent discrepancy</strong> — near zero, or the answer is not conserving mass</li>
-<li><strong>A case you can predict</strong> — before trusting one you can’t</li>
-</ol>
-<div class="kicker">
-<p>What’s due</p>
+<p>What you did today</p>
 </div>
 <ul>
-<li><strong>HW 8 — Regression analysis</strong>, Wednesday 10/28 at 11:59pm</li>
-<li><strong>Project 2 analysis, part 2</strong></li>
-<li>Finish the Week 10 lab before Tuesday</li>
+<li><code>fig, ax = plt.subplots()</code> first, always</li>
+<li>Sharing an axis is a claim that the panels are comparable</li>
+<li>Sequential, diverging, qualitative — and never <code>jet</code></li>
+<li>Centre a diverging map on zero, or it lies</li>
+<li>Encode every distinction twice</li>
 </ul>
 <div class="kicker">
-<p>Next week</p>
+<p>Before Thursday</p>
 </div>
-<p>The real basin: a wellfield, recharge, and a head field you cannot work out by hand.</p>
+<ul>
+<li>Parts 1–2 of <code>labs/week13/week13_lab_matplotlib.ipynb</code></li>
+</ul>
+<div class="kicker">
+<p>Thursday</p>
+</div>
+<p>Annotation, maps, and saving a figure that survives a journal.</p>
 
 
 <script type="pyodide-data">

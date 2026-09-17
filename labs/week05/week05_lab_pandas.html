@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Week 5 Lab — Pandas and time series – HWRS 564a</title>
+<title>Week 5 Lab — Pandas, time series, and Matplotlib – HWRS 564a</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../slides/week06_tue_apis.html" rel="next">
+<link href="../../slides/week06_tue_what_is_modflow.html" rel="next">
 <link href="../../slides/week05_thu_filtering.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -168,75 +168,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../../slides/week05_thu_filtering.html">
- <span class="dropdown-text">Wk 5 · Filter, summarise, reshape</span></a>
+ <span class="dropdown-text">Wk 5 · Matplotlib from scratch</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week06_tue_apis.html">
- <span class="dropdown-text">Wk 6 · Where data comes from</span></a>
+    <a class="dropdown-item" href="../../slides/week06_tue_what_is_modflow.html">
+ <span class="dropdown-text">Wk 6 · What MODFLOW is</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week06_thu_cleaning.html">
- <span class="dropdown-text">Wk 6 · Gaps, duplicates, outliers</span></a>
+    <a class="dropdown-item" href="../../slides/week06_thu_running_it.html">
+ <span class="dropdown-text">Wk 6 · Running it</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week07_tue_inference.html">
- <span class="dropdown-text">Wk 7 · Uncertainty and hypothesis testing</span></a>
+    <a class="dropdown-item" href="../../slides/week07_tue_inputs_outputs.html">
+ <span class="dropdown-text">Wk 7 · Inputs, outputs, hitting go</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week07_thu_inference_lab.html">
- <span class="dropdown-text">Wk 7 · Groundwater inference lab</span></a>
+    <a class="dropdown-item" href="../../slides/week07_thu_budgets.html">
+ <span class="dropdown-text">Wk 7 · Budgets</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week08_tue_figures.html">
- <span class="dropdown-text">Wk 8 · Figures worth showing</span></a>
+    <a class="dropdown-item" href="../../slides/week08_tue_discretization.html">
+ <span class="dropdown-text">Wk 8 · Discretization</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week08_thu_annotation_maps.html">
- <span class="dropdown-text">Wk 8 · Annotation and maps</span></a>
+    <a class="dropdown-item" href="../../slides/week08_thu_unconfined.html">
+ <span class="dropdown-text">Wk 8 · Unconfined flow</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week09_tue_regression.html">
- <span class="dropdown-text">Wk 9 · Regression and uncertainty</span></a>
+    <a class="dropdown-item" href="../../slides/week09_tue_time.html">
+ <span class="dropdown-text">Wk 9 · Time and storage</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week09_thu_regression_lab.html">
- <span class="dropdown-text">Wk 9 · Regression lab</span></a>
+    <a class="dropdown-item" href="../../slides/week09_thu_capture_et.html">
+ <span class="dropdown-text">Wk 9 · Capture and ET</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week10_tue_what_is_modflow.html">
- <span class="dropdown-text">Wk 10 · What MODFLOW is</span></a>
+    <a class="dropdown-item" href="../../slides/week10_tue_layers_rivers.html">
+ <span class="dropdown-text">Wk 10 · Layers and rivers</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week10_thu_running_it.html">
- <span class="dropdown-text">Wk 10 · Running it</span></a>
+    <a class="dropdown-item" href="../../slides/week11_tue_apis.html">
+ <span class="dropdown-text">Wk 11 · Where data comes from</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week11_tue_inputs_outputs.html">
- <span class="dropdown-text">Wk 11 · Inputs, outputs, hitting go</span></a>
+    <a class="dropdown-item" href="../../slides/week11_thu_cleaning.html">
+ <span class="dropdown-text">Wk 11 · Gaps, duplicates, outliers</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week11_thu_budgets.html">
- <span class="dropdown-text">Wk 11 · Budgets</span></a>
+    <a class="dropdown-item" href="../../slides/week12_tue_inference.html">
+ <span class="dropdown-text">Wk 12 · Differences and trends</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week12_tue_discretization.html">
- <span class="dropdown-text">Wk 12 · Discretization</span></a>
+    <a class="dropdown-item" href="../../slides/week12_thu_inference_lab.html">
+ <span class="dropdown-text">Wk 12 · Inference and regression lab</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week12_thu_unconfined.html">
- <span class="dropdown-text">Wk 12 · Unconfined flow</span></a>
+    <a class="dropdown-item" href="../../slides/week13_tue_figures.html">
+ <span class="dropdown-text">Wk 13 · Figures worth showing</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../slides/week13_tue_time.html">
- <span class="dropdown-text">Wk 13 · Time and storage</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../slides/week13_thu_capture_et.html">
- <span class="dropdown-text">Wk 13 · Capture and ET</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../slides/week14_tue_layers_rivers.html">
- <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+    <a class="dropdown-item" href="../../slides/week13_thu_annotation_maps.html">
+ <span class="dropdown-text">Wk 13 · Annotation and maps</span></a>
   </li>  
     </ul>
   </li>
@@ -259,43 +251,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/week05/week05_lab_pandas.html">
- <span class="dropdown-text">Wk 5 · Pandas and time series</span></a>
+ <span class="dropdown-text">Wk 5 · Pandas and Matplotlib</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week06/week06_lab_real_world_data.html">
- <span class="dropdown-text">Wk 6 · Real-world data</span></a>
+    <a class="dropdown-item" href="../../labs/week06/week06_lab_meeting_modflow.html">
+ <span class="dropdown-text">Wk 6 · Meeting MODFLOW</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week07/week07_lab_inference.html">
- <span class="dropdown-text">Wk 7 · Groundwater inference</span></a>
+    <a class="dropdown-item" href="../../labs/week07/week07_lab_basin_model.html">
+ <span class="dropdown-text">Wk 7 · Tucson basin model</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week08/week08_lab_matplotlib.html">
- <span class="dropdown-text">Wk 8 · Figures</span></a>
+    <a class="dropdown-item" href="../../labs/week08/week08_lab_discretization_boundaries.html">
+ <span class="dropdown-text">Wk 8 · Discretization</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week09/week09_lab_regression.html">
- <span class="dropdown-text">Wk 9 · Linear regression clinic</span></a>
+    <a class="dropdown-item" href="../../labs/week09/week09_lab_transient_stresses.html">
+ <span class="dropdown-text">Wk 9 · Transient stresses</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week10/week10_lab_meeting_modflow.html">
- <span class="dropdown-text">Wk 10 · Meeting MODFLOW</span></a>
+    <a class="dropdown-item" href="../../labs/week10/week10_lab_layers_rivers_loading.html">
+ <span class="dropdown-text">Wk 10 · Layers and rivers</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week11/week11_lab_basin_model.html">
- <span class="dropdown-text">Wk 11 · Tucson basin model</span></a>
+    <a class="dropdown-item" href="../../labs/week11/week11_lab_real_world_data.html">
+ <span class="dropdown-text">Wk 11 · Real-world data</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week12/week12_lab_discretization_boundaries.html">
- <span class="dropdown-text">Wk 12 · Discretization</span></a>
+    <a class="dropdown-item" href="../../labs/week12/week12_lab_inference.html">
+ <span class="dropdown-text">Wk 12 · Differences and trends</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week13/week13_lab_transient_stresses.html">
- <span class="dropdown-text">Wk 13 · Transient stresses</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../labs/week14/week14_lab_layers_rivers_loading.html">
- <span class="dropdown-text">Wk 14 · Layers and rivers</span></a>
+    <a class="dropdown-item" href="../../labs/week13/week13_lab_matplotlib.html">
+ <span class="dropdown-text">Wk 13 · Figures</span></a>
   </li>  
     </ul>
   </li>
@@ -310,7 +298,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and time series</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and time series</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and Matplotlib</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and Matplotlib</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -421,7 +409,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Week 5 — Pandas and time series</span></a>
+ <span class="menu-text">Week 5 — Pandas and Matplotlib</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -442,7 +430,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Lab · Pandas and time series</span></a>
+ <span class="menu-text">Lab · Pandas and Matplotlib</span></a>
   </div>
 </li>
       </ul>
@@ -452,7 +440,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
- <span class="menu-text">Module 2 · Data Analysis &amp; Visualization</span></a>
+ <span class="menu-text">Module 2 · MODFLOW &amp; FloPy</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -461,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 6 — Real-world data</span></a>
+ <span class="menu-text">Week 6 — Meeting MODFLOW</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -469,20 +457,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week06_tue_apis.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week06_tue_what_is_modflow.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tue 9/29 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week06_thu_cleaning.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week06_thu_running_it.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Thu 10/1 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week06/week06_lab_real_world_data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Working with real-world data</span></a>
+  <a href="../../labs/week06/week06_lab_meeting_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Meeting MODFLOW</span></a>
   </div>
 </li>
       </ul>
@@ -490,7 +478,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 7 — Groundwater inference</span></a>
+ <span class="menu-text">Week 7 — Inputs, outputs, hitting go</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -498,20 +486,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week07_tue_inference.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week07_tue_inputs_outputs.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tue 10/6 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week07_thu_inference_lab.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week07_thu_budgets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Thu 10/8 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week07/week07_lab_inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Is the difference larger than the noise?</span></a>
+  <a href="../../labs/week07/week07_lab_basin_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · A model of the Tucson basin</span></a>
   </div>
 </li>
       </ul>
@@ -519,7 +507,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 8 — Figures</span></a>
+ <span class="menu-text">Week 8 — Discretization and boundaries</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -527,20 +515,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week08_tue_figures.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week08_tue_discretization.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tue 10/13 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week08_thu_annotation_maps.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week08_thu_unconfined.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Thu 10/15 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week08/week08_lab_matplotlib.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Figures worth showing people</span></a>
+  <a href="../../labs/week08/week08_lab_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Discretization and unconfined flow</span></a>
   </div>
 </li>
       </ul>
@@ -548,7 +536,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 9 — Linear regression</span></a>
+ <span class="menu-text">Week 9 — Transient stresses</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -556,20 +544,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week09_tue_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week09_tue_time.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tue 10/20 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week09_thu_regression_lab.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week09_thu_capture_et.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Thu 10/22 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week09/week09_lab_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Linear regression clinic</span></a>
+  <a href="../../labs/week09/week09_lab_transient_stresses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Stresses that change with time</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 10 — Layers, rivers, loading</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_tue_layers_rivers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/27 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week10/week10_lab_layers_rivers_loading.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Layers, rivers, and inheriting a model</span></a>
   </div>
 </li>
       </ul>
@@ -578,46 +589,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
- <span class="menu-text">Module 3 · MODFLOW &amp; FloPy</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 3 · Data Analysis &amp; Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 10 — Meeting MODFLOW</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../slides/week10_tue_what_is_modflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tue 10/27 · Slides</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../slides/week10_thu_running_it.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Thu 10/29 · Slides</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../labs/week10/week10_lab_meeting_modflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Meeting MODFLOW</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 11 — Inputs, outputs, hitting go</span></a>
+ <span class="menu-text">Week 11 — Real-world data</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -625,20 +607,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week11_tue_inputs_outputs.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week11_tue_apis.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tue 11/3 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week11_thu_budgets.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week11_thu_cleaning.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Thu 11/5 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week11/week11_lab_basin_model.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · A model of the Tucson basin</span></a>
+  <a href="../../labs/week11/week11_lab_real_world_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Working with real-world data</span></a>
   </div>
 </li>
       </ul>
@@ -646,7 +628,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 12 — Discretization and boundaries</span></a>
+ <span class="menu-text">Week 12 — Inference and regression</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -654,20 +636,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week12_tue_discretization.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week12_tue_inference.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tue 11/10 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week12_thu_unconfined.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week12_thu_inference_lab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Thu 11/12 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week12/week12_lab_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Discretization and unconfined flow</span></a>
+  <a href="../../labs/week12/week12_lab_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · From differences to trends</span></a>
   </div>
 </li>
       </ul>
@@ -675,7 +657,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 13 — Transient stresses</span></a>
+ <span class="menu-text">Week 13 — More on Matplotlib</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -683,43 +665,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week13_tue_time.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week13_tue_figures.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tue 11/17 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../slides/week13_thu_capture_et.html" class="sidebar-item-text sidebar-link">
+  <a href="../../slides/week13_thu_annotation_maps.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Thu 11/19 · Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week13/week13_lab_transient_stresses.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Stresses that change with time</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-          <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false">
- <span class="menu-text">Week 14 — Layers, rivers, loading</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth2 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../slides/week14_tue_layers_rivers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tue 11/24 · Slides</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../labs/week14/week14_lab_layers_rivers_loading.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Layers, rivers, and inheriting a model</span></a>
+  <a href="../../labs/week13/week13_lab_matplotlib.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Figures worth showing people</span></a>
   </div>
 </li>
       </ul>
@@ -750,6 +709,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#part-3-dates-become-a-coordinate" id="toc-part-3-dates-become-a-coordinate" class="nav-link" data-scroll-target="#part-3-dates-become-a-coordinate">Part 3 — Dates become a coordinate</a>
   <ul class="collapse">
   <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
+  <li><a href="#guided-plotting-walkthrough-1-build-a-figure-from-scratch" id="toc-guided-plotting-walkthrough-1-build-a-figure-from-scratch" class="nav-link" data-scroll-target="#guided-plotting-walkthrough-1-build-a-figure-from-scratch">Guided plotting walkthrough 1 — Build a figure from scratch</a></li>
   </ul></li>
   <li><a href="#part-4-resample-a-daily-streamflow-record" id="toc-part-4-resample-a-daily-streamflow-record" class="nav-link" data-scroll-target="#part-4-resample-a-daily-streamflow-record">Part 4 — Resample a daily streamflow record</a>
   <ul class="collapse">
@@ -773,9 +733,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and time series</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and time series</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 1 · Python Foundations</li><li class="breadcrumb-item"><a href="../../slides/week05_tue_pandas.html">Week 5 — Pandas and Matplotlib</a></li><li class="breadcrumb-item"><a href="../../labs/week05/week05_lab_pandas.html">Lab · Pandas and Matplotlib</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Week 5 Lab — Pandas and time series</h1>
+<h1 class="title">Week 5 Lab — Pandas, time series, and Matplotlib</h1>
 </div>
 
 
@@ -805,8 +765,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>select and filter rows without silently losing track of missing values;</li>
 <li>parse dates and use a <code>DatetimeIndex</code>;</li>
 <li>distinguish monthly resampling from a monthly climatology;</li>
-<li>compute water-year and rolling summaries; and</li>
-<li>group and reshape irregular groundwater observations.</li>
+<li>compute water-year and rolling summaries;</li>
+<li>build and label a Matplotlib Figure and Axes; and</li>
+<li>choose marks that preserve the physical meaning of the data.</li>
 </ul>
 </section>
 <section id="setup-find-the-repository-data" class="level2">
@@ -931,16 +892,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> historical.index.<span class="bu">max</span>().year <span class="op">==</span> <span class="dv">1979</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"site </span><span class="sc">{</span>most_observed_site<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(one_site)<span class="sc">}</span><span class="ss"> measurements; </span><span class="sc">{</span><span class="bu">len</span>(historical)<span class="sc">}</span><span class="ss"> in 1950–1979"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Make a quick diagnostic plot. Depth is measured downward, so invert the axis.</p>
+</section>
+<section id="guided-plotting-walkthrough-1-build-a-figure-from-scratch" class="level3">
+<h3 class="anchored" data-anchor-id="guided-plotting-walkthrough-1-build-a-figure-from-scratch">Guided plotting walkthrough 1 — Build a figure from scratch</h3>
+<p>Follow Thursday’s four-step recipe: <strong>1 make, 2 draw, 3 label, 4 show</strong>. The code below creates the Figure and Axes, draws the record, labels its physical meaning, and inverts the vertical axis because depth is measured downward. Change the figure size or line width and rerun the cell to see which object each choice affects.</p>
 <div id="cell-19" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.5</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ax.plot(one_site.index, one_site[<span class="st">"depth_to_water_ft"</span>], color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"date"</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"depth to water (ft below land surface)"</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Groundwater record at site </span><span class="sc">{</span>most_observed_site<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.25</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. MAKE the Figure and one Axes</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.5</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. DRAW the data into that Axes</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ax.plot(one_site.index, one_site[<span class="st">"depth_to_water_ft"</span>], color<span class="op">=</span><span class="st">"#0C234B"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. LABEL the coordinate, quantity, unit, and message</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    xlabel<span class="op">=</span><span class="st">"date"</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    ylabel<span class="op">=</span><span class="st">"depth to water (ft below land surface)"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="ss">f"Groundwater record at site </span><span class="sc">{</span>most_observed_site<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()  <span class="co"># make downward on the page mean downward in the aquifer</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. SHOW the finished Figure</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -1005,14 +977,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>wettest_30_day_cfs<span class="sc">:.1f}</span><span class="ss"> cfs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-28" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">3.8</span>))</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ax.plot(flow.index, flow[<span class="st">"discharge_cfs"</span>], color<span class="op">=</span><span class="st">"0.75"</span>, lw<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">"daily"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>ax.plot(rolling_30.index, rolling_30, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"30-day mean"</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"date"</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"discharge (cfs)"</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"A rolling mean separates sustained wet periods from daily peaks"</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GUIDED PLOTTING WALKTHROUGH 2 — layer raw and smoothed flow on one Axes</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.5</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>ax.plot(flow.index, flow[<span class="st">"discharge_cfs"</span>], color<span class="op">=</span><span class="st">"0.75"</span>, lw<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">"daily"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ax.plot(rolling_30.index, rolling_30, color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"30-day mean"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    xlabel<span class="op">=</span><span class="st">"date"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    ylabel<span class="op">=</span><span class="st">"discharge (ft³/s)"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Sabino Creek daily flow and 30-day mean"</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -1026,6 +1001,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Build <code>site_summary</code> with the count, first depth, and last depth for every site.</li>
 <li>Add <code>change_ft = last - first</code> and count sites with positive change as <code>n_declining</code>.</li>
 <li>Find the three sites with the most measurements and pivot only those records into <code>wide</code>, with dates as rows and sites as columns.</li>
+<li>Starting from an empty plotting cell, create <code>fig_summary</code> and <code>ax_summary</code>; draw one line per site, label both axes with meaning and units, add a message title and legend, and invert the depth axis.</li>
 </ol>
 <div id="cell-30" class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
@@ -1035,7 +1011,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>n_declining <span class="op">=</span> ...</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>top_three <span class="op">=</span> ...</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>wide <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>wide <span class="op">=</span> ...</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>fig_summary, ax_summary <span class="op">=</span> ...</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> site <span class="kw">in</span> ...:</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    ax_summary.plot(..., ..., lw<span class="op">=</span><span class="dv">1</span>, label<span class="op">=</span>site)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>ax_summary.<span class="bu">set</span>(xlabel<span class="op">=</span>..., ylabel<span class="op">=</span>..., title<span class="op">=</span>...)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>ax_summary.invert_yaxis()</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>ax_summary.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-31" class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
@@ -1044,8 +1028,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(site_summary[<span class="st">"change_ft"</span>].median(), <span class="fl">46.83</span>)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wide.shape <span class="op">==</span> (<span class="dv">1185</span>, <span class="dv">3</span>)</span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> wide.isna().<span class="bu">sum</span>().<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">2281</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_declining<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(site_summary)<span class="sc">}</span><span class="ss"> sites have positive depth change"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"wide table: </span><span class="sc">{</span>wide<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">; </span><span class="sc">{</span>wide<span class="sc">.</span>isna()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:,}</span><span class="ss"> empty cells"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(ax_summary.lines) <span class="op">==</span> <span class="dv">3</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ax_summary.yaxis_inverted()</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">"ft"</span> <span class="kw">in</span> ax_summary.get_ylabel()</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_declining<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(site_summary)<span class="sc">}</span><span class="ss"> sites have positive depth change"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"wide table: </span><span class="sc">{</span>wide<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">; </span><span class="sc">{</span>wide<span class="sc">.</span>isna()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:,}</span><span class="ss"> empty cells"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Positive depth change means the water table moved downward. The wide table is useful for aligned comparison, but it is sparse because field visits did not occur on the same dates. Missing cells are absence of measurement, not zero depth.</p>
 </section>
@@ -1064,7 +1051,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="next-week" class="level2">
 <h2 class="anchored" data-anchor-id="next-week">Next week</h2>
-<p>You will retrieve hydrologic records and diagnose gaps, duplicates, and outliers. The table and time-series operations in this lab are the tools you will use to do it.</p>
+<p>You will build and verify your first MODFLOW model, then use Matplotlib to inspect its simulated head field.</p>
 </section>
 <section id="stuck" class="level2">
 <h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
@@ -1510,7 +1497,7 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../slides/week06_tue_apis.html" class="pagination-link" aria-label="Tue 9/29 · Slides">
+      <a href="../../slides/week06_tue_what_is_modflow.html" class="pagination-link" aria-label="Tue 9/29 · Slides">
         <span class="nav-page-text">Tue 9/29 · Slides</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

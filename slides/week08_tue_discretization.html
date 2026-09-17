@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Budgets, and what a model is worth</title>
+  <title>HWRS 564a – Discretization</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,8 +197,8 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Budgets, and what a model is worth</h1>
-  <p class="subtitle">HWRS 564a · Week 11 · Thursday, November 5</p>
+  <h1 class="title">Discretization</h1>
+  <p class="subtitle">HWRS 564a · Week 8 · Tuesday, October 13</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -212,81 +212,86 @@ Dr.&nbsp;Andrew Bennett
 <section class="slide level2 smaller">
 <h2>Today</h2>
 <div class="kicker">
-<p>Week 11, session 2 of 2</p>
+<p>Week 8, session 1 of 2</p>
 </div>
 <ol type="1">
-<li>The water budget, term by term</li>
-<li>Depletion and capture — the distinction that regulation is built on</li>
-<li>Comparing your model with real measurements</li>
-<li>Why it doesn’t match, and why that is the useful part</li>
+<li>Quiz — five minutes, on MODFLOW basics</li>
+<li>Choosing a cell size, and testing whether it mattered</li>
+<li>The one number that never converges</li>
+<li><code>ibound</code>, and domains that aren’t rectangles</li>
+<li>Connectivity, which nothing checks for you</li>
 </ol>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>The budget</h1>
+<h1>Grid convergence</h1>
 
 </section>
 <section class="slide level2">
-<h2>Four terms, one basin</h2>
-<p>Tuesday’s model: 20,000 m³/d wellfield, uniform recharge, constant heads on the east and west edges.</p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Term</th>
-<th>m³/d</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>recharge in</td>
-<td>+17,400</td>
-</tr>
-<tr class="even">
-<td>net constant-head in</td>
-<td>+2,600</td>
-</tr>
-<tr class="odd">
-<td><strong>wells out</strong></td>
-<td><strong>−20,000</strong></td>
-</tr>
-<tr class="even">
-<td>discrepancy</td>
-<td>0.00 %</td>
-</tr>
-</tbody>
-</table>
+<h2>You picked 250 m because I said so</h2>
+<p><strong>A number that changes when you refine the grid is a number about your grid, not about the aquifer.</strong></p>
 <div class="fragment">
-<p>And here is the sentence that took a model to write: <em>of the 20,000 m³/d pumped, 17,400 comes from recharge and 2,600 is captured from flow that would otherwise have left the basin.</em></p>
+<p>The test: run the same physical problem at two resolutions and see whether the answer moves.</p>
+</div>
+<div class="fragment">
+<p>Note <em>physical</em> problem. The well goes at the same <strong>location</strong>, not the same cell index — 7,500 m east and 5,000 m south, whatever that is in cells.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>You predicted that number</h2>
-<p>Before running anything, in Tuesday’s lab:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>n_active_cells <span class="op">=</span> (ibound <span class="op">&gt;</span> <span class="dv">0</span>).<span class="bu">sum</span>()            <span class="co"># 2320, not 2400</span></span>
-<span id="cb1-2"><a></a>total_recharge <span class="op">=</span> RECHARGE <span class="op">*</span> n_active_cells <span class="op">*</span> DELR <span class="op">*</span> DELC</span>
-<span id="cb1-3"><a></a>deficit <span class="op">=</span> <span class="op">-</span>WELL_Q <span class="op">-</span> total_recharge             <span class="co"># 2600</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>Three resolutions</h2>
+<div id="fccb7eef" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-stdout">
+<pre><code> cell size     cells   well head   min head
+      500m       600    655.990m    620.00m
+      250m     2,400    654.365m    620.00m
+      125m     9,600    653.101m    620.00m</code></pre>
+</div>
+</div>
 <div class="fragment">
-<p><strong>Recharge landing on a constant-head cell is discarded</strong> — MODFLOW applies <code>RCH</code> only where <code>ibound &gt; 0</code>. That is 80 cells and 600 m³/d.</p>
+<p>The minimum head does not move at all — it is a boundary condition. The <strong>well head keeps falling</strong>.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Which is expected</h2>
+
+<img data-src="week08_tue_discretization_files/figure-revealjs/cell-4-output-1.png" class="r-stretch"></section>
+<section class="slide level2">
+<h2>Why it never converges</h2>
+<p>Head near a well varies <strong>logarithmically</strong> with distance:</p>
+<p><span class="math display">\[h(r) = h_0 + \frac{Q}{2\pi T}\ln\frac{r}{r_0}\]</span></p>
+<div class="fragment">
+<p>So the <em>average</em> head over a cell containing a well depends on how big that cell is — forever. Halve the cell and the average goes deeper.</p>
 </div>
 <div class="fragment due-notice">
-<p>Predicting the budget before you run is how you find out that your model is doing something you did not intend. The 600 m³/d is small; the <em>habit</em> is not.</p>
+<p><strong>The head in a pumping cell is not a water level in a well.</strong> Reporting it as one is among the most common errors in groundwater modelling reports.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: close a budget</h2>
-<p>A model reports these terms. One is missing — work out what it must be.</p>
-<script type="exercise-setup-ex_close-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nsb3NlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoicmVjaGFyZ2VfaW4gPSAxNzQwMC4wXG5jb25zdGFudF9oZWFkX2luID0gMTMxNzc0LjZcbmNvbnN0YW50X2hlYWRfb3V0ID0gMTI5MTc0LjZcbndlbGxzX291dCA9IDIwMDAwLjAifQ==
+<h2>What does converge</h2>
+<ul>
+<li class="fragment">Regional heads away from the well</li>
+<li class="fragment">The <strong>water budget</strong> — every term</li>
+<li class="fragment">The shape and extent of the cone</li>
+</ul>
+<div class="fragment">
+<p>Those are the numbers you report. If you need a pumping water level you apply an analytical correction, refine locally, or say you can’t.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: is this converging?</h2>
+<p>Three runs of the same problem. Decide whether the grid is fine enough.</p>
+<script type="exercise-setup-ex_converge-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaGVhZHMgPSB7NTAwLjA6IDY1My4wOTMsIDI1MC4wOiA2NTQuMzYwLCAxMjUuMDogNjU0Ljk4N30ifQ==
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nsb3NlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ0b3RhbF9pbiA9IF9fX19fX1xudG90YWxfb3V0ID0gX19fX19fXG5kaXNjcmVwYW5jeV9wY3QgPSAxMDAgKiAodG90YWxfaW4gLSB0b3RhbF9vdXQpIC8gKCh0b3RhbF9pbiArIHRvdGFsX291dCkgLyAyKVxucHJpbnQoZlwiaW4ge3RvdGFsX2luOiwuMWZ9ICBvdXQge3RvdGFsX291dDosLjFmfSAgZGlzY3JlcGFuY3kge2Rpc2NyZXBhbmN5X3BjdDorLjRmfSAlXCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJjaGFuZ2VfMSA9IGhlYWRzWzI1MC4wXSAtIGhlYWRzWzUwMC4wXVxuY2hhbmdlXzIgPSBfX19fX19cbmNvbnZlcmdpbmcgPSBfX19fX19cbnByaW50KGZcIjUwMCAtPiAyNTAgbSA6IHtjaGFuZ2VfMTorLjNmfSBtXCIpXG5wcmludChmXCIyNTAgLT4gMTI1IG0gOiB7Y2hhbmdlXzI6Ky4zZn0gbVwiKVxucHJpbnQoZlwiY2hhbmdlcyBzaHJpbmtpbmc/IHtjb252ZXJnaW5nfVwiKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_close">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_converge">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -296,12 +301,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Every <code>_in</code> term goes on one side, every <code>_out</code> term on the other. There are two of each.</p>
+<p>Converging means each successive change is smaller in magnitude than the last. <code>abs()</code> both of them before comparing.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_close">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_converge">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -311,10 +316,10 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>total_in <span class="op">=</span> recharge_in <span class="op">+</span> constant_head_in</span>
-<span id="cb2-2"><a></a>total_out <span class="op">=</span> constant_head_out <span class="op">+</span> wells_out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>149,174.6 both ways, discrepancy zero.</p>
-<p>Notice how <strong>large the constant-head terms are</strong> — 131,000 m³/d flowing through the domain, against 20,000 pumped. The regional throughflow dwarfs the well, and the budget is the only place you see that. It is also a warning: if your boundary conditions are wrong, they are wrong about the biggest number in the model.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>change_2 <span class="op">=</span> heads[<span class="fl">125.0</span>] <span class="op">-</span> heads[<span class="fl">250.0</span>]</span>
+<span id="cb2-2"><a></a>converging <span class="op">=</span> <span class="bu">abs</span>(change_2) <span class="op">&lt;</span> <span class="bu">abs</span>(change_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>+1.267</code> then <code>+0.627</code> — halving each time, so yes, the sequence is converging, just to a value it never quite reaches.</p>
+<p><strong>Had the second change been larger than the first</strong>, the grid would be too coarse to be saying anything at all, and the right response is to refine until the changes shrink — not to pick whichever answer you like.</p>
 </div>
 </div>
 </div>
@@ -322,51 +327,103 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Depletion vs capture</h1>
+<h1><code>ibound</code></h1>
 
 </section>
 <section class="slide level2">
-<h2>Two ways to produce water</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Depletion</strong></p>
-<p>Water taken out of storage.</p>
-<p>A one-off withdrawal from the aquifer’s stock. Not renewable.</p>
-</div><div class="column" style="width:50%;">
-<p><strong>Capture</strong></p>
-<p>Recharge or throughflow diverted to the well.</p>
-<p>Renewable — but it was going somewhere, and now it isn’t.</p>
-</div></div>
-<div class="fragment due-notice">
-<p><strong>Neither is free.</strong> “Safe yield” regulation is an argument about how much capture is acceptable and whose water it was.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>In this model</h2>
-<ul>
-<li class="fragment">Storage is zero — it is steady state, nothing is changing</li>
-<li class="fragment">So 100% of the well’s yield is <strong>capture</strong></li>
-<li class="fragment">17,400 m³/d of captured recharge</li>
-<li class="fragment">2,600 m³/d of throughflow that no longer leaves to the north-west</li>
-</ul>
+<h2>Three values, three meanings</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Meaning</th>
+<th>Head is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>1</code></td>
+<td>active</td>
+<td>solved for</td>
+</tr>
+<tr class="even">
+<td><code>0</code></td>
+<td><strong>inactive</strong> — not in the model</td>
+<td>never computed</td>
+</tr>
+<tr class="odd">
+<td><code>-1</code></td>
+<td>constant head</td>
+<td>fixed at <code>strt</code>, forever</td>
+</tr>
+</tbody>
+</table>
 <div class="fragment">
-<p>Downstream of this basin, somebody is 2,600 m³/d short and has no way to measure why. Week 13 adds storage and the picture gets more interesting.</p>
+<p><strong><code>ibound = 0</code> is not the same as <code>hk = 0</code>.</strong> An inactive cell is removed from the equations. A zero-conductivity cell is still solved for, still has a head, and still makes your solver miserable.</p>
+</div>
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 12. -->
+</section>
+<section class="slide level2 smaller">
+<h2>Cell status turns a rectangle into a model domain</h2>
+<div class="columns">
+<div class="column" style="width:47%;">
+<p><img data-src="../assets/legacy/boundary_cells.jpg" style="width:88.0%" alt="A rectangular groundwater model grid with no-flow cells outside an aquifer boundary, constant-head cells at an edge, and variable-head cells inside"></p>
+</div><div class="column" style="width:53%;">
+<p>The grid stays rectangular, but the <strong>solved domain does not have to be</strong>.</p>
+<ul>
+<li class="fragment">Grey cells are removed from the equations</li>
+<li class="fragment">Blue cells impose a fixed head</li>
+<li class="fragment">White cells carry the unknown heads</li>
+<li class="fragment">The black line is the conceptual aquifer boundary</li>
+</ul>
+<div class="fragment due-notice">
+<p>Cell status is a modeling decision about the domain, not a cosmetic mask.</p>
+</div>
+</div></div>
+</section>
+<section class="slide level2">
+<h2>Cutting the basin out of the rectangle</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>ibound <span class="op">=</span> np.ones((<span class="dv">1</span>, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb3-2"><a></a>ibound[<span class="dv">0</span>][land_surface <span class="op">&gt;</span> <span class="fl">850.0</span>] <span class="op">=</span> <span class="dv">0</span>     <span class="co"># bedrock, not basin fill</span></span>
+<span id="cb3-3"><a></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb3-4"><a></a>ibound[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p>387 cells inactive — 16% of the grid. The domain is now basin-shaped.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: whose water is it?</h2>
-<script type="exercise-setup-ex_capture-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NhcHR1cmUiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJzY2VuYXJpb3MgPSB7XG4gICAgXCJhXCI6IFwic3RvcmFnZSDigJQgYSBvbmUtb2ZmIHdpdGhkcmF3YWwgZnJvbSB0aGUgYXF1aWZlcidzIHN0b2NrXCIsXG4gICAgXCJiXCI6IFwiY2FwdHVyZSDigJQgcmVjaGFyZ2UgdGhhdCB3b3VsZCBoYXZlIGZsb3dlZCB0byB0aGUgcml2ZXJcIixcbiAgICBcImNcIjogXCJjYXB0dXJlIOKAlCB0aHJvdWdoZmxvdyB0aGF0IHdvdWxkIGhhdmUgbGVmdCB0aGUgYmFzaW5cIixcbn0ifQ==
+<h2>And the problem that creates</h2>
+
+<img data-src="week08_tue_discretization_files/figure-revealjs/cell-5-output-1.png" class="r-stretch"><div class="fragment">
+<p>The southern three rows became a wall with nothing behind it.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>MODFLOW would not tell you</h2>
+<ul>
+<li class="fragment">It runs</li>
+<li class="fragment">It solves the remaining domain</li>
+<li class="fragment">It computes nothing for rows 37–39</li>
+<li class="fragment">It reports a <strong>closed budget</strong> — because a region exchanging no water is trivially in balance</li>
+</ul>
+<div class="fragment due-notice">
+<p><strong>Checking connectivity is your job.</strong> Nothing in the software does it for you, and a zero discrepancy will not warn you.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: find the blocked rows</h2>
+<script type="exercise-setup-ex_connect-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbiMgYWN0aXZlLWNlbGwgY291bnRzIGZvciBhIDEwLXJvdyB0b3kgZG9tYWluXG5hY3RpdmVfcGVyX3JvdyA9IG5wLmFycmF5KFsxMiwgMTQsIDE1LCAxNSwgMTUsIDEzLCA4LCAwLCAwLCAwXSkifQ==
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NhcHR1cmUiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6IiMgQSBuZXcgd2VsbCBzdGFydHMgcHVtcGluZy4gQWZ0ZXIgNTAgeWVhcnMgdGhlIGFxdWlmZXIgaGFzIHJlLWVxdWlsaWJyYXRlZFxuIyBhbmQgaGVhZHMgYXJlIHN0ZWFkeSBhZ2Fpbi4gV2hlcmUgaXMgaXRzIHdhdGVyIGNvbWluZyBmcm9tP1xuYW5zd2VyID0gX19fX19fXG5wcmludChzY2VuYXJpb3NbYW5zd2VyXSkifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImJsb2NrZWQgPSBfX19fX19cbndoaWNoID0gX19fX19fXG5wcmludChmXCJ7YmxvY2tlZH0gcm93cyBhcmUgZnVsbHkgaW5hY3RpdmU6IHJvd3Mge3doaWNofVwiKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_capture">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_connect">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -376,12 +433,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>At steady state, by definition, storage is not changing. So the water cannot be coming out of storage.</p>
+<p>Summing a boolean array counts the <code>True</code>s. <code>np.where(condition)[0]</code> gives the indices where it holds.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_capture">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_connect">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -391,48 +448,30 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<p><code>"b"</code> or <code>"c"</code> — either is right; the point is that it is <strong>not</strong> <code>"a"</code>.</p>
-<p>Once heads are steady, storage contributes exactly zero by definition. Every litre the well produces is being taken from somewhere else in the budget: a river, a spring, a wetland, a neighbour’s throughflow, or evapotranspiration that no longer happens.</p>
-<p><strong>A well at steady state is not “using up” an aquifer. It is redirecting a flux.</strong> Which flux, and to whose cost, is what the budget tells you and nothing else does.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>blocked <span class="op">=</span> <span class="bu">int</span>((active_per_row <span class="op">==</span> <span class="dv">0</span>).<span class="bu">sum</span>())</span>
+<span id="cb4-2"><a></a>which <span class="op">=</span> np.where(active_per_row <span class="op">==</span> <span class="dv">0</span>)[<span class="dv">0</span>].tolist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Three rows, 7 through 9.</p>
+<p>The fix in the lab is to raise the bedrock cutoff until every row reaches a boundary. Note what that means: <strong>you changed a geological decision because of a numerical problem.</strong> Sometimes right, sometimes the start of a model answering a different question — but either way it goes in the report, not in your head.</p>
 </div>
 </div>
 </div>
-</div>
-</section></section>
-<section>
-<section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Comparing with reality</h1>
-
-</section>
-<section class="slide level2">
-<h2>Head is not depth to water</h2>
-<p>MODFLOW reports head as an <strong>elevation</strong>. A well measures <strong>depth below land surface</strong>.</p>
-<p><span class="math display">\[\text{depth to water} = \text{land surface} - \text{head}\]</span></p>
-<div class="fragment">
-<p>Which means every comparison with a real measurement depends on a land-surface array MODFLOW knows nothing about.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>The comparison</h2>
-
-<img data-src="week11_thu_budgets_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
-<p>Medians: modelled <strong>{python} f”{np.median(dtw_model):.0f}“</strong> m, observed <strong>{python} f”{observed.median():.0f}“</strong> m. The model is biased deep by well over a hundred metres.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Your turn: convert head to depth</h2>
-<script type="exercise-setup-ex_dtw-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2R0dyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImxhbmRfc3VyZmFjZV9tID0gNzQ1LjAgICAgICMgYXQgdGhpcyB3ZWxsJ3MgbG9jYXRpb25cbm1vZGVsbGVkX2hlYWRfbSA9IDY2MS42XG5vYnNlcnZlZF9kZXB0aF9tID0gNTguMCJ9
+<h2>Your turn: pick a cell size</h2>
+<p>You need to resolve a cone of depression about 2 km across, and the domain is 15 km by 10 km. Cells must be square.</p>
+<script type="exercise-setup-ex_cellsize-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NlbGxzaXplIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY29uZV93aWR0aF9tID0gMjAwMC4wXG5kb21haW5feCwgZG9tYWluX3kgPSAxNTAwMC4wLCAxMDAwMC4wXG5jZWxsc19hY3Jvc3NfY29uZSA9IDggICAgICAgICMgYSBydWxlIG9mIHRodW1iOiBhdCBsZWFzdCA4IGNlbGxzIGFjcm9zcyBhIGZlYXR1cmUifQ==
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2R0dyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibW9kZWxsZWRfZGVwdGggPSBfX19fX19cbnJlc2lkdWFsID0gX19fX19fXG5wcmludChmXCJtb2RlbGxlZCBkZXB0aCB0byB3YXRlciB7bW9kZWxsZWRfZGVwdGg6LjFmfSBtXCIpXG5wcmludChmXCJvYnNlcnZlZCAgICAgICAgICAgICAgICB7b2JzZXJ2ZWRfZGVwdGhfbTouMWZ9IG1cIilcbnByaW50KGZcInJlc2lkdWFsIChtb2RlbCAtIG9icykgIHtyZXNpZHVhbDorLjFmfSBtXCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NlbGxzaXplIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJtYXhfY2VsbF9zaXplID0gX19fX19fXG5uX2NlbGxzID0gX19fX19fXG5wcmludChmXCJjZWxsIHNpemUgbm8gbGFyZ2VyIHRoYW4ge21heF9jZWxsX3NpemU6LjBmfSBtXCIpXG5wcmludChmXCJ0aGF0IGlzIHtuX2NlbGxzOiwuMGZ9IGNlbGxzIGluIG9uZSBsYXllclwiKSJ9
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_dtw">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_cellsize">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -442,12 +481,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Depth counts downward from the land surface, so it is the land surface <em>minus</em> the head. The residual convention is modelled minus observed, as in Week 9.</p>
+<p>If you need 8 cells across a 2 km feature, each cell can be at most 2000/8 across. Then count how many fit in the domain.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_dtw">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_cellsize">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -457,36 +496,13 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>modelled_depth <span class="op">=</span> land_surface_m <span class="op">-</span> modelled_head_m</span>
-<span id="cb3-2"><a></a>residual <span class="op">=</span> modelled_depth <span class="op">-</span> observed_depth_m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>83.4 m modelled against 58.0 m observed — the model puts the water table <strong>25 m too deep</strong> at this well.</p>
-<p>Note that a 25 m head residual is only 0.3% of the elevations involved, which is why you must never assess a groundwater model by comparing <em>heads</em> as numbers. Compare <strong>residuals</strong>, and compare them against the head <em>range</em> across the domain — 80 m here, so 25 m is over a quarter of the signal.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>max_cell_size <span class="op">=</span> cone_width_m <span class="op">/</span> cells_across_cone</span>
+<span id="cb5-2"><a></a>n_cells <span class="op">=</span> (domain_x <span class="op">/</span> max_cell_size) <span class="op">*</span> (domain_y <span class="op">/</span> max_cell_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>250 m cells, 2,400 of them — which is where the number I handed you in Week 7 came from.</p>
+<p><strong>Resolve the feature you came to look at.</strong> Same argument as choosing a time step, and the same argument as choosing a rolling window in Week 5: the discretization has to be finer than the thing you are trying to see.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Three reasons, none of them bugs</h2>
-<ol type="1">
-<li class="fragment"><strong>The boundary heads were invented.</strong> 620 m and 700 m, chosen to give a plausible gradient. They set the entire head field.</li>
-<li class="fragment"><strong>The monitored wells are not a random sample.</strong> They cluster where people pump — the valley floor — which is where water is shallowest.</li>
-<li class="fragment"><strong>Uniform <code>K</code> and uniform recharge.</strong> The real basin has neither.</li>
-</ol>
-<div class="fragment">
-<p>Reason 2 is the subtle one, and it is the Week 8 sampling problem again. You are comparing a whole-domain distribution with a biased sample of it.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>What to do about it</h2>
-<div class="fragment">
-<p><strong>Calibration</strong>: adjust the things you guessed until the model reproduces what you measured — at the <em>locations you measured it</em>, not across the whole domain.</p>
-</div>
-<div class="fragment">
-<p>And then be honest about what that gets you. A calibrated model is <strong>one consistent explanation</strong> of the observations, not the truth. Several different parameter sets will fit equally well and disagree about the future.</p>
-</div>
-<div class="fragment due-notice">
-<p>That is what Project 3 is about, and why it asks for a comparison of scenarios rather than a single prediction.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
@@ -495,22 +511,21 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>Read a budget term by term, and predicted it before running</li>
-<li>Distinguished depletion from capture, and why regulation cares</li>
-<li>Compared modelled depth to water with 80 real wells</li>
-<li>Found a large bias, and named three reasons for it</li>
+<li>Test the answer against cell size; a number that moves is about your grid</li>
+<li>The pumping-cell head never converges, and is not a well water level</li>
+<li><code>ibound</code>: 1 active, 0 inactive, −1 constant head — and 0 is not <code>hk = 0</code></li>
+<li>A disconnected region still reports a closed budget</li>
 </ul>
 <div class="kicker">
-<p>What’s due</p>
+<p>Before Thursday</p>
 </div>
 <ul>
-<li><strong>HW 9 — MODFLOW structure diagram</strong>, Wednesday 11/11 at 11:59pm</li>
-<li>Finish the Week 11 lab before Tuesday</li>
+<li>Parts 1–3 of <code>labs/week08/week08_lab_discretization_boundaries.ipynb</code></li>
 </ul>
 <div class="kicker">
-<p>Next week</p>
+<p>Thursday</p>
 </div>
-<p>Discretization and boundary conditions — and what happens when you take the confining layer off this model.</p>
+<p>Taking the confining layer off, and the model that stops converging.</p>
 
 
 <script type="pyodide-data">
