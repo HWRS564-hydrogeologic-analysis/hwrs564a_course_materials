@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Week 6 Lab — Meeting MODFLOW – HWRS 564a</title>
+<title>Week 6 Lab: Meeting MODFLOW – HWRS 564a</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -726,28 +726,28 @@ window.Quarto = {
   <ul>
   <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link active" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
-  <li><a href="#part-1-is-modflow-even-here" id="toc-part-1-is-modflow-even-here" class="nav-link" data-scroll-target="#part-1-is-modflow-even-here">Part 1 — Is MODFLOW even here?</a>
+  <li><a href="#part-1-check-for-the-modflow-executable" id="toc-part-1-check-for-the-modflow-executable" class="nav-link" data-scroll-target="#part-1-check-for-the-modflow-executable">Part 1: Check for the MODFLOW executable</a>
   <ul class="collapse">
   <li><a href="#where-the-model-files-go" id="toc-where-the-model-files-go" class="nav-link" data-scroll-target="#where-the-model-files-go">Where the model files go</a></li>
   </ul></li>
-  <li><a href="#part-2-six-questions-six-packages" id="toc-part-2-six-questions-six-packages" class="nav-link" data-scroll-target="#part-2-six-questions-six-packages">Part 2 — Six questions, six packages</a>
+  <li><a href="#part-2-modflow-packages" id="toc-part-2-modflow-packages" class="nav-link" data-scroll-target="#part-2-modflow-packages">Part 2: MODFLOW packages</a>
   <ul class="collapse">
-  <li><a href="#the-simplest-useful-model" id="toc-the-simplest-useful-model" class="nav-link" data-scroll-target="#the-simplest-useful-model">The simplest useful model</a></li>
+  <li><a href="#a-simple-confined-model" id="toc-a-simple-confined-model" class="nav-link" data-scroll-target="#a-simple-confined-model">A simple confined model</a></li>
   <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
   </ul></li>
-  <li><a href="#part-3-running-it-and-checking-that-it-ran" id="toc-part-3-running-it-and-checking-that-it-ran" class="nav-link" data-scroll-target="#part-3-running-it-and-checking-that-it-ran">Part 3 — Running it, and checking that it ran</a>
+  <li><a href="#part-3-run-the-model-and-check-its-status" id="toc-part-3-run-the-model-and-check-its-status" class="nav-link" data-scroll-target="#part-3-run-the-model-and-check-its-status">Part 3: Run the model and check its status</a>
   <ul class="collapse">
-  <li><a href="#your-turn-2-break-it-on-purpose" id="toc-your-turn-2-break-it-on-purpose" class="nav-link" data-scroll-target="#your-turn-2-break-it-on-purpose">YOUR TURN 2 — break it on purpose</a></li>
+  <li><a href="#your-turn-2-examine-a-failed-run" id="toc-your-turn-2-examine-a-failed-run" class="nav-link" data-scroll-target="#your-turn-2-examine-a-failed-run">YOUR TURN 2: Examine a failed run</a></li>
   </ul></li>
-  <li><a href="#part-4-reading-the-heads-back" id="toc-part-4-reading-the-heads-back" class="nav-link" data-scroll-target="#part-4-reading-the-heads-back">Part 4 — Reading the heads back</a>
+  <li><a href="#part-4-read-the-simulated-heads" id="toc-part-4-read-the-simulated-heads" class="nav-link" data-scroll-target="#part-4-read-the-simulated-heads">Part 4: Read the simulated heads</a>
   <ul class="collapse">
   <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
   </ul></li>
-  <li><a href="#part-5-the-water-budget" id="toc-part-5-the-water-budget" class="nav-link" data-scroll-target="#part-5-the-water-budget">Part 5 — The water budget</a>
+  <li><a href="#part-5-the-water-budget" id="toc-part-5-the-water-budget" class="nav-link" data-scroll-target="#part-5-the-water-budget">Part 5: The water budget</a>
   <ul class="collapse">
   <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
-  <li><a href="#your-turn-5-how-much-water-is-actually-moving" id="toc-your-turn-5-how-much-water-is-actually-moving" class="nav-link" data-scroll-target="#your-turn-5-how-much-water-is-actually-moving">YOUR TURN 5 — how much water is actually moving?</a></li>
-  <li><a href="#where-the-5-went" id="toc-where-the-5-went" class="nav-link" data-scroll-target="#where-the-5-went">Where the 5% went</a></li>
+  <li><a href="#your-turn-5-calculate-the-volumetric-flow" id="toc-your-turn-5-calculate-the-volumetric-flow" class="nav-link" data-scroll-target="#your-turn-5-calculate-the-volumetric-flow">YOUR TURN 5: Calculate the volumetric flow</a></li>
+  <li><a href="#the-distance-between-boundary-heads" id="toc-the-distance-between-boundary-heads" class="nav-link" data-scroll-target="#the-distance-between-boundary-heads">The distance between boundary heads</a></li>
   <li><a href="#your-turn-6" id="toc-your-turn-6" class="nav-link" data-scroll-target="#your-turn-6">YOUR TURN 6</a></li>
   </ul></li>
   <li><a href="#before-you-leave" id="toc-before-you-leave" class="nav-link" data-scroll-target="#before-you-leave">Before you leave</a></li>
@@ -762,7 +762,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 2 · MODFLOW &amp; FloPy</li><li class="breadcrumb-item"><a href="../../slides/week06_tue_what_is_modflow.html">Week 6 — Meeting MODFLOW</a></li><li class="breadcrumb-item"><a href="../../labs/week06/week06_lab_meeting_modflow.html">Lab · Meeting MODFLOW</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Week 6 Lab — Meeting MODFLOW</h1>
+<h1 class="title">Week 6 Lab: Meeting MODFLOW</h1>
 </div>
 
 
@@ -780,32 +780,28 @@ window.Quarto = {
 
 
 <p><strong>HWRS 564a · Fall 2026</strong></p>
-<p>For nine weeks you have been inferring what an aquifer is doing from patterns in observations. Now you build a model of it.</p>
-<p>MODFLOW is a Fortran program that solves the groundwater flow equation on a grid. FloPy is the Python library that writes its input files, runs it, and reads its output back. <strong>You will never edit a MODFLOW input file by hand in this course</strong> — but you will read a few, because knowing what FloPy is writing is what lets you debug it.</p>
-<p>This week is orientation: what the pieces are, how to run one, and how to tell whether the answer means anything.</p>
+<p>MODFLOW solves the groundwater flow equation on a grid. FloPy is the Python library that writes MODFLOW input files, runs the program, and reads its output. In this course, you will use FloPy to generate input files and inspect them when troubleshooting a model.</p>
+<p>In this lab, you will build a simple model, run it, compare its results with an analytic solution, and check its water budget.</p>
 <section id="how-to-use-this-notebook" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
-<p>Run each cell with <strong>Shift+Enter</strong>. Cells marked <strong><code># YOUR TURN</code></strong> have something for you to write. Cells marked <strong><code># CHECK</code></strong> verify your answer — if they run without complaint, you’re right.</p>
-<blockquote class="blockquote">
-<p><strong>Before you submit anything all semester:</strong> <em>Kernel → Restart Kernel and Run All Cells</em>. A notebook that only works when run out of order is not finished.</p>
-</blockquote>
+<p>Run each cell with <strong>Shift+Enter</strong>. Complete the code in cells marked <strong><code># YOUR TURN</code></strong>. Cells marked <strong><code># CHECK</code></strong> test your answers against the expected results.</p>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>By the end of this notebook you can:</p>
 <ol type="1">
-<li>Say what each of the six core MODFLOW packages answers</li>
-<li>Confirm the MODFLOW binary exists before trying to use it</li>
-<li>Build, write, and run the simplest possible model from FloPy</li>
-<li>Check <code>success</code> properly, and get a useful message when it fails</li>
-<li>Read heads out of the binary <code>.hds</code> file</li>
-<li>Find the water budget in the <code>.list</code> file and check that it closes</li>
+<li>Explain the roles of the MODFLOW packages used in this lab</li>
+<li>Check that the MODFLOW executable is available</li>
+<li>Build, write, and run a simple model with FloPy</li>
+<li>Check <code>success</code> and capture diagnostic output from a failed run</li>
+<li>Read heads from the binary <code>.hds</code> file</li>
+<li>Read the water budget in the <code>.list</code> file and check its discrepancy</li>
 </ol>
 <hr>
 </section>
-<section id="part-1-is-modflow-even-here" class="level2">
-<h2 class="anchored" data-anchor-id="part-1-is-modflow-even-here">Part 1 — Is MODFLOW even here?</h2>
-<p>MODFLOW is a compiled binary, not a Python package. <code>postbuild.sh</code> downloaded it when your codespace was created. <strong>Check for it before anything else</strong> — a missing binary produces a failure much later and much less clearly.</p>
+<section id="part-1-check-for-the-modflow-executable" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-check-for-the-modflow-executable">Part 1: Check for the MODFLOW executable</h2>
+<p>FloPy runs MODFLOW as a separate compiled program. <code>postbuild.sh</code> downloads the executable when your codespace is created. <strong>Check that it is available</strong> before building the model so a missing executable is easy to diagnose.</p>
 <div id="c002" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -813,35 +809,35 @@ window.Quarto = {
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> <span class="bu">next</span>(p <span class="cf">for</span> p <span class="kw">in</span> Path.cwd().parents <span class="cf">if</span> (p <span class="op">/</span> <span class="st">"pyproject.toml"</span>).exists())</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> Path(<span class="st">"../.."</span>)  <span class="co"># course repo root</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>MF_EXE <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"modflow"</span> <span class="op">/</span> <span class="st">"mf2005"</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> MF_EXE.exists(), (</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"MODFLOW binary not found at </span><span class="sc">{</span>MF_EXE<span class="sc">}</span><span class="ss">. Your codespace may not have "</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"finished building — run ./postbuild.sh from a terminal."</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"finished building. Run ./postbuild.sh from a terminal."</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"flopy </span><span class="sc">{</span>flopy<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MODFLOW at </span><span class="sc">{</span>MF_EXE<span class="sc">.</span>relative_to(ROOT)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"other binaries available: </span><span class="sc">{</span><span class="bu">sorted</span>(p.name <span class="cf">for</span> p <span class="kw">in</span> MF_EXE.parent.iterdir())[:<span class="dv">8</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>That assertion, with that message, goes at the top of every MODFLOW notebook you write. It costs one line and it turns “<code>FileNotFoundError</code> from somewhere inside flopy” into “run postbuild.sh”.</p>
+<p>Include this assertion at the start of each MODFLOW notebook. It reports a missing executable and explains how to obtain it.</p>
 <section id="where-the-model-files-go" class="level3">
 <h3 class="anchored" data-anchor-id="where-the-model-files-go">Where the model files go</h3>
-<p>A MODFLOW run writes about a dozen files. <strong>Give every model its own scratch directory</strong>, outside version control — otherwise <code>.hds</code>, <code>.cbc</code> and <code>.list</code> files accumulate in the repo root and get committed.</p>
+<p>A MODFLOW run writes input and output files. <strong>Give each model its own scratch directory</strong> under <code>_run/</code>, which is excluded from version control. This keeps <code>.hds</code>, <code>.cbc</code>, and <code>.list</code> files out of the repository.</p>
 <div id="c004" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>WS <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"_run"</span> <span class="op">/</span> <span class="st">"week06_first"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>WS.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"model workspace: </span><span class="sc">{</span>WS<span class="sc">.</span>relative_to(ROOT)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"(_run/ is in .gitignore — model output is never committed)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"(_run/ is excluded from version control by .gitignore)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
 </section>
-<section id="part-2-six-questions-six-packages" class="level2">
-<h2 class="anchored" data-anchor-id="part-2-six-questions-six-packages">Part 2 — Six questions, six packages</h2>
-<p>MODFLOW has no single “model file”. It has a <strong>package per question</strong>, and a <code>.nam</code> file listing them.</p>
+<section id="part-2-modflow-packages" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-modflow-packages">Part 2: MODFLOW packages</h2>
+<p>MODFLOW uses separate packages to define the parts of a model. The <code>.nam</code> file lists the packages used in a simulation.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -850,66 +846,66 @@ window.Quarto = {
 </colgroup>
 <thead>
 <tr class="header">
-<th>Question</th>
+<th>Model component</th>
 <th>Package</th>
 <th>FloPy class</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>What shape is the domain, in what units, over what time?</td>
+<td>Grid dimensions, units, and time periods</td>
 <td><code>DIS</code></td>
 <td><code>ModflowDis</code></td>
 </tr>
 <tr class="even">
-<td>Which cells are active, and where do we start?</td>
+<td>Active cells and starting heads</td>
 <td><code>BAS</code></td>
 <td><code>ModflowBas</code></td>
 </tr>
 <tr class="odd">
-<td>How permeable is it?</td>
+<td>Aquifer hydraulic properties</td>
 <td><code>LPF</code></td>
 <td><code>ModflowLpf</code></td>
 </tr>
 <tr class="even">
-<td>How do we solve it?</td>
+<td>Numerical solver</td>
 <td><code>PCG</code></td>
 <td><code>ModflowPcg</code></td>
 </tr>
 <tr class="odd">
-<td>What do we save?</td>
+<td>Output to save</td>
 <td><code>OC</code></td>
 <td><code>ModflowOc</code></td>
 </tr>
 <tr class="even">
-<td>Who is pumping, recharging, evaporating?</td>
+<td>Wells, recharge, and evapotranspiration</td>
 <td><code>WEL</code>, <code>RCH</code>, <code>EVT</code>, …</td>
-<td>one class each</td>
+<td>One class per package</td>
 </tr>
 </tbody>
 </table>
-<p>That table is the whole mental model. Everything you build from here is those answers, plus whichever stress packages the problem needs.</p>
-<section id="the-simplest-useful-model" class="level3">
-<h3 class="anchored" data-anchor-id="the-simplest-useful-model">The simplest useful model</h3>
-<p>One layer, 10 by 20 cells, constant head on the east and west edges, nothing else. Flow runs west to east because we told the two edges to differ.</p>
+<p>We will use <code>DIS</code>, <code>BAS</code>, <code>LPF</code>, <code>PCG</code>, and <code>OC</code> here. Later labs add stress packages for processes such as pumping and recharge.</p>
+<section id="a-simple-confined-model" class="level3">
+<h3 class="anchored" data-anchor-id="a-simple-confined-model">A simple confined model</h3>
+<p>The model has one layer and a grid of 10 rows by 20 columns. Constant heads in the west and east boundary columns drive flow from west to east. There are no wells or recharge.</p>
 <div id="c006" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>NLAY, NROW, NCOL <span class="op">=</span> <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">20</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>DELR <span class="op">=</span> DELC <span class="op">=</span> <span class="fl">100.0</span>        <span class="co"># m, cell size</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>mf <span class="op">=</span> flopy.modflow.Modflow(<span class="st">"first"</span>, model_ws<span class="op">=</span><span class="bu">str</span>(WS), exe_name<span class="op">=</span><span class="bu">str</span>(MF_EXE))</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># DIS — geometry and time</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># DIS: geometry and time</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowDis(</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    mf, NLAY, NROW, NCOL,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    delr<span class="op">=</span>DELR, delc<span class="op">=</span>DELC,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    top<span class="op">=</span><span class="fl">100.0</span>, botm<span class="op">=</span><span class="fl">0.0</span>,       <span class="co"># ELEVATIONS, not thicknesses</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    top<span class="op">=</span><span class="fl">100.0</span>, botm<span class="op">=</span><span class="fl">0.0</span>,       <span class="co"># top and bottom elevations (m)</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    nper<span class="op">=</span><span class="dv">1</span>, steady<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mf.dis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>top=100.0, botm=0.0</code> are <strong>elevations above datum</strong>, so this aquifer is 100 m thick. Passing thicknesses instead gives you a layer with a negative thickness and an error message that does not mention <code>botm</code>.</p>
+<p><code>top=100.0</code> and <code>botm=0.0</code> are <strong>elevations above datum</strong>, giving an aquifer thickness of 100 m. Check the difference between <code>top</code> and <code>botm</code> when defining each layer.</p>
 <div id="c008" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BAS — which cells are active, and the starting heads</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BAS: active cells and starting heads</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ibound <span class="op">=</span> np.ones((NLAY, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>        <span class="co"># west edge: constant head</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ibound[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>       <span class="co"># east edge: constant head</span></span>
@@ -923,10 +919,10 @@ window.Quarto = {
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  1 = active,  0 = inactive,  -1 = constant head"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <blockquote class="blockquote">
-<p><strong><code>strt</code> does two jobs.</strong> In active cells it is only a starting guess for the solver. In <code>ibound == -1</code> cells it <em>is</em> the boundary condition, and it does not change. Same array, two meanings, decided by <code>ibound</code>.</p>
+<p><strong>The role of <code>strt</code> depends on <code>ibound</code>.</strong> For this steady-state model, it provides the solver’s initial head estimates in active cells. In cells with <code>ibound == -1</code>, it specifies the constant boundary heads.</p>
 </blockquote>
 <div id="c010" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LPF — hydraulic properties.  PCG — the solver.  OC — what to save.</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LPF: hydraulic properties. PCG: solver. OC: output to save.</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowLpf(mf, hk<span class="op">=</span><span class="fl">10.0</span>, laytyp<span class="op">=</span><span class="dv">0</span>, ipakcb<span class="op">=</span><span class="dv">53</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowPcg(mf)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>flopy.modflow.ModflowOc(</span>
@@ -935,23 +931,23 @@ window.Quarto = {
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"packages attached:"</span>, mf.get_package_list())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Two arguments worth naming now, because they come back every week:</p>
+<p>Two package arguments used in this lab:</p>
 <ul>
-<li><strong><code>laytyp=0</code></strong> means <em>confined</em> — transmissivity is fixed. <code>laytyp=1</code> means <em>convertible</em>, so transmissivity depends on the computed head and the problem becomes nonlinear. Week 8 is about that difference.</li>
-<li><strong><code>ipakcb=53</code></strong> tells the package to write its flows to the cell-budget file. Leave it out and the budget terms for that package are silently absent.</li>
+<li><strong><code>laytyp=0</code></strong> specifies a confined layer with fixed transmissivity. <strong><code>laytyp=1</code></strong> specifies a convertible layer, where transmissivity can depend on the computed head. We will examine this behavior in Week 8.</li>
+<li><strong><code>ipakcb=53</code></strong> tells the package to write its flows to the cell-budget file. Include it to save that package’s budget terms.</li>
 </ul>
 </section>
 <section id="your-turn-1" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-1">YOUR TURN 1</h3>
-<p>Before running anything, work out what this model <em>should</em> say.</p>
-<p>The two constant-head boundaries are 95 m and 85 m, and there are 20 columns of 100 m cells. With no recharge and no wells, the head profile must be a straight line between them.</p>
+<p>Calculate the expected head gradient and specific discharge before running the model.</p>
+<p>The two constant-head boundaries are 95 m and 85 m, and there are 20 columns of 100 m cells. With no recharge or wells, the head profile should be a straight line between the boundaries.</p>
 <p>Make a <strong>first estimate</strong> using the full width of the domain:</p>
 <ul>
-<li><code>domain_length_m</code> — the east–west extent of the model</li>
-<li><code>expected_gradient</code> — the hydraulic gradient, dimensionless</li>
-<li><code>expected_q</code> — the specific discharge in m/d, from Darcy’s law with <code>hk=10.0</code></li>
+<li><code>domain_length_m</code>: the east–west extent of the model</li>
+<li><code>expected_gradient</code>: the dimensionless hydraulic gradient</li>
+<li><code>expected_q</code>: the specific discharge in m/d, from Darcy’s law with <code>hk=10.0</code></li>
 </ul>
-<p>Hold onto these. Part 5 checks them against MODFLOW and the answer is <em>not</em> quite what you get here — for a reason worth knowing.</p>
+<p>In Part 5, you will compare this estimate with MODFLOW’s flow rate and account for the positions of the boundary cell centres.</p>
 <div id="c012" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hk <span class="op">=</span> <span class="fl">10.0</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -968,14 +964,14 @@ window.Quarto = {
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"domain      </span><span class="sc">{</span>domain_length_m<span class="sc">:.0f}</span><span class="ss"> m"</span>)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"gradient    </span><span class="sc">{</span>expected_gradient<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"q           </span><span class="sc">{</span>expected_q<span class="sc">:.3f}</span><span class="ss"> m/d"</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">That is the arithmetic. Part 5 asks whether MODFLOW agrees."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">In Part 5, compare this estimate with the MODFLOW budget."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
 </section>
-<section id="part-3-running-it-and-checking-that-it-ran" class="level2">
-<h2 class="anchored" data-anchor-id="part-3-running-it-and-checking-that-it-ran">Part 3 — Running it, and checking that it ran</h2>
-<p><code>write_input()</code> turns the FloPy objects into text files. <code>run_model()</code> shells out to the binary.</p>
+<section id="part-3-run-the-model-and-check-its-status" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-run-the-model-and-check-its-status">Part 3: Run the model and check its status</h2>
+<p><code>write_input()</code> writes the FloPy model’s input files. <code>run_model()</code> runs the MODFLOW executable.</p>
 <div id="c015" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mf.write_input()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -989,16 +985,16 @@ window.Quarto = {
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"converged. </span><span class="sc">{</span><span class="bu">len</span>(buff)<span class="sc">}</span><span class="ss"> lines of output captured."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Three details in those two lines, and all three matter.</strong></p>
-<p><strong>FloPy does not raise when a model fails.</strong> It returns <code>(success, buff)</code> and carries on. Ignore <code>success</code> and you will happily plot whatever was last written to the <code>.hds</code> file and present it as a result.</p>
-<p><strong><code>report=True</code> is not optional.</strong> With <code>silent=True</code> alone, FloPy returns an <strong>empty</strong> <code>buff</code> — so the assertion fires with nothing in the message, at exactly the moment you needed a diagnostic. You will see tutorials that omit it.</p>
-<p><strong><code>silent=True</code> only suppresses the console echo.</strong> The full run log is always written to the <code>.list</code> file, which is where the real diagnosis lives.</p>
+<p><strong>Check the run status and capture its output.</strong></p>
+<p><code>run_model()</code> returns <code>(success, buff)</code>. Check <code>success</code> before reading the results; files left from an earlier run can otherwise be mistaken for new output.</p>
+<p>Use <strong><code>report=True</code></strong> to capture MODFLOW output in <code>buff</code>. With <code>silent=True</code> alone, <code>buff</code> is empty, so the assertion has no diagnostic output to include.</p>
+<p><strong><code>silent=True</code></strong> suppresses console output. The <code>.list</code> file still contains the run log and details about convergence and the water budget.</p>
 </blockquote>
-<section id="your-turn-2-break-it-on-purpose" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-2-break-it-on-purpose">YOUR TURN 2 — break it on purpose</h3>
-<p>You need to have seen a failure before you meet one by accident.</p>
-<p>Build the same model again, but hand the solver an impossible convergence criterion: <code>mxiter=1, iter1=1, hclose=1e-12</code>. One iteration cannot close a head change to a picometre.</p>
-<p>Capture <code>success</code> and <code>buff</code> <strong>without</strong> asserting, so the cell completes.</p>
+<section id="your-turn-2-examine-a-failed-run" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-2-examine-a-failed-run">YOUR TURN 2: Examine a failed run</h3>
+<p>Use restrictive solver settings to produce a convergence failure and inspect the output.</p>
+<p>The code below rebuilds the model with <code>laytyp=1</code> and limits the solver to one outer iteration and one inner iteration. The head and residual tolerances are both <code>1e-12</code>.</p>
+<p>Capture <code>success</code> and <code>buff</code> <strong>without asserting</strong> so you can examine the failed run in the following cells.</p>
 <div id="c018" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>WS_FAIL <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"_run"</span> <span class="op">/</span> <span class="st">"week06_fail"</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>WS_FAIL.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
@@ -1017,17 +1013,17 @@ window.Quarto = {
 </div>
 <div id="c019" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bad_success <span class="kw">is</span> <span class="va">False</span>, <span class="ss">f"this model should NOT have converged (got </span><span class="sc">{</span>bad_success<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bad_success <span class="kw">is</span> <span class="va">False</span>, <span class="ss">f"expected a convergence failure (got </span><span class="sc">{</span>bad_success<span class="sc">}</span><span class="ss">)"</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(bad_buff) <span class="op">&gt;</span> <span class="dv">0</span>, (</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"buff is empty — you need report=True, or the failure message tells you nothing"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"buff is empty. Use report=True to capture diagnostic output."</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"success = </span><span class="sc">{</span>bad_success<span class="sc">}</span><span class="ss">, with </span><span class="sc">{</span><span class="bu">len</span>(bad_buff)<span class="sc">}</span><span class="ss"> lines of output"</span>)</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">last few lines:"</span>)</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> [l.strip() <span class="cf">for</span> l <span class="kw">in</span> bad_buff <span class="cf">if</span> l.strip()][<span class="op">-</span><span class="dv">3</span>:]:</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>line<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>There it is: <strong>FAILED TO MEET SOLVER CONVERGENCE CRITERIA</strong>.</p>
-<p>The <code>.list</code> file says more, including the number that tells you <em>how</em> badly it failed:</p>
+<p>Look for <strong>FAILED TO MEET SOLVER CONVERGENCE CRITERIA</strong> in the output.</p>
+<p>The <code>.list</code> file contains additional diagnostics, including the water-budget discrepancy:</p>
 <div id="c021" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>listing <span class="op">=</span> (WS_FAIL <span class="op">/</span> <span class="st">"nope.list"</span>).read_text().splitlines()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>tail <span class="op">=</span> [l.strip() <span class="cf">for</span> l <span class="kw">in</span> listing <span class="cf">if</span> l.strip()]</span>
@@ -1035,13 +1031,13 @@ window.Quarto = {
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> tail[<span class="op">-</span><span class="dv">6</span>:]:</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(line)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>BUDGET PERCENT DISCREPANCY IS -162.7.</strong> Water is not being conserved, by a factor of more than two. That single number is the first thing to look at when a model misbehaves, and we come back to it in Part 5.</p>
+<p>The failed run reports a budget discrepancy of about <strong>-162.7%</strong>, indicating a large imbalance between inflow and outflow. Check both solver convergence and budget discrepancy when evaluating a run. Part 5 examines the budget in more detail.</p>
 <hr>
 </section>
 </section>
-<section id="part-4-reading-the-heads-back" class="level2">
-<h2 class="anchored" data-anchor-id="part-4-reading-the-heads-back">Part 4 — Reading the heads back</h2>
-<p>Heads are written to a binary file. <code>flopy.utils.HeadFile</code> reads it.</p>
+<section id="part-4-read-the-simulated-heads" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-read-the-simulated-heads">Part 4: Read the simulated heads</h2>
+<p>MODFLOW writes heads to a binary file. Use <code>flopy.utils.HeadFile</code> to read it.</p>
 <div id="c024" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hds <span class="op">=</span> flopy.utils.HeadFile(<span class="bu">str</span>(WS <span class="op">/</span> <span class="st">"first.hds"</span>))</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1052,13 +1048,13 @@ window.Quarto = {
 </div>
 <section id="your-turn-3" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
-<p>Confirm MODFLOW agrees with the arithmetic you did in Part 1.</p>
+<p>Check whether the simulated heads follow the expected linear profile from Part 2.</p>
 <p>Extract the head profile along <strong>row 5</strong> and compare it with a straight line between its two ends.</p>
 <ul>
-<li><code>profile</code> — the heads along row 5 of layer 0, as a 1D array</li>
-<li><code>max_deviation</code> — the largest absolute difference between <code>profile</code> and a straight line joining <code>profile[0]</code> to <code>profile[-1]</code></li>
+<li><code>profile</code>: the heads along row 5 of layer 0, as a 1D array</li>
+<li><code>max_deviation</code>: the largest absolute difference between <code>profile</code> and a straight line joining <code>profile[0]</code> to <code>profile[-1]</code></li>
 </ul>
-<p><code>np.linspace(a, b, n)</code> builds that straight line for you.</p>
+<p>Use <code>np.linspace(a, b, n)</code> to construct the comparison line.</p>
 <div id="c026" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>profile <span class="op">=</span> ...</span>
@@ -1072,10 +1068,10 @@ window.Quarto = {
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> max_deviation <span class="op">&lt;</span> <span class="fl">1e-4</span>, <span class="ss">f"expected a straight line, deviation was </span><span class="sc">{</span>max_deviation<span class="sc">}</span><span class="ss">"</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"profile ends: </span><span class="sc">{</span>profile[<span class="dv">0</span>]<span class="sc">:.2f}</span><span class="ss"> -&gt; </span><span class="sc">{</span>profile[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.2f}</span><span class="ss"> m"</span>)</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"max deviation from a straight line: </span><span class="sc">{</span>max_deviation<span class="sc">:.2e}</span><span class="ss"> m"</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">MODFLOW reproduced the analytic solution exactly. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">The simulated heads match the linear profile within the check tolerance."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>This is the most important habit in the whole module.</strong> Before you trust a model on a problem you <em>can’t</em> solve by hand, run it on one you can.</p>
-<p>A one-dimensional confined aquifer between two fixed heads has a linear solution, and MODFLOW reproduces it to within floating-point noise. Now the grid, the units, the boundary handling and the solver are all confirmed working — so when a later result surprises you, the surprise is about the <em>physics</em> you added, not about whether you set the model up correctly.</p>
+<p><strong>Test a simple model against an analytic solution</strong> before adding more complex processes.</p>
+<p>A one-dimensional confined aquifer between two fixed heads has a linear head profile. Agreement with that profile checks the grid, boundary heads, and solver for this case. As you add processes, check their effects and investigate unexpected changes in the results.</p>
 <div id="c029" class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">3.6</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1105,8 +1101,8 @@ window.Quarto = {
 </section>
 </section>
 <section id="part-5-the-water-budget" class="level2">
-<h2 class="anchored" data-anchor-id="part-5-the-water-budget">Part 5 — The water budget</h2>
-<p>Every MODFLOW run writes a mass balance to the <code>.list</code> file. <strong>Read it every time.</strong> A model can converge and still be wrong; a budget that doesn’t close tells you so.</p>
+<h2 class="anchored" data-anchor-id="part-5-the-water-budget">Part 5: The water budget</h2>
+<p>MODFLOW writes a water budget to the <code>.list</code> file. <strong>Inspect it after each run.</strong> Check that the inflows and outflows balance, even when the solver reports convergence.</p>
 <div id="c031" class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>listing <span class="op">=</span> (WS <span class="op">/</span> <span class="st">"first.list"</span>).read_text().splitlines()</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1115,7 +1111,7 @@ window.Quarto = {
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> line.strip():</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(line.rstrip())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Two halves — <code>IN</code> and <code>OUT</code> — and at the bottom the number that matters: <strong>PERCENT DISCREPANCY</strong>.</p>
+<p>The budget lists flows under <code>IN</code> and <code>OUT</code>. <strong>PERCENT DISCREPANCY</strong> reports the imbalance between total inflow and total outflow.</p>
 <div id="c033" class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>discrepancy <span class="op">=</span> <span class="bu">next</span>(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">float</span>(l.split()[<span class="op">-</span><span class="dv">1</span>]) <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">reversed</span>(listing) <span class="cf">if</span> <span class="st">"PERCENT DISCREPANCY"</span> <span class="kw">in</span> l</span>
@@ -1127,12 +1123,12 @@ window.Quarto = {
 </div>
 <section id="your-turn-4" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
-<p>Write <code>budget_discrepancy(list_path)</code>, returning the percent discrepancy from a MODFLOW <code>.list</code> file as a float.</p>
-<p>Read the file, find the <strong>last</strong> line containing <code>"PERCENT DISCREPANCY"</code>, and pull the number off the end of it. You will use this function every week from here.</p>
-<p>One wrinkle, and it is the kind real file formats always have. MODFLOW writes that phrase two different ways:</p>
+<p>Write <code>budget_discrepancy(list_path)</code> to return the percent discrepancy from a MODFLOW <code>.list</code> file as a float.</p>
+<p>Read the file, find the <strong>last</strong> line containing <code>"PERCENT DISCREPANCY"</code>, and extract the number at the end. You will reuse this function in later labs.</p>
+<p>MODFLOW writes the discrepancy in two formats:</p>
 <pre><code> PERCENT DISCREPANCY =        -162.74     PERCENT DISCREPANCY =        -162.74
  BUDGET PERCENT DISCREPANCY IS -162.7401</code></pre>
-<p>One uses <code>=</code> and repeats itself in two columns; the other uses <code>IS</code>. Splitting on <code>"="</code> works on the first and crashes on the second. <strong>Take the last whitespace-separated token instead</strong> — that is correct for both.</p>
+<p><strong>Take the last whitespace-separated token</strong> and convert it to a float. This handles both formats. Splitting on <code>"="</code> only handles the first.</p>
 <div id="c035" class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> budget_discrepancy(list_path):</span>
@@ -1153,12 +1149,12 @@ window.Quarto = {
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="your-turn-5-how-much-water-is-actually-moving" class="level3">
-<h3 class="anchored" data-anchor-id="your-turn-5-how-much-water-is-actually-moving">YOUR TURN 5 — how much water is actually moving?</h3>
-<p>MODFLOW’s budget reports the flow through the system as the <code>CONSTANT HEAD</code> term. Compare it with the Darcy estimate from Part 1.</p>
+<section id="your-turn-5-calculate-the-volumetric-flow" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-5-calculate-the-volumetric-flow">YOUR TURN 5: Calculate the volumetric flow</h3>
+<p>In this model, the <code>CONSTANT HEAD</code> budget term reports the flow through the system. Compare it with the Darcy estimate from Part 2.</p>
 <ul>
-<li><code>cross_section_area</code> — the full north–south width times the aquifer thickness</li>
-<li><code>darcy_flow</code> — <code>expected_q</code> times that area</li>
+<li><code>cross_section_area</code>: the full north–south width times the aquifer thickness</li>
+<li><code>darcy_flow</code>: <code>expected_q</code> times that area</li>
 </ul>
 <div id="c038" class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>thickness_m <span class="op">=</span> <span class="fl">100.0</span></span>
@@ -1175,26 +1171,25 @@ window.Quarto = {
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>chd <span class="op">=</span> <span class="bu">next</span>(</span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">float</span>(l.split()[<span class="op">-</span><span class="dv">1</span>]) <span class="cf">for</span> l <span class="kw">in</span> listing <span class="cf">if</span> l.strip().startswith(<span class="st">"CONSTANT HEAD ="</span>)</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Darcy's law (Part 1) says </span><span class="sc">{</span>darcy_flow<span class="sc">:9.1f}</span><span class="ss"> m3/d"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Darcy's law (Part 2) says </span><span class="sc">{</span>darcy_flow<span class="sc">:9.1f}</span><span class="ss"> m3/d"</span>)</span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MODFLOW's budget says     </span><span class="sc">{</span>chd<span class="sc">:9.1f}</span><span class="ss"> m3/d"</span>)</span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"difference                </span><span class="sc">{</span><span class="dv">100</span> <span class="op">*</span> (chd <span class="op">-</span> darcy_flow) <span class="op">/</span> darcy_flow<span class="sc">:+9.1f}</span><span class="ss"> %"</span>)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Correct — and that 5</span><span class="sc">% g</span><span class="st">ap is not an error. Read on."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">The flow estimates differ by about 5%. Check the boundary positions below."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="where-the-5-went" class="level3">
-<h3 class="anchored" data-anchor-id="where-the-5-went">Where the 5% went</h3>
-<p>MODFLOW is right and the Part 1 arithmetic is wrong, in a way that catches everybody once.</p>
-<p><strong>A constant head is specified at the cell <em>centre</em>, not at the model edge.</strong> The head of 95 m sits at the middle of column 0, and the 85 m sits at the middle of column 19. The distance the water actually travels between those two points is</p>
+<section id="the-distance-between-boundary-heads" class="level3">
+<h3 class="anchored" data-anchor-id="the-distance-between-boundary-heads">The distance between boundary heads</h3>
+<p>The first estimate used the full 2,000 m domain width. MODFLOW specifies <strong>constant heads at cell centres</strong>: 95 m at the centre of column 0 and 85 m at the centre of column 19. The distance between them is</p>
 <p><span class="math display">\[19    imes 100\   ext{m} = 1900\  ext{m}\]</span></p>
-<p>not the 2000 m width of the domain. There is half a cell of aquifer outside each boundary head that is not part of the flow path.</p>
+<p>Each boundary cell centre sits half a cell width inside the model edge. Use the 1,900 m distance between centres to calculate the gradient.</p>
 </section>
 <section id="your-turn-6" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-6">YOUR TURN 6</h3>
-<p>Redo it with the right distance.</p>
+<p>Recalculate specific discharge and volumetric flow using that distance.</p>
 <ul>
-<li><code>centre_to_centre_m</code> — the distance between the two constant-head cell centres</li>
-<li><code>corrected_q</code> — specific discharge over that distance</li>
-<li><code>corrected_flow</code> — and the volumetric flow</li>
+<li><code>centre_to_centre_m</code>: the distance between the constant-head cell centres</li>
+<li><code>corrected_q</code>: specific discharge over that distance</li>
+<li><code>corrected_flow</code>: volumetric flow through the cross section</li>
 </ul>
 <div id="c041" class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
@@ -1212,12 +1207,12 @@ window.Quarto = {
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"corrected q               </span><span class="sc">{</span>corrected_q<span class="sc">:9.5f}</span><span class="ss"> m/d"</span>)</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"corrected flow            </span><span class="sc">{</span>corrected_flow<span class="sc">:9.2f}</span><span class="ss"> m3/d"</span>)</span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MODFLOW                   </span><span class="sc">{</span>chd<span class="sc">:9.2f}</span><span class="ss"> m3/d"</span>)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Exact agreement. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">The corrected flow matches the MODFLOW budget within the check tolerance."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>This is why you test against an analytic solution.</strong> A 5% error is small enough to look like rounding and large enough to matter, and the only way you would ever have found it is by predicting the answer first and being bothered when the numbers didn’t match.</p>
-<p>The practical consequence: <strong>a boundary condition is half a cell inside the edge you drew.</strong> On a 250 m grid that is 125 m of slop, and if you are trying to match an observed gradient across a small domain it is the first thing to check.</p>
-<p><strong>Think about this before Thursday:</strong> you now have a model that reproduces an analytic solution, closes its budget, and agrees with Darcy’s law. That is the baseline against which everything else this module gets judged.</p>
-<p>Next week you put a well in it, and the head field stops being something you could have worked out on paper.</p>
+<p>Comparing the budget with Darcy’s law revealed a difference in the distance used to calculate the gradient. Accounting for the boundary cell centres brings the two flow estimates into agreement.</p>
+<p><strong>Constant heads apply at the boundary cell centres.</strong> On a 250 m grid, each centre is 125 m inside the model edge. Use those positions when comparing modeled and observed gradients.</p>
+<p>You have checked this model against a linear head profile, inspected its water budget, and compared its flow rate with Darcy’s law. Use these results as a baseline when adding new processes.</p>
+<p>Next week, you will add a well and recharge and examine how they change the head field.</p>
 <hr>
 </section>
 </section>
@@ -1232,18 +1227,18 @@ window.Quarto = {
 <section id="whats-due" class="level2">
 <h2 class="anchored" data-anchor-id="whats-due">What’s due</h2>
 <ul>
-<li><strong>HW 3 — From labelled data to a verified first model</strong>, Wednesday 10/7 at 11:59pm</li>
+<li><strong>HW 3: From labelled data to a verified first model</strong>, Wednesday 10/7 at 11:59pm</li>
 </ul>
 </section>
 <section id="next-week" class="level2">
 <h2 class="anchored" data-anchor-id="next-week">Next week</h2>
-<p>Building a real 2D model: a well, recharge, and a head field you cannot predict by hand.</p>
+<p>Build a basin model with a well and recharge, then examine the resulting head field.</p>
 </section>
 <section id="stuck" class="level2">
 <h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
 <ul>
-<li><code>FileNotFoundError</code> mentioning <code>mf2005</code> — the binary isn’t there. Run <code>./postbuild.sh</code> from a terminal.</li>
-<li><code>success</code> is <code>False</code> and <code>buff</code> is empty — you left out <code>report=True</code>.</li>
+<li><code>FileNotFoundError</code> mentioning <code>mf2005</code>: the binary isn’t there. Run <code>./postbuild.sh</code> from a terminal.</li>
+<li><code>success</code> is <code>False</code> and <code>buff</code> is empty: you left out <code>report=True</code>.</li>
 <li>A model that converges but whose heads are all identical to <code>strt</code> usually means every cell is <code>ibound == -1</code>, so nothing was free to change.</li>
 <li><code>AssertionError</code> on layer thickness, or a <code>.list</code> file complaining about <code>BOTM</code>, means <code>top</code> and <code>botm</code> are the wrong way round.</li>
 <li>Office hours: Tuesdays 1:00–2:00pm, Harshbarger 322B.</li>

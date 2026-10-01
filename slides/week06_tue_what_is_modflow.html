@@ -218,14 +218,14 @@ Dr.&nbsp;Andrew Bennett
 <p>Week 6, session 1 of 2</p>
 </div>
 <ol type="1">
-<li>Quiz — five minutes, on regression</li>
+<li>Quiz: five minutes, on regression</li>
 <li>What changes when you build a model</li>
 <li>The conceptual model that comes before the grid</li>
 <li>The equation MODFLOW solves, and how it discretizes it</li>
-<li>Six questions, six packages</li>
-<li>FloPy, and why you never edit an input file by hand</li>
+<li>MODFLOW packages and their roles</li>
+<li>Writing input files with FloPy</li>
 </ol>
-<p>For nine weeks you inferred what the aquifer was doing from observations. From today you build something that has to obey conservation of mass.</p>
+<p>So far, you have used observations to study aquifer behavior. This week you begin building groundwater flow models based on conservation of mass.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
@@ -241,7 +241,7 @@ Dr.&nbsp;Andrew Bennett
 <li class="fragment">It does not tell you <strong>how much</strong> moves along it</li>
 </ul>
 <div class="fragment due-notice">
-<p>A model is the only tool that closes a <strong>water budget</strong>. That is what it is for — not prediction, not pretty maps. Accounting.</p>
+<p>A groundwater flow model estimates the flows and storage changes that make up a <strong>water budget</strong>.</p>
 </div>
 </section>
 <section class="slide level2">
@@ -250,55 +250,55 @@ Dr.&nbsp;Andrew Bennett
 <p><em>Of the 20,000 m³/d this wellfield produces, how much is recharge, how much is water taken out of storage, and how much is flow captured from the river?</em></p>
 </blockquote>
 <div class="fragment">
-<p>Nobody can measure that. Every term is a flux across a surface you cannot instrument.</p>
+<p>These contributions are difficult to measure separately across an entire aquifer.</p>
 </div>
 <div class="fragment">
-<p>A model computes all of them, and they are forced to sum to zero. <strong>That constraint is the whole value.</strong></p>
+<p>A model estimates each contribution while requiring inflows, outflows, and storage changes to balance.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>What you give up</h2>
+<h2>Model assumptions</h2>
 <ul>
-<li class="fragment">A model needs parameters you have not measured</li>
-<li class="fragment">It needs boundary conditions you invented</li>
-<li class="fragment">It will produce an answer regardless of whether any of that is right</li>
-<li class="fragment">And it will look equally confident either way</li>
+<li class="fragment">Some parameters must be estimated from limited data</li>
+<li class="fragment">Boundary conditions represent assumptions about the surrounding system</li>
+<li class="fragment">A model can run successfully with incorrect assumptions</li>
+<li class="fragment">Check results against observations and expected behavior</li>
 </ul>
 <div class="fragment">
-<p>Weeks 6 to 10 are as much about <strong>not being fooled by your own model</strong> as about building one.</p>
+<p>In Weeks 6 to 10, you will build models and evaluate whether their results are consistent with the system you are studying.</p>
 </div>
 <!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 7. -->
 </section>
 <section class="slide level2 smaller">
-<h2>Modeling is a cycle, not a one-way build</h2>
+<h2>The modeling cycle</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p><img data-src="../assets/legacy/modeling_cycle.jpg" style="width:85.0%" alt="A modeling cycle linking conceptualization, data collection, simulation and calibration, and hypothesis testing"></p>
 </div><div class="column" style="width:40%;">
-<p>The first simulation is not the finish line.</p>
+<p>Use the first simulation to evaluate your assumptions.</p>
 <ul>
 <li class="fragment">Compare its behavior with observations</li>
-<li class="fragment">Diagnose which assumption failed</li>
+<li class="fragment">Identify assumptions that need revision</li>
 <li class="fragment">Revise the conceptual model</li>
 <li class="fragment">Test again</li>
 </ul>
 <div class="fragment due-notice">
-<p>A model earns trust through this loop, not through visual polish.</p>
+<p>Repeated comparisons with observations help assess whether a model is useful for its intended purpose.</p>
 </div>
 </div></div>
 <!-- Adapted from old_slides/hwrs564a_oct23.pdf. -->
 </section>
 <section class="slide level2">
-<h2>A model starts as a question, not a grid</h2>
+<h2>Define the conceptual model</h2>
 <p>Before opening FloPy, write down four things:</p>
 <ol type="1">
-<li class="fragment"><strong>Purpose</strong> — what decision or flux must the model inform?</li>
-<li class="fragment"><strong>System and boundaries</strong> — what is inside, and what crosses the edges?</li>
-<li class="fragment"><strong>Inputs and outputs</strong> — what is imposed, and what will be compared to data?</li>
-<li class="fragment"><strong>Use test</strong> — what result would change your conclusion?</li>
+<li class="fragment"><strong>Purpose</strong>: what decision or flux must the model inform?</li>
+<li class="fragment"><strong>System and boundaries</strong>: what is inside, and what crosses the edges?</li>
+<li class="fragment"><strong>Inputs and outputs</strong>: what is imposed, and what will be compared to data?</li>
+<li class="fragment"><strong>Use test</strong>: what result would change your conclusion?</li>
 </ol>
 <div class="fragment due-notice">
-<p>The grid, packages, and solver are an implementation of that conceptual model. If the question is vague, a finer grid only gives a more detailed vague answer.</p>
+<p>Choose the grid, packages, and solver to address the model question and represent the conceptual model.</p>
 </div>
 </section></section>
 <section>
@@ -313,12 +313,12 @@ Dr.&nbsp;Andrew Bennett
 \frac{\partial}{\partial z}\left(K_z \frac{\partial h}{\partial z}\right)
 + W = S_s \frac{\partial h}{\partial t}\]</span></p>
 <div class="fragment">
-<p>Darcy’s law plus conservation of mass. You have met both.</p>
+<p>This equation combines Darcy’s law with conservation of mass.</p>
 </div>
 <div class="fragment">
 <ul>
 <li>left: flow in and out through the faces of a control volume</li>
-<li><span class="math inline">\(W\)</span>: sources and sinks — wells, recharge, ET</li>
+<li><span class="math inline">\(W\)</span>: sources and sinks, including wells, recharge, and ET</li>
 <li>right: change in storage</li>
 </ul>
 </div>
@@ -333,7 +333,7 @@ Dr.&nbsp;Andrew Bennett
 <li class="fragment">Solve the resulting linear system</li>
 </ul>
 <div class="fragment">
-<p>A 40 × 60 grid is 2,400 equations. A regional model is millions. <strong>That is why this is a computer’s job</strong> and why Week 4’s iteration material was not a detour.</p>
+<p>A 40 × 60 grid has 2,400 equations per layer. Regional models can have millions of equations, requiring numerical solvers such as those introduced in Week 4.</p>
 </div>
 <!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 11. -->
 </section>
@@ -343,7 +343,7 @@ Dr.&nbsp;Andrew Bennett
 <div class="column" style="width:67%;">
 <p><img data-src="../assets/legacy/grid_families.jpg" style="width:72.0%" alt="Examples of rectangular, triangular, hexagonal, nested, radial, and irregular polygon numerical grids"></p>
 </div><div class="column" style="width:33%;">
-<p>All of these do the same conceptual job: divide a continuous domain into cells where the equations can be balanced.</p>
+<p>Each grid divides the domain into cells where the flow equations are solved.</p>
 <div class="fragment">
 <p>We begin with a rectangular structured grid because it makes indexing, neighbors, and cell dimensions visible.</p>
 </div>
@@ -391,7 +391,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>cells <span class="op">=</span> nlay <span class="op">*</span> nrow <span class="op">*</span> ncol</span>
 <span id="cb1-2"><a></a>total_solves <span class="op">=</span> nper</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>1.2 million cells, and 288 million head values written to disk over the run. At 8 bytes each that is 2.3 GB of output from a single model.</p>
-<p><strong>This is why output selection is part of model design</strong>, and why you will spend real time deciding which time steps are worth saving.</p>
+<p>Choose which time steps to save based on the results you need and the storage available.</p>
 </div>
 </div>
 </div>
@@ -399,7 +399,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Six questions</h1>
+<h1>MODFLOW packages</h1>
 <!-- Package tree rebuilt from old_slides/hwrs564a_oct23.pdf, p. 9, using the
      MODFLOW-2005 packages introduced in this course. -->
 </section>
@@ -429,7 +429,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 </div>
 <div class="fragment">
-<p>There is no single “model file.” The <code>.nam</code> file tells MODFLOW which packages belong to this simulation; each package answers one modeling question.</p>
+<p>The <code>.nam</code> file lists the input packages used in a simulation. Each package defines a part of the model, such as the grid, aquifer properties, or wells.</p>
 </div>
 <p><small>Structure adapted to MODFLOW-2005 from the modular framework documented by the USGS.</small></p>
 </section>
@@ -443,10 +443,10 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
        100.0
      1.0         1         1.000000      TR</code></pre>
 <div class="fragment">
-<p>Column-formatted Fortran. No names, no comments, position is everything.</p>
+<p>MODFLOW reads values in a prescribed order. Check the package documentation to identify each field.</p>
 </div>
 <div class="fragment due-notice">
-<p><strong>You will never write one of these by hand.</strong> But you will read one when a model misbehaves, and knowing that FloPy generated it — rather than it being magic — is what makes that possible.</p>
+<p>Use <strong>FloPy to generate input files</strong>. When troubleshooting a model, inspect the generated files to check what MODFLOW received.</p>
 </div>
 </section>
 <section class="slide level2">
@@ -461,11 +461,11 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <span id="cb3-8"><a></a>                         nper<span class="op">=</span><span class="dv">1</span>, steady<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb3-9"><a></a>mf.write_input()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>Named arguments, defaults, and a <code>ValueError</code> when you get it wrong — instead of a Fortran read error on line 4 of a file you didn’t write.</p>
+<p>FloPy provides named arguments and defaults for MODFLOW inputs. It also checks some inputs and reports errors in Python.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: elevations, not thicknesses</h2>
+<h2>Your turn: calculate the bottom elevation</h2>
 <p><code>top</code> and <code>botm</code> are <strong>elevations above datum</strong>. An aquifer whose top is at 600 m and which is 200 m thick has what <code>botm</code>?</p>
 <script type="exercise-setup-ex_botm-contents">
 eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2JvdG0iLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ0b3AgPSA2MDAuMFxudGhpY2tuZXNzID0gMjAwLjAifQ==
@@ -504,8 +504,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 <div class="callout-content">
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>botm <span class="op">=</span> top <span class="op">-</span> thickness</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>400.0</code>. Passing the thickness directly gives a layer 400 m thick, or — if you put the thickness in <code>top</code> — a layer with <strong>negative</strong> thickness and an error message that mentions neither argument.</p>
-<p>This is the single most common mistake in a first FloPy model.</p>
+<p><code>400.0</code>. Setting <code>botm=200.0</code> would give a layer 400 m thick. Check the difference between <code>top</code> and <code>botm</code> when defining each layer.</p>
 </div>
 </div>
 </div>
@@ -513,7 +512,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section>
 <section class="slide level2">
 <h2>Your turn: is the binary there?</h2>
-<p>MODFLOW is a compiled program, not a Python package. Check for it first.</p>
+<p>FloPy runs MODFLOW as a separate compiled program. Check that the executable is available before building the model.</p>
 <script type="exercise-setup-ex_check-contents">
 eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NoZWNrIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY2xhc3MgRmFrZVBhdGg6XG4gICAgZGVmIF9faW5pdF9fKHNlbGYsIGV4aXN0cyk6IHNlbGYuX2V4aXN0cyA9IGV4aXN0c1xuICAgIGRlZiBleGlzdHMoc2VsZik6IHJldHVybiBzZWxmLl9leGlzdHNcbiAgICBkZWYgX19zdHJfXyhzZWxmKTogcmV0dXJuIFwiL3dvcmtzcGFjZXMvY291cnNlL21vZGZsb3cvbWYyMDA1XCJcblxubWZfZXhlID0gRmFrZVBhdGgoZXhpc3RzPUZhbHNlKSJ9
 </script>
@@ -522,7 +521,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NoZWNrIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpZiBfX19fX186XG4gICAgcHJpbnQoXCJNT0RGTE9XIGZvdW5kIOKAlCBjYXJyeSBvblwiKVxuZWxzZTpcbiAgICBwcmludChmXCJNT0RGTE9XIGJpbmFyeSBub3QgZm91bmQgYXQge21mX2V4ZX0uXCIpXG4gICAgcHJpbnQoXCJSdW4gLi9wb3N0YnVpbGQuc2ggZnJvbSBhIHRlcm1pbmFsLlwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NoZWNrIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpZiBfX19fX186XG4gICAgcHJpbnQoXCJNT0RGTE9XIGZvdW5kLiBDb250aW51ZS5cIilcbmVsc2U6XG4gICAgcHJpbnQoZlwiTU9ERkxPVyBiaW5hcnkgbm90IGZvdW5kIGF0IHttZl9leGV9LlwiKVxuICAgIHByaW50KFwiUnVuIC4vcG9zdGJ1aWxkLnNoIGZyb20gYSB0ZXJtaW5hbC5cIikifQ==
 </script>
 </div>
 <div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_check">
@@ -554,9 +553,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>In the lab you write it as an assertion:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="cf">assert</span> MF_EXE.exists(), (</span>
 <span id="cb6-2"><a></a>    <span class="ss">f"MODFLOW binary not found at </span><span class="sc">{</span>MF_EXE<span class="sc">}</span><span class="ss">. Your codespace may not have "</span></span>
-<span id="cb6-3"><a></a>    <span class="st">"finished building — run ./postbuild.sh from a terminal."</span></span>
+<span id="cb6-3"><a></a>    <span class="st">"finished building. Run ./postbuild.sh from a terminal."</span></span>
 <span id="cb6-4"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>That single line converts a <code>FileNotFoundError</code> from somewhere inside FloPy into an instruction. <strong>Every MODFLOW notebook you write starts with it.</strong></p>
+<p>This assertion reports a missing executable and explains how to obtain it. Include the check at the start of each MODFLOW notebook.</p>
 </div>
 </div>
 </div>
@@ -568,12 +567,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>A model exists to close a water budget you cannot measure</li>
+<li>A groundwater flow model estimates flows and storage changes in a water budget</li>
 <li>Define the purpose, system, boundaries, and use test before building the grid</li>
 <li>MODFLOW discretizes the flow equation into one equation per cell</li>
-<li>Six questions, six packages, and a <code>.nam</code> file listing them</li>
+<li>MODFLOW uses separate packages, listed in the <code>.nam</code> file</li>
 <li><code>top</code> and <code>botm</code> are elevations</li>
-<li>Check the binary before anything else</li>
+<li>Check that the MODFLOW executable is available</li>
 </ul>
 <div class="kicker">
 <p>Before Thursday</p>
@@ -584,7 +583,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <div class="kicker">
 <p>Thursday</p>
 </div>
-<p>Running one, and the three ways of finding out whether the answer means anything.</p>
+<p>Run a model, compare it with a known solution, and check its water budget.</p>
 
 
 <script type="pyodide-data">
