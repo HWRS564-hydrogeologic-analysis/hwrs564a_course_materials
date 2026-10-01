@@ -317,66 +317,10 @@ difference between `top` and `botm` when defining each layer.
 :::
 :::
 
-## Your turn: is the binary there?
-
-FloPy runs MODFLOW as a separate compiled program. Check that the executable
-is available before building the model.
-
-```{pyodide}
-#| setup: true
-#| exercise: ex_check
-class FakePath:
-    def __init__(self, exists): self._exists = exists
-    def exists(self): return self._exists
-    def __str__(self): return "/workspaces/course/modflow/mf2005"
-
-mf_exe = FakePath(exists=False)
-```
-
-```{pyodide}
-#| exercise: ex_check
-if ______:
-    print("MODFLOW found. Continue.")
-else:
-    print(f"MODFLOW binary not found at {mf_exe}.")
-    print("Run ./postbuild.sh from a terminal.")
-```
-
-::: {.hint exercise="ex_check"}
-::: {.callout-note collapse="false"}
-## Hint
-
-`Path.exists()` is a method, so it needs calling. In the lab this becomes an
-`assert` with that message attached.
-:::
-:::
-
-::: {.solution exercise="ex_check"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```python
-if mf_exe.exists():
-```
-
-In the lab you write it as an assertion:
-
-```python
-assert MF_EXE.exists(), (
-    f"MODFLOW binary not found at {MF_EXE}. Your codespace may not have "
-    "finished building. Run ./postbuild.sh from a terminal."
-)
-```
-
-This assertion reports a missing executable and explains how to obtain it.
-Include the check at the start of each MODFLOW notebook.
-:::
-:::
-
 ## Wrap up {.smaller}
 
 ::: {.kicker}
-What you did today
+What you should have learned
 :::
 
 - A groundwater flow model estimates flows and storage changes in a water budget
@@ -387,13 +331,7 @@ What you did today
 - Check that the MODFLOW executable is available
 
 ::: {.kicker}
-Before Thursday
+Next up:
 :::
 
-- Parts 1–2 of `labs/week06/week06_lab_meeting_modflow.ipynb`
-
-::: {.kicker}
-Thursday
-:::
-
-Run a model, compare it with a known solution, and check its water budget.
+Running your first MODFLOW model

@@ -376,13 +376,6 @@ The three checks, on every run
 3. **Known solution**: compare a simple test case with an analytic result
 
 ::: {.kicker}
-What's due
-:::
-
-- **HW 3: From labelled data to a verified first model**, Wednesday 10/7 at 11:59pm
-- Finish the Week 6 lab before Tuesday
-
-::: {.kicker}
 Next week
 :::
 
