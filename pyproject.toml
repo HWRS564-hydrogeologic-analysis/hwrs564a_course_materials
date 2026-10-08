@@ -29,6 +29,7 @@ dependencies = [
     # build tooling for slides, quizzes, and D2L pages
     "pyyaml>=6.0",
     "tqdm>=4.67.1",
+    "wqchartpy>=0.1.10",
 ]
 
 [dependency-groups]
