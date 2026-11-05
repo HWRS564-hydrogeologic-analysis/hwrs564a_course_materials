@@ -8,6 +8,7 @@ project:
   resources:
     - data/**
     - assets/**
+    - slides/week11_thu_computational_landscape.html
 
 jupyter: python3
 
