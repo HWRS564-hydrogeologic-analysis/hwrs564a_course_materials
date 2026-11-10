@@ -311,7 +311,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>This is Tuesday’s rectangular model at 250 m, with the layer top at 700 m and the east boundary at 680 m.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>ok_conf, head_conf, ws_conf <span class="op">=</span> run_box(<span class="st">"confined"</span>, laytyp<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb2-2"><a></a>ok_uncf, head_uncf, ws_uncf <span class="op">=</span> run_box(<span class="st">"unconfined"</span>, laytyp<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="5ec7d031" class="cell" data-execution_count="2">
+<div id="7503863f" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-stdout">
 <pre><code>confined:   success = True
 unconfined: success = False</code></pre>
@@ -376,7 +376,7 @@ unconfined: success = False</code></pre>
 </section>
 <section class="slide level2">
 <h2>How big are the flows?</h2>
-<div id="0dc28df9" class="cell" data-execution_count="3">
+<div id="34c5b2fb" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-stdout">
 <pre><code>CONSTANT_HEAD_IN        123502.8672  m3/d
 RECHARGE_IN              17400.0000  m3/d
@@ -395,7 +395,7 @@ IN-OUT                       0.0000  m3/d</code></pre>
 <section class="slide level2">
 <h2>More iterations?</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>run_box(<span class="st">"unconfined_more"</span>, laytyp<span class="op">=</span><span class="dv">1</span>, pcg_kwargs<span class="op">=</span>{<span class="st">"mxiter"</span>: <span class="dv">200</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="42720cdf" class="cell" data-execution_count="4">
+<div id="984ee20b" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-stdout">
 <pre><code>mxiter=200: success = False</code></pre>
 </div>
@@ -405,7 +405,7 @@ IN-OUT                       0.0000  m3/d</code></pre>
 </div>
 <div class="fragment">
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>run_box(<span class="st">"unconfined_fixed"</span>, laytyp<span class="op">=</span><span class="dv">1</span>, pcg_kwargs<span class="op">=</span>{<span class="st">"rclose"</span>: <span class="fl">1.0</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="f7f81b8c" class="cell" data-execution_count="5">
+<div id="2c665ae7" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
 <pre><code>rclose=1.0: success = True</code></pre>
 </div>
@@ -463,7 +463,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <section class="slide level2">
 <h2>Did the “failed” run get the wrong answer?</h2>
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>np.<span class="bu">abs</span>(head_uncf <span class="op">-</span> head_fixed).<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="84006096" class="cell" data-execution_count="6">
+<div id="2cbaa699" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-stdout">
 <pre><code>0.000061 m</code></pre>
 </div>
@@ -490,7 +490,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <section class="slide level2">
 <h2>How much does <code>laytyp</code> matter?</h2>
 <p>Both layer types, with the well pumping 80,000 m³/d:</p>
-<div id="67093083" class="cell" data-execution_count="7">
+<div id="54d68eaa" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-stdout">
 <pre><code>confined   well-cell head   630.95 m
 unconfined well-cell head   627.86 m
@@ -593,7 +593,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section>
 <section class="slide level2">
 <h2>Masking fixes the plot, not the model</h2>
-<div id="e8be7855" class="cell" data-execution_count="9">
+<div id="28aa0ef1" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-stdout">
 <pre><code>pumping asked for:     40,000 m3/d
 pumping in the budget: 0 m3/d</code></pre>
@@ -636,7 +636,7 @@ pumping in the budget: 0 m3/d</code></pre>
 </section>
 <section class="slide level2">
 <h2>Getting started</h2>
-<p>Open <code>labs/week08/week08_03_pinal_startup.ipynb</code>.</p>
+<p>Open <code>labs/week09/week09_01_pinal_startup.ipynb</code>.</p>
 <ol type="1">
 <li class="fragment">Download the model from the Google Drive link on the Week 8 D2L page</li>
 <li class="fragment">Unzip it into a folder called <code>pinal_model</code> at the top of the course repo</li>

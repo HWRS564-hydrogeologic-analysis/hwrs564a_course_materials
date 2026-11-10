@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Week 12 Bonus Lab — Streamflow in the Tucson basin – HWRS 564a</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../labs/week12/week12_lab_pinal_water_levels.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8e547040071cf592dc7cfc6331f26ef2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-f09e64199bd3979e1988ebe50f28fa28.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">HWRS 564a</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-slides" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Slides</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-slides">    
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_tue_getting_started.html">
+ <span class="dropdown-text">Wk 2 · Getting started with Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week02_thu_data_types.html">
+ <span class="dropdown-text">Wk 2 · Data types &amp; sequences</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_tue_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week03_thu_functions.html">
+ <span class="dropdown-text">Wk 3 · Functions and modules</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_tue_arrays.html">
+ <span class="dropdown-text">Wk 4 · Arrays with numpy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week04_thu_iteration.html">
+ <span class="dropdown-text">Wk 4 · Iterative solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_tue_pandas.html">
+ <span class="dropdown-text">Wk 5 · Labelled data through time</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week05_thu_filtering.html">
+ <span class="dropdown-text">Wk 5 · Filter, summarise, and reshape</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_tue_what_is_modflow.html">
+ <span class="dropdown-text">Wk 6 · What MODFLOW is</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week06_thu_running_it.html">
+ <span class="dropdown-text">Wk 6 · Running and checking a model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_tue_inputs_outputs.html">
+ <span class="dropdown-text">Wk 7 · Your first FloPy model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week07_thu_budgets.html">
+ <span class="dropdown-text">Wk 7 · Loading and changing a model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_tue_discretization.html">
+ <span class="dropdown-text">Wk 8 · Discretization and boundary conditions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week08_thu_unconfined.html">
+ <span class="dropdown-text">Wk 8 · Unconfined flow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_tue_time.html">
+ <span class="dropdown-text">Wk 9 · Time and storage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week09_thu_capture_et.html">
+ <span class="dropdown-text">Wk 9 · Hydrographs, capture, and ET</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week10_thu_hydrologic_modeling.html">
+ <span class="dropdown-text">Wk 10 · Hydrologic models</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week11_thu_computational_landscape.html">
+ <span class="dropdown-text">Wk 11 · The computational landscape</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week12_tue_real_world_data.html">
+ <span class="dropdown-text">Wk 12 · Working with real-world data</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/week02/week02_lab_python_basics.html">
+ <span class="dropdown-text">Wk 2 · Python basics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week03/week03_lab_control_flow.html">
+ <span class="dropdown-text">Wk 3 · Control flow and functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week04/week04_lab_arrays_iteration.html">
+ <span class="dropdown-text">Wk 4 · Arrays and iteration</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week05/week05_lab_pandas.html">
+ <span class="dropdown-text">Wk 5 · Pandas and Matplotlib</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week06/week06_lab_meeting_modflow.html">
+ <span class="dropdown-text">Wk 6 · Meeting MODFLOW</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week07/week07_01_flopy_simple_model.html">
+ <span class="dropdown-text">Wk 7 · A simple FloPy model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week07/week07_02_loading_modflow_models.html">
+ <span class="dropdown-text">Wk 7 · Loading and modifying a model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_00_wells_in_flopy.html">
+ <span class="dropdown-text">Wk 8 · Wells in FloPy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_01_discretization_boundaries.html">
+ <span class="dropdown-text">Wk 8 · Discretization and boundaries</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_02_unconfined_dry_cells.html">
+ <span class="dropdown-text">Wk 8 · Unconfined flow and dry cells</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week09/week09_00_lab_transient_stresses.html">
+ <span class="dropdown-text">Wk 9 · Transient stresses</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week09/week09_01_pinal_startup.html">
+ <span class="dropdown-text">Wk 9 · Starting up the Pinal County model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week12/week12_lab_pinal_water_levels.html">
+ <span class="dropdown-text">Wk 12 · Pinal water levels</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week12/week12_bonus_tucson_streamflow.html">
+ <span class="dropdown-text">Wk 12 · Bonus: Tucson streamflow</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 3 · Data Analysis &amp; Visualization</li><li class="breadcrumb-item"><a href="../../slides/week12_tue_real_world_data.html">Week 12 — Real-world data</a></li><li class="breadcrumb-item"><a href="../../labs/week12/week12_bonus_tucson_streamflow.html">Bonus lab · Streamflow in the Tucson basin</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 1 · Python Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 2 — Getting started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_tue_getting_started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week02_thu_data_types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/3 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week02/week02_lab_python_basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Python basics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 3 — Control flow and functions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_tue_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week03_thu_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week03/week03_lab_control_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Control flow and functions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 4 — Arrays and iteration</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_tue_arrays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week04_thu_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/17 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week04/week04_lab_arrays_iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Arrays and iterative solutions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 5 — Pandas and Matplotlib</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_tue_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week05_thu_filtering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 9/24 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week05/week05_lab_pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Pandas and Matplotlib</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 2 · MODFLOW &amp; FloPy</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 6 — Meeting MODFLOW</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_tue_what_is_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 9/29 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week06_thu_running_it.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/1 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week06/week06_lab_meeting_modflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Meeting MODFLOW</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 7 — Inputs, outputs, hitting go</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_tue_inputs_outputs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/6 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week07_thu_budgets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/8 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week07/week07_01_flopy_simple_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · A simple FloPy model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week07/week07_02_loading_modflow_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Loading and modifying a model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 8 — Discretization and boundaries</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_tue_discretization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/13 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week08_thu_unconfined.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/15 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_00_wells_in_flopy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Wells in FloPy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_01_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Discretization and boundaries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_02_unconfined_dry_cells.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Unconfined flow and dry cells</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 9 — Transient stresses</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_tue_time.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 10/20 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week09_thu_capture_et.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/22 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week09/week09_00_lab_transient_stresses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Stresses that change with time</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week09/week09_01_pinal_startup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Starting up the Pinal County model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 10 — Layers, rivers, loading</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week10_thu_hydrologic_modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 10/29 · Slides</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 3 · Data Analysis &amp; Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 11 — Lectures</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week11_thu_computational_landscape.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/5 · The computational landscape</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 12 — Real-world data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week12_tue_real_world_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/10 · Slides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week12/week12_lab_pinal_water_levels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Water levels in the Pinal AMA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week12/week12_bonus_tucson_streamflow.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Bonus lab · Streamflow in the Tucson basin</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link active" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#part-1-the-five-gages" id="toc-part-1-the-five-gages" class="nav-link" data-scroll-target="#part-1-the-five-gages">Part 1 — The five gages</a></li>
+  <li><a href="#part-2-download-the-daily-flows" id="toc-part-2-download-the-daily-flows" class="nav-link" data-scroll-target="#part-2-download-the-daily-flows">Part 2 — Download the daily flows</a>
+  <ul class="collapse">
+  <li><a href="#if-the-download-fails" id="toc-if-the-download-fails" class="nav-link" data-scroll-target="#if-the-download-fails">If the download fails</a></li>
+  <li><a href="#duplicate-days" id="toc-duplicate-days" class="nav-link" data-scroll-target="#duplicate-days">Duplicate days</a></li>
+  <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">YOUR TURN 1</a></li>
+  </ul></li>
+  <li><a href="#part-3-how-often-does-each-stream-flow" id="toc-part-3-how-often-does-each-stream-flow" class="nav-link" data-scroll-target="#part-3-how-often-does-each-stream-flow">Part 3 — How often does each stream flow?</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">YOUR TURN 2</a></li>
+  </ul></li>
+  <li><a href="#part-4-when-does-each-stream-flow" id="toc-part-4-when-does-each-stream-flow" class="nav-link" data-scroll-target="#part-4-when-does-each-stream-flow">Part 4 — When does each stream flow?</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">YOUR TURN 3</a></li>
+  </ul></li>
+  <li><a href="#part-5-how-much-of-the-water-reaches-each-gage" id="toc-part-5-how-much-of-the-water-reaches-each-gage" class="nav-link" data-scroll-target="#part-5-how-much-of-the-water-reaches-each-gage">Part 5 — How much of the water reaches each gage?</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">YOUR TURN 4</a></li>
+  </ul></li>
+  <li><a href="#part-6-the-santa-cruz-river-at-cortaro" id="toc-part-6-the-santa-cruz-river-at-cortaro" class="nav-link" data-scroll-target="#part-6-the-santa-cruz-river-at-cortaro">Part 6 — The Santa Cruz River at Cortaro</a>
+  <ul class="collapse">
+  <li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">YOUR TURN 5</a></li>
+  </ul></li>
+  <li><a href="#going-further" id="toc-going-further" class="nav-link" data-scroll-target="#going-further">Going further</a></li>
+  <li><a href="#stuck" id="toc-stuck" class="nav-link" data-scroll-target="#stuck">Stuck?</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Module 3 · Data Analysis &amp; Visualization</li><li class="breadcrumb-item"><a href="../../slides/week12_tue_real_world_data.html">Week 12 — Real-world data</a></li><li class="breadcrumb-item"><a href="../../labs/week12/week12_bonus_tucson_streamflow.html">Bonus lab · Streamflow in the Tucson basin</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Week 12 Bonus Lab — Streamflow in the Tucson basin</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>HWRS 564a · Fall 2026 · Optional</strong></p>
+<p>This is an optional lab. It uses the same <code>dataretrieval.waterdata</code> tools as the Pinal water-level lab, but for streams instead of wells. You download 30 years of daily streamflow at five USGS gages in the Tucson basin, from Sabino Creek in the Santa Catalina Mountains down to the Santa Cruz River at Cortaro, and compare how often each one flows, when it flows, and how much water reaches it.</p>
+<section id="how-to-use-this-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
+<p>Run each cell with <strong>Shift+Enter</strong>. Cells marked <strong><code># YOUR TURN</code></strong> have something for you to write. Cells marked <strong><code># CHECK</code></strong> verify your answer — if they run without an error, you’re right.</p>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this notebook you can:</p>
+<ol type="1">
+<li>Download daily streamflow for several gages in one request with <code>dataretrieval.waterdata.get_daily</code>.</li>
+<li>Find and remove duplicate days in a downloaded record.</li>
+<li>Summarize a flow record by gage, by month, and by water year with <code>groupby</code>.</li>
+<li>Convert mean streamflow to runoff depth, so gages with different drainage areas can be compared.</li>
+<li>Describe what the records say about stream-channel recharge and about treated wastewater in the Santa Cruz River.</li>
+</ol>
+<hr>
+</section>
+<section id="part-1-the-five-gages" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-the-five-gages">Part 1 — The five gages</h2>
+<p>Water from the Santa Catalina and Rincon Mountains drains to the Rillito, which joins the Santa Cruz River northwest of downtown Tucson. We use five gages along that path:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gage</th>
+<th>USGS ID</th>
+<th>Where it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sabino Creek</td>
+<td>09484000</td>
+<td>Sabino Canyon, where the creek leaves the Santa Catalina Mountains</td>
+</tr>
+<tr class="even">
+<td>Tanque Verde Creek</td>
+<td>09484500</td>
+<td>Tanque Verde Creek at Tucson, below Sabino Creek</td>
+</tr>
+<tr class="odd">
+<td>Rillito Creek</td>
+<td>09486055</td>
+<td>Rillito Creek at La Cholla Blvd, near where it joins the Santa Cruz</td>
+</tr>
+<tr class="even">
+<td>Santa Cruz at Tucson</td>
+<td>09482500</td>
+<td>Santa Cruz River at Congress Street, downtown</td>
+</tr>
+<tr class="odd">
+<td>Santa Cruz at Cortaro</td>
+<td>09486500</td>
+<td>Santa Cruz River at Cortaro Road, below the Rillito</td>
+</tr>
+</tbody>
+</table>
+<p>Each gage’s <strong>drainage area</strong> is the land area that drains to it, in square miles. A gage downstream includes the drainage area of every gage upstream of it. The areas and locations below come from the USGS site descriptions.</p>
+<div id="w12b-02" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> Path(<span class="st">"../.."</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>CACHE <span class="op">=</span> ROOT <span class="op">/</span> <span class="st">"data"</span> <span class="op">/</span> <span class="st">"cache"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>GAGES <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"site"</span>: [<span class="st">"USGS-09484000"</span>, <span class="st">"USGS-09484500"</span>, <span class="st">"USGS-09486055"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>             <span class="st">"USGS-09482500"</span>, <span class="st">"USGS-09486500"</span>],</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: [<span class="st">"Sabino Creek"</span>, <span class="st">"Tanque Verde Creek"</span>, <span class="st">"Rillito Creek"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Santa Cruz at Tucson"</span>, <span class="st">"Santa Cruz at Cortaro"</span>],</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"drainage_area_mi2"</span>: [<span class="fl">35.5</span>, <span class="dv">219</span>, <span class="dv">922</span>, <span class="dv">2222</span>, <span class="dv">3503</span>],</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lon"</span>: [<span class="op">-</span><span class="fl">110.811</span>, <span class="op">-</span><span class="fl">110.841</span>, <span class="op">-</span><span class="fl">111.011</span>, <span class="op">-</span><span class="fl">110.982</span>, <span class="op">-</span><span class="fl">111.096</span>],</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lat"</span>: [<span class="fl">32.315</span>, <span class="fl">32.264</span>, <span class="fl">32.303</span>, <span class="fl">32.221</span>, <span class="fl">32.351</span>],</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"color"</span>: [<span class="st">"#2a78d6"</span>, <span class="st">"#eb6834"</span>, <span class="st">"#1baf7a"</span>, <span class="st">"#eda100"</span>, <span class="st">"#e87ba4"</span>],</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>GAGES</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">site</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">drainage_area_mi2</th>
+<th data-quarto-table-cell-role="th">lon</th>
+<th data-quarto-table-cell-role="th">lat</th>
+<th data-quarto-table-cell-role="th">color</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>USGS-09484000</td>
+<td>Sabino Creek</td>
+<td>35.5</td>
+<td>-110.811</td>
+<td>32.315</td>
+<td>#2a78d6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>USGS-09484500</td>
+<td>Tanque Verde Creek</td>
+<td>219.0</td>
+<td>-110.841</td>
+<td>32.264</td>
+<td>#eb6834</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>USGS-09486055</td>
+<td>Rillito Creek</td>
+<td>922.0</td>
+<td>-111.011</td>
+<td>32.303</td>
+<td>#1baf7a</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>USGS-09482500</td>
+<td>Santa Cruz at Tucson</td>
+<td>2222.0</td>
+<td>-110.982</td>
+<td>32.221</td>
+<td>#eda100</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>USGS-09486500</td>
+<td>Santa Cruz at Cortaro</td>
+<td>3503.0</td>
+<td>-111.096</td>
+<td>32.351</td>
+<td>#e87ba4</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="w12b-03" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="fl">4.5</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, g <span class="kw">in</span> GAGES.iterrows():</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ax.scatter(g[<span class="st">"lon"</span>], g[<span class="st">"lat"</span>], s<span class="op">=</span><span class="dv">80</span>, color<span class="op">=</span>g[<span class="st">"color"</span>], edgecolor<span class="op">=</span><span class="st">"white"</span>, zorder<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    ax.annotate(g[<span class="st">"name"</span>], (g[<span class="st">"lon"</span>], g[<span class="st">"lat"</span>]), xytext<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                textcoords<span class="op">=</span><span class="st">"offset points"</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"longitude"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"latitude"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"USGS stream gages used in this lab"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.radians(<span class="fl">32.3</span>)))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="op">-</span><span class="fl">111.15</span>, <span class="op">-</span><span class="fl">110.70</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="fl">32.18</span>, <span class="fl">32.40</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week12_bonus_tucson_streamflow_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="part-2-download-the-daily-flows" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-download-the-daily-flows">Part 2 — Download the daily flows</h2>
+<p><code>get_daily</code> returns one value per day: here, the <strong>daily mean discharge</strong> (parameter code <code>00060</code>, statistic code <code>00003</code>), in cubic feet per second (cfs). You can ask for several gages at once by passing a list of IDs.</p>
+<p>We download water years 1996 through 2025. A <strong>water year</strong> runs from October 1 to September 30 and is named for the year it ends in, so water year 2025 is October 1, 2024 to September 30, 2025. All five gages were running for that whole period.</p>
+<p>The download takes about 10 seconds.</p>
+<div id="w12b-05" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataretrieval <span class="im">import</span> waterdata</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>raw, md <span class="op">=</span> waterdata.get_daily(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    monitoring_location_id<span class="op">=</span><span class="bu">list</span>(GAGES[<span class="st">"site"</span>]),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    parameter_code<span class="op">=</span><span class="st">"00060"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    statistic_id<span class="op">=</span><span class="st">"00003"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    time<span class="op">=</span><span class="st">"1995-10-01/2025-09-30"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"request:"</span>, md.url)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"downloaded from the USGS: </span><span class="sc">{</span><span class="bu">len</span>(raw)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Geopandas not installed. Geometries will be flattened into pandas DataFrames.
+Retrieving: daily · 2 pages · 59,604 rows
+No API key detected — register for higher rate limits at https://api.waterdata.usgs.gov/signup/</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>request: https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items?monitoring_location_id=USGS-09484000%2CUSGS-09484500%2CUSGS-09486055%2CUSGS-09482500%2CUSGS-09486500&amp;parameter_code=00060&amp;statistic_id=00003&amp;time=1995-10-01%2F2025-09-30&amp;limit=50000
+downloaded from the USGS: 59,604 rows</code></pre>
+</div>
+</div>
+<p>Look at the columns, then keep the three we need: the gage ID, the date, and the discharge.</p>
+<div id="w12b-07" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(raw.columns))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>raw[[<span class="st">"monitoring_location_id"</span>, <span class="st">"time"</span>, <span class="st">"value"</span>, <span class="st">"unit_of_measure"</span>, <span class="st">"approval_status"</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['time_series_id', 'monitoring_location_id', 'parameter_code', 'statistic_id', 'time', 'value', 'unit_of_measure', 'approval_status', 'qualifier', 'last_modified', 'geometry', 'daily_id']</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">monitoring_location_id</th>
+<th data-quarto-table-cell-role="th">time</th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">unit_of_measure</th>
+<th data-quarto-table-cell-role="th">approval_status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>USGS-09482500</td>
+<td>1995-10-01</td>
+<td>0.00</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>USGS-09484000</td>
+<td>1995-10-01</td>
+<td>0.02</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>USGS-09484500</td>
+<td>1995-10-01</td>
+<td>0.00</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>USGS-09486055</td>
+<td>1995-10-01</td>
+<td>0.00</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>USGS-09486500</td>
+<td>1995-10-01</td>
+<td>45.00</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="w12b-08" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"site"</span>: raw[<span class="st">"monitoring_location_id"</span>],</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>: pd.to_datetime(raw[<span class="st">"time"</span>]),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"discharge_cfs"</span>: pd.to_numeric(raw[<span class="st">"value"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> daily.sort_values([<span class="st">"site"</span>, <span class="st">"date"</span>], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>daily.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">site</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">discharge_cfs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>USGS-09482500</td>
+<td>1995-10-01</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>USGS-09482500</td>
+<td>1995-10-02</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>USGS-09482500</td>
+<td>1995-10-03</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>USGS-09482500</td>
+<td>1995-10-04</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>USGS-09482500</td>
+<td>1995-10-05</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="if-the-download-fails" class="level3">
+<h3 class="anchored" data-anchor-id="if-the-download-fails">If the download fails</h3>
+<p>If any of the cells above gave an error, use the saved copy of the same table in <code>data/cache/</code> instead: remove the <code>#</code> at the start of each line below (select the lines and press Ctrl+/ or Cmd+/), then run the cell. Otherwise skip it.</p>
+<div id="w12b-10" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># daily = pd.read_csv(CACHE / "waterdata_tucson_streams_daily.csv", parse_dates=["date"])</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print(f"saved copy: {len(daily):,} rows")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="duplicate-days" class="level3">
+<h3 class="anchored" data-anchor-id="duplicate-days">Duplicate days</h3>
+<p>Thirty water years is 10,958 days. Count the rows for each gage:</p>
+<div id="w12b-12" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>daily.groupby(<span class="st">"site"</span>).size()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>site
+USGS-09482500    15775
+USGS-09484000    10958
+USGS-09484500    10957
+USGS-09486055    10956
+USGS-09486500    10958
+dtype: int64</code></pre>
+</div>
+</div>
+<p>The Santa Cruz at Tucson gage has more rows than there are days. The USGS stores two overlapping daily records for this gage, one from 1992 to 2011 and one from 1998 to the present, and <code>get_daily</code> returned both. Where they overlap, the same date appears twice. The two values agree on almost every day, so we keep the first one for each gage and date.</p>
+<p>Two other gages have a few rows <em>fewer</em> than 10,958. Those days have no row at all, rather than a row with a missing value. Both kinds of gap matter when you count days.</p>
+<div id="w12b-14" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>n_before <span class="op">=</span> <span class="bu">len</span>(daily)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> daily.drop_duplicates(subset<span class="op">=</span>[<span class="st">"site"</span>, <span class="st">"date"</span>], keep<span class="op">=</span><span class="st">"first"</span>, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"removed </span><span class="sc">{</span>n_before <span class="op">-</span> <span class="bu">len</span>(daily)<span class="sc">:,}</span><span class="ss"> duplicate rows; </span><span class="sc">{</span><span class="bu">len</span>(daily)<span class="sc">:,}</span><span class="ss"> rows left"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>removed 4,817 duplicate rows; 54,787 rows left</code></pre>
+</div>
+</div>
+<p>Last, add the gage name and the water year. Months October through December belong to the next water year.</p>
+<div id="w12b-16" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">"gage"</span>] <span class="op">=</span> daily[<span class="st">"site"</span>].<span class="bu">map</span>(GAGES.set_index(<span class="st">"site"</span>)[<span class="st">"name"</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>daily[<span class="st">"water_year"</span>] <span class="op">=</span> daily[<span class="st">"date"</span>].dt.year <span class="op">+</span> (daily[<span class="st">"date"</span>].dt.month <span class="op">&gt;=</span> <span class="dv">10</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>daily.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">site</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">discharge_cfs</th>
+<th data-quarto-table-cell-role="th">gage</th>
+<th data-quarto-table-cell-role="th">water_year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>USGS-09482500</td>
+<td>1995-10-01</td>
+<td>0.0</td>
+<td>Santa Cruz at Tucson</td>
+<td>1996</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>USGS-09482500</td>
+<td>1995-10-02</td>
+<td>0.0</td>
+<td>Santa Cruz at Tucson</td>
+<td>1996</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>USGS-09482500</td>
+<td>1995-10-03</td>
+<td>0.0</td>
+<td>Santa Cruz at Tucson</td>
+<td>1996</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>USGS-09482500</td>
+<td>1995-10-04</td>
+<td>0.0</td>
+<td>Santa Cruz at Tucson</td>
+<td>1996</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>USGS-09482500</td>
+<td>1995-10-05</td>
+<td>0.0</td>
+<td>Santa Cruz at Tucson</td>
+<td>1996</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="your-turn-1" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-1">YOUR TURN 1</h3>
+<p>Describe the cleaned table:</p>
+<ul>
+<li><code>days_per_gage</code> — a Series with the number of rows for each <code>gage</code></li>
+<li><code>n_missing</code> — the number of rows with no discharge value</li>
+<li><code>first_date</code>, <code>last_date</code> — the earliest and latest dates in the table</li>
+</ul>
+<div id="w12b-18" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>days_per_gage <span class="op">=</span> ...</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>n_missing <span class="op">=</span> ...</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>first_date <span class="op">=</span> ...</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>last_date <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-19" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(days_per_gage) <span class="op">==</span> <span class="dv">5</span>, <span class="ss">f"expected 5 gages, got </span><span class="sc">{</span><span class="bu">len</span>(days_per_gage)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> days_per_gage.<span class="bu">max</span>() <span class="op">==</span> <span class="dv">10958</span>, <span class="st">"a gage has more rows than days: did you drop duplicates?"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> days_per_gage.<span class="bu">min</span>() <span class="op">&gt;</span> <span class="dv">10900</span>, days_per_gage.to_string()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_missing <span class="op">==</span> daily[<span class="st">"discharge_cfs"</span>].isna().<span class="bu">sum</span>(), <span class="ss">f"got </span><span class="sc">{</span>n_missing<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> first_date <span class="op">==</span> pd.Timestamp(<span class="st">"1995-10-01"</span>), <span class="ss">f"got </span><span class="sc">{</span>first_date<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> last_date <span class="op">==</span> pd.Timestamp(<span class="st">"2025-09-30"</span>), <span class="ss">f"got </span><span class="sc">{</span>last_date<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(days_per_gage.to_string())</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_missing<span class="sc">}</span><span class="ss"> missing values, </span><span class="sc">{</span>first_date<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>last_date<span class="sc">:</span><span class="op">%</span>Y<span class="op">-%</span>m<span class="op">-%</span>d<span class="sc">}</span><span class="ss">. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-3-how-often-does-each-stream-flow" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-how-often-does-each-stream-flow">Part 3 — How often does each stream flow?</h2>
+<p>A discharge of exactly 0 cfs means the gage was working and the channel was dry. Most streams in the Tucson basin are dry for much of the year.</p>
+<section id="your-turn-2" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-2">YOUR TURN 2</h3>
+<p>Compute <code>flowing_fraction</code>: a Series indexed by <code>gage</code> giving the fraction of days with discharge greater than zero (a number between 0 and 1).</p>
+<div id="w12b-21" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>flowing_fraction <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-22" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(flowing_fraction) <span class="op">==</span> <span class="dv">5</span>, <span class="ss">f"expected 5 gages, got </span><span class="sc">{</span><span class="bu">len</span>(flowing_fraction)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> flowing_fraction.between(<span class="dv">0</span>, <span class="dv">1</span>).<span class="bu">all</span>(), <span class="st">"fractions should be between 0 and 1"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> flowing_fraction[<span class="st">"Santa Cruz at Cortaro"</span>] <span class="op">==</span> <span class="fl">1.0</span>, flowing_fraction.to_string()</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> flowing_fraction.idxmin() <span class="op">==</span> <span class="st">"Rillito Creek"</span>, flowing_fraction.to_string()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((flowing_fraction <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>).sort_values().to_string())</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-23" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">3.2</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> GAGES[<span class="st">"name"</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>ax.barh(names, flowing_fraction[names] <span class="op">*</span> <span class="dv">100</span>, color<span class="op">=</span>GAGES[<span class="st">"color"</span>], height<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, name <span class="kw">in</span> <span class="bu">enumerate</span>(names):</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    ax.text(flowing_fraction[name] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> <span class="dv">1</span>, i, <span class="ss">f"</span><span class="sc">{</span>flowing_fraction[name]<span class="sc">:.0%}</span><span class="ss">"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>            va<span class="op">=</span><span class="st">"center"</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>, <span class="dv">110</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"</span><span class="sc">% o</span><span class="st">f days with flow, water years 1996–2025"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"How often each gage records flow"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>, axis<span class="op">=</span><span class="st">"x"</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sabino Creek flows on about two days out of three. Tanque Verde Creek, a few miles downstream, flows on far fewer days, and the Rillito flows least of all, even though each one drains a larger area than the gage above it. Water that leaves the mountains in Sabino Creek soaks into the sandy channel beds on the way down. A stream that loses water to the aquifer through its bed is called a <strong>losing stream</strong>, and this channel infiltration is one of the main ways the Tucson basin aquifer is recharged.</p>
+<p>The Santa Cruz at Cortaro is different: it flowed on every day for 30 years. Part 6 looks at why.</p>
+<hr>
+</section>
+</section>
+<section id="part-4-when-does-each-stream-flow" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-when-does-each-stream-flow">Part 4 — When does each stream flow?</h2>
+<p>Start with one water year. Water year 2021 had a dry winter and a wet monsoon summer in 2021.</p>
+<div id="w12b-26" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>wy <span class="op">=</span> daily[daily[<span class="st">"water_year"</span>] <span class="op">==</span> <span class="dv">2021</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="bu">len</span>(GAGES), <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">9</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (_, g) <span class="kw">in</span> <span class="bu">zip</span>(axes, GAGES.iterrows()):</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    one <span class="op">=</span> wy[wy[<span class="st">"gage"</span>] <span class="op">==</span> g[<span class="st">"name"</span>]]</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    ax.plot(one[<span class="st">"date"</span>], one[<span class="st">"discharge_cfs"</span>], color<span class="op">=</span>g[<span class="st">"color"</span>], lw<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    ax.set_title(g[<span class="st">"name"</span>], loc<span class="op">=</span><span class="st">"left"</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"cfs"</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="op">-</span><span class="dv">1</span>].set_xlabel(<span class="st">"date"</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Daily mean discharge, water year 2021"</span>, y<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Each panel has its own y-axis, because the peaks range from about 1,000 cfs at Sabino Creek to over 7,000 cfs at Cortaro. All five gages respond to the same July–September storms.</p>
+<p>One year is not enough to describe a stream’s seasons. Average over all 30 years instead.</p>
+<section id="your-turn-3" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-3">YOUR TURN 3</h3>
+<p>Build <code>monthly_mean</code>: a DataFrame with one row per month (1–12) and one column per gage, holding the mean daily discharge in that month over all 30 years.</p>
+<p>Hint: group by two things, <code>daily["date"].dt.month</code> and <code>"gage"</code>, take the mean of <code>discharge_cfs</code>, then use <code>.unstack("gage")</code> to move the gages into columns.</p>
+<div id="w12b-28" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>monthly_mean <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-29" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> monthly_mean.shape <span class="op">==</span> (<span class="dv">12</span>, <span class="dv">5</span>), <span class="ss">f"expected 12 rows x 5 columns, got </span><span class="sc">{</span>monthly_mean<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">list</span>(monthly_mean.index) <span class="op">==</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">13</span>)), <span class="st">"rows should be months 1-12"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> monthly_mean[<span class="st">"Sabino Creek"</span>].idxmin() <span class="kw">in</span> (<span class="dv">5</span>, <span class="dv">6</span>), monthly_mean[<span class="st">"Sabino Creek"</span>].to_string()</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> monthly_mean[<span class="st">"Santa Cruz at Tucson"</span>].idxmax() <span class="kw">in</span> (<span class="dv">7</span>, <span class="dv">8</span>), monthly_mean[<span class="st">"Santa Cruz at Tucson"</span>].to_string()</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(monthly_mean[GAGES[<span class="st">"name"</span>]].<span class="bu">round</span>(<span class="dv">1</span>).to_string())</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-30" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, g <span class="kw">in</span> GAGES.iterrows():</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    ax.plot(monthly_mean.index, monthly_mean[g[<span class="st">"name"</span>]], color<span class="op">=</span>g[<span class="st">"color"</span>],</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            lw<span class="op">=</span><span class="dv">2</span>, marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">5</span>, label<span class="op">=</span>g[<span class="st">"name"</span>])</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">13</span>))</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels(<span class="bu">list</span>(<span class="st">"JFMAMJJASOND"</span>))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"month"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"mean discharge (cfs)"</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Mean discharge by month, water years 1996–2025"</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>ax.legend(fontsize<span class="op">=</span><span class="dv">9</span>, frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The streams draining the mountains have two wet seasons: winter (December to March), from long frontal storms and some snowmelt from the Santa Catalinas, and the summer monsoon (July to September), from short thunderstorms. May and June are the driest months at every gage. The Santa Cruz at Tucson gets most of its water in the monsoon.</p>
+<p>The Santa Cruz at Cortaro has a floor under it: even in May and June its mean flow stays near 50 cfs.</p>
+<hr>
+</section>
+</section>
+<section id="part-5-how-much-of-the-water-reaches-each-gage" class="level2">
+<h2 class="anchored" data-anchor-id="part-5-how-much-of-the-water-reaches-each-gage">Part 5 — How much of the water reaches each gage?</h2>
+<p>A bigger drainage area collects more rain, so mean discharge alone doesn’t tell you which watershed produces the most water. Dividing by drainage area fixes that. <strong>Runoff depth</strong> is the mean discharge spread evenly over the drainage area, in inches per year: the depth of water that would cover the whole watershed if a year’s streamflow were spread over it.</p>
+<p><span class="math display">\[
+\text{runoff (in/yr)} = \frac{Q \text{ (ft}^3\text{/s)} \times \text{seconds per year}}
+{A \text{ (mi}^2\text{)} \times \text{ft}^2 \text{ per mi}^2} \times 12 \text{ in/ft}
+\]</span></p>
+<section id="your-turn-4" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-4">YOUR TURN 4</h3>
+<p>Compute:</p>
+<ul>
+<li><code>mean_flow_cfs</code> — the mean of <code>discharge_cfs</code> for each <code>gage</code>, over the whole 30 years</li>
+<li><code>runoff_in_per_yr</code> — runoff depth for each gage, using <code>area</code> and the two constants below</li>
+</ul>
+<div id="w12b-33" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>SECONDS_PER_YEAR <span class="op">=</span> <span class="fl">365.25</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> <span class="dv">3600</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>FT2_PER_MI2 <span class="op">=</span> <span class="dv">5280</span> <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>area <span class="op">=</span> GAGES.set_index(<span class="st">"name"</span>)[<span class="st">"drainage_area_mi2"</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>mean_flow_cfs <span class="op">=</span> ...</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>runoff_in_per_yr <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-34" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>expected <span class="op">=</span> daily.groupby(<span class="st">"gage"</span>)[<span class="st">"discharge_cfs"</span>].mean()</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.allclose(mean_flow_cfs[expected.index], expected), mean_flow_cfs</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(runoff_in_per_yr[<span class="st">"Sabino Creek"</span>] <span class="op">-</span> expected[<span class="st">"Sabino Creek"</span>] <span class="op">*</span> SECONDS_PER_YEAR</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>           <span class="op">/</span> (<span class="fl">35.5</span> <span class="op">*</span> FT2_PER_MI2) <span class="op">*</span> <span class="dv">12</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span>, <span class="ss">f"Sabino: got </span><span class="sc">{</span>runoff_in_per_yr[<span class="st">'Sabino Creek'</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> runoff_in_per_yr.idxmax() <span class="op">==</span> <span class="st">"Sabino Creek"</span>, runoff_in_per_yr.to_string()</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({<span class="st">"drainage area (mi2)"</span>: area,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"mean flow (cfs)"</span>: mean_flow_cfs.<span class="bu">round</span>(<span class="dv">1</span>),</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"runoff (in/yr)"</span>: runoff_in_per_yr.<span class="bu">round</span>(<span class="dv">2</span>)})</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary.loc[GAGES[<span class="st">"name"</span>]].to_string())</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sabino Creek produces several inches of runoff per year from its watershed, which is mostly high, steep, rocky terrain that gets much more rain than the valley floor. Tanque Verde Creek drains six times the area but carries about the same amount of water as Sabino Creek. The Rillito drains 26 times the area of Sabino Creek and also carries about the same amount. Two things explain the drop: the lower parts of these watersheds are desert that produces little runoff, and water is lost through the channel beds between the gages.</p>
+<p>The USGS and others estimate stream-channel recharge by comparing flows at upstream and downstream gages on the same day, after accounting for evaporation and for water that enters the channel in between. These five gages are too far apart to do that carefully here, but the pattern above is the starting point for that kind of study.</p>
+<p>The Santa Cruz at Cortaro has more runoff per square mile than the Rillito or the Santa Cruz at Tucson, even though it is downstream of both. Part 6 explains why.</p>
+<hr>
+</section>
+</section>
+<section id="part-6-the-santa-cruz-river-at-cortaro" class="level2">
+<h2 class="anchored" data-anchor-id="part-6-the-santa-cruz-river-at-cortaro">Part 6 — The Santa Cruz River at Cortaro</h2>
+<p>The Santa Cruz at Tucson is dry five days out of six. The Santa Cruz at Cortaro, downstream, has not been dry once in 30 years. Most of its everyday flow is <strong>treated wastewater</strong> (effluent) from Pima County’s two large water reclamation facilities, Agua Nueva and Tres Rios, which discharge into the river between the two gages. Storm runoff from the Rillito and the Santa Cruz is added on top of that.</p>
+<p>The median daily flow is a good measure of that everyday flow, because storm days are a small fraction of the year and don’t move the median much.</p>
+<section id="your-turn-5" class="level3">
+<h3 class="anchored" data-anchor-id="your-turn-5">YOUR TURN 5</h3>
+<p>Compute <code>median_by_wy</code>: a Series indexed by water year (1996–2025) giving the median daily discharge at the Santa Cruz at Cortaro in each water year.</p>
+<div id="w12b-37" class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>median_by_wy <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-38" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(median_by_wy) <span class="op">==</span> <span class="dv">30</span>, <span class="ss">f"expected 30 water years, got </span><span class="sc">{</span><span class="bu">len</span>(median_by_wy)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> median_by_wy.index.<span class="bu">min</span>() <span class="op">==</span> <span class="dv">1996</span> <span class="kw">and</span> median_by_wy.index.<span class="bu">max</span>() <span class="op">==</span> <span class="dv">2025</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>cortaro <span class="op">=</span> daily[daily[<span class="st">"gage"</span>] <span class="op">==</span> <span class="st">"Santa Cruz at Cortaro"</span>]</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> median_by_wy[<span class="dv">2010</span>] <span class="op">==</span> cortaro.loc[cortaro[<span class="st">"water_year"</span>] <span class="op">==</span> <span class="dv">2010</span>, <span class="st">"discharge_cfs"</span>].median()</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(median_by_wy.<span class="bu">round</span>(<span class="dv">1</span>).to_string())</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w12b-39" class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">3.6</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ax.plot(median_by_wy.index, median_by_wy.values, color<span class="op">=</span><span class="st">"#e87ba4"</span>, lw<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        marker<span class="op">=</span><span class="st">"o"</span>, ms<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"water year"</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"median daily discharge (cfs)"</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="va">None</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Santa Cruz River at Cortaro: median daily flow by water year"</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The median flow rose through the late 1990s, peaked around 2003–2004, and has been lower since about 2015. The record alone can’t tell you why. Some questions to look into if you are interested:</p>
+<ul>
+<li>How much effluent did the two reclamation facilities discharge each year, and did that change? Both were rebuilt in the early 2010s.</li>
+<li>How much of the effluent is now sent to recharge basins or to Tucson’s reclaimed water system instead of the river?</li>
+<li>How much of the water discharged to the river soaks into the channel before it reaches Cortaro?</li>
+</ul>
+<p>Pima County publishes annual reports on the effluent-dependent reach of the Santa Cruz River (search for “Living River” reports), which track flow and water quality along this stretch.</p>
+<hr>
+</section>
+</section>
+<section id="going-further" class="level2">
+<h2 class="anchored" data-anchor-id="going-further">Going further</h2>
+<ul>
+<li>Add another gage. Pantano Wash at Broadway (09485450) and Rincon Creek near Tucson (09485000) drain the Rincon Mountains. Add them to <code>GAGES</code> and rerun.</li>
+<li>Change the <code>time</code> argument to start in 1990 and find the January 1993 flood, the largest flow on record at several of these gages. (Some gages have gaps before 1996.)</li>
+<li>Compare one gage with a nearby well. The Week 12 slides use well WR-52, south of the Rillito, whose daily record is in <code>data/cache/waterdata_321517110571802_daily.csv</code>.</li>
+</ul>
+</section>
+<section id="stuck" class="level2">
+<h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
+<ul>
+<li><strong>The download hangs or fails:</strong> interrupt the kernel if it hangs, then run the cell under <em>If the download fails</em> in Part 2.</li>
+<li><strong><code>days_per_gage</code> shows 15,000+ days for the Santa Cruz at Tucson:</strong> run the <code>drop_duplicates</code> cell in Part 2.</li>
+<li><strong><code>monthly_mean</code> has 60 rows and one column:</strong> you left out <code>.unstack("gage")</code>.</li>
+<li>Office hours: Tuesdays 1:00–2:00pm, Harshbarger 232.</li>
+</ul>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../labs/week12";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/hwrs564-hydrogeologic-analysis\.github\.io\/hwrs564a_course_materials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../labs/week12/week12_lab_pinal_water_levels.html" class="pagination-link" aria-label="Lab · Water levels in the Pinal AMA">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lab · Water levels in the Pinal AMA</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>HWRS 564a · Fall 2026 · Dr.&nbsp;Andrew Bennett</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
