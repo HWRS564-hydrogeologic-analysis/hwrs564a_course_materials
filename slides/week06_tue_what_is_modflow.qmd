@@ -10,7 +10,7 @@ author: "Dr. Andrew Bennett"
 Week 6, session 1 of 2
 :::
 
-1. Quiz: five minutes, on regression
+1. Quiz: five minutes, on pandas
 2. What changes when you build a model
 3. The conceptual model that comes before the grid
 4. The equation MODFLOW solves, and how it discretizes it

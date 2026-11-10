@@ -1,14 +1,18 @@
+# D2L content page — Week 9
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week09.yml
+
 week: 9
-title: "Week 9 — Ordinary least squares and linear regression"
+title: "Week 9 — Time, storage, capture, and ET"
 dates: "October 20 & 22, 2026"
+
 overview: >
-  Tuesday derives ordinary least squares from the definition of a residual,
-  spelling out both normal equations and every algebraic step leading to the
-  slope and intercept. We then connect the fitted line to R-squared, residual
-  variance, slope standard error, confidence intervals, and hypothesis tests.
-  Thursday is a full-period lab: students reproduce the calculations, diagnose
-  assumption failures, compare random and chronological validation, and write
-  a careful interpretation of what the linear model can and cannot support.
+  Every model so far has been steady state. This week adds time. On Tuesday we
+  cover stress periods and time steps, specific yield and specific storage, and
+  why a transient run starts with a steady-state period. On Thursday we read a
+  hydrograph out of the head file, use the budget to separate depletion from
+  capture, and add evapotranspiration with an extinction depth. The second lab
+  notebook loads the Pinal County model for Project 3.
 
 time_budget:
   - "3 hours in class"
@@ -17,37 +21,36 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Finish the Week 8 lab notebook"
-    url: "labs/week08/week08_lab_matplotlib.html"
+  - text: "Finish the Week 8 lab notebooks"
+    url: "labs/week08/week08_02_unconfined_dry_cells.html"
     site_relative: true
-    note: "The residual plots on Tuesday assume you can build a two-panel figure."
 
 class_material:
-  - text: "Tue 10/20 — Slides: Ordinary least squares, one step at a time"
-    url: "slides/week09_tue_regression.html"
+  - text: "Tue 10/20 — Slides: Time, storage, and stress periods"
+    url: "slides/week09_tue_time.html"
     site_relative: true
-  - text: "Thu 10/22 — Slides: Regression lab checkpoints"
-    url: "slides/week09_thu_regression_lab.html"
+  - text: "Thu 10/22 — Slides: Hydrographs, capture, and ET"
+    url: "slides/week09_thu_capture_et.html"
     site_relative: true
-  - text: "Lab notebook — Linear regression clinic"
-    url: "labs/week09/week09_lab_regression.html"
+  - text: "Lab notebook — Stresses that change with time"
+    url: "labs/week09/week09_00_lab_transient_stresses.html"
+    site_relative: true
+  - text: "Lab notebook — Starting up the Pinal County model"
+    url: "labs/week09/week09_01_pinal_startup.html"
     site_relative: true
 
 assignments:
-  - text: "Quiz 7 — on Week 8 material"
+  - text: "Quiz 7 — Python refresher"
     quiz: "TBD-week09-quiz"
     note: "In class, Tuesday 10/20."
-  - text: "Submit: HW 4 — Evaluate and communicate a groundwater difference"
-    dropbox: "TBD-hw04-dropbox"
+  - text: "Submit: HW 3 — Groundwater data and a first MODFLOW model"
+    dropbox: "TBD-hw03-dropbox"
     note: "Due Wednesday 10/21 at 11:59pm."
-  - text: "Open: HW 5 — Three checks before believing an answer"
-    dropbox: "TBD-hw05-dropbox"
-    note: "Available after class Thursday 10/22; due Wednesday 11/4 at 11:59pm."
 
 bonus:
-  - text: "OpenIntro Statistics — simple linear regression"
-    url: "https://www.openintro.org/book/os/"
-  - text: "SciPy — linregress reference"
-    url: "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html"
-  - text: "scikit-learn — cross-validation, including TimeSeriesSplit"
-    url: "https://scikit-learn.org/stable/modules/cross_validation.html"
+  - text: "Barlow & Leake, Streamflow depletion by wells (USGS Circular 1376)"
+    url: "https://pubs.usgs.gov/circ/1376/"
+  - text: "Theis (1940), The source of water derived from wells"
+    url: "https://doi.org/10.1061/TACEAT.0006159"
+  - text: "Bredehoeft (2002), The Water Budget Myth Revisited"
+    url: "https://doi.org/10.1111/j.1745-6584.2002.tb02511.x"

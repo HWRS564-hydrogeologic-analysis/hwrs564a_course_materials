@@ -20,10 +20,10 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Finish the Week 14 lab notebook"
-    url: "labs/week14/week14_lab_layers_rivers_loading.html"
+  - text: "Finish the Week 12 lab notebook"
+    url: "labs/week12/week12_lab_pinal_water_levels.html"
     site_relative: true
-    note: "HW 7 assumes you can load an inherited model without rebuilding it."
+  # TODO: point this at the Week 13 lab once Week 13 is set.
 
 class_material:
   - "Debugging and reproducible coding practices — material will be posted in D2L."

@@ -1,14 +1,20 @@
+# D2L content page — Week 12
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week12.yml
+
 week: 12
-title: "Week 12 — Discretization and boundary conditions"
+title: "Week 12 — Working with real-world data"
 dates: "November 10 & 12, 2026"
+
 overview: >
-  Last week's model converged on the first try because the aquifer was confined,
-  which makes the equations linear. This week you take the confining layer off,
-  the physics gets more realistic, and the model stops converging — and dealing
-  with that is most of what a modeller actually does. On the way we test whether
-  the answer depends on the cell size you chose, use `ibound` to cut a
-  basin-shaped domain out of a rectangle, and meet dry cells, which are a
-  modelling failure rather than a result.
+  This week we download data from the USGS with the `dataretrieval` package.
+  On Tuesday we cover what an API request is, why to use `waterdata` rather than
+  the older `nwis` functions, how to fall back to a saved copy when a request
+  fails, and how to find a site before downloading its record. We pull daily
+  discharge at Sabino Creek and water levels at a Tucson well, put them on one
+  time axis, and survey in situ and remote-sensing sources beyond the USGS. The
+  lab downloads every USGS water level in the Pinal AMA and compares the trends
+  with the Pinal County model.
 
 time_budget:
   - "3 hours in class"
@@ -17,35 +23,36 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Finish the Week 11 lab notebook"
-    url: "labs/week11/week11_lab_basin_model.html"
-    site_relative: true
-    note: "This week rebuilds that model at three resolutions, so know how it fits together."
+  - text: "USGS Water Data for the Nation — the Sabino Creek gage"
+    url: "https://waterdata.usgs.gov/monitoring-location/09484000/"
+    note: "Ten minutes looking around. We download this record in class."
 
 class_material:
-  - text: "Tue 11/10 — Slides: Discretization"
-    url: "slides/week12_tue_discretization.html"
+  - text: "Tue 11/10 — Slides: Working with real-world data"
+    url: "slides/week12_tue_real_world_data.html"
     site_relative: true
-  - text: "Thu 11/12 — Slides: Boundaries, unconfined flow, and dry cells"
-    url: "slides/week12_thu_unconfined.html"
+  # TODO: add Thursday 11/12 once it is decided.
+  - text: "Lab notebook — Water levels in the Pinal AMA"
+    url: "labs/week12/week12_lab_pinal_water_levels.html"
     site_relative: true
-  - text: "Lab notebook — Discretization, boundaries, and unconfined flow"
-    url: "labs/week12/week12_lab_discretization_boundaries.html"
+  - text: "Bonus lab — Streamflow in the Tucson basin"
+    url: "labs/week12/week12_bonus_tucson_streamflow.html"
     site_relative: true
-    note: "Runs eight models. Some cells take a few seconds — that is expected."
+    note: "Optional."
 
 assignments:
-  - text: "Quiz 10 — on Week 11 material"
+  - text: "Quiz 10 — MODFLOW review: water budgets, depletion and capture"
     quiz: "TBD-week12-quiz"
     note: "In class, Tuesday 11/10."
-  - text: "Continue: HW 6 — Build and stress-test a basin model"
-    dropbox: "TBD-hw06-dropbox"
-    note: "Use this week's discretization and boundary material; due Wednesday 11/18 at 11:59pm."
+  - text: "Submit: HW 4 — Putting the Pinal County wells on the model grid"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Due Wednesday 11/11 at 11:59pm."
+  # TODO: the Week 12 lab says "HW 6 — Build, audit, and evaluate a groundwater
+  # dataset" is due Wednesday 11/18. Confirm its number (HW 5 or HW 6) and when
+  # it opens, then add it here.
 
 bonus:
-  - text: "MODFLOW-NWT — the version that handles dewatering properly"
-    url: "https://www.usgs.gov/software/modflow-nwt-newton-formulation-modflow-2005"
-  - text: "Hill & Tiedeman on model calibration and observation-parameter sensitivity"
-    url: "https://doi.org/10.1002/0470041080"
-  - text: "Reilly & Harbaugh, Guidelines for evaluating ground-water flow models"
-    url: "https://pubs.usgs.gov/sir/2004/5038/"
+  - text: "dataretrieval-python documentation"
+    url: "https://doi-usgs.github.io/dataretrieval-python/"
+  - text: "USGS parameter codes — what 00060 and 72019 mean"
+    url: "https://help.waterdata.usgs.gov/parameter_cd"

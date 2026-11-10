@@ -415,5 +415,5 @@ What's due
 Next week
 :::
 
-Where real data comes from, and how to diagnose gaps, duplicates, and outliers
-before they become results.
+MODFLOW: what it is, the equation it solves, and running a first model with
+FloPy.

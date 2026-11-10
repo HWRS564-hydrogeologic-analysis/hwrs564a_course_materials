@@ -1,9 +1,9 @@
-# Week 8 quiz — covers Week 7 (datetime, resample, rolling, reshaping).
+# Week 8 quiz — covers Week 5 (datetime, resample, rolling, reshaping).
 
 quiz:
   week: 8
   title: "Week 8 Quiz"
-  covers: "Week 7 — DatetimeIndex, resample, water year, rolling, long vs wide"
+  covers: "Week 5 — DatetimeIndex, resample, water year, rolling, long vs wide"
   given: "Tuesday, October 13, start of class"
   time_limit_minutes: 5
   default_points: 1

@@ -1,9 +1,9 @@
-# Week 12 quiz — covers Week 11 (building a real model, budgets, comparison).
+# Week 12 quiz — covers Week 9 (building a real model, budgets, comparison).
 
 quiz:
   week: 12
   title: "Week 12 Quiz"
-  covers: "Week 11 — a real basin model, water budgets, depletion vs capture"
+  covers: "Week 9 — a real basin model, water budgets, depletion vs capture"
   given: "Tuesday, November 10, start of class"
   time_limit_minutes: 5
   default_points: 1

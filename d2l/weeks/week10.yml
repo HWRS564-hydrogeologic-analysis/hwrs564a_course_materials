@@ -1,14 +1,17 @@
+# D2L content page — Week 10
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week10.yml
+
 week: 10
-title: "Week 10 — Introduction to MODFLOW and FloPy"
+title: "Week 10 — Layers, rivers, and hydrologic models"
 dates: "October 27 & 29, 2026"
+
 overview: >
-  For nine weeks you inferred what the aquifer was doing from patterns in
-  observations. From this week you build something that has to obey conservation
-  of mass. We cover what MODFLOW is and why it is organised as a package per
-  question, how FloPy writes its input files so you never have to, and — most
-  importantly — the three checks that go on every model run you will ever do:
-  that it converged, that its water budget closes, and that it reproduces a case
-  whose answer you already knew.
+  On Tuesday we cover layered models, rivers, and loading a model somebody else
+  built. On Thursday we step back from MODFLOW to look at hydrologic models more
+  broadly: how the purpose of a model decides what it represents, how to choose
+  a test that matches the intended use, and what an ensemble includes and leaves
+  out.
 
 time_budget:
   - "3 hours in class"
@@ -17,39 +20,29 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Confirm your codespace has the MODFLOW binaries"
-    url: "https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials"
-    note: "Open a terminal and run `ls modflow`. If it is empty, run ./postbuild.sh before Tuesday."
-  - text: "Finish the Week 9 lab notebook"
-    url: "labs/week09/week09_lab_regression.html"
+  - text: "Finish the Week 9 lab notebooks"
+    url: "labs/week09/week09_01_pinal_startup.html"
     site_relative: true
 
 class_material:
-  - text: "Tue 10/27 — Slides: What MODFLOW is, and why"
-    url: "slides/week10_tue_what_is_modflow.html"
+  # TODO: no deck on the course site for Tuesday. A retired version is in
+  # retired/slides/week14_tue_layers_rivers.qmd.
+  - "Tue 10/27 — Layers, rivers, and loading a model somebody else built"
+  - text: "Thu 10/29 — Slides: Hydrologic models and the questions they answer"
+    url: "slides/week10_thu_hydrologic_modeling.html"
     site_relative: true
-  - text: "Thu 10/29 — Slides: Running it, and believing it"
-    url: "slides/week10_thu_running_it.html"
-    site_relative: true
-  - text: "Lab notebook — Meeting MODFLOW"
-    url: "labs/week10/week10_lab_meeting_modflow.html"
-    site_relative: true
-    note: "Builds and runs your first model, and deliberately breaks one."
 
 assignments:
-  - text: "Quiz 8 — on Week 9 material"
+  - text: "Quiz 8 — on Week 9 material (the Pinal County model)"
     quiz: "TBD-week10-quiz"
     note: "In class, Tuesday 10/27."
-  - text: "Continue: HW 5 — Three checks before believing an answer"
-    dropbox: "TBD-hw05-dropbox"
-    note: "Add this week's model-run checks; due Wednesday 11/4 at 11:59pm."
-  - text: "Submit: Project 2 — analysis component, part 2"
-    dropbox: "TBD-project2b-dropbox"
+  - text: "Open: HW 4 — Putting the Pinal County wells on the model grid"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Available Tuesday 10/27; due Wednesday 11/11 at 11:59pm."
+  # TODO: confirm whether Project 2 has a milestone this week.
 
 bonus:
-  - text: "MODFLOW-2005 online guide — the package reference"
+  - text: "MODFLOW-2005 online guide — the RIV package"
     url: "https://water.usgs.gov/nrp/gwsoftware/modflow2005/MODFLOW-2005-Guide.html"
-  - text: "FloPy documentation"
-    url: "https://flopy.readthedocs.io/"
-  - text: "Applied Groundwater Modeling (Anderson, Woessner & Hunt) — the standard text"
-    url: "https://doi.org/10.1016/C2009-0-21563-7"
+  - text: "FloPy — loading and modifying existing models"
+    url: "https://flopy.readthedocs.io/en/stable/Notebooks/mf_load_example.html"

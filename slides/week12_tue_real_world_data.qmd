@@ -1,0 +1,824 @@
+---
+title: "Working with real-world data"
+subtitle: "HWRS 564a · Week 12 · Tuesday, November 10"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+# Figures in this deck come from the committed Week 12 fallbacks in data/cache,
+# built by `python scripts/fetch_data.py --week12`. Reading the cache rather
+# than calling the API keeps the render deterministic and offline; the live
+# calls are shown on the slides as code.
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+ROOT = Path.cwd().parent
+CACHE = ROOT / "data" / "cache"
+WELL = "321517110571802"
+CFS_TO_CMS = 0.0283168
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE, UA_SKY = "#AB0520", "#0C234B", "#81D3EB"
+
+flow = pd.read_csv(CACHE / "waterdata_09484000_daily.csv", parse_dates=["date"])
+flow["wy"] = flow["date"].dt.year + (flow["date"].dt.month >= 10)
+runoff_Mm3 = (flow["discharge_cfs"] * CFS_TO_CMS * 86400).groupby(flow["wy"]).sum() / 1e6
+
+sensor = pd.read_csv(CACHE / f"waterdata_{WELL}_daily.csv", parse_dates=["date"])
+sensor["wy"] = sensor["date"].dt.year + (sensor["date"].dt.month >= 10)
+
+field = pd.read_csv(CACHE / f"waterdata_{WELL}_field.csv",
+                    dtype={"parameter_code": str}, parse_dates=["time"])
+tape = field[field["parameter_code"] == "72019"]
+tape = tape[(tape["time"] >= "1990-10-01") & (tape["time"] < "2025-10-01")]
+
+depth_by_wy = sensor.groupby("wy")["depth_to_water_ft"].mean()
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 12, session 1 of 2
+:::
+
+1. Quiz — five minutes
+2. What an API is, and the `dataretrieval` package
+3. Keeping a saved copy for when the API is down
+4. Finding a site before you fetch its data
+5. Streams: daily discharge at Sabino Creek
+6. Wells: the same package, a different kind of record
+7. A stream and a well on one time axis
+8. Data sources beyond the USGS
+
+Most projects need several datasets, such as a stream gage, a few wells, and
+maybe a satellite product, and they rarely share the same time step or units. Today we pull a stream and a well
+from the USGS, put them on the same time axis, and look at where other kinds of
+data come from.
+
+# Getting data from an API {background-color="#AB0520"}
+
+## A URL that returns data {.smaller}
+
+You can download a CSV from a website by clicking through it. An **API**
+(application programming interface) is a web address you build yourself that
+returns the data directly:
+
+<div class="url-anatomy">
+<span class="url-endpoint">https://api.waterdata.usgs.gov/ogcapi/v0/collections/daily/items</span><br>
+?<span class="url-site">monitoring_location_id=USGS-09484000</span><br>
+&amp;<span class="url-format">parameter_code=00060</span><br>
+&amp;<span class="url-time">time=2024-10-01/2025-09-30</span>
+</div>
+
+- underlined: the **endpoint**, which dataset you want (daily values)
+- blue: which **site** (Sabino Creek) · green: which **measurement** (discharge)
+  · red: which **dates**
+- `?` starts the options and `&` separates them
+
+::: {.fragment}
+Paste that into a browser and you get the data back as text. Because the
+request is written in your code, anyone can rerun it and get the same data, and
+changing the site or dates is a one-word edit.
+:::
+
+## `dataretrieval` builds the URL for you {.smaller}
+
+`dataretrieval` is the USGS's Python package for its water data. It builds the
+URL, sends the request, and turns the response into a pandas DataFrame. It is
+already installed in the course environment.
+
+```python
+from dataretrieval import waterdata
+
+q, md = waterdata.get_daily(
+    monitoring_location_id="USGS-09484000",
+    parameter_code="00060",
+    time="2024-10-01/2025-09-30",
+)
+```
+
+Each call returns two things: the data (`q`, a DataFrame) and metadata (`md`).
+`md.url` is the exact URL that was sent.
+
+::: {.fragment}
+**Use `waterdata`, not `nwis`.** Most tutorials online use
+`dataretrieval.nwis`. The USGS is retiring the services behind it: some `nwis`
+functions are deprecated and some, like `nwis.get_gwlevels`, no longer exist. If
+code from a tutorial fails because a function is missing, the tutorial is
+probably older than the package.
+:::
+
+## Reading a deprecation warning
+
+```
+DeprecationWarning: `nwis.get_record` is deprecated and will be removed
+from `dataretrieval` on or after 2027-05-06; use the appropriate
+`waterdata.get_*()` for the service you need instead.
+```
+
+::: {.incremental}
+- It tells you **what** is going away
+- It tells you **when**
+- It tells you **what to use instead**
+:::
+
+::: {.fragment}
+A warning is not an error, and your code still runs. After the removal date,
+the same line raises an error, so it is worth switching when you first see the
+warning.
+:::
+
+# When the API is down {background-color="#AB0520"}
+
+## Why keep a saved copy
+
+A request can fail for reasons outside your code:
+
+- the USGS limits how many requests come from one IP address, and everyone on
+  campus wifi shares one
+- large queries can time out even when the service is working
+- the network in the room may be slow or down
+
+Recent data is also **provisional** and can be revised after you download it.
+Every notebook in this course that calls an API also ships a saved copy of the
+data, so the lab works in class either way.
+
+## The pattern {.smaller}
+
+```python
+def load_sabino():
+    """Daily discharge at Sabino Creek. Live if possible, cached if not."""
+    try:
+        q, md = waterdata.get_daily(
+            monitoring_location_id="USGS-09484000", parameter_code="00060",
+            statistic_id="00003", time="1990-10-01/2025-09-30")
+        print(f"live from the USGS: {len(q):,} rows")
+        return tidy(q)
+    except Exception as exc:
+        print(f"live fetch failed ({type(exc).__name__}); using the cached copy")
+        return pd.read_csv(DATA / "cache" / "waterdata_09484000_daily.csv",
+                           parse_dates=["date"])
+```
+
+::: {.fragment}
+Both branches return **the same columns**, and the function prints which one
+ran, so a failed request is never silent.
+:::
+
+## Your turn: complete the fallback
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_fallback
+def fetch_live(site):
+    raise ConnectionError("the USGS is not answering")   # pretend the API is down
+
+def read_cache(site):
+    return f"cached data for {site}"
+```
+
+```{pyodide}
+#| exercise: ex_fallback
+def load(site):
+    try:
+        return ______
+    except Exception as exc:
+        print(f"live fetch failed ({type(exc).__name__}); using cache")
+        return ______
+
+load("USGS-09484000")
+```
+
+::: {.hint exercise="ex_fallback"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Try the live request first. If anything goes wrong, fall back to the cache.
+Both branches need a `return`.
+:::
+:::
+
+::: {.solution exercise="ex_fallback"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+try:
+    return fetch_live(site)
+except Exception as exc:
+    print(...)
+    return read_cache(site)
+```
+
+Catching bare `Exception` usually hides bugs in your own code. Here it is
+reasonable: a network call can fail in many ways, and every one of them should
+end with the cached copy.
+:::
+:::
+
+## Where the cache comes from
+
+A data file with no record of where it came from is hard to trust or update.
+The course cache is built by a script in the repository:
+
+```bash
+python scripts/fetch_data.py --list      # what gets built
+python scripts/fetch_data.py --week12    # rebuild today's files
+```
+
+::: {.fragment}
+Every file in `data/cache/` was written by that script, so you can read exactly
+which request produced it. For your own projects, save the request alongside
+the data and note the date you pulled it.
+:::
+
+# Finding the site {background-color="#0C234B"}
+
+## Find sites first {.smaller}
+
+`dataretrieval.waterdata` mirrors how the USGS now organizes its data — by
+**collection**:
+
+| Function | Answers |
+|---|---|
+| `get_monitoring_locations` | what sites exist here? |
+| `get_time_series_metadata` | which of them measure what, and for how long? |
+| `get_daily` | daily summaries of a sensor record |
+| `get_continuous` | the raw sensor readings, every 15 minutes or so |
+| `get_field_measurements` | readings taken by hand, on a visit |
+
+::: {.fragment}
+The first two are small and fast. Use them to pick a site before downloading
+a long record.
+:::
+
+## Your turn: which function?
+
+You need **groundwater levels** for a list of well IDs. `nwis.get_gwlevels` is
+gone. Pick the replacement.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_api
+descriptions = {
+    "waterdata.get_daily": "daily summary values from a continuous sensor",
+    "waterdata.get_continuous": "15-minute sensor readings",
+    "waterdata.get_field_measurements": "discrete readings taken by hand in the field",
+    "waterdata.get_samples": "laboratory water-quality analyses",
+}
+```
+
+```{pyodide}
+#| exercise: ex_api
+choice = ______
+print(f"{choice}: {descriptions[choice]}")
+```
+
+::: {.hint exercise="ex_api"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Most water levels in a basin monitoring network are measured by someone
+visiting the well with a tape a few times a year, not by a logger.
+:::
+:::
+
+::: {.solution exercise="ex_api"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+choice = "waterdata.get_field_measurements"
+```
+
+These are discrete, manual readings. `get_daily` and `get_continuous` return
+little or nothing for most wells, because few are instrumented.
+
+The wrong choice does not raise an error. It returns an empty DataFrame, so
+check `len(df)` after every request.
+:::
+:::
+
+## Searching a box
+
+```python
+from dataretrieval import waterdata
+
+series, md = waterdata.get_time_series_metadata(
+    bbox=[-111.10, 32.15, -110.70, 32.40],   # west, south, east, north
+    parameter_code="72019",                  # depth to water below land surface
+)
+```
+
+::: {.fragment}
+| Well | Type | Depth (ft) | Daily record |
+|---|---|---|---|
+| `USGS-321208110525001` · C-045 | extensometer | 465 | 1979– |
+| `USGS-321517110571802` · WR-52 | extensometer | 808 | 1982– |
+| `USGS-321058110563301` · B-076 | extensometer | 885 | 1990– |
+| `USGS-321142110530301` · D-061 | extensometer | 1010 | 1990– |
+:::
+
+::: {.fragment}
+Many more wells in that box are measured by hand, but only **four** have a
+daily sensor record. All four are **extensometer wells**, which the USGS uses to
+monitor land subsidence. We'll come back to that at the end.
+:::
+
+## Your turn: IDs are strings {.smaller}
+
+The new API wants `"USGS-09484000"`: an **agency prefix**, and a **leading zero**
+that is part of the number — `int("09484000")` is a site that doesn't exist.
+Excel strips that zero when you open the file; so does `pd.read_csv` without
+`dtype={"site_no": str}`.
+
+Someone opened the site list in Excel. Turn it back into IDs the API accepts.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_ids
+raw = [9484000, 9485700, "321517110571802"]   # two mangled gages, one well
+```
+
+```{pyodide}
+#| exercise: ex_ids
+ids = [f"USGS-{str(s).zfill(______)}" for s in raw]
+print(ids)
+```
+
+::: {.hint exercise="ex_ids"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`"42".zfill(5)` is `"00042"` — it left-pads with zeros up to a width. Stream
+gage numbers are at least eight digits long.
+:::
+:::
+
+::: {.solution exercise="ex_ids"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+ids = [f"USGS-{str(s).zfill(8)}" for s in raw]
+# ['USGS-09484000', 'USGS-09485700', 'USGS-321517110571802']
+```
+
+`zfill(8)` repairs the gages and leaves the 15-digit well number alone, because
+it is already longer than 8. The better fix is upstream: read the file with
+`dtype=str` so the zero is never lost.
+:::
+:::
+
+# Streams {background-color="#AB0520"}
+
+## Daily discharge, the current way
+
+```python
+q, md = waterdata.get_daily(
+    monitoring_location_id="USGS-09484000",   # Sabino Creek near Tucson
+    parameter_code="00060",                   # discharge, ft³/s
+    statistic_id="00003",                     # daily mean
+    time="1990-10-01/2025-09-30",
+)
+```
+
+::: {.fragment}
+```
+['time', 'value', 'unit_of_measure', 'approval_status', 'qualifier',
+ 'parameter_code', 'statistic_id', 'monitoring_location_id', ...]
+```
+
+There is one `value` column, and **`parameter_code` and `unit_of_measure` tell
+you what it is**. All the `waterdata` functions return this same layout, so the
+same code works for streams and wells. (Older code using `nwis` gets a column
+called `00060_Mean` instead.)
+:::
+
+::: {.fragment}
+Once you have checked the parameter code and unit, rename the column when you
+load it, with the unit in the name:
+
+```python
+q = q.rename(columns={"value": "discharge_cfs"})
+```
+
+If the DataFrame looks wrong, paste `md.url` into a browser to see the raw
+response.
+:::
+
+## Sabino Creek, 35 water years
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.6
+fig, ax = plt.subplots(figsize=(11, 3.6))
+ax.plot(flow["date"], flow["discharge_cfs"], color=UA_BLUE, lw=0.7)
+peak = flow.loc[flow["discharge_cfs"].idxmax()]
+ax.annotate(f"{peak['discharge_cfs']:,.0f} ft³/s\n{peak['date']:%d %b %Y}",
+            xy=(peak["date"], peak["discharge_cfs"]),
+            xytext=(peak["date"] + pd.Timedelta(days=900), peak["discharge_cfs"] * 0.85),
+            arrowprops=dict(arrowstyle="->", color=UA_RED), color=UA_RED)
+ax.set_ylabel("daily mean discharge (ft³/s)")
+ax.grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+If you only pull 2005–2024, the biggest day is a **monsoon** flood, 2,450 ft³/s
+on 31 July 2006. Over this longer range, the biggest day is in **January** 1993,
+during the winter storms.
+The date range you choose changes the answer, so always report it.
+:::
+
+## Your turn: water years
+
+Hydrologists total flow from **1 October to 30 September**, so winter storms
+and the spring runoff that follows are counted in the same year. Water year 2025 is
+October 2024 through September 2025. In pandas it is one line, because `True`
+counts as 1.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_wy
+import pandas as pd
+dates = pd.Series(pd.to_datetime(
+    ["2024-09-30", "2024-10-01", "2025-01-08", "2025-09-30"]))
+```
+
+```{pyodide}
+#| exercise: ex_wy
+wy = dates.dt.year + (dates.dt.month ______)
+pd.DataFrame({"date": dates.dt.date, "water_year": wy})
+```
+
+::: {.hint exercise="ex_wy"}
+::: {.callout-note collapse="false"}
+## Hint
+
+October, November, and December belong to the **next** calendar year's water
+year. Which months need the extra 1?
+:::
+:::
+
+::: {.solution exercise="ex_wy"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+wy = dates.dt.year + (dates.dt.month >= 10)
+```
+
+30 September 2024 is the last day of WY 2024; the next morning is WY 2025.
+`> 9` works too. `> 10` silently puts every October in the wrong year, and
+nothing errors.
+:::
+:::
+
+## Annual runoff
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.6
+fig, ax = plt.subplots(figsize=(11, 3.6))
+ax.bar(runoff_Mm3.index, runoff_Mm3.values, color=UA_BLUE, alpha=0.85)
+ax.axhline(runoff_Mm3.mean(), color=UA_RED, lw=1.5, ls="--")
+ax.text(2024.5, runoff_Mm3.mean() + 1.5, f"mean {runoff_Mm3.mean():.1f}",
+        color=UA_RED, ha="right", va="bottom")
+ax.set_xlabel("water year")
+ax.set_ylabel("runoff (million m³)")
+ax.grid(alpha=0.3, axis="y")
+plt.tight_layout()
+plt.show()
+```
+
+ft³/s × 0.0283 → m³/s, × 86,400 s → m³ per day, then sum by water year.
+
+::: {.fragment}
+From **57.6** million m³ (1993) to **0.13** (2025): a 400-fold range. Water year
+2025 was dry on 90% of days. The mean, 14.2, isn't close to most individual
+years.
+:::
+
+# Wells {background-color="#0C234B"}
+
+## Two ways a well gets measured {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+**A sensor**
+
+- pressure transducer hung below the water surface
+- logs every 15–60 minutes, unattended
+- `get_daily`, `get_continuous`
+- can drift, so it's checked against hand measurements
+:::
+
+::: {.column width="50%"}
+**A tape**
+
+- steel or electric tape, lowered by hand on a visit
+- a few readings a year, sometimes fewer
+- `get_field_measurements`
+- the reference the sensor is checked against
+:::
+:::
+
+::: {.fragment}
+Most wells only have the right-hand column. WR-52 has both, which lets us ask
+whether they agree.
+:::
+
+## One visit, five numbers {.smaller}
+
+```python
+field, md = waterdata.get_field_measurements(
+    monitoring_location_id="USGS-321517110571802")
+```
+
+| time | parameter_code | value | vertical_datum |
+|---|---|---|---|
+| 1983-11-04 22:00 | 62610 | 2211.69 | NGVD29 |
+| 1983-11-04 22:00 | 62611 | 2213.86 | NAVD88 |
+| 1983-11-04 22:00 | 72019 | 183.31 | Local Assumed Datum |
+
+::: {.fragment}
+One water surface, three numbers: an elevation above two different datums,
+2.2 ft apart, and a **depth below land surface**. Later visits add two more
+codes, `50012` and `70309` — extensometer compaction readings, not water at all.
+:::
+
+::: {.fragment .due-notice}
+`field["value"].mean()` runs fine and returns about 1,240 ft, an average of
+depths, elevations, and compaction readings that isn't meaningful. **Always
+filter on `parameter_code` first.**
+:::
+
+## Your turn: one parameter only
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_param
+import pandas as pd
+field = pd.DataFrame({
+    "parameter_code": ["62610", "62611", "72019", "62610", "62611", "72019", "70309"],
+    "value":          [2211.69, 2213.86, 183.31, 2209.42, 2211.59, 185.58, 11.61],
+})
+```
+
+```{pyodide}
+#| exercise: ex_param
+depth = field[field["parameter_code"] == ______]
+print(f"{len(depth)} readings, mean depth {depth['value'].mean():.2f} ft")
+```
+
+::: {.hint exercise="ex_param"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Depth to water below land surface is `72019`. Look at the column's dtype — are
+the codes numbers or strings?
+:::
+:::
+
+::: {.solution exercise="ex_param"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+depth = field[field["parameter_code"] == "72019"]
+```
+
+Two readings, mean 184.45 ft. Writing `72019` without quotes matches **nothing**
+— an integer never equals a string — and you get an empty frame and a `NaN`
+mean, not an error. Parameter codes are strings for the same reason site
+numbers are: `"00060"` as an integer is `60`.
+:::
+:::
+
+## Depth is measured downward
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.8
+fig, ax = plt.subplots(figsize=(11, 3.8))
+ax.plot(sensor["date"], sensor["depth_to_water_ft"], color=UA_BLUE, lw=1,
+        label="sensor, daily mean")
+ax.plot(tape["time"], tape["value"], "o", ms=4, mfc="none", mec=UA_RED,
+        label="tape, by hand")
+ax.invert_yaxis()
+ax.set_ylabel("depth to water (ft)")
+ax.set_title("WR-52, central Tucson (depth axis inverted)",
+             fontsize=13)
+ax.legend(frameon=False, loc="lower left")
+ax.grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+The water level dropped **35 ft** from 1991 to 2006, then rose **58 ft**. We
+flip the y-axis so that a rising water table goes up on the plot.
+:::
+
+## Do the sensor and the tape agree?
+
+On the 201 days that have both:
+
+::: {.incremental}
+- median difference **0.06 ft** — under an inch
+- worst **4.2 ft**, on 17 January 2005
+- the sensor record is corrected using these hand measurements, which is part
+  of how it gets approved
+:::
+
+::: {.fragment}
+Gaps matter too. The sensor ran all 365 days of WY 2017, but only **103** days
+of WY 2014. An average from 103 days isn't comparable to one from a full year,
+so check how many days each year has before averaging.
+:::
+
+# Two records, one axis {background-color="#AB0520"}
+
+## Annual runoff and annual depth
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 4.6
+fig, (top, bot) = plt.subplots(2, 1, figsize=(11, 4.6), sharex=True)
+top.bar(runoff_Mm3.index, runoff_Mm3.values, color=UA_BLUE, alpha=0.85)
+top.set_ylabel("Sabino runoff\n(million m³)")
+top.grid(alpha=0.3, axis="y")
+bot.plot(depth_by_wy.index, depth_by_wy.values, "o-", color=UA_RED, ms=4)
+bot.invert_yaxis()
+bot.set_ylabel("WR-52 mean\ndepth (ft)")
+bot.set_xlabel("water year")
+bot.grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+Wet years like 1993 and 1995 don't show up in the well. The correlation between
+annual runoff and the change in depth is only **r ≈ 0.2**. The rise after 2006
+matches when Tucson Water cut pumping from its central wellfield and switched to
+recharged Colorado River water, starting in 2001. WR-52 is 808 ft deep and about
+15 km from Sabino Creek, so it mostly reflects **pumping**, not this stream.
+:::
+
+## Lining up two records
+
+::: {.due-notice}
+Two records that look related on a plot aren't necessarily connected. The data
+can show whether they change together; explaining why takes physical reasoning.
+:::
+
+# Beyond the USGS {background-color="#0C234B"}
+
+## Points and grids {.smaller}
+
+| | In situ | Remote sensing / gridded |
+|---|---|---|
+| What it is | a sensor at a place | a pixel over an area |
+| Shape | table: time × site | array: time × y × x |
+| Python | `pandas` | `xarray` (+ `rioxarray` for GeoTIFFs) |
+| Strength | direct, long records | covers areas with no wells or gages |
+| Catch | only where someone chose to measure | footprint, revisit time, and it is a *retrieval* — a model's estimate, not a reading |
+
+::: {.fragment}
+You usually need both. A satellite can show that a region is losing water; a
+well shows what is happening at one location.
+:::
+
+## In situ sources worth knowing {.smaller}
+
+| Source | What | Access |
+|---|---|---|
+| [ADWR GWSI](https://azwatermaps.azwater.gov/gwsiweb/) | Arizona's well inventory and water levels — far more wells than the USGS holds here | web map + bulk download |
+| [Water Quality Portal](https://www.waterqualitydata.us/) | chemistry from USGS, EPA, and states | `dataretrieval.wqp`, `waterdata.get_samples` |
+| [NRCS SNOTEL](https://wcc.sc.egov.usda.gov/awdbRestApi/swagger-ui/index.html) | snow water equivalent, soil moisture | REST API |
+| [ACIS](https://www.rcc-acis.org/docs_webservices.html) / [GHCN-Daily](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) | station precipitation and temperature | web services |
+| [AZMET](https://azmet.arizona.edu/) | UA's agricultural weather network, reference ET | web + API |
+| [AmeriFlux](https://ameriflux.lbl.gov/) | eddy-covariance ET and carbon flux towers | download, free account |
+| [HydroShare](https://www.hydroshare.org/) | datasets other researchers published | web + Python client |
+
+## Remote sensing and gridded sources {.smaller}
+
+| Source | Measures | Scale |
+|---|---|---|
+| [GRACE / GRACE-FO](https://grace.jpl.nasa.gov/) | change in total water storage, groundwater included | a few hundred km, monthly, 2002– |
+| [InSAR — NASA OPERA](https://www.earthdata.nasa.gov/data/projects/opera), [ADWR subsidence](https://www.azwater.gov/hydrology/field-services/land-subsidence-arizona) | ground motion: subsidence from pumping | tens of metres, every few weeks |
+| [OpenET](https://openetdata.org/) | evapotranspiration from Landsat | 30 m, monthly, western US |
+| [SMAP](https://nsidc.org/data/smap) | surface soil moisture, top ~5 cm | 9–36 km, every 2–3 days |
+| [AppEEARS](https://appeears.earthdatacloud.nasa.gov/) | MODIS, Landsat, and more, clipped to your points or polygon | whatever the product is |
+| [Planetary Computer](https://planetarycomputer.microsoft.com/catalog) | Landsat, Sentinel, DEMs, climate, as a searchable catalog | per product |
+| [PRISM](https://prism.oregonstate.edu/), [Daymet](https://daymet.ornl.gov/), [gridMET](https://www.climatologylab.org/gridmet.html) | gridded precipitation, temperature, reference ET | 0.8–4 km, daily |
+
+::: {.fragment}
+The four extensometer wells from earlier are used to check InSAR subsidence
+maps. Ground and satellite data are most useful together.
+:::
+
+## Python tools for the rest {.smaller}
+
+| Tool | Use it for |
+|---|---|
+| [`dataretrieval`](https://doi-usgs.github.io/dataretrieval-python/) | USGS water data and the Water Quality Portal — today |
+| [`earthaccess`](https://earthaccess.readthedocs.io/) | searching and downloading NASA Earthdata: GRACE, SMAP, MODIS, OPERA (free login) |
+| [`pystac-client`](https://pystac-client.readthedocs.io/) | searching STAC imagery catalogs such as Planetary Computer |
+| [HyRiver](https://docs.hyriver.io/) | `py3dep` elevation, `pydaymet` / `pygridmet` climate, `pynhd` flowlines |
+| [`xarray`](https://docs.xarray.dev/) / [`rioxarray`](https://pypi.org/project/rioxarray/) | gridded arrays with labelled dimensions; GeoTIFFs |
+| [Earth Engine](https://earthengine.google.com/) | analysis on Google's servers over the whole archive (account required) |
+
+::: {.fragment}
+`xarray` is already in the course environment. The others are not — add them
+with `uv add` in your own project, not in this repo.
+:::
+
+## Your turn: what does one pixel see?
+
+A GRACE grid cell is roughly 300 km on a side. Arizona is 295,000 km².
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_footprint
+arizona_km2 = 295_000
+grace_side_km = 300
+```
+
+```{pyodide}
+#| exercise: ex_footprint
+grace_cell_km2 = ______
+n_cells = arizona_km2 / grace_cell_km2
+print(f"one GRACE cell ≈ {grace_cell_km2:,} km²")
+print(f"Arizona ≈ {n_cells:.1f} GRACE cells")
+```
+
+::: {.hint exercise="ex_footprint"}
+::: {.callout-note collapse="false"}
+## Hint
+
+A square's area is its side squared.
+:::
+:::
+
+::: {.solution exercise="ex_footprint"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+grace_cell_km2 = grace_side_km ** 2     # 90,000 km²
+```
+
+Arizona is only about **three GRACE cells**. GRACE can show regional
+groundwater loss, but it can't resolve the Tucson basin or a single well. Choose
+data whose resolution matches your question.
+:::
+:::
+
+## Five questions for any new dataset
+
+::: {.incremental}
+1. **What** exactly was measured — parameter, unit, datum, sign convention?
+2. **Where**, and over what footprint — a point, a pixel, a basin?
+3. **When**, how often, and what's missing?
+4. **Measured or modelled?** A retrieval is an estimate with its own error.
+5. **Provisional or final** — and on what date did you pull it?
+:::
+
+::: {.fragment}
+Each of these came up today: vertical datums, pixel size, the 103-day year,
+and approval status.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Read a deprecation warning and switched from `nwis` to `waterdata`
+- Wrote a fallback that loads a saved copy when the API request fails
+- Discovered sites with metadata before fetching data
+- Pulled a stream (`get_daily`) and a well (`get_daily`, `get_field_measurements`)
+  from one API, with IDs and parameter codes kept as strings
+- Totalled flow by water year and plotted depth the right way up
+- Lined up two records and discussed what they do and don't show
+- Mapped where in situ and remote-sensing data live, and the tools to reach them
+
+::: {.kicker}
+Lab
+:::
+
+- `labs/week12/week12_lab_pinal_water_levels.ipynb`: download every USGS water
+  level in the Pinal AMA, clean it, and compare the trends with the Pinal model

@@ -1,9 +1,9 @@
-# Week 11 quiz — covers Week 10 (what MODFLOW is, running it, budgets).
+# Week 11 quiz — covers Week 6 (what MODFLOW is, running it, budgets).
 
 quiz:
   week: 11
   title: "Week 11 Quiz"
-  covers: "Week 10 — MODFLOW packages, running a model, the .list file budget"
+  covers: "Week 6 — MODFLOW packages, running a model, the .list file budget"
   given: "Tuesday, November 3, start of class"
   time_limit_minutes: 5
   default_points: 1

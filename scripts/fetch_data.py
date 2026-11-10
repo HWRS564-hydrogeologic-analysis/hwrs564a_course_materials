@@ -208,6 +208,184 @@ def build_sabino_daily() -> pd.DataFrame:
     return df
 
 
+# --------------------------------------------------------------------------
+# Week 12 — streams and wells through `dataretrieval.waterdata`
+#
+# These are the offline fallbacks for the Week 12 lab and the figures in
+# slides/week12_tue_real_world_data.qmd. Each one is written in exactly the
+# shape the lab's own loader returns, so nothing downstream can tell which path
+# ran. Water years 1991-2025 are where the stream gage and the well's daily
+# sensor record overlap.
+
+# WR-52, an extensometer well a few km south of the Rillito. Its daily sensor
+# record shows the central-Tucson decline and the post-2005 recovery.
+WR52_WELL = "321517110571802"
+WEEK12_START, WEEK12_END = "1990-10-01", "2025-09-30"
+WEEK12_BBOX = [-111.10, 32.15, -110.70, 32.40]   # west, south, east, north
+
+
+def build_week12_sabino_daily() -> pd.DataFrame:
+    """Sabino Creek daily mean discharge, water years 1991-2025."""
+    from dataretrieval import waterdata
+
+    raw, _ = waterdata.get_daily(
+        monitoring_location_id=f"USGS-{SABINO_GAGE}", parameter_code="00060",
+        statistic_id="00003", time=f"{WEEK12_START}/{WEEK12_END}",
+    )
+    return pd.DataFrame({
+        "date": pd.to_datetime(raw["time"]).dt.date,
+        "discharge_cfs": pd.to_numeric(raw["value"], errors="coerce"),
+        "approval_status": raw["approval_status"],
+    }).sort_values("date").reset_index(drop=True)
+
+
+def build_week12_well_daily() -> pd.DataFrame:
+    """WR-52 daily mean depth to water from its pressure transducer."""
+    from dataretrieval import waterdata
+
+    raw, _ = waterdata.get_daily(
+        monitoring_location_id=f"USGS-{WR52_WELL}", parameter_code="72019",
+        statistic_id="00003", time=f"{WEEK12_START}/{WEEK12_END}",
+    )
+    return pd.DataFrame({
+        "date": pd.to_datetime(raw["time"]).dt.date,
+        "depth_to_water_ft": pd.to_numeric(raw["value"], errors="coerce"),
+        "approval_status": raw["approval_status"],
+    }).sort_values("date").reset_index(drop=True)
+
+
+def build_week12_well_field() -> pd.DataFrame:
+    """Every hand measurement at WR-52 — all three parameter codes per visit.
+
+    Deliberately left un-filtered: picking 72019 out of the three rows each
+    visit produces is one of the lab exercises.
+    """
+    from dataretrieval import waterdata
+
+    raw, _ = waterdata.get_field_measurements(monitoring_location_id=f"USGS-{WR52_WELL}")
+    cols = ["time", "parameter_code", "value", "unit_of_measure", "vertical_datum",
+            "observing_procedure", "approval_status"]
+    out = raw[cols].copy()
+    out["time"] = pd.to_datetime(out["time"], utc=True).dt.tz_localize(None)
+    return out.sort_values(["time", "parameter_code"]).reset_index(drop=True)
+
+
+# The Week 12 lab: every USGS depth-to-water measurement in the Pinal AMA, and
+# the Pinal County model's head observations. The lab's `fetch_pinal` and
+# `load_model_obs` produce exactly these columns, so the cache is a drop-in.
+PINAL_BBOX = [-112.10, 32.60, -111.30, 33.15]   # Maricopa, Casa Grande, Eloy, Florence
+PINAL_MODEL_DIRS = [ROOT / "pinal_county_model", ROOT / "labs" / "week09" / "pinal_county_model"]
+PINAL_NAM = "PM_AWS2019_SS25115.nam"
+
+
+def _join_codes(q) -> str:
+    """Qualifiers arrive as lists, e.g. ['Above', 'Pumping']; store them as text."""
+    if isinstance(q, (list, tuple, np.ndarray)):
+        return ", ".join(str(x) for x in q)
+    return "" if q is None or (isinstance(q, float) and np.isnan(q)) else str(q)
+
+
+def build_week12_pinal_field() -> pd.DataFrame:
+    """All USGS depth-to-water field measurements in the Pinal AMA box."""
+    from dataretrieval import waterdata
+
+    raw, _ = waterdata.get_field_measurements(bbox=PINAL_BBOX, parameter_code="72019")
+    out = pd.DataFrame({
+        "site": raw["monitoring_location_id"],
+        "date": pd.to_datetime(raw["time"], utc=True, format="mixed")
+                  .dt.tz_localize(None).dt.normalize(),
+        "depth_to_water_ft": pd.to_numeric(raw["value"], errors="coerce"),
+        "qualifier": raw["qualifier"].apply(_join_codes),
+        "lon": raw["geometry"].str[0].round(5),
+        "lat": raw["geometry"].str[1].round(5),
+    })
+    return out.sort_values(["site", "date"], ignore_index=True)
+
+
+def build_week12_pinal_model_obs() -> pd.DataFrame:
+    """Observed and simulated heads at the Pinal model's calibration wells.
+
+    Read from a local copy of the model (it is distributed through D2L, not
+    committed). Same parsing as labs/week09/week09_01_pinal_startup.ipynb.
+    """
+    import flopy
+
+    ws = next((d for d in PINAL_MODEL_DIRS if (d / PINAL_NAM).exists()), None)
+    if ws is None:
+        raise FileNotFoundError(f"no {PINAL_NAM} in {[str(d) for d in PINAL_MODEL_DIRS]}")
+    nam = ws / PINAL_NAM
+    units = {}
+    for line in nam.read_text(errors="replace").splitlines():
+        w = line.split()
+        if len(w) >= 3 and not line.lstrip().startswith("#"):
+            units[int(w[1])] = (w[0].upper(), w[2])
+    hob_file = next(f for t, f in units.values() if t == "HOB")
+    lines = [l for l in (ws / hob_file).read_text(errors="replace").splitlines()
+             if l.strip() and not l.lstrip().startswith("#")]
+    out_file = units[int(lines[0].split()[3])][1]
+    recs = []
+    for l in lines[2:]:
+        w = l.split()
+        if len(w) >= 9 and not w[0][0].isdigit():
+            recs.append({"name": w[0], "row": int(w[2]) - 1, "col": int(w[3]) - 1,
+                         "sp": int(w[4]), "toffset": float(w[5])})
+    obs = pd.DataFrame(recs).merge(
+        pd.read_csv(ws / out_file, sep=r"\s+", skiprows=1,
+                    names=["simulated", "observed", "name"]), on="name")
+    m = flopy.modflow.Modflow.load(nam.name, model_ws=str(ws), load_only=["dis"],
+                                   check=False, forgive=True, verbose=False)
+    perlen = m.dis.perlen.array
+    # stress period 1 is steady-state 1922; stress period n >= 2 is year 1921 + n
+    obs["year"] = np.where(obs["sp"] == 1, 1922.0,
+                           1921 + obs["sp"] + obs["toffset"] / perlen[obs["sp"] - 1])
+    obs["site"] = obs["name"].str[:-5]
+    obs = obs[["site", "row", "col", "year", "observed", "simulated"]]
+    return obs.round({"year": 4, "observed": 2, "simulated": 2})
+
+
+# The Week 12 bonus lab: daily discharge at five Tucson-basin stream gages,
+# water years 1996-2025. Saved before duplicates are removed, because removing
+# the Santa Cruz at Tucson's overlapping records is one of the lab's steps.
+TUCSON_STREAM_GAGES = ["09484000", "09484500", "09486055", "09482500", "09486500"]
+
+
+def build_week12_tucson_streams() -> pd.DataFrame:
+    """Daily mean discharge at Sabino, Tanque Verde, Rillito, and two Santa Cruz gages."""
+    from dataretrieval import waterdata
+
+    raw, _ = waterdata.get_daily(
+        monitoring_location_id=[f"USGS-{g}" for g in TUCSON_STREAM_GAGES],
+        parameter_code="00060", statistic_id="00003", time="1995-10-01/2025-09-30",
+    )
+    out = pd.DataFrame({
+        "site": raw["monitoring_location_id"],
+        "date": pd.to_datetime(raw["time"]),
+        "discharge_cfs": pd.to_numeric(raw["value"], errors="coerce"),
+    })
+    return out.sort_values(["site", "date"], ignore_index=True)
+
+
+WEEK12_TARGETS = {
+    "data/cache/waterdata_tucson_streams_daily.csv": build_week12_tucson_streams,
+    "data/cache/waterdata_09484000_daily.csv": build_week12_sabino_daily,
+    f"data/cache/waterdata_{WR52_WELL}_daily.csv": build_week12_well_daily,
+    f"data/cache/waterdata_{WR52_WELL}_field.csv": build_week12_well_field,
+    "data/cache/waterdata_pinal_field_72019.csv": build_week12_pinal_field,
+    "data/cache/pinal_model_head_obs.csv": build_week12_pinal_model_obs,
+}
+
+
+def build_week12() -> None:
+    for rel, builder in WEEK12_TARGETS.items():
+        try:
+            df = builder()
+        except FileNotFoundError as exc:     # the Pinal model is not in the repo
+            print(f"  skipped {rel}: {exc}")
+            continue
+        df.to_csv(ROOT / rel, index=False)
+        print(f"  {len(df):,} rows -> {rel}")
+
+
 def build_grid_top(inventory: pd.DataFrame, nrow: int = 40, ncol: int = 60) -> pd.DataFrame:
     """Land-surface elevation on the Week 11-14 model grid, in metres.
 
@@ -309,21 +487,30 @@ TARGETS = {
     "data/cache/nwis_09484000_dv.csv": "Sabino Creek daily discharge (Week 6 offline fallback)",
     "data/week04_permeameter.xlsx": "Constant-head permeameter runs (the one read_excel demo)",
     "data/tucson_grid_top.csv": "Land-surface elevation on the 40x60 model grid (Weeks 11-14)",
+    **{name: f"Week 12 waterdata fallback ({fn.__name__})"
+       for name, fn in WEEK12_TARGETS.items()},
 }
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--list", action="store_true", help="show targets and exit")
+    ap.add_argument("--week12", action="store_true",
+                    help="rebuild only the Week 12 waterdata fallbacks")
     args = ap.parse_args()
 
     if args.list:
         for name, desc in TARGETS.items():
-            print(f"  {name:42s} {desc}")
+            print(f"  {name:50s} {desc}")
         return 0
 
     DATA.mkdir(exist_ok=True)
     CACHE.mkdir(exist_ok=True)
+
+    print("Week 12 waterdata fallbacks...")
+    build_week12()
+    if args.week12:
+        return 0
 
     print("Well inventory...")
     inventory = build_well_inventory()

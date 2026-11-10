@@ -1,0 +1,116 @@
+# Week 10 quiz — covers Week 9 (OLS derivation, diagnostics, interpretation).
+
+quiz:
+  week: 10
+  title: "Week 10 Quiz"
+  covers: "Week 9 — OLS derivation, uncertainty, diagnostics, validation, interpretation"
+  given: "Tuesday, October 27, start of class"
+  time_limit_minutes: 5
+  default_points: 1
+
+questions:
+
+  - type: mc
+    title: "What least squares minimises"
+    text: >
+      Ordinary least squares chooses the intercept and slope that minimise
+      which quantity?
+    difficulty: 3
+    feedback: >
+      OLS minimises the residual sum of squares:
+      $\sum_i[y_i-(b_0+b_1x_i)]^2$. Squaring prevents positive and negative
+      residuals from cancelling and penalises large misses strongly.
+    options:
+      - text: "The sum of squared vertical residuals"
+        correct: true
+        feedback: "Correct — measured minus predicted, squared and summed."
+      - text: "The sum of the residuals"
+        feedback: "With an intercept, that sum is zero for every OLS fit."
+      - text: "The largest absolute residual"
+        feedback: "That would be a minimax fit, not ordinary least squares."
+      - text: "The slope standard error"
+        feedback: "The standard error is calculated after fitting the line."
+
+  - type: mc
+    title: "Serial correlation and uncertainty"
+    text: >
+      A groundwater trend has 379 observations and lag-1 residual correlation
+      of 0.986. What is the best interpretation of its ordinary OLS confidence
+      interval for the slope?
+    difficulty: 4
+    feedback: >
+      The fitted slope remains a calculable descriptive summary, but the usual
+      OLS standard error treats residuals as independent. Strong positive
+      serial correlation means the record contains fewer independent pieces of
+      information than the row count suggests, so the ordinary interval is too
+      narrow.
+    options:
+      - text: "It is probably too narrow because the independence assumption fails"
+        correct: true
+        feedback: "Correct — adjacent residuals are not independent evidence."
+      - text: "It is unusually wide because correlation increases the sample size"
+        feedback: "Correlation reduces the effective independent information."
+      - text: "It is valid because 379 is a large sample"
+        feedback: "A large row count does not repair dependence among rows."
+      - text: "The slope itself cannot be calculated"
+        feedback: "OLS can still calculate a descriptive slope; inference is the problem."
+
+  - type: mc
+    title: "Validating a time series model"
+    text: >
+      You want to know whether a trend model can forecast the next decade.
+      Which validation scheme tells you?
+    difficulty: 3
+    feedback: >
+      Train on everything before a cutoff and test on everything after. Both
+      `train_test_split` with shuffling and random k-fold scatter the test set
+      *through* the training period, so the model is interpolating between
+      points it already fitted rather than forecasting.
+    options:
+      - text: "Train on data before a cutoff year, test on data after it"
+        correct: true
+        feedback: "Correct — this is what `TimeSeriesSplit` automates."
+      - text: "`train_test_split` with `test_size=0.25`"
+        feedback: >
+          It shuffles by default, so the test set is interleaved with training
+          dates and asks an interpolation question rather than a forecasting one.
+      - text: "k-fold cross-validation with random folds"
+        feedback: "Same problem as shuffling, repeated k times."
+      - text: "Fit on everything and report R-squared"
+        feedback: "That holds nothing back at all."
+
+  - type: sa
+    title: "Slope confidence interval"
+    text: |
+      A fitted slope is **2.08 ft/yr**, its standard error is **0.04 ft/yr**,
+      and the appropriate 95% critical value is **2.0**. What is the lower
+      endpoint of the confidence interval? Give two decimal places.
+    difficulty: 3
+    input_rows: 1
+    input_width: 15
+    answers:
+      - "2.00"
+      - "2"
+      - "2.00 ft/yr"
+      - "2 ft/yr"
+    case_sensitivity: insensitive
+    feedback: >
+      The margin is $2.0 \times 0.04 = 0.08$ ft/yr. The lower endpoint is
+      $2.08 - 0.08 = 2.00$ ft/yr; the full interval is 2.00–2.16 ft/yr.
+
+  - type: tf
+    title: "Negative test R-squared"
+    text: >
+      A negative $R^2$ on held-out test data means the model predicts those
+      observations worse than using the test-set mean as a constant prediction.
+    difficulty: 2
+    answer: true
+    feedback: >
+      Test $R^2=1-\mathrm{RSS}/\mathrm{TSS}$. It becomes negative when the
+      model's squared test error exceeds the test-set variation around its mean.
+    true_feedback: >
+      Correct. Negative test R-squared is possible and signals a poor prediction
+      relative to the mean baseline.
+    false_feedback: >
+      It can be negative on held-out data. That means the model is worse than
+      the constant test-mean baseline for those observations.

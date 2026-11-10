@@ -1,0 +1,53 @@
+week: 9
+title: "Week 9 — Ordinary least squares and linear regression"
+dates: "October 20 & 22, 2026"
+overview: >
+  Tuesday derives ordinary least squares from the definition of a residual,
+  spelling out both normal equations and every algebraic step leading to the
+  slope and intercept. We then connect the fitted line to R-squared, residual
+  variance, slope standard error, confidence intervals, and hypothesis tests.
+  Thursday is a full-period lab: students reproduce the calculations, diagnose
+  assumption failures, compare random and chronological validation, and write
+  a careful interpretation of what the linear model can and cannot support.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 8 lab notebook"
+    url: "labs/week08/week08_lab_matplotlib.html"
+    site_relative: true
+    note: "The residual plots on Tuesday assume you can build a two-panel figure."
+
+class_material:
+  - text: "Tue 10/20 — Slides: Ordinary least squares, one step at a time"
+    url: "slides/week09_tue_regression.html"
+    site_relative: true
+  - text: "Thu 10/22 — Slides: Regression lab checkpoints"
+    url: "slides/week09_thu_regression_lab.html"
+    site_relative: true
+  - text: "Lab notebook — Linear regression clinic"
+    url: "labs/week09/week09_lab_regression.html"
+    site_relative: true
+
+assignments:
+  - text: "Quiz 7 — on Week 8 material"
+    quiz: "TBD-week09-quiz"
+    note: "In class, Tuesday 10/20."
+  - text: "Submit: HW 4 — Evaluate and communicate a groundwater difference"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Due Wednesday 10/21 at 11:59pm."
+  - text: "Open: HW 5 — Three checks before believing an answer"
+    dropbox: "TBD-hw05-dropbox"
+    note: "Available after class Thursday 10/22; due Wednesday 11/4 at 11:59pm."
+
+bonus:
+  - text: "OpenIntro Statistics — simple linear regression"
+    url: "https://www.openintro.org/book/os/"
+  - text: "SciPy — linregress reference"
+    url: "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html"
+  - text: "scikit-learn — cross-validation, including TimeSeriesSplit"
+    url: "https://scikit-learn.org/stable/modules/cross_validation.html"

@@ -1,0 +1,1285 @@
+time,parameter_code,value,unit_of_measure,vertical_datum,observing_procedure,approval_status
+1983-11-04 22:00:00,62610,2211.69,ft,NGVD29,None,Approved
+1983-11-04 22:00:00,62611,2213.86,ft,NAVD88,None,Approved
+1983-11-04 22:00:00,72019,183.31,ft,Local Assumed Datum,None,Approved
+1983-12-04 20:30:00,62610,2210.95,ft,NGVD29,None,Approved
+1983-12-04 20:30:00,62611,2213.12,ft,NAVD88,None,Approved
+1983-12-04 20:30:00,72019,184.05,ft,Local Assumed Datum,None,Approved
+1984-01-18 21:45:00,62610,2209.82,ft,NGVD29,None,Approved
+1984-01-18 21:45:00,62611,2211.99,ft,NAVD88,None,Approved
+1984-01-18 21:45:00,72019,185.18,ft,Local Assumed Datum,None,Approved
+1984-02-11 17:30:00,62610,2209.44,ft,NGVD29,None,Approved
+1984-02-11 17:30:00,62611,2211.61,ft,NAVD88,None,Approved
+1984-02-11 17:30:00,72019,185.56,ft,Local Assumed Datum,None,Approved
+1984-03-09 18:00:00,62610,2208.59,ft,NGVD29,None,Approved
+1984-03-09 18:00:00,62611,2210.76,ft,NAVD88,None,Approved
+1984-03-09 18:00:00,72019,186.41,ft,Local Assumed Datum,None,Approved
+1984-04-07 20:45:00,62610,2208.29,ft,NGVD29,None,Approved
+1984-04-07 20:45:00,62611,2210.46,ft,NAVD88,None,Approved
+1984-04-07 20:45:00,72019,186.71,ft,Local Assumed Datum,None,Approved
+1984-05-06 22:00:00,62610,2207.98,ft,NGVD29,None,Approved
+1984-05-06 22:00:00,62611,2210.15,ft,NAVD88,None,Approved
+1984-05-06 22:00:00,72019,187.02,ft,Local Assumed Datum,None,Approved
+1984-06-05 15:15:00,62610,2207.37,ft,NGVD29,None,Approved
+1984-06-05 15:15:00,62611,2209.54,ft,NAVD88,None,Approved
+1984-06-05 15:15:00,72019,187.63,ft,Local Assumed Datum,None,Approved
+1984-07-08 00:15:00,62610,2207.0,ft,NGVD29,None,Approved
+1984-07-08 00:15:00,62611,2209.17,ft,NAVD88,None,Approved
+1984-07-08 00:15:00,72019,188.0,ft,Local Assumed Datum,None,Approved
+1984-08-07 20:45:00,62610,2206.55,ft,NGVD29,None,Approved
+1984-08-07 20:45:00,62611,2208.72,ft,NAVD88,None,Approved
+1984-08-07 20:45:00,72019,188.45,ft,Local Assumed Datum,None,Approved
+1984-09-06 21:00:00,62610,2206.26,ft,NGVD29,None,Approved
+1984-09-06 21:00:00,62611,2208.43,ft,NAVD88,None,Approved
+1984-09-06 21:00:00,72019,188.74,ft,Local Assumed Datum,None,Approved
+1984-10-09 21:50:00,62610,2207.82,ft,NGVD29,None,Approved
+1984-10-09 21:50:00,62611,2209.99,ft,NAVD88,None,Approved
+1984-10-09 21:50:00,72019,187.18,ft,Local Assumed Datum,None,Approved
+1984-11-08 21:30:00,62610,2205.8,ft,NGVD29,None,Approved
+1984-11-08 21:30:00,62611,2207.97,ft,NAVD88,None,Approved
+1984-11-08 21:30:00,72019,189.2,ft,Local Assumed Datum,None,Approved
+1984-12-06 21:30:00,62610,2206.73,ft,NGVD29,None,Approved
+1984-12-06 21:30:00,62611,2208.9,ft,NAVD88,None,Approved
+1984-12-06 21:30:00,72019,188.27,ft,Local Assumed Datum,None,Approved
+1985-01-06 20:15:00,62610,2209.13,ft,NGVD29,None,Approved
+1985-01-06 20:15:00,62611,2211.3,ft,NAVD88,None,Approved
+1985-01-06 20:15:00,72019,185.87,ft,Local Assumed Datum,None,Approved
+1985-02-07 22:25:00,62610,2210.33,ft,NGVD29,None,Approved
+1985-02-07 22:25:00,62611,2212.5,ft,NAVD88,None,Approved
+1985-02-07 22:25:00,72019,184.67,ft,Local Assumed Datum,None,Approved
+1985-03-09 19:40:00,62610,2209.57,ft,NGVD29,None,Approved
+1985-03-09 19:40:00,62611,2211.74,ft,NAVD88,None,Approved
+1985-03-09 19:40:00,72019,185.43,ft,Local Assumed Datum,None,Approved
+1985-04-06 19:10:00,62610,2207.43,ft,NGVD29,None,Approved
+1985-04-06 19:10:00,62611,2209.6,ft,NAVD88,None,Approved
+1985-04-06 19:10:00,72019,187.57,ft,Local Assumed Datum,None,Approved
+1985-05-04 20:35:00,62610,2206.43,ft,NGVD29,None,Approved
+1985-05-04 20:35:00,62611,2208.6,ft,NAVD88,None,Approved
+1985-05-04 20:35:00,72019,188.57,ft,Local Assumed Datum,None,Approved
+1985-06-05 21:45:00,62610,2205.61,ft,NGVD29,None,Approved
+1985-06-05 21:45:00,62611,2207.78,ft,NAVD88,None,Approved
+1985-06-05 21:45:00,72019,189.39,ft,Local Assumed Datum,None,Approved
+1985-06-29 18:05:00,62610,2204.3,ft,NGVD29,None,Approved
+1985-06-29 18:05:00,62611,2206.47,ft,NAVD88,None,Approved
+1985-06-29 18:05:00,72019,190.7,ft,Local Assumed Datum,None,Approved
+1985-07-31 23:05:00,62610,2205.91,ft,NGVD29,None,Approved
+1985-07-31 23:05:00,62611,2208.08,ft,NAVD88,None,Approved
+1985-07-31 23:05:00,72019,189.09,ft,Local Assumed Datum,None,Approved
+1985-08-31 18:35:00,62610,2205.79,ft,NGVD29,None,Approved
+1985-08-31 18:35:00,62611,2207.96,ft,NAVD88,None,Approved
+1985-08-31 18:35:00,72019,189.21,ft,Local Assumed Datum,None,Approved
+1985-10-04 21:00:00,62610,2208.35,ft,NGVD29,None,Approved
+1985-10-04 21:00:00,62611,2210.52,ft,NAVD88,None,Approved
+1985-10-04 21:00:00,72019,186.65,ft,Local Assumed Datum,None,Approved
+1985-11-06 20:05:00,62610,2208.84,ft,NGVD29,None,Approved
+1985-11-06 20:05:00,62611,2211.01,ft,NAVD88,None,Approved
+1985-11-06 20:05:00,72019,186.16,ft,Local Assumed Datum,None,Approved
+1985-12-03 17:15:00,62610,2211.82,ft,NGVD29,None,Approved
+1985-12-03 17:15:00,62611,2213.99,ft,NAVD88,None,Approved
+1985-12-03 17:15:00,72019,183.18,ft,Local Assumed Datum,None,Approved
+1985-12-09 19:10:00,62610,2212.25,ft,NGVD29,None,Approved
+1985-12-09 19:10:00,62611,2214.42,ft,NAVD88,None,Approved
+1985-12-09 19:10:00,72019,182.75,ft,Local Assumed Datum,None,Approved
+1986-01-09 21:00:00,62610,2209.14,ft,NGVD29,None,Approved
+1986-01-09 21:00:00,62611,2211.31,ft,NAVD88,None,Approved
+1986-01-09 21:00:00,72019,185.86,ft,Local Assumed Datum,None,Approved
+1986-02-10 20:15:00,62610,2209.48,ft,NGVD29,None,Approved
+1986-02-10 20:15:00,62611,2211.65,ft,NAVD88,None,Approved
+1986-02-10 20:15:00,72019,185.52,ft,Local Assumed Datum,None,Approved
+1986-03-15 20:45:00,62610,2208.94,ft,NGVD29,None,Approved
+1986-03-15 20:45:00,62611,2211.11,ft,NAVD88,None,Approved
+1986-03-15 20:45:00,72019,186.06,ft,Local Assumed Datum,None,Approved
+1986-05-31 17:10:00,62610,2206.65,ft,NGVD29,None,Approved
+1986-05-31 17:10:00,62611,2208.82,ft,NAVD88,None,Approved
+1986-05-31 17:10:00,72019,188.35,ft,Local Assumed Datum,None,Approved
+1986-07-21 20:45:00,62610,2205.29,ft,NGVD29,None,Approved
+1986-07-21 20:45:00,62611,2207.46,ft,NAVD88,None,Approved
+1986-07-21 20:45:00,72019,189.71,ft,Local Assumed Datum,None,Approved
+1986-08-22 20:15:00,62610,2204.97,ft,NGVD29,None,Approved
+1986-08-22 20:15:00,62611,2207.14,ft,NAVD88,None,Approved
+1986-08-22 20:15:00,72019,190.03,ft,Local Assumed Datum,None,Approved
+1986-10-27 19:40:00,62610,2204.85,ft,NGVD29,None,Approved
+1986-10-27 19:40:00,62611,2207.02,ft,NAVD88,None,Approved
+1986-10-27 19:40:00,72019,190.15,ft,Local Assumed Datum,None,Approved
+1986-11-24 23:55:00,62610,2208.24,ft,NGVD29,None,Approved
+1986-11-24 23:55:00,62611,2210.41,ft,NAVD88,None,Approved
+1986-11-24 23:55:00,72019,186.76,ft,Local Assumed Datum,None,Approved
+1986-12-22 21:05:00,62610,2207.19,ft,NGVD29,None,Approved
+1986-12-22 21:05:00,62611,2209.36,ft,NAVD88,None,Approved
+1986-12-22 21:05:00,72019,187.81,ft,Local Assumed Datum,None,Approved
+1987-01-22 22:35:00,62610,2205.66,ft,NGVD29,None,Approved
+1987-01-22 22:35:00,62611,2207.83,ft,NAVD88,None,Approved
+1987-01-22 22:35:00,72019,189.34,ft,Local Assumed Datum,None,Approved
+1987-02-24 17:10:00,62610,2204.11,ft,NGVD29,None,Approved
+1987-02-24 17:10:00,62611,2206.28,ft,NAVD88,None,Approved
+1987-02-24 17:10:00,72019,190.89,ft,Local Assumed Datum,None,Approved
+1987-03-27 16:30:00,62610,2204.64,ft,NGVD29,None,Approved
+1987-03-27 16:30:00,62611,2206.81,ft,NAVD88,None,Approved
+1987-03-27 16:30:00,72019,190.36,ft,Local Assumed Datum,None,Approved
+1987-04-23 22:30:00,62610,2203.54,ft,NGVD29,None,Approved
+1987-04-23 22:30:00,62611,2205.71,ft,NAVD88,None,Approved
+1987-04-23 22:30:00,72019,191.46,ft,Local Assumed Datum,None,Approved
+1987-05-18 21:40:00,62610,2204.23,ft,NGVD29,None,Approved
+1987-05-18 21:40:00,62611,2206.4,ft,NAVD88,None,Approved
+1987-05-18 21:40:00,72019,190.77,ft,Local Assumed Datum,None,Approved
+1987-06-22 21:20:00,62610,2202.97,ft,NGVD29,None,Approved
+1987-06-22 21:20:00,62611,2205.14,ft,NAVD88,None,Approved
+1987-06-22 21:20:00,72019,192.03,ft,Local Assumed Datum,None,Approved
+1987-07-22 22:10:00,62610,2202.01,ft,NGVD29,None,Approved
+1987-07-22 22:10:00,62611,2204.18,ft,NAVD88,None,Approved
+1987-07-22 22:10:00,72019,192.99,ft,Local Assumed Datum,None,Approved
+1987-08-20 22:12:00,62610,2201.31,ft,NGVD29,None,Approved
+1987-08-20 22:12:00,62611,2203.48,ft,NAVD88,None,Approved
+1987-08-20 22:12:00,72019,193.69,ft,Local Assumed Datum,None,Approved
+1987-09-24 20:20:00,62610,2200.71,ft,NGVD29,None,Approved
+1987-09-24 20:20:00,62611,2202.88,ft,NAVD88,None,Approved
+1987-09-24 20:20:00,72019,194.29,ft,Local Assumed Datum,None,Approved
+1987-10-23 18:00:00,62610,2200.05,ft,NGVD29,None,Approved
+1987-10-23 18:00:00,62611,2202.22,ft,NAVD88,None,Approved
+1987-10-23 18:00:00,72019,194.95,ft,Local Assumed Datum,None,Approved
+1987-11-20 19:30:00,62610,2200.21,ft,NGVD29,None,Approved
+1987-11-20 19:30:00,62611,2202.38,ft,NAVD88,None,Approved
+1987-11-20 19:30:00,72019,194.79,ft,Local Assumed Datum,None,Approved
+1987-12-15 19:45:00,62610,2199.81,ft,NGVD29,None,Approved
+1987-12-15 19:45:00,62611,2201.98,ft,NAVD88,None,Approved
+1987-12-15 19:45:00,72019,195.19,ft,Local Assumed Datum,None,Approved
+1988-01-20 21:25:00,62610,2201.1,ft,NGVD29,None,Approved
+1988-01-20 21:25:00,62611,2203.27,ft,NAVD88,None,Approved
+1988-01-20 21:25:00,72019,193.9,ft,Local Assumed Datum,None,Approved
+1988-02-19 20:46:00,62610,2200.12,ft,NGVD29,None,Approved
+1988-02-19 20:46:00,62611,2202.29,ft,NAVD88,None,Approved
+1988-02-19 20:46:00,72019,194.88,ft,Local Assumed Datum,None,Approved
+1988-03-23 22:05:00,62610,2199.42,ft,NGVD29,None,Approved
+1988-03-23 22:05:00,62611,2201.59,ft,NAVD88,None,Approved
+1988-03-23 22:05:00,72019,195.58,ft,Local Assumed Datum,None,Approved
+1988-04-24 00:20:00,62610,2198.72,ft,NGVD29,None,Approved
+1988-04-24 00:20:00,62611,2200.89,ft,NAVD88,None,Approved
+1988-04-24 00:20:00,72019,196.28,ft,Local Assumed Datum,None,Approved
+1988-05-17 19:38:00,62610,2198.04,ft,NGVD29,None,Approved
+1988-05-17 19:38:00,62611,2200.21,ft,NAVD88,None,Approved
+1988-05-17 19:38:00,72019,196.96,ft,Local Assumed Datum,None,Approved
+1988-06-17 20:11:00,62610,2197.19,ft,NGVD29,None,Approved
+1988-06-17 20:11:00,62611,2199.36,ft,NAVD88,None,Approved
+1988-06-17 20:11:00,72019,197.81,ft,Local Assumed Datum,None,Approved
+1988-07-18 20:30:00,62610,2196.13,ft,NGVD29,None,Approved
+1988-07-18 20:30:00,62611,2198.3,ft,NAVD88,None,Approved
+1988-07-18 20:30:00,72019,198.87,ft,Local Assumed Datum,None,Approved
+1988-08-21 01:30:00,62610,2195.78,ft,NGVD29,None,Approved
+1988-08-21 01:30:00,62611,2197.95,ft,NAVD88,None,Approved
+1988-08-21 01:30:00,72019,199.22,ft,Local Assumed Datum,None,Approved
+1988-09-16 19:00:00,62610,2194.86,ft,NGVD29,None,Approved
+1988-09-16 19:00:00,62611,2197.03,ft,NAVD88,None,Approved
+1988-09-16 19:00:00,72019,200.14,ft,Local Assumed Datum,None,Approved
+1988-10-18 22:15:00,62610,2194.41,ft,NGVD29,None,Approved
+1988-10-18 22:15:00,62611,2196.58,ft,NAVD88,None,Approved
+1988-10-18 22:15:00,72019,200.59,ft,Local Assumed Datum,None,Approved
+1988-11-04 21:30:00,62610,2193.92,ft,NGVD29,None,Approved
+1988-11-04 21:30:00,62611,2196.09,ft,NAVD88,None,Approved
+1988-11-04 21:30:00,72019,201.08,ft,Local Assumed Datum,None,Approved
+1988-12-06 19:20:00,62610,2193.6,ft,NGVD29,None,Approved
+1988-12-06 19:20:00,62611,2195.77,ft,NAVD88,None,Approved
+1988-12-06 19:20:00,72019,201.4,ft,Local Assumed Datum,None,Approved
+1989-01-05 23:51:00,62610,2193.23,ft,NGVD29,None,Approved
+1989-01-05 23:51:00,62611,2195.4,ft,NAVD88,None,Approved
+1989-01-05 23:51:00,72019,201.77,ft,Local Assumed Datum,None,Approved
+1989-02-03 22:45:00,62610,2192.99,ft,NGVD29,None,Approved
+1989-02-03 22:45:00,62611,2195.16,ft,NAVD88,None,Approved
+1989-02-03 22:45:00,72019,202.01,ft,Local Assumed Datum,None,Approved
+1989-03-06 21:15:00,62610,2192.39,ft,NGVD29,None,Approved
+1989-03-06 21:15:00,62611,2194.56,ft,NAVD88,None,Approved
+1989-03-06 21:15:00,72019,202.61,ft,Local Assumed Datum,None,Approved
+1989-04-04 20:33:00,62610,2192.52,ft,NGVD29,None,Approved
+1989-04-04 20:33:00,62611,2194.69,ft,NAVD88,None,Approved
+1989-04-04 20:33:00,72019,202.48,ft,Local Assumed Datum,None,Approved
+1989-05-05 19:00:00,62610,2191.8,ft,NGVD29,None,Approved
+1989-05-05 19:00:00,62611,2193.97,ft,NAVD88,None,Approved
+1989-05-05 19:00:00,72019,203.2,ft,Local Assumed Datum,None,Approved
+1989-06-06 19:45:00,62610,2191.1,ft,NGVD29,None,Approved
+1989-06-06 19:45:00,62611,2193.27,ft,NAVD88,None,Approved
+1989-06-06 19:45:00,72019,203.9,ft,Local Assumed Datum,None,Approved
+1989-07-07 18:30:00,62610,2190.3,ft,NGVD29,None,Approved
+1989-07-07 18:30:00,62611,2192.47,ft,NAVD88,None,Approved
+1989-07-07 18:30:00,72019,204.7,ft,Local Assumed Datum,None,Approved
+1989-08-09 20:30:00,62610,2190.0,ft,NGVD29,None,Approved
+1989-08-09 20:30:00,62611,2192.17,ft,NAVD88,None,Approved
+1989-08-09 20:30:00,72019,205.0,ft,Local Assumed Datum,None,Approved
+1989-08-29 21:05:00,62610,2189.5,ft,NGVD29,None,Approved
+1989-08-29 21:05:00,62611,2191.67,ft,NAVD88,None,Approved
+1989-08-29 21:05:00,72019,205.5,ft,Local Assumed Datum,None,Approved
+1989-09-26 22:12:00,62610,2188.7,ft,NGVD29,None,Approved
+1989-09-26 22:12:00,62611,2190.87,ft,NAVD88,None,Approved
+1989-09-26 22:12:00,72019,206.3,ft,Local Assumed Datum,None,Approved
+1989-10-27 20:36:00,62610,2188.77,ft,NGVD29,None,Approved
+1989-10-27 20:36:00,62611,2190.94,ft,NAVD88,None,Approved
+1989-10-27 20:36:00,72019,206.23,ft,Local Assumed Datum,None,Approved
+1989-11-27 22:30:00,62610,2187.8,ft,NGVD29,None,Approved
+1989-11-27 22:30:00,62611,2189.97,ft,NAVD88,None,Approved
+1989-11-27 22:30:00,72019,207.2,ft,Local Assumed Datum,None,Approved
+1989-12-21 20:00:00,62610,2187.3,ft,NGVD29,None,Approved
+1989-12-21 20:00:00,62611,2189.47,ft,NAVD88,None,Approved
+1989-12-21 20:00:00,72019,207.7,ft,Local Assumed Datum,None,Approved
+1990-01-17 22:30:00,62610,2187.2,ft,NGVD29,None,Approved
+1990-01-17 22:30:00,62611,2189.37,ft,NAVD88,None,Approved
+1990-01-17 22:30:00,72019,207.8,ft,Local Assumed Datum,None,Approved
+1990-02-27 17:30:00,62610,2186.3,ft,NGVD29,None,Approved
+1990-02-27 17:30:00,62611,2188.47,ft,NAVD88,None,Approved
+1990-02-27 17:30:00,72019,208.7,ft,Local Assumed Datum,None,Approved
+1990-03-30 21:00:00,62610,2186.3,ft,NGVD29,None,Approved
+1990-03-30 21:00:00,62611,2188.47,ft,NAVD88,None,Approved
+1990-03-30 21:00:00,72019,208.7,ft,Local Assumed Datum,None,Approved
+1990-05-02 22:30:00,62610,2185.3,ft,NGVD29,None,Approved
+1990-05-02 22:30:00,62611,2187.47,ft,NAVD88,None,Approved
+1990-05-02 22:30:00,72019,209.7,ft,Local Assumed Datum,None,Approved
+1990-06-01 19:30:00,62610,2184.45,ft,NGVD29,None,Approved
+1990-06-01 19:30:00,62611,2186.62,ft,NAVD88,None,Approved
+1990-06-01 19:30:00,72019,210.55,ft,Local Assumed Datum,None,Approved
+1990-07-03 18:45:00,62610,2183.5,ft,NGVD29,None,Approved
+1990-07-03 18:45:00,62611,2185.67,ft,NAVD88,None,Approved
+1990-07-03 18:45:00,72019,211.5,ft,Local Assumed Datum,None,Approved
+1990-08-02 19:00:00,62610,2184.0,ft,NGVD29,None,Approved
+1990-08-02 19:00:00,62611,2186.17,ft,NAVD88,None,Approved
+1990-08-02 19:00:00,72019,211.0,ft,Local Assumed Datum,None,Approved
+1990-08-31 19:28:00,62610,2182.5,ft,NGVD29,None,Approved
+1990-08-31 19:28:00,62611,2184.67,ft,NAVD88,None,Approved
+1990-08-31 19:28:00,72019,212.5,ft,Local Assumed Datum,None,Approved
+1990-09-27 19:10:00,62610,2181.9,ft,NGVD29,None,Approved
+1990-09-27 19:10:00,62611,2184.07,ft,NAVD88,None,Approved
+1990-09-27 19:10:00,72019,213.1,ft,Local Assumed Datum,None,Approved
+1990-10-29 20:00:00,62610,2181.01,ft,NGVD29,None,Approved
+1990-10-29 20:00:00,62611,2183.18,ft,NAVD88,None,Approved
+1990-10-29 20:00:00,72019,213.99,ft,Local Assumed Datum,None,Approved
+1990-12-03 21:00:00,62610,2180.8,ft,NGVD29,None,Approved
+1990-12-03 21:00:00,62611,2182.97,ft,NAVD88,None,Approved
+1990-12-03 21:00:00,72019,214.2,ft,Local Assumed Datum,None,Approved
+1991-01-02 22:00:00,62610,2179.9,ft,NGVD29,None,Approved
+1991-01-02 22:00:00,62611,2182.07,ft,NAVD88,None,Approved
+1991-01-02 22:00:00,72019,215.1,ft,Local Assumed Datum,None,Approved
+1991-02-01 23:00:00,62610,2180.5,ft,NGVD29,None,Approved
+1991-02-01 23:00:00,62611,2182.67,ft,NAVD88,None,Approved
+1991-02-01 23:00:00,72019,214.5,ft,Local Assumed Datum,None,Approved
+1991-03-04 20:00:00,62610,2178.4,ft,NGVD29,None,Approved
+1991-03-04 20:00:00,62611,2180.57,ft,NAVD88,None,Approved
+1991-03-04 20:00:00,72019,216.6,ft,Local Assumed Datum,None,Approved
+1991-05-03 22:30:00,62610,2177.9,ft,NGVD29,None,Approved
+1991-05-03 22:30:00,62611,2180.07,ft,NAVD88,None,Approved
+1991-05-03 22:30:00,72019,217.1,ft,Local Assumed Datum,None,Approved
+1991-06-07 19:00:00,62610,2177.14,ft,NGVD29,None,Approved
+1991-06-07 19:00:00,62611,2179.31,ft,NAVD88,None,Approved
+1991-06-07 19:00:00,72019,217.86,ft,Local Assumed Datum,None,Approved
+1991-07-02 18:30:00,62610,2176.6,ft,NGVD29,None,Approved
+1991-07-02 18:30:00,62611,2178.77,ft,NAVD88,None,Approved
+1991-07-02 18:30:00,72019,218.4,ft,Local Assumed Datum,None,Approved
+1991-07-31 21:10:00,62610,2176.5,ft,NGVD29,None,Approved
+1991-07-31 21:10:00,62611,2178.67,ft,NAVD88,None,Approved
+1991-07-31 21:10:00,72019,218.5,ft,Local Assumed Datum,None,Approved
+1991-08-29 21:45:00,62610,2175.9,ft,NGVD29,None,Approved
+1991-08-29 21:45:00,62611,2178.07,ft,NAVD88,None,Approved
+1991-08-29 21:45:00,72019,219.1,ft,Local Assumed Datum,None,Approved
+1991-09-26 19:40:00,62610,2175.03,ft,NGVD29,None,Approved
+1991-09-26 19:40:00,62611,2177.2,ft,NAVD88,None,Approved
+1991-09-26 19:40:00,72019,219.97,ft,Local Assumed Datum,None,Approved
+1991-10-24 21:00:00,62610,2174.47,ft,NGVD29,None,Approved
+1991-10-24 21:00:00,62611,2176.64,ft,NAVD88,None,Approved
+1991-10-24 21:00:00,72019,220.53,ft,Local Assumed Datum,None,Approved
+1991-11-14 19:45:00,62610,2174.5,ft,NGVD29,None,Approved
+1991-11-14 19:45:00,62611,2176.67,ft,NAVD88,None,Approved
+1991-11-14 19:45:00,72019,220.5,ft,Local Assumed Datum,None,Approved
+1991-12-11 21:45:00,62610,2174.2,ft,NGVD29,None,Approved
+1991-12-11 21:45:00,62611,2176.37,ft,NAVD88,None,Approved
+1991-12-11 21:45:00,72019,220.8,ft,Local Assumed Datum,None,Approved
+1992-01-08 23:30:00,62610,2173.81,ft,NGVD29,None,Approved
+1992-01-08 23:30:00,62611,2175.98,ft,NAVD88,None,Approved
+1992-01-08 23:30:00,72019,221.19,ft,Local Assumed Datum,None,Approved
+1992-02-07 21:20:00,62610,2173.71,ft,NGVD29,None,Approved
+1992-02-07 21:20:00,62611,2175.88,ft,NAVD88,None,Approved
+1992-02-07 21:20:00,72019,221.29,ft,Local Assumed Datum,None,Approved
+1992-03-03 23:00:00,62610,2173.8,ft,NGVD29,None,Approved
+1992-03-03 23:00:00,62611,2175.97,ft,NAVD88,None,Approved
+1992-03-03 23:00:00,72019,221.2,ft,Local Assumed Datum,None,Approved
+1992-04-01 21:10:00,62610,2173.67,ft,NGVD29,"GW level, steel tape",Approved
+1992-04-01 21:10:00,62611,2175.84,ft,NAVD88,"GW level, steel tape",Approved
+1992-04-01 21:10:00,72019,221.33,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-05-01 20:15:00,62610,2172.8,ft,NGVD29,"GW level, steel tape",Approved
+1992-05-01 20:15:00,62611,2174.97,ft,NAVD88,"GW level, steel tape",Approved
+1992-05-01 20:15:00,72019,222.2,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-06-18 18:30:00,62610,2172.4,ft,NGVD29,"GW level, steel tape",Approved
+1992-06-18 18:30:00,62611,2174.57,ft,NAVD88,"GW level, steel tape",Approved
+1992-06-18 18:30:00,72019,222.6,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-06-24 18:30:00,62610,2172.06,ft,NGVD29,"GW level, steel tape",Approved
+1992-06-24 18:30:00,62611,2174.23,ft,NAVD88,"GW level, steel tape",Approved
+1992-06-24 18:30:00,72019,222.94,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-07-24 16:40:00,62610,2171.61,ft,NGVD29,"GW level, steel tape",Approved
+1992-07-24 16:40:00,62611,2173.78,ft,NAVD88,"GW level, steel tape",Approved
+1992-07-24 16:40:00,72019,223.39,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-08-20 23:00:00,62610,2171.49,ft,NGVD29,"GW level, steel tape",Approved
+1992-08-20 23:00:00,62611,2173.66,ft,NAVD88,"GW level, steel tape",Approved
+1992-08-20 23:00:00,72019,223.51,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-09-17 15:40:00,62610,2171.62,ft,NGVD29,"GW level, steel tape",Approved
+1992-09-17 15:40:00,62611,2173.79,ft,NAVD88,"GW level, steel tape",Approved
+1992-09-17 15:40:00,72019,223.38,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-10-15 14:30:00,62610,2170.91,ft,NGVD29,"GW level, steel tape",Approved
+1992-10-15 14:30:00,62611,2173.08,ft,NAVD88,"GW level, steel tape",Approved
+1992-10-15 14:30:00,72019,224.09,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-11-13 21:00:00,62610,2170.82,ft,NGVD29,"GW level, steel tape",Approved
+1992-11-13 21:00:00,62611,2172.99,ft,NAVD88,"GW level, steel tape",Approved
+1992-11-13 21:00:00,72019,224.18,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1992-12-10 22:15:00,62610,2174.15,ft,NGVD29,"GW level, steel tape",Approved
+1992-12-10 22:15:00,62611,2176.32,ft,NAVD88,"GW level, steel tape",Approved
+1992-12-10 22:15:00,72019,220.85,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1993-01-06 20:30:00,62610,2176.24,ft,NGVD29,"GW level, steel tape",Approved
+1993-01-06 20:30:00,62611,2178.41,ft,NAVD88,"GW level, steel tape",Approved
+1993-01-06 20:30:00,72019,218.76,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1993-02-03 17:00:00,62610,2173.9,ft,NGVD29,"GW level, steel tape",Approved
+1993-02-03 17:00:00,62611,2176.07,ft,NAVD88,"GW level, steel tape",Approved
+1993-02-03 17:00:00,72019,221.1,ft,Local Assumed Datum,"GW level, steel tape",Approved
+1993-03-05 21:00:00,62610,2174.13,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-03-05 21:00:00,62611,2176.3,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-03-05 21:00:00,72019,220.87,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-04-01 19:00:00,62610,2174.17,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-04-01 19:00:00,62611,2176.34,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-04-01 19:00:00,72019,220.83,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-04-28 20:55:00,62610,2173.03,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-04-28 20:55:00,62611,2175.2,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-04-28 20:55:00,72019,221.97,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-05-26 19:30:00,62610,2172.59,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-05-26 19:30:00,62611,2174.76,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-05-26 19:30:00,72019,222.41,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-06-24 19:45:00,62610,2172.35,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-06-24 19:45:00,62611,2174.52,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-06-24 19:45:00,72019,222.65,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-07-26 16:30:00,62610,2171.8,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-07-26 16:30:00,62611,2173.97,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-07-26 16:30:00,72019,223.2,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-08-23 20:05:00,62610,2171.79,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-08-23 20:05:00,62611,2173.96,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-08-23 20:05:00,72019,223.21,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-09-24 00:30:00,62610,2171.8,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-09-24 00:30:00,62611,2173.97,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-09-24 00:30:00,72019,223.2,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-10-21 22:50:00,62610,2174.05,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-10-21 22:50:00,62611,2176.22,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-10-21 22:50:00,72019,220.95,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1993-12-16 23:50:00,62610,2173.03,ft,NGVD29,"GW level, calib electric tape",Approved
+1993-12-16 23:50:00,62611,2175.2,ft,NAVD88,"GW level, calib electric tape",Approved
+1993-12-16 23:50:00,72019,221.97,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-01-14 21:50:00,62610,2173.04,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-01-14 21:50:00,62611,2175.21,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-01-14 21:50:00,72019,221.96,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-02-10 18:55:00,62610,2175.51,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-02-10 18:55:00,62611,2177.68,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-02-10 18:55:00,72019,219.49,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-03-08 19:50:00,62610,2173.54,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-03-08 19:50:00,62611,2175.71,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-03-08 19:50:00,72019,221.46,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-04-07 18:05:00,62610,2173.25,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-04-07 18:05:00,62611,2175.42,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-04-07 18:05:00,72019,221.75,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-05-05 17:50:00,62610,2172.66,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-05-05 17:50:00,62611,2174.83,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-05-05 17:50:00,72019,222.34,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-06-02 20:15:00,62610,2172.43,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-06-02 20:15:00,62611,2174.6,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-06-02 20:15:00,72019,222.57,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-06-21 20:45:00,62610,2172.23,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-06-21 20:45:00,62611,2174.4,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-06-21 20:45:00,72019,222.77,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-07-21 16:35:00,62610,2171.84,ft,NGVD29,"GW level, calib electric tape",Approved
+1994-07-21 16:35:00,62611,2174.01,ft,NAVD88,"GW level, calib electric tape",Approved
+1994-07-21 16:35:00,72019,223.16,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+1994-08-16 18:05:00,50012,3.0767,ft,None,None,Approved
+1994-08-16 18:05:00,62610,2174.71,ft,NGVD29,"GW level, electric tape",Approved
+1994-08-16 18:05:00,62611,2176.88,ft,NAVD88,"GW level, electric tape",Approved
+1994-08-16 18:05:00,72019,220.29,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1994-09-16 17:30:00,50012,3.0769,ft,None,None,Approved
+1994-09-16 17:30:00,62610,2173.3,ft,NGVD29,"GW level, electric tape",Approved
+1994-09-16 17:30:00,62611,2175.47,ft,NAVD88,"GW level, electric tape",Approved
+1994-09-16 17:30:00,72019,221.7,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1994-10-14 19:20:00,50012,3.075,ft,None,None,Approved
+1994-10-14 19:20:00,62610,2172.33,ft,NGVD29,"GW level, electric tape",Approved
+1994-10-14 19:20:00,62611,2174.5,ft,NAVD88,"GW level, electric tape",Approved
+1994-10-14 19:20:00,72019,222.67,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1994-11-10 21:10:00,50012,3.0746,ft,None,None,Approved
+1994-11-10 21:10:00,62610,2171.58,ft,NGVD29,"GW level, electric tape",Approved
+1994-11-10 21:10:00,62611,2173.75,ft,NAVD88,"GW level, electric tape",Approved
+1994-11-10 21:10:00,72019,223.42,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1994-12-08 21:30:00,50012,3.074,ft,None,None,Approved
+1994-12-08 21:30:00,62610,2171.28,ft,NGVD29,"GW level, electric tape",Approved
+1994-12-08 21:30:00,62611,2173.45,ft,NAVD88,"GW level, electric tape",Approved
+1994-12-08 21:30:00,72019,223.72,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-01-06 19:10:00,50012,3.0767,ft,None,None,Approved
+1995-01-06 19:10:00,62610,2171.68,ft,NGVD29,"GW level, electric tape",Approved
+1995-01-06 19:10:00,62611,2173.85,ft,NAVD88,"GW level, electric tape",Approved
+1995-01-06 19:10:00,72019,223.32,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-02-03 20:30:00,50012,3.0754,ft,None,None,Approved
+1995-02-03 20:30:00,62610,2170.87,ft,NGVD29,"GW level, electric tape",Approved
+1995-02-03 20:30:00,62611,2173.04,ft,NAVD88,"GW level, electric tape",Approved
+1995-02-03 20:30:00,72019,224.13,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-03-03 18:20:00,50012,3.0765,ft,None,None,Approved
+1995-03-03 18:20:00,62610,2171.05,ft,NGVD29,"GW level, electric tape",Approved
+1995-03-03 18:20:00,62611,2173.22,ft,NAVD88,"GW level, electric tape",Approved
+1995-03-03 18:20:00,72019,223.95,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-03-31 18:40:00,50012,3.0774,ft,None,None,Approved
+1995-03-31 18:40:00,62610,2171.21,ft,NGVD29,"GW level, electric tape",Approved
+1995-03-31 18:40:00,62611,2173.38,ft,NAVD88,"GW level, electric tape",Approved
+1995-03-31 18:40:00,72019,223.79,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-04-28 19:45:00,50012,3.0774,ft,None,None,Approved
+1995-04-28 19:45:00,62610,2170.76,ft,NGVD29,"GW level, electric tape",Approved
+1995-04-28 19:45:00,62611,2172.93,ft,NAVD88,"GW level, electric tape",Approved
+1995-04-28 19:45:00,72019,224.24,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-05-26 21:35:00,50012,3.0772,ft,None,None,Approved
+1995-05-26 21:35:00,62610,2170.23,ft,NGVD29,"GW level, electric tape",Approved
+1995-05-26 21:35:00,62611,2172.4,ft,NAVD88,"GW level, electric tape",Approved
+1995-05-26 21:35:00,72019,224.77,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-06-23 18:10:00,50012,3.077,ft,None,None,Approved
+1995-06-23 18:10:00,62610,2169.93,ft,NGVD29,"GW level, electric tape",Approved
+1995-06-23 18:10:00,62611,2172.1,ft,NAVD88,"GW level, electric tape",Approved
+1995-06-23 18:10:00,72019,225.07,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-07-07 20:30:00,50012,3.0772,ft,None,None,Approved
+1995-07-07 20:30:00,62610,2169.83,ft,NGVD29,"GW level, electric tape",Approved
+1995-07-07 20:30:00,62611,2172.0,ft,NAVD88,"GW level, electric tape",Approved
+1995-07-07 20:30:00,72019,225.17,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-08-02 17:55:00,50012,3.0776,ft,None,None,Approved
+1995-08-02 17:55:00,62610,2169.57,ft,NGVD29,"GW level, electric tape",Approved
+1995-08-02 17:55:00,62611,2171.74,ft,NAVD88,"GW level, electric tape",Approved
+1995-08-02 17:55:00,72019,225.43,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-09-06 22:45:00,50012,3.0784,ft,None,None,Approved
+1995-09-06 22:45:00,62610,2169.17,ft,NGVD29,"GW level, electric tape",Approved
+1995-09-06 22:45:00,62611,2171.34,ft,NAVD88,"GW level, electric tape",Approved
+1995-09-06 22:45:00,72019,225.83,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-10-05 22:30:00,50012,3.0793,ft,None,None,Approved
+1995-10-05 22:30:00,62610,2169.17,ft,NGVD29,"GW level, electric tape",Approved
+1995-10-05 22:30:00,62611,2171.34,ft,NAVD88,"GW level, electric tape",Approved
+1995-10-05 22:30:00,72019,225.83,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-11-02 21:25:00,50012,3.0804,ft,None,None,Approved
+1995-11-02 21:25:00,62610,2171.13,ft,NGVD29,"GW level, electric tape",Approved
+1995-11-02 21:25:00,62611,2173.3,ft,NAVD88,"GW level, electric tape",Approved
+1995-11-02 21:25:00,72019,223.87,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1995-11-29 18:35:00,50012,3.0796,ft,None,None,Approved
+1995-11-29 18:35:00,62610,2169.63,ft,NGVD29,"GW level, electric tape",Approved
+1995-11-29 18:35:00,62611,2171.8,ft,NAVD88,"GW level, electric tape",Approved
+1995-11-29 18:35:00,72019,225.37,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-01-16 21:20:00,50012,3.081,ft,None,None,Approved
+1996-01-16 21:20:00,62610,2168.94,ft,NGVD29,"GW level, electric tape",Approved
+1996-01-16 21:20:00,62611,2171.11,ft,NAVD88,"GW level, electric tape",Approved
+1996-01-16 21:20:00,72019,226.06,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-02-16 18:40:00,50012,3.0825,ft,None,None,Approved
+1996-02-16 18:40:00,62610,2170.38,ft,NGVD29,"GW level, electric tape",Approved
+1996-02-16 18:40:00,62611,2172.55,ft,NAVD88,"GW level, electric tape",Approved
+1996-02-16 18:40:00,72019,224.62,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-03-19 15:55:00,50012,3.0814,ft,None,None,Approved
+1996-03-19 15:55:00,62610,2168.34,ft,NGVD29,"GW level, electric tape",Approved
+1996-03-19 15:55:00,62611,2170.51,ft,NAVD88,"GW level, electric tape",Approved
+1996-03-19 15:55:00,72019,226.66,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-05-17 20:45:00,50012,3.0819,ft,None,None,Approved
+1996-05-17 20:45:00,62610,2167.33,ft,NGVD29,"GW level, electric tape",Approved
+1996-05-17 20:45:00,62611,2169.5,ft,NAVD88,"GW level, electric tape",Approved
+1996-05-17 20:45:00,72019,227.67,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-06-13 20:55:00,50012,3.0827,ft,None,None,Approved
+1996-06-13 20:55:00,62610,2166.97,ft,NGVD29,"GW level, electric tape",Approved
+1996-06-13 20:55:00,62611,2169.14,ft,NAVD88,"GW level, electric tape",Approved
+1996-06-13 20:55:00,72019,228.03,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-08-20 18:20:00,50012,3.0828,ft,None,None,Approved
+1996-08-20 18:20:00,62610,2166.61,ft,NGVD29,"GW level, electric tape",Approved
+1996-08-20 18:20:00,62611,2168.78,ft,NAVD88,"GW level, electric tape",Approved
+1996-08-20 18:20:00,72019,228.39,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-09-27 19:30:00,50012,3.0833,ft,None,None,Approved
+1996-09-27 19:30:00,62610,2167.11,ft,NGVD29,"GW level, electric tape",Approved
+1996-09-27 19:30:00,62611,2169.28,ft,NAVD88,"GW level, electric tape",Approved
+1996-09-27 19:30:00,72019,227.89,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-12-12 16:30:00,62610,2165.23,ft,NGVD29,"GW level, electric tape",Approved
+1996-12-12 16:30:00,62611,2167.4,ft,NAVD88,"GW level, electric tape",Approved
+1996-12-12 16:30:00,72019,229.77,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1996-12-26 17:45:00,50012,3.0844,ft,None,None,Approved
+1996-12-26 17:45:00,62610,2165.23,ft,NGVD29,"GW level, electric tape",Approved
+1996-12-26 17:45:00,62611,2167.4,ft,NAVD88,"GW level, electric tape",Approved
+1996-12-26 17:45:00,72019,229.77,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-01-16 21:00:00,62610,2165.08,ft,NGVD29,"GW level, electric tape",Approved
+1997-01-16 21:00:00,62611,2167.25,ft,NAVD88,"GW level, electric tape",Approved
+1997-01-16 21:00:00,72019,229.92,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-02-19 20:20:00,50012,3.0863,ft,None,None,Approved
+1997-02-19 20:20:00,62610,2164.68,ft,NGVD29,"GW level, electric tape",Approved
+1997-02-19 20:20:00,62611,2166.85,ft,NAVD88,"GW level, electric tape",Approved
+1997-02-19 20:20:00,72019,230.32,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-03-04 19:25:00,62610,2164.43,ft,NGVD29,"GW level, electric tape",Approved
+1997-03-04 19:25:00,62611,2166.6,ft,NAVD88,"GW level, electric tape",Approved
+1997-03-04 19:25:00,72019,230.57,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-03-12 20:20:00,50012,3.0865,ft,None,None,Approved
+1997-03-12 20:20:00,62610,2164.51,ft,NGVD29,"GW level, electric tape",Approved
+1997-03-12 20:20:00,62611,2166.68,ft,NAVD88,"GW level, electric tape",Approved
+1997-03-12 20:20:00,72019,230.49,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-03-12 20:21:00,50012,3.0872,ft,None,None,Approved
+1997-04-13 20:25:00,50012,3.0877,ft,None,None,Approved
+1997-04-13 20:25:00,62610,2164.03,ft,NGVD29,"GW level, electric tape",Approved
+1997-04-13 20:25:00,62611,2166.2,ft,NAVD88,"GW level, electric tape",Approved
+1997-04-13 20:25:00,72019,230.97,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-05-19 21:30:00,50012,3.0885,ft,None,None,Approved
+1997-05-19 21:30:00,62610,2162.95,ft,NGVD29,"GW level, electric tape",Approved
+1997-05-19 21:30:00,62611,2165.12,ft,NAVD88,"GW level, electric tape",Approved
+1997-05-19 21:30:00,72019,232.05,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-06-18 21:50:00,50012,3.0894,ft,None,None,Approved
+1997-06-18 21:50:00,62610,2162.93,ft,NGVD29,"GW level, electric tape",Approved
+1997-06-18 21:50:00,62611,2165.1,ft,NAVD88,"GW level, electric tape",Approved
+1997-06-18 21:50:00,72019,232.07,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-06-26 18:00:00,62610,2161.9,ft,NGVD29,"GW level, electric tape",Approved
+1997-06-26 18:00:00,62611,2164.07,ft,NAVD88,"GW level, electric tape",Approved
+1997-06-26 18:00:00,72019,233.1,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-08-19 18:15:00,50012,3.0907,ft,None,None,Approved
+1997-08-19 18:15:00,62610,2163.18,ft,NGVD29,"GW level, electric tape",Approved
+1997-08-19 18:15:00,62611,2165.35,ft,NAVD88,"GW level, electric tape",Approved
+1997-08-19 18:15:00,72019,231.82,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-09-16 20:20:00,50012,3.0904,ft,None,None,Approved
+1997-09-16 20:20:00,62610,2161.6,ft,NGVD29,"GW level, electric tape",Approved
+1997-09-16 20:20:00,62611,2163.77,ft,NAVD88,"GW level, electric tape",Approved
+1997-09-16 20:20:00,72019,233.4,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-10-17 20:50:00,50012,3.091,ft,None,None,Approved
+1997-10-17 20:50:00,62610,2166.66,ft,NGVD29,"GW level, electric tape",Approved
+1997-10-17 20:50:00,62611,2168.83,ft,NAVD88,"GW level, electric tape",Approved
+1997-10-17 20:50:00,72019,228.34,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1997-12-09 20:40:00,50012,3.09,ft,None,None,Approved
+1997-12-09 20:40:00,62610,2169.0,ft,NGVD29,"GW level, electric tape",Approved
+1997-12-09 20:40:00,62611,2171.17,ft,NAVD88,"GW level, electric tape",Approved
+1997-12-09 20:40:00,72019,226.0,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-01-15 19:15:00,50012,3.0916,ft,None,None,Approved
+1998-01-15 19:15:00,62610,2169.1,ft,NGVD29,"GW level, electric tape",Approved
+1998-01-15 19:15:00,62611,2171.27,ft,NAVD88,"GW level, electric tape",Approved
+1998-01-15 19:15:00,72019,225.9,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-02-12 20:30:00,50012,3.092,ft,None,None,Approved
+1998-02-12 20:30:00,62610,2168.6,ft,NGVD29,"GW level, electric tape",Approved
+1998-02-12 20:30:00,62611,2170.77,ft,NAVD88,"GW level, electric tape",Approved
+1998-02-12 20:30:00,72019,226.4,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-03-26 21:45:00,50012,3.0926,ft,None,None,Approved
+1998-03-26 21:45:00,62610,2166.5,ft,NGVD29,"GW level, electric tape",Approved
+1998-03-26 21:45:00,62611,2168.67,ft,NAVD88,"GW level, electric tape",Approved
+1998-03-26 21:45:00,72019,228.5,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-04-28 17:00:00,50012,3.0946,ft,None,None,Approved
+1998-04-28 17:00:00,62610,2165.4,ft,NGVD29,"GW level, electric tape",Approved
+1998-04-28 17:00:00,62611,2167.57,ft,NAVD88,"GW level, electric tape",Approved
+1998-04-28 17:00:00,72019,229.6,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-05-27 19:10:00,50012,3.0953,ft,None,None,Approved
+1998-05-27 19:10:00,62610,2164.1,ft,NGVD29,"GW level, electric tape",Approved
+1998-05-27 19:10:00,62611,2166.27,ft,NAVD88,"GW level, electric tape",Approved
+1998-05-27 19:10:00,72019,230.9,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-06-26 20:15:00,50012,3.097,ft,None,None,Approved
+1998-06-26 20:15:00,62610,2161.6,ft,NGVD29,"GW level, electric tape",Approved
+1998-06-26 20:15:00,62611,2163.77,ft,NAVD88,"GW level, electric tape",Approved
+1998-06-26 20:15:00,72019,233.4,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-08-24 19:45:00,62610,2160.75,ft,NGVD29,"GW level, electric tape",Approved
+1998-08-24 19:45:00,62611,2162.92,ft,NAVD88,"GW level, electric tape",Approved
+1998-08-24 19:45:00,72019,234.25,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-09-25 17:50:00,50012,3.0976,ft,None,None,Approved
+1998-09-25 17:50:00,62610,2161.25,ft,NGVD29,"GW level, electric tape",Approved
+1998-09-25 17:50:00,62611,2163.42,ft,NAVD88,"GW level, electric tape",Approved
+1998-09-25 17:50:00,72019,233.75,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-10-21 15:45:00,50012,3.0982,ft,None,None,Approved
+1998-10-21 15:45:00,62610,2162.1,ft,NGVD29,"GW level, electric tape",Approved
+1998-10-21 15:45:00,62611,2164.27,ft,NAVD88,"GW level, electric tape",Approved
+1998-10-21 15:45:00,72019,232.9,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-11-30 19:15:00,50012,3.0997,ft,None,None,Approved
+1998-11-30 19:15:00,62610,2164.8,ft,NGVD29,"GW level, electric tape",Approved
+1998-11-30 19:15:00,62611,2166.97,ft,NAVD88,"GW level, electric tape",Approved
+1998-11-30 19:15:00,72019,230.2,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1998-12-28 19:20:00,50012,3.0991,ft,None,None,Approved
+1998-12-28 19:20:00,62610,2167.3,ft,NGVD29,"GW level, electric tape",Approved
+1998-12-28 19:20:00,62611,2169.47,ft,NAVD88,"GW level, electric tape",Approved
+1998-12-28 19:20:00,72019,227.7,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-02-10 14:45:00,50012,3.0978,ft,None,None,Approved
+1999-02-10 14:45:00,62610,2162.6,ft,NGVD29,"GW level, electric tape",Approved
+1999-02-10 14:45:00,62611,2164.77,ft,NAVD88,"GW level, electric tape",Approved
+1999-02-10 14:45:00,72019,232.4,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-02-16 17:10:00,62610,2164.65,ft,NGVD29,"GW level, electric tape",Approved
+1999-02-16 17:10:00,62611,2166.82,ft,NAVD88,"GW level, electric tape",Approved
+1999-02-16 17:10:00,72019,230.35,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-03-10 17:20:00,50012,3.0991,ft,None,None,Approved
+1999-03-10 17:20:00,62610,2161.15,ft,NGVD29,"GW level, electric tape",Approved
+1999-03-10 17:20:00,62611,2163.32,ft,NAVD88,"GW level, electric tape",Approved
+1999-03-10 17:20:00,72019,233.85,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-04-06 18:15:00,50012,3.0991,ft,None,None,Approved
+1999-04-06 18:15:00,62610,2163.18,ft,NGVD29,"GW level, electric tape",Approved
+1999-04-06 18:15:00,62611,2165.35,ft,NAVD88,"GW level, electric tape",Approved
+1999-04-06 18:15:00,72019,231.82,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-05-06 16:45:00,50012,3.0989,ft,None,None,Approved
+1999-05-06 16:45:00,62610,2160.3,ft,NGVD29,"GW level, electric tape",Approved
+1999-05-06 16:45:00,62611,2162.47,ft,NAVD88,"GW level, electric tape",Approved
+1999-05-06 16:45:00,72019,234.7,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-06-08 17:45:00,50012,3.0996,ft,None,None,Approved
+1999-06-08 17:45:00,62610,2159.5,ft,NGVD29,"GW level, electric tape",Approved
+1999-06-08 17:45:00,62611,2161.67,ft,NAVD88,"GW level, electric tape",Approved
+1999-06-08 17:45:00,72019,235.5,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-07-02 19:45:00,50012,3.1013,ft,None,None,Approved
+1999-07-02 19:45:00,62610,2158.8,ft,NGVD29,"GW level, electric tape",Approved
+1999-07-02 19:45:00,62611,2160.97,ft,NAVD88,"GW level, electric tape",Approved
+1999-07-02 19:45:00,72019,236.2,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-08-02 19:15:00,50012,3.1069,ft,None,None,Approved
+1999-08-02 19:15:00,62610,2158.9,ft,NGVD29,"GW level, electric tape",Approved
+1999-08-02 19:15:00,62611,2161.07,ft,NAVD88,"GW level, electric tape",Approved
+1999-08-02 19:15:00,72019,236.1,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-09-07 20:15:00,62610,2158.1,ft,NGVD29,"GW level, electric tape",Approved
+1999-09-07 20:15:00,62611,2160.27,ft,NAVD88,"GW level, electric tape",Approved
+1999-09-07 20:15:00,72019,236.9,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-10-05 00:20:00,50012,3.1078,ft,None,None,Approved
+1999-10-05 00:20:00,62610,2157.5,ft,NGVD29,"GW level, electric tape",Approved
+1999-10-05 00:20:00,62611,2159.67,ft,NAVD88,"GW level, electric tape",Approved
+1999-10-05 00:20:00,72019,237.5,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-11-03 19:45:00,50012,3.1087,ft,None,None,Approved
+1999-11-03 19:45:00,62610,2156.7,ft,NGVD29,"GW level, electric tape",Approved
+1999-11-03 19:45:00,62611,2158.87,ft,NAVD88,"GW level, electric tape",Approved
+1999-11-03 19:45:00,72019,238.3,ft,Local Assumed Datum,"GW level, electric tape",Approved
+1999-12-06 20:45:00,50012,3.1094,ft,None,None,Approved
+1999-12-06 20:45:00,62610,2156.4,ft,NGVD29,"GW level, electric tape",Approved
+1999-12-06 20:45:00,62611,2158.57,ft,NAVD88,"GW level, electric tape",Approved
+1999-12-06 20:45:00,72019,238.6,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-01-06 16:00:00,50012,3.1088,ft,None,None,Approved
+2000-01-06 16:00:00,62610,2156.4,ft,NGVD29,"GW level, electric tape",Approved
+2000-01-06 16:00:00,62611,2158.57,ft,NAVD88,"GW level, electric tape",Approved
+2000-01-06 16:00:00,72019,238.6,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-01-06 16:01:00,50012,3.11,ft,None,None,Approved
+2000-02-03 23:30:00,50012,3.1116,ft,None,None,Approved
+2000-02-03 23:30:00,62610,2157.8,ft,NGVD29,"GW level, electric tape",Approved
+2000-02-03 23:30:00,62611,2159.97,ft,NAVD88,"GW level, electric tape",Approved
+2000-02-03 23:30:00,72019,237.2,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-03-06 20:00:00,50012,3.1133,ft,None,None,Approved
+2000-03-06 20:00:00,62610,2158.72,ft,NGVD29,"GW level, electric tape",Approved
+2000-03-06 20:00:00,62611,2160.89,ft,NAVD88,"GW level, electric tape",Approved
+2000-03-06 20:00:00,72019,236.28,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-04-03 22:00:00,50012,3.1121,ft,None,None,Approved
+2000-04-03 22:00:00,62610,2157.0,ft,NGVD29,"GW level, electric tape",Approved
+2000-04-03 22:00:00,62611,2159.17,ft,NAVD88,"GW level, electric tape",Approved
+2000-04-03 22:00:00,72019,238.0,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-05-05 18:20:00,50012,3.1131,ft,None,None,Approved
+2000-05-05 18:20:00,62610,2155.5,ft,NGVD29,"GW level, electric tape",Approved
+2000-05-05 18:20:00,62611,2157.67,ft,NAVD88,"GW level, electric tape",Approved
+2000-05-05 18:20:00,72019,239.5,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-06-05 17:00:00,50012,3.1135,ft,None,None,Approved
+2000-06-05 17:00:00,62610,2154.64,ft,NGVD29,"GW level, electric tape",Approved
+2000-06-05 17:00:00,62611,2156.81,ft,NAVD88,"GW level, electric tape",Approved
+2000-06-05 17:00:00,72019,240.36,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-07-10 18:30:00,50012,3.1145,ft,None,None,Approved
+2000-07-10 18:30:00,62610,2154.27,ft,NGVD29,"GW level, electric tape",Approved
+2000-07-10 18:30:00,62611,2156.44,ft,NAVD88,"GW level, electric tape",Approved
+2000-07-10 18:30:00,72019,240.73,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2000-08-04 16:45:00,50012,3.1147,ft,None,None,Approved
+2000-08-04 16:45:00,62610,2153.8,ft,NGVD29,"GW level, electric tape",Approved
+2000-08-04 16:45:00,62611,2155.97,ft,NAVD88,"GW level, electric tape",Approved
+2000-08-04 16:45:00,72019,241.2,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2002-09-17 18:15:00,50012,3.1616,ft,None,None,Approved
+2002-09-17 18:15:00,62610,2146.21,ft,NGVD29,"GW level, electric tape",Approved
+2002-09-17 18:15:00,62611,2148.38,ft,NAVD88,"GW level, electric tape",Approved
+2002-09-17 18:15:00,72019,248.79,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2002-10-21 22:45:00,50012,3.1617,ft,None,None,Approved
+2002-10-21 22:45:00,62610,2145.6,ft,NGVD29,"GW level, electric tape",Approved
+2002-10-21 22:45:00,62611,2147.77,ft,NAVD88,"GW level, electric tape",Approved
+2002-10-21 22:45:00,72019,249.4,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2002-11-20 20:00:00,50012,3.1613,ft,None,None,Approved
+2002-11-20 20:00:00,62610,2147.02,ft,NGVD29,"GW level, electric tape",Approved
+2002-11-20 20:00:00,62611,2149.19,ft,NAVD88,"GW level, electric tape",Approved
+2002-11-20 20:00:00,72019,247.98,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2002-12-18 21:00:00,50012,3.1626,ft,None,None,Approved
+2002-12-18 21:00:00,62610,2144.85,ft,NGVD29,"GW level, electric tape",Approved
+2002-12-18 21:00:00,62611,2147.02,ft,NAVD88,"GW level, electric tape",Approved
+2002-12-18 21:00:00,72019,250.15,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-01-21 19:45:00,50012,3.1621,ft,None,None,Approved
+2003-01-21 19:45:00,62610,2145.29,ft,NGVD29,"GW level, electric tape",Approved
+2003-01-21 19:45:00,62611,2147.46,ft,NAVD88,"GW level, electric tape",Approved
+2003-01-21 19:45:00,72019,249.71,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-02-24 22:00:00,50012,3.1637,ft,None,None,Approved
+2003-02-24 22:00:00,62610,2147.57,ft,NGVD29,"GW level, electric tape",Approved
+2003-02-24 22:00:00,62611,2149.74,ft,NAVD88,"GW level, electric tape",Approved
+2003-02-24 22:00:00,72019,247.43,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-03-21 21:00:00,50012,3.1622,ft,None,None,Approved
+2003-03-21 21:00:00,62610,2147.45,ft,NGVD29,"GW level, electric tape",Approved
+2003-03-21 21:00:00,62611,2149.62,ft,NAVD88,"GW level, electric tape",Approved
+2003-03-21 21:00:00,72019,247.55,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-04-24 18:00:00,50012,3.162,ft,None,None,Approved
+2003-04-24 18:00:00,62610,2145.07,ft,NGVD29,"GW level, electric tape",Approved
+2003-04-24 18:00:00,62611,2147.24,ft,NAVD88,"GW level, electric tape",Approved
+2003-04-24 18:00:00,72019,249.93,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-05-27 22:30:00,50012,3.1623,ft,None,None,Approved
+2003-05-27 22:30:00,62610,2144.49,ft,NGVD29,"GW level, electric tape",Approved
+2003-05-27 22:30:00,62611,2146.66,ft,NAVD88,"GW level, electric tape",Approved
+2003-05-27 22:30:00,72019,250.51,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-06-24 23:00:00,50012,3.163,ft,None,None,Approved
+2003-06-24 23:00:00,62610,2143.92,ft,NGVD29,"GW level, electric tape",Approved
+2003-06-24 23:00:00,62611,2146.09,ft,NAVD88,"GW level, electric tape",Approved
+2003-06-24 23:00:00,72019,251.08,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-07-29 22:40:00,50012,3.1621,ft,None,None,Approved
+2003-07-29 22:40:00,62610,2143.85,ft,NGVD29,"GW level, electric tape",Approved
+2003-07-29 22:40:00,62611,2146.02,ft,NAVD88,"GW level, electric tape",Approved
+2003-07-29 22:40:00,72019,251.15,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-09-02 22:00:00,50012,3.1621,ft,None,None,Approved
+2003-09-02 22:00:00,62610,2143.52,ft,NGVD29,"GW level, electric tape",Approved
+2003-09-02 22:00:00,62611,2145.69,ft,NAVD88,"GW level, electric tape",Approved
+2003-09-02 22:00:00,72019,251.48,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-09-26 19:00:00,50012,3.1616,ft,None,None,Approved
+2003-09-26 19:00:00,62610,2145.06,ft,NGVD29,"GW level, electric tape",Approved
+2003-09-26 19:00:00,62611,2147.23,ft,NAVD88,"GW level, electric tape",Approved
+2003-09-26 19:00:00,72019,249.94,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-10-28 21:00:00,50012,3.1614,ft,None,None,Approved
+2003-10-28 21:00:00,62610,2142.8,ft,NGVD29,"GW level, electric tape",Approved
+2003-10-28 21:00:00,62611,2144.97,ft,NAVD88,"GW level, electric tape",Approved
+2003-10-28 21:00:00,72019,252.2,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-11-20 21:00:00,50012,3.161,ft,None,None,Approved
+2003-11-20 21:00:00,62610,2146.15,ft,NGVD29,"GW level, electric tape",Approved
+2003-11-20 21:00:00,62611,2148.32,ft,NAVD88,"GW level, electric tape",Approved
+2003-11-20 21:00:00,72019,248.85,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2003-12-16 20:30:00,50012,3.1583,ft,None,None,Approved
+2003-12-16 20:30:00,62610,2143.6,ft,NGVD29,"GW level, electric tape",Approved
+2003-12-16 20:30:00,62611,2145.77,ft,NAVD88,"GW level, electric tape",Approved
+2003-12-16 20:30:00,72019,251.4,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-01-14 22:15:00,50012,3.1607,ft,None,None,Approved
+2004-01-14 22:15:00,62610,2145.44,ft,NGVD29,"GW level, electric tape",Approved
+2004-01-14 22:15:00,62611,2147.61,ft,NAVD88,"GW level, electric tape",Approved
+2004-01-14 22:15:00,72019,249.56,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-03-16 21:30:00,50012,3.1582,ft,None,None,Approved
+2004-03-16 21:30:00,62610,2148.49,ft,NGVD29,"GW level, electric tape",Approved
+2004-03-16 21:30:00,62611,2150.66,ft,NAVD88,"GW level, electric tape",Approved
+2004-03-16 21:30:00,72019,246.51,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-04-15 21:30:00,50012,3.1577,ft,None,None,Approved
+2004-04-15 21:30:00,62610,2145.2,ft,NGVD29,"GW level, electric tape",Approved
+2004-04-15 21:30:00,62611,2147.37,ft,NAVD88,"GW level, electric tape",Approved
+2004-04-15 21:30:00,72019,249.8,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-05-18 20:45:00,50012,3.157,ft,None,None,Approved
+2004-05-18 20:45:00,62610,2144.03,ft,NGVD29,"GW level, electric tape",Approved
+2004-05-18 20:45:00,62611,2146.2,ft,NAVD88,"GW level, electric tape",Approved
+2004-05-18 20:45:00,72019,250.97,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-06-21 22:00:00,50012,3.1568,ft,None,None,Approved
+2004-06-21 22:00:00,62610,2142.97,ft,NGVD29,"GW level, electric tape",Approved
+2004-06-21 22:00:00,62611,2145.14,ft,NAVD88,"GW level, electric tape",Approved
+2004-06-21 22:00:00,72019,252.03,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-07-23 22:00:00,50012,3.1559,ft,None,None,Approved
+2004-07-23 22:00:00,62610,2143.25,ft,NGVD29,"GW level, electric tape",Approved
+2004-07-23 22:00:00,62611,2145.42,ft,NAVD88,"GW level, electric tape",Approved
+2004-07-23 22:00:00,72019,251.75,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-08-26 17:00:00,50012,3.1557,ft,None,None,Approved
+2004-08-26 17:00:00,62610,2142.57,ft,NGVD29,"GW level, electric tape",Approved
+2004-08-26 17:00:00,62611,2144.74,ft,NAVD88,"GW level, electric tape",Approved
+2004-08-26 17:00:00,72019,252.43,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-10-01 20:30:00,50012,3.1552,ft,None,None,Approved
+2004-10-01 20:30:00,62610,2142.41,ft,NGVD29,"GW level, electric tape",Approved
+2004-10-01 20:30:00,62611,2144.58,ft,NAVD88,"GW level, electric tape",Approved
+2004-10-01 20:30:00,72019,252.59,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-11-01 22:30:00,50012,3.155,ft,None,None,Approved
+2004-11-01 22:30:00,62610,2142.58,ft,NGVD29,"GW level, electric tape",Approved
+2004-11-01 22:30:00,62611,2144.75,ft,NAVD88,"GW level, electric tape",Approved
+2004-11-01 22:30:00,72019,252.42,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-11-19 20:00:00,62610,2142.14,ft,NGVD29,"GW level, electric tape",Approved
+2004-11-19 20:00:00,62611,2144.31,ft,NAVD88,"GW level, electric tape",Approved
+2004-11-19 20:00:00,72019,252.86,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2004-12-02 18:30:00,50012,3.129,ft,None,None,Approved
+2004-12-02 18:30:00,62610,2142.0,ft,NGVD29,"GW level, electric tape",Approved
+2004-12-02 18:30:00,62611,2144.17,ft,NAVD88,"GW level, electric tape",Approved
+2004-12-02 18:30:00,72019,253.0,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-01-03 16:00:00,50012,3.127,ft,None,None,Approved
+2005-01-03 16:00:00,62610,2144.45,ft,NGVD29,"GW level, electric tape",Approved
+2005-01-03 16:00:00,62611,2146.62,ft,NAVD88,"GW level, electric tape",Approved
+2005-01-03 16:00:00,72019,250.55,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-01-17 17:00:00,50012,3.126,ft,None,None,Approved
+2005-01-17 17:00:00,62610,2142.2,ft,NGVD29,"GW level, electric tape",Approved
+2005-01-17 17:00:00,62611,2144.37,ft,NAVD88,"GW level, electric tape",Approved
+2005-01-17 17:00:00,72019,252.8,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-02-02 19:45:00,50012,3.126,ft,None,None,Approved
+2005-02-02 19:45:00,62610,2147.29,ft,NGVD29,"GW level, electric tape",Approved
+2005-02-02 19:45:00,62611,2149.46,ft,NAVD88,"GW level, electric tape",Approved
+2005-02-02 19:45:00,72019,247.71,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-03-04 19:30:00,50012,3.125,ft,None,None,Approved
+2005-03-04 19:30:00,62610,2147.29,ft,NGVD29,"GW level, electric tape",Approved
+2005-03-04 19:30:00,62611,2149.46,ft,NAVD88,"GW level, electric tape",Approved
+2005-03-04 19:30:00,72019,247.71,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-03-09 20:30:00,50012,3.126,ft,None,None,Approved
+2005-03-09 20:30:00,62610,2147.75,ft,NGVD29,"GW level, electric tape",Approved
+2005-03-09 20:30:00,62611,2149.92,ft,NAVD88,"GW level, electric tape",Approved
+2005-03-09 20:30:00,72019,247.25,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-03-09 20:31:00,50012,3.154,ft,None,None,Approved
+2005-04-04 18:45:00,50012,3.1537,ft,None,None,Approved
+2005-04-04 18:45:00,62610,2146.12,ft,NGVD29,"GW level, electric tape",Approved
+2005-04-04 18:45:00,62611,2148.29,ft,NAVD88,"GW level, electric tape",Approved
+2005-04-04 18:45:00,72019,248.88,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-04-14 17:00:00,62610,2144.95,ft,NGVD29,"GW level, electric tape",Approved
+2005-04-14 17:00:00,62611,2147.12,ft,NAVD88,"GW level, electric tape",Approved
+2005-04-14 17:00:00,72019,250.05,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-05-05 16:00:00,50012,3.1537,ft,None,None,Approved
+2005-05-05 16:00:00,62610,2143.95,ft,NGVD29,"GW level, electric tape",Approved
+2005-05-05 16:00:00,62611,2146.12,ft,NAVD88,"GW level, electric tape",Approved
+2005-05-05 16:00:00,72019,251.05,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-06-03 20:15:00,50012,3.1537,ft,None,None,Approved
+2005-06-03 20:15:00,62610,2143.14,ft,NGVD29,"GW level, electric tape",Approved
+2005-06-03 20:15:00,62611,2145.31,ft,NAVD88,"GW level, electric tape",Approved
+2005-06-03 20:15:00,72019,251.86,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-07-05 16:15:00,50012,3.1537,ft,None,None,Approved
+2005-07-05 16:15:00,62610,2142.1,ft,NGVD29,"GW level, electric tape",Approved
+2005-07-05 16:15:00,62611,2144.27,ft,NAVD88,"GW level, electric tape",Approved
+2005-07-05 16:15:00,72019,252.9,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2005-08-03 16:30:00,50012,3.1537,ft,None,None,Approved
+2005-08-03 16:30:00,62610,2142.66,ft,NGVD29,"GW level, electric tape",Approved
+2005-08-03 16:30:00,62611,2144.83,ft,NAVD88,"GW level, electric tape",Approved
+2005-08-03 16:30:00,72019,252.34,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2007-10-01 17:21:00,62610,2145.93,ft,NGVD29,"GW level, calib electric tape",Approved
+2007-10-01 17:21:00,62611,2148.1,ft,NAVD88,"GW level, calib electric tape",Approved
+2007-10-01 17:21:00,72019,249.07,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2007-10-24 16:21:00,50012,3.1527,ft,None,None,Approved
+2007-10-24 16:21:00,62610,2146.4,ft,NGVD29,"GW level, calib electric tape",Approved
+2007-10-24 16:21:00,62611,2148.57,ft,NAVD88,"GW level, calib electric tape",Approved
+2007-10-24 16:21:00,72019,248.6,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2008-02-27 17:11:00,50012,3.1527,ft,None,None,Approved
+2008-02-27 17:11:00,62610,2152.05,ft,NGVD29,"GW level, calib electric tape",Approved
+2008-02-27 17:11:00,62611,2154.22,ft,NAVD88,"GW level, calib electric tape",Approved
+2008-02-27 17:11:00,72019,242.95,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2008-03-24 18:17:00,62610,2152.6,ft,NGVD29,"GW level, calib electric tape",Approved
+2008-03-24 18:17:00,62611,2154.77,ft,NAVD88,"GW level, calib electric tape",Approved
+2008-03-24 18:17:00,72019,242.4,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2008-05-19 19:36:00,62610,2149.87,ft,NGVD29,"GW level, calib electric tape",Approved
+2008-05-19 19:36:00,62611,2152.04,ft,NAVD88,"GW level, calib electric tape",Approved
+2008-05-19 19:36:00,72019,245.13,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2008-06-16 20:33:00,62610,2148.02,ft,NGVD29,"GW level, calib electric tape",Approved
+2008-06-16 20:33:00,62611,2150.19,ft,NAVD88,"GW level, calib electric tape",Approved
+2008-06-16 20:33:00,72019,246.98,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2008-08-08 21:46:00,62610,2151.31,ft,NGVD29,"GW level, calib electric tape",Approved
+2008-08-08 21:46:00,62611,2153.48,ft,NAVD88,"GW level, calib electric tape",Approved
+2008-08-08 21:46:00,72019,243.69,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2008-09-09 23:16:00,62610,2152.71,ft,NGVD29,"GW level, calib electric tape",Approved
+2008-09-09 23:16:00,62611,2154.88,ft,NAVD88,"GW level, calib electric tape",Approved
+2008-09-09 23:16:00,72019,242.29,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2008-10-03 23:38:00,50012,3.121,ft,None,None,Approved
+2008-10-03 23:38:00,62610,2153.4,ft,NGVD29,"GW level, calib electric tape",Approved
+2008-10-03 23:38:00,62611,2155.57,ft,NAVD88,"GW level, calib electric tape",Approved
+2008-10-03 23:38:00,72019,241.6,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-01-07 16:40:00,50012,3.121,ft,None,None,Approved
+2009-01-07 16:40:00,62610,2156.63,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-01-07 16:40:00,62611,2158.8,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-01-07 16:40:00,72019,238.37,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-03-06 19:25:00,50012,3.123,ft,None,None,Approved
+2009-03-06 19:25:00,62610,2155.98,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-03-06 19:25:00,62611,2158.15,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-03-06 19:25:00,72019,239.02,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-03-18 19:34:00,50012,3.686,ft,None,None,Approved
+2009-03-18 19:35:00,50012,3.12,ft,None,None,Approved
+2009-03-18 21:15:00,62610,2156.92,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-03-18 21:15:00,62611,2159.09,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-03-18 21:15:00,72019,238.08,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-04-17 22:11:00,50012,3.119,ft,None,None,Approved
+2009-04-17 22:11:00,62610,2159.27,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-04-17 22:11:00,62611,2161.44,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-04-17 22:11:00,72019,235.73,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-05-20 20:37:00,50012,3.12,ft,None,None,Approved
+2009-05-20 20:37:00,62610,2159.1,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-05-20 20:37:00,62611,2161.27,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-05-20 20:37:00,72019,235.9,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-06-26 19:15:00,50012,3.121,ft,None,None,Approved
+2009-06-26 19:15:00,62610,2158.16,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-06-26 19:15:00,62611,2160.33,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-06-26 19:15:00,72019,236.84,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-07-20 16:10:00,50012,3.121,ft,None,None,Approved
+2009-07-20 16:10:00,62610,2157.99,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-07-20 16:10:00,62611,2160.16,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-07-20 16:10:00,72019,237.01,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-08-20 15:03:00,50012,3.122,ft,None,None,Approved
+2009-08-20 15:03:00,62610,2159.75,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-08-20 15:03:00,62611,2161.92,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-08-20 15:03:00,72019,235.25,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-08-20 15:51:00,50012,3.686,ft,None,None,Approved
+2009-10-02 16:15:00,50012,3.687,ft,None,None,Approved
+2009-10-02 16:15:00,62610,2160.12,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-10-02 16:15:00,62611,2162.29,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-10-02 16:15:00,72019,234.88,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-10-02 16:30:00,50012,3.12,ft,None,None,Approved
+2009-12-24 17:15:00,50012,3.119,ft,None,None,Approved
+2009-12-24 17:15:00,62610,2164.01,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-12-24 17:15:00,62611,2166.18,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-12-24 17:15:00,72019,230.99,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2009-12-28 19:32:00,50012,3.687,ft,None,None,Approved
+2009-12-28 19:32:00,62610,2164.31,ft,NGVD29,"GW level, calib electric tape",Approved
+2009-12-28 19:32:00,62611,2166.48,ft,NAVD88,"GW level, calib electric tape",Approved
+2009-12-28 19:32:00,72019,230.69,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2010-02-08 20:13:00,50012,3.12,ft,None,None,Approved
+2010-02-08 20:13:00,62610,2165.63,ft,NGVD29,"GW level, calib electric tape",Approved
+2010-02-08 20:13:00,62611,2167.8,ft,NAVD88,"GW level, calib electric tape",Approved
+2010-02-08 20:13:00,72019,229.37,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2010-04-13 20:39:00,50012,3.12,ft,None,None,Approved
+2010-04-13 20:39:00,62610,2166.71,ft,NGVD29,"GW level, calib electric tape",Approved
+2010-04-13 20:39:00,62611,2168.88,ft,NAVD88,"GW level, calib electric tape",Approved
+2010-04-13 20:39:00,72019,228.29,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2010-05-19 20:38:00,50012,3.12,ft,None,None,Approved
+2010-05-19 20:38:00,62610,2160.3,ft,NGVD29,"GW level, calib electric tape",Approved
+2010-05-19 20:38:00,62611,2162.47,ft,NAVD88,"GW level, calib electric tape",Approved
+2010-05-19 20:38:00,72019,234.7,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2010-07-02 18:30:00,50012,3.119,ft,None,None,Approved
+2010-07-02 18:30:00,62610,2161.5,ft,NGVD29,"GW level, calib electric tape",Approved
+2010-07-02 18:30:00,62611,2163.67,ft,NAVD88,"GW level, calib electric tape",Approved
+2010-07-02 18:30:00,72019,233.5,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2010-08-31 20:41:00,62610,2165.01,ft,NGVD29,"GW level, calib electric tape",Approved
+2010-08-31 20:41:00,62611,2167.18,ft,NAVD88,"GW level, calib electric tape",Approved
+2010-08-31 20:41:00,72019,229.99,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2010-10-28 20:08:00,62610,2166.83,ft,NGVD29,"GW level, calib electric tape",Approved
+2010-10-28 20:08:00,62611,2169.0,ft,NAVD88,"GW level, calib electric tape",Approved
+2010-10-28 20:08:00,72019,228.17,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2010-12-21 15:52:00,62610,2168.75,ft,NGVD29,"GW level, calib electric tape",Approved
+2010-12-21 15:52:00,62611,2170.92,ft,NAVD88,"GW level, calib electric tape",Approved
+2010-12-21 15:52:00,72019,226.25,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-02-04 18:08:00,62610,2168.33,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-02-04 18:08:00,62611,2170.5,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-02-04 18:08:00,72019,226.67,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-03-30 20:28:00,62610,2169.53,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-03-30 20:28:00,62611,2171.7,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-03-30 20:28:00,72019,225.47,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-06-01 17:30:00,50012,3.122,ft,None,None,Approved
+2011-06-01 17:30:00,62610,2171.2,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-06-01 17:30:00,62611,2173.37,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-06-01 17:30:00,72019,223.8,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-07-15 19:30:00,62610,2172.11,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-07-15 19:30:00,62611,2174.28,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-07-15 19:30:00,72019,222.89,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-08-18 18:20:00,50012,3.118,ft,None,None,Approved
+2011-08-18 18:20:00,62610,2172.13,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-08-18 18:20:00,62611,2174.3,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-08-18 18:20:00,72019,222.87,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-09-29 18:30:00,50012,3.118,ft,None,None,Approved
+2011-09-29 18:30:00,62610,2172.69,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-09-29 18:30:00,62611,2174.86,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-09-29 18:30:00,72019,222.31,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-11-02 18:30:00,50012,3.118,ft,None,None,Approved
+2011-11-02 18:30:00,62610,2171.55,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-11-02 18:30:00,62611,2173.72,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-11-02 18:30:00,72019,223.45,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2011-12-19 18:45:00,50012,3.118,ft,None,None,Approved
+2011-12-19 18:45:00,62610,2173.99,ft,NGVD29,"GW level, calib electric tape",Approved
+2011-12-19 18:45:00,62611,2176.16,ft,NAVD88,"GW level, calib electric tape",Approved
+2011-12-19 18:45:00,72019,221.01,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2012-01-19 17:19:00,50012,3.118,ft,None,None,Approved
+2012-01-19 17:19:00,62610,2172.95,ft,NGVD29,"GW level, calib electric tape",Approved
+2012-01-19 17:19:00,62611,2175.12,ft,NAVD88,"GW level, calib electric tape",Approved
+2012-01-19 17:19:00,72019,222.05,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2012-02-27 18:10:00,50012,3.119,ft,None,None,Approved
+2012-02-27 18:10:00,62610,2175.52,ft,NGVD29,"GW level, calib electric tape",Approved
+2012-02-27 18:10:00,62611,2177.69,ft,NAVD88,"GW level, calib electric tape",Approved
+2012-02-27 18:10:00,72019,219.48,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2012-05-10 16:30:00,50012,3.119,ft,None,None,Approved
+2012-05-10 16:30:00,62610,2175.99,ft,NGVD29,"GW level, calib electric tape",Approved
+2012-05-10 16:30:00,62611,2178.16,ft,NAVD88,"GW level, calib electric tape",Approved
+2012-05-10 16:30:00,72019,219.01,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2012-08-03 18:10:00,62610,2176.82,ft,NGVD29,"GW level, calib electric tape",Approved
+2012-08-03 18:10:00,62611,2178.99,ft,NAVD88,"GW level, calib electric tape",Approved
+2012-08-03 18:10:00,72019,218.18,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2012-10-12 18:15:00,62610,2176.14,ft,NGVD29,"GW level, calib electric tape",Approved
+2012-10-12 18:15:00,62611,2178.31,ft,NAVD88,"GW level, calib electric tape",Approved
+2012-10-12 18:15:00,72019,218.86,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2012-11-23 16:58:00,50012,3.118,ft,None,None,Approved
+2012-11-23 16:58:00,62610,2177.22,ft,NGVD29,"GW level, calib electric tape",Approved
+2012-11-23 16:58:00,62611,2179.39,ft,NAVD88,"GW level, calib electric tape",Approved
+2012-11-23 16:58:00,72019,217.78,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-01-07 17:18:00,50012,3.117,ft,None,None,Approved
+2013-01-07 17:18:00,62610,2173.96,ft,NGVD29,"GW level, calib electric tape",Approved
+2013-01-07 17:18:00,62611,2176.13,ft,NAVD88,"GW level, calib electric tape",Approved
+2013-01-07 17:18:00,72019,221.04,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-02-26 18:21:00,50012,3.69,ft,None,None,Approved
+2013-02-26 18:21:00,62610,2169.43,ft,NGVD29,"GW level, calib electric tape",Approved
+2013-02-26 18:21:00,62611,2171.6,ft,NAVD88,"GW level, calib electric tape",Approved
+2013-02-26 18:21:00,72019,225.57,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-02-26 18:22:00,50012,3.119,ft,None,None,Approved
+2013-04-10 18:40:00,50012,3.118,ft,None,None,Approved
+2013-04-10 18:40:00,62610,2176.89,ft,NGVD29,"GW level, calib electric tape",Approved
+2013-04-10 18:40:00,62611,2179.06,ft,NAVD88,"GW level, calib electric tape",Approved
+2013-04-10 18:40:00,72019,218.11,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-05-24 18:55:00,50012,3.119,ft,None,None,Approved
+2013-05-24 18:55:00,62610,2177.47,ft,NGVD29,"GW level, calib electric tape",Approved
+2013-05-24 18:55:00,62611,2179.64,ft,NAVD88,"GW level, calib electric tape",Approved
+2013-05-24 18:55:00,72019,217.53,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-05-24 18:56:00,50012,3.117,ft,None,None,Approved
+2013-07-18 20:10:00,50012,3.69,ft,None,None,Approved
+2013-07-18 20:10:00,62610,2177.5,ft,NGVD29,"GW level, calib electric tape",Approved
+2013-07-18 20:10:00,62611,2179.67,ft,NAVD88,"GW level, calib electric tape",Approved
+2013-07-18 20:10:00,72019,217.5,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-07-18 20:11:00,50012,3.116,ft,None,None,Approved
+2013-10-18 18:19:00,50012,3.116,ft,None,None,Approved
+2013-10-18 18:19:00,62610,2176.88,ft,NGVD29,"GW level, calib electric tape",Approved
+2013-10-18 18:19:00,62611,2179.05,ft,NAVD88,"GW level, calib electric tape",Approved
+2013-10-18 18:19:00,72019,218.12,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-12-13 17:44:00,50012,3.115,ft,None,None,Approved
+2013-12-13 17:44:00,62610,2177.53,ft,NGVD29,"GW level, calib electric tape",Approved
+2013-12-13 17:44:00,62611,2179.7,ft,NAVD88,"GW level, calib electric tape",Approved
+2013-12-13 17:44:00,72019,217.47,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2013-12-13 17:45:00,50012,3.118,ft,None,None,Approved
+2014-07-14 20:10:00,50012,3.12,ft,None,None,Approved
+2014-07-14 20:46:00,62610,2173.53,ft,NGVD29,"GW level, steel tape",Approved
+2014-07-14 20:46:00,62611,2175.7,ft,NAVD88,"GW level, steel tape",Approved
+2014-07-14 20:46:00,72019,221.47,ft,Local Assumed Datum,"GW level, steel tape",Approved
+2014-09-30 20:35:00,62610,2172.28,ft,NGVD29,"GW level, calib electric tape",Approved
+2014-09-30 20:35:00,62611,2174.45,ft,NAVD88,"GW level, calib electric tape",Approved
+2014-09-30 20:35:00,72019,222.72,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2014-12-05 17:42:00,62610,2175.8,ft,NGVD29,"GW level, calib electric tape",Approved
+2014-12-05 17:42:00,62611,2177.97,ft,NAVD88,"GW level, calib electric tape",Approved
+2014-12-05 17:42:00,72019,219.2,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2015-02-13 18:47:00,62610,2177.62,ft,NGVD29,"GW level, calib electric tape",Approved
+2015-02-13 18:47:00,62611,2179.79,ft,NAVD88,"GW level, calib electric tape",Approved
+2015-02-13 18:47:00,72019,217.38,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2015-04-16 20:13:00,62610,2177.46,ft,NGVD29,"GW level, calib electric tape",Approved
+2015-04-16 20:13:00,62611,2179.63,ft,NAVD88,"GW level, calib electric tape",Approved
+2015-04-16 20:13:00,72019,217.54,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2015-08-03 17:19:15,50012,23.112,ft,None,None,Approved
+2015-08-03 17:30:00,62610,2179.33,ft,NGVD29,"GW level, calib electric tape",Approved
+2015-08-03 17:30:00,62611,2181.5,ft,NAVD88,"GW level, calib electric tape",Approved
+2015-08-03 17:30:00,72019,215.67,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2016-03-08 22:57:00,62610,2181.93,ft,NGVD29,"GW level, calib electric tape",Approved
+2016-03-08 22:57:00,62611,2184.1,ft,NAVD88,"GW level, calib electric tape",Approved
+2016-03-08 22:57:00,72019,213.07,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2016-03-08 23:00:00,50012,3.112,ft,None,None,Approved
+2016-04-06 17:05:00,62610,2181.71,ft,NGVD29,"GW level, calib electric tape",Approved
+2016-04-06 17:05:00,62611,2183.88,ft,NAVD88,"GW level, calib electric tape",Approved
+2016-04-06 17:05:00,72019,213.29,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2016-04-06 17:13:00,50012,3.122,ft,None,None,Approved
+2016-07-25 16:22:00,62610,2181.63,ft,NGVD29,"GW level, electric tape",Approved
+2016-07-25 16:22:00,62611,2183.8,ft,NAVD88,"GW level, electric tape",Approved
+2016-07-25 16:22:00,72019,213.37,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2016-07-25 16:45:00,50012,3.115,ft,None,None,Approved
+2016-07-25 16:46:00,50012,3.112,ft,None,None,Approved
+2016-10-31 16:37:00,62610,2173.14,ft,NGVD29,"GW level, electric tape",Approved
+2016-10-31 16:37:00,62611,2175.31,ft,NAVD88,"GW level, electric tape",Approved
+2016-10-31 16:37:00,72019,221.86,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2016-10-31 16:52:00,50012,3.112,ft,None,None,Approved
+2017-01-05 17:10:00,62610,2172.47,ft,NGVD29,"GW level, electric tape",Approved
+2017-01-05 17:10:00,62611,2174.64,ft,NAVD88,"GW level, electric tape",Approved
+2017-01-05 17:10:00,72019,222.53,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2017-01-05 17:25:00,50012,3.113,ft,None,None,Approved
+2017-03-07 19:05:00,50012,3.112,ft,None,None,Approved
+2017-03-07 19:11:00,62610,2174.3,ft,NGVD29,"GW level, electric tape",Approved
+2017-03-07 19:11:00,62611,2176.47,ft,NAVD88,"GW level, electric tape",Approved
+2017-03-07 19:11:00,72019,220.7,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2017-05-08 19:50:00,62610,2177.58,ft,NGVD29,"GW level, electric tape",Approved
+2017-05-08 19:50:00,62611,2179.75,ft,NAVD88,"GW level, electric tape",Approved
+2017-05-08 19:50:00,72019,217.42,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2017-06-01 21:25:00,62610,2178.58,ft,NGVD29,"GW level, electric tape",Approved
+2017-06-01 21:25:00,62611,2180.75,ft,NAVD88,"GW level, electric tape",Approved
+2017-06-01 21:25:00,72019,216.42,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2017-06-01 21:39:00,70309,0.11,ft,None,None,Approved
+2017-07-27 20:50:00,62610,2179.68,ft,NGVD29,"GW level, electric tape",Approved
+2017-07-27 20:50:00,62611,2181.85,ft,NAVD88,"GW level, electric tape",Approved
+2017-07-27 20:50:00,72019,215.32,ft,Local Assumed Datum,"GW level, electric tape",Approved
+2017-07-27 20:57:00,70309,0.11,ft,None,High precision encoder,Approved
+2017-10-13 18:21:00,70309,0.11,ft,None,None,Approved
+2017-10-13 18:39:00,62610,2180.59,ft,NGVD29,"GW level, calib electric tape",Approved
+2017-10-13 18:39:00,62611,2182.76,ft,NAVD88,"GW level, calib electric tape",Approved
+2017-10-13 18:39:00,72019,214.41,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2017-12-19 20:33:00,70309,0.11,ft,None,None,Approved
+2017-12-19 20:50:00,62610,2181.27,ft,NGVD29,"GW level, calib electric tape",Approved
+2017-12-19 20:50:00,62611,2183.44,ft,NAVD88,"GW level, calib electric tape",Approved
+2017-12-19 20:50:00,72019,213.73,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-04-06 21:08:00,62610,2180.82,ft,NGVD29,"GW level, calib electric tape",Approved
+2018-04-06 21:08:00,62611,2182.99,ft,NAVD88,"GW level, calib electric tape",Approved
+2018-04-06 21:08:00,72019,214.18,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-04-06 21:17:00,70309,0.11,ft,None,None,Approved
+2018-04-06 21:17:08,70309,3.11,ft,None,None,Approved
+2018-05-21 19:58:00,62610,2182.75,ft,NGVD29,"GW level, calib electric tape",Approved
+2018-05-21 19:58:00,62611,2184.92,ft,NAVD88,"GW level, calib electric tape",Approved
+2018-05-21 19:58:00,72019,212.25,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-05-21 20:05:00,70309,23.11,ft,None,None,Approved
+2018-05-21 20:05:00,70309,0.11,ft,None,None,Approved
+2018-06-21 18:24:00,62610,2182.92,ft,NGVD29,"GW level, calib electric tape",Approved
+2018-06-21 18:24:00,62611,2185.09,ft,NAVD88,"GW level, calib electric tape",Approved
+2018-06-21 18:24:00,72019,212.08,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-06-21 18:39:00,70309,3.11,ft,None,None,Approved
+2018-06-21 18:39:00,70309,0.11,ft,None,None,Approved
+2018-07-27 19:48:00,62610,2183.4,ft,NGVD29,"GW level, calib electric tape",Approved
+2018-07-27 19:48:00,62611,2185.57,ft,NAVD88,"GW level, calib electric tape",Approved
+2018-07-27 19:48:00,72019,211.6,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-07-27 19:52:00,70309,23.11,ft,None,None,Approved
+2018-07-27 19:52:00,70309,0.11,ft,None,None,Approved
+2018-09-21 22:31:00,70309,0.11,ft,None,None,Approved
+2018-09-21 22:31:00,70309,23.11,ft,None,None,Approved
+2018-09-21 22:37:00,62610,2183.45,ft,NGVD29,"GW level, calib electric tape",Approved
+2018-09-21 22:37:00,62611,2185.62,ft,NAVD88,"GW level, calib electric tape",Approved
+2018-09-21 22:37:00,72019,211.55,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-10-11 22:39:00,62610,2183.03,ft,NGVD29,"GW level, calib electric tape",Approved
+2018-10-11 22:39:00,62611,2185.2,ft,NAVD88,"GW level, calib electric tape",Approved
+2018-10-11 22:39:00,72019,211.97,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-10-11 22:46:00,70309,0.11,ft,None,None,Approved
+2018-10-11 22:46:00,70309,23.11,ft,None,None,Approved
+2018-12-14 20:39:00,62610,2181.25,ft,NGVD29,"GW level, calib electric tape",Approved
+2018-12-14 20:39:00,62611,2183.42,ft,NAVD88,"GW level, calib electric tape",Approved
+2018-12-14 20:39:00,72019,213.75,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2018-12-14 20:58:00,70309,23.11,ft,None,None,Approved
+2018-12-14 20:58:00,70309,0.11,ft,None,None,Approved
+2019-02-14 22:42:00,62610,2183.89,ft,NGVD29,"GW level, calib electric tape",Approved
+2019-02-14 22:42:00,62611,2186.06,ft,NAVD88,"GW level, calib electric tape",Approved
+2019-02-14 22:42:00,72019,211.11,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2019-02-14 22:46:00,70309,23.11,ft,None,None,Approved
+2019-02-14 22:46:00,70309,0.11,ft,None,None,Approved
+2019-03-08 21:19:00,70309,23.11,ft,None,None,Approved
+2019-03-08 21:19:00,70309,0.11,ft,None,None,Approved
+2019-03-08 22:01:00,62610,2183.88,ft,NGVD29,"GW level, calib electric tape",Approved
+2019-03-08 22:01:00,62611,2186.05,ft,NAVD88,"GW level, calib electric tape",Approved
+2019-03-08 22:01:00,72019,211.12,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2019-04-19 22:37:00,62610,2183.98,ft,NGVD29,"GW level, calib electric tape",Approved
+2019-04-19 22:37:00,62611,2186.15,ft,NAVD88,"GW level, calib electric tape",Approved
+2019-04-19 22:37:00,72019,211.02,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2019-04-19 22:42:00,70309,23.11,ft,None,None,Approved
+2019-04-19 22:42:00,70309,0.11,ft,None,None,Approved
+2019-05-23 16:44:00,62610,2184.39,ft,NGVD29,"GW level, calib electric tape",Approved
+2019-05-23 16:44:00,62611,2186.56,ft,NAVD88,"GW level, calib electric tape",Approved
+2019-05-23 16:44:00,72019,210.61,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2019-05-23 16:47:00,70309,0.11,ft,None,None,Approved
+2019-05-23 16:47:00,70309,23.11,ft,None,None,Approved
+2019-07-02 21:13:00,62610,2184.45,ft,NGVD29,"GW level, calib electric tape",Approved
+2019-07-02 21:13:00,62611,2186.62,ft,NAVD88,"GW level, calib electric tape",Approved
+2019-07-02 21:13:00,72019,210.55,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2019-07-02 21:17:00,70309,0.11,ft,None,None,Approved
+2019-07-02 21:17:00,70309,23.11,ft,None,None,Approved
+2019-07-22 19:47:00,62610,2184.52,ft,NGVD29,"GW level, calib electric tape",Approved
+2019-07-22 19:47:00,62611,2186.69,ft,NAVD88,"GW level, calib electric tape",Approved
+2019-07-22 19:47:00,72019,210.48,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2019-07-22 19:53:00,70309,23.11,ft,None,None,Approved
+2019-07-22 19:53:00,70309,0.11,ft,None,None,Approved
+2019-10-03 20:37:00,62610,2185.57,ft,NGVD29,"GW level, calib electric tape",Approved
+2019-10-03 20:37:00,62611,2187.74,ft,NAVD88,"GW level, calib electric tape",Approved
+2019-10-03 20:37:00,72019,209.43,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2019-10-03 20:47:00,70309,23.11,ft,None,None,Approved
+2019-10-03 20:47:00,70309,0.11,ft,None,None,Approved
+2020-01-16 21:15:00,62610,2185.57,ft,NGVD29,"GW level, calib electric tape",Approved
+2020-01-16 21:15:00,62611,2187.74,ft,NAVD88,"GW level, calib electric tape",Approved
+2020-01-16 21:15:00,72019,209.43,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2020-01-16 21:22:00,70309,0.11,ft,None,None,Approved
+2020-01-16 21:22:00,70309,23.11,ft,None,None,Approved
+2020-04-02 22:23:00,62610,2187.6,ft,NGVD29,"GW level, calib electric tape",Approved
+2020-04-02 22:23:00,62611,2189.77,ft,NAVD88,"GW level, calib electric tape",Approved
+2020-04-02 22:23:00,72019,207.4,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2020-04-02 22:28:00,70309,0.11,ft,None,None,Approved
+2020-04-02 22:28:00,70309,23.11,ft,None,None,Approved
+2020-07-08 20:44:00,62610,2187.58,ft,NGVD29,"GW level, calib electric tape",Approved
+2020-07-08 20:44:00,62611,2189.75,ft,NAVD88,"GW level, calib electric tape",Approved
+2020-07-08 20:44:00,72019,207.42,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2020-07-08 20:45:00,70309,0.11,ft,None,None,Approved
+2020-07-08 20:45:00,70309,23.11,ft,None,None,Approved
+2020-10-29 14:39:00,70309,0.12,ft,None,None,Approved
+2020-10-29 14:41:00,62610,2184.28,ft,NGVD29,"GW level, calib electric tape",Approved
+2020-10-29 14:41:00,62611,2186.45,ft,NAVD88,"GW level, calib electric tape",Approved
+2020-10-29 14:41:00,72019,210.72,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2020-10-29 14:48:00,70309,23.12,ft,None,None,Approved
+2021-02-10 23:39:00,62610,2191.31,ft,NGVD29,"GW level, calib electric tape",Approved
+2021-02-10 23:39:00,62611,2193.48,ft,NAVD88,"GW level, calib electric tape",Approved
+2021-02-10 23:39:00,72019,203.69,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2021-02-10 23:46:00,70309,23.11,ft,None,None,Approved
+2021-02-10 23:46:00,70309,0.11,ft,None,None,Approved
+2021-05-15 00:37:00,62610,2190.67,ft,NGVD29,"GW level, calib electric tape",Approved
+2021-05-15 00:37:00,62611,2192.84,ft,NAVD88,"GW level, calib electric tape",Approved
+2021-05-15 00:37:00,72019,204.33,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2021-05-15 00:41:00,70309,23.11,ft,None,None,Approved
+2021-05-15 00:41:00,70309,0.11,ft,None,None,Approved
+2021-08-06 23:10:00,62610,2192.9,ft,NGVD29,"GW level, calib electric tape",Approved
+2021-08-06 23:10:00,62611,2195.07,ft,NAVD88,"GW level, calib electric tape",Approved
+2021-08-06 23:10:00,72019,202.1,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2021-08-06 23:12:00,70309,23.11,ft,None,None,Approved
+2021-08-06 23:12:00,70309,0.11,ft,None,None,Approved
+2021-10-19 17:57:00,70309,23.11,ft,None,None,Approved
+2021-10-19 17:57:00,70309,0.11,ft,None,None,Approved
+2021-10-19 18:03:00,62610,2183.46,ft,NGVD29,"GW level, calib electric tape",Approved
+2021-10-19 18:03:00,62611,2185.63,ft,NAVD88,"GW level, calib electric tape",Approved
+2021-10-19 18:03:00,72019,211.54,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2022-02-03 21:02:00,70309,0.11,ft,None,None,Approved
+2022-02-03 21:08:00,62610,2191.93,ft,NGVD29,"GW level, calib electric tape",Approved
+2022-02-03 21:08:00,62611,2194.1,ft,NAVD88,"GW level, calib electric tape",Approved
+2022-02-03 21:08:00,72019,203.07,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2022-02-03 21:09:00,70309,23.11,ft,None,None,Approved
+2022-04-26 22:10:00,62610,2193.03,ft,NGVD29,"GW level, calib electric tape",Approved
+2022-04-26 22:10:00,62611,2195.2,ft,NAVD88,"GW level, calib electric tape",Approved
+2022-04-26 22:10:00,72019,201.97,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2022-07-14 18:29:00,70309,0.11,ft,None,None,Approved
+2022-07-14 18:29:00,70309,23.11,ft,None,None,Approved
+2022-07-14 18:37:00,62610,2193.39,ft,NGVD29,"GW level, calib electric tape",Approved
+2022-07-14 18:37:00,62611,2195.56,ft,NAVD88,"GW level, calib electric tape",Approved
+2022-07-14 18:37:00,72019,201.61,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2022-11-04 19:36:00,62610,2190.46,ft,NGVD29,"GW level, calib electric tape",Approved
+2022-11-04 19:36:00,62611,2192.63,ft,NAVD88,"GW level, calib electric tape",Approved
+2022-11-04 19:36:00,72019,204.54,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2022-11-04 19:42:00,70309,23.11,ft,None,None,Approved
+2022-11-04 19:42:00,70309,0.11,ft,None,None,Approved
+2022-11-14 22:31:00,62610,2189.97,ft,NGVD29,"GW level, calib electric tape",Approved
+2022-11-14 22:31:00,62611,2192.14,ft,NAVD88,"GW level, calib electric tape",Approved
+2022-11-14 22:31:00,72019,205.03,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2023-02-02 21:59:00,62610,2196.33,ft,NGVD29,"GW level, calib electric tape",Approved
+2023-02-02 21:59:00,62611,2198.5,ft,NAVD88,"GW level, calib electric tape",Approved
+2023-02-02 21:59:00,72019,198.67,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2023-02-02 22:34:00,70309,0.11,ft,None,None,Approved
+2023-02-02 22:34:00,70309,23.11,ft,None,None,Approved
+2023-04-11 18:26:00,70309,0.11,ft,None,None,Approved
+2023-04-11 18:26:00,70309,23.11,ft,None,None,Approved
+2023-04-11 18:34:00,62610,2197.49,ft,NGVD29,"GW level, calib electric tape",Approved
+2023-04-11 18:34:00,62611,2199.66,ft,NAVD88,"GW level, calib electric tape",Approved
+2023-04-11 18:34:00,72019,197.51,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2023-08-17 18:35:00,62610,2196.79,ft,NGVD29,"GW level, calib electric tape",Approved
+2023-08-17 18:35:00,62611,2198.96,ft,NAVD88,"GW level, calib electric tape",Approved
+2023-08-17 18:35:00,72019,198.21,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2023-08-17 18:36:00,70309,23.11,ft,None,None,Approved
+2023-08-17 18:36:00,70309,0.11,ft,None,None,Approved
+2023-11-08 15:45:00,62610,2192.65,ft,NGVD29,"GW level, calib electric tape",Approved
+2023-11-08 15:45:00,62611,2194.82,ft,NAVD88,"GW level, calib electric tape",Approved
+2023-11-08 15:45:00,72019,202.35,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2023-11-08 15:50:00,70309,23.11,ft,None,None,Approved
+2023-11-08 15:50:00,70309,0.11,ft,None,None,Approved
+2024-02-09 19:23:00,62610,2199.08,ft,NGVD29,"GW level, calib electric tape",Approved
+2024-02-09 19:23:00,62611,2201.25,ft,NAVD88,"GW level, calib electric tape",Approved
+2024-02-09 19:23:00,72019,195.92,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2024-02-09 19:24:00,70309,0.11,ft,None,None,Approved
+2024-02-09 19:24:00,70309,23.11,ft,None,None,Approved
+2024-02-13 18:14:00,62610,2199.2,ft,NGVD29,"GW level, calib electric tape",Approved
+2024-02-13 18:14:00,62611,2201.37,ft,NAVD88,"GW level, calib electric tape",Approved
+2024-02-13 18:14:00,72019,195.8,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2024-02-13 18:17:00,70309,0.11,ft,None,None,Approved
+2024-02-13 18:17:00,70309,23.11,ft,None,None,Approved
+2024-04-09 19:24:00,70309,23.11,ft,None,None,Approved
+2024-04-09 19:24:00,70309,0.11,ft,None,None,Approved
+2024-04-09 19:39:00,62610,2200.0,ft,NGVD29,"GW level, calib electric tape",Approved
+2024-04-09 19:39:00,62611,2202.17,ft,NAVD88,"GW level, calib electric tape",Approved
+2024-04-09 19:39:00,72019,195.0,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2024-04-12 16:53:00,62610,2199.97,ft,NGVD29,"GW level, calib electric tape",Approved
+2024-04-12 16:53:00,62611,2202.14,ft,NAVD88,"GW level, calib electric tape",Approved
+2024-04-12 16:53:00,72019,195.03,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2024-04-12 17:15:00,70309,23.11,ft,None,None,Approved
+2024-04-12 17:15:00,70309,0.11,ft,None,None,Approved
+2024-08-27 17:36:00,70309,0.11,ft,None,None,Approved
+2024-08-27 17:36:00,70309,23.11,ft,None,None,Approved
+2024-08-27 17:39:00,62610,2200.49,ft,NGVD29,"GW level, calib electric tape",Approved
+2024-08-27 17:39:00,62611,2202.66,ft,NAVD88,"GW level, calib electric tape",Approved
+2024-08-27 17:39:00,72019,194.51,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2024-08-28 16:16:00,70309,23.11,ft,None,None,Approved
+2024-08-28 16:16:00,70309,0.11,ft,None,None,Approved
+2024-08-28 16:29:00,62610,2200.58,ft,NGVD29,"GW level, calib electric tape",Approved
+2024-08-28 16:29:00,62611,2202.75,ft,NAVD88,"GW level, calib electric tape",Approved
+2024-08-28 16:29:00,72019,194.42,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2024-10-17 20:45:00,70309,23.11,ft,None,None,Approved
+2024-10-17 20:45:00,70309,0.11,ft,None,None,Approved
+2024-10-17 20:47:00,62610,2195.21,ft,NGVD29,"GW level, calib electric tape",Approved
+2024-10-17 20:47:00,62611,2197.38,ft,NAVD88,"GW level, calib electric tape",Approved
+2024-10-17 20:47:00,72019,199.79,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2025-01-14 22:21:00,62610,2201.79,ft,NGVD29,"GW level, calib electric tape",Approved
+2025-01-14 22:21:00,62611,2203.96,ft,NAVD88,"GW level, calib electric tape",Approved
+2025-01-14 22:21:00,72019,193.21,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2025-01-14 22:25:00,70309,0.1,ft,None,None,Approved
+2025-04-16 18:45:00,62610,2203.03,ft,NGVD29,"GW level, calib electric tape",Approved
+2025-04-16 18:45:00,62611,2205.2,ft,NAVD88,"GW level, calib electric tape",Approved
+2025-04-16 18:45:00,72019,191.97,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2025-04-16 18:46:00,70309,0.1,ft,None,None,Approved
+2025-04-16 18:46:00,70309,0.1,ft,None,None,Approved
+2025-05-16 18:53:00,62610,2202.49,ft,NGVD29,"GW level, calib electric tape",Approved
+2025-05-16 18:53:00,62611,2204.66,ft,NAVD88,"GW level, calib electric tape",Approved
+2025-05-16 18:53:00,72019,192.51,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2025-05-16 18:55:00,70309,0.1,ft,None,None,Approved
+2025-05-16 18:55:00,70309,23.1,ft,None,None,Approved
+2025-06-02 19:11:00,62610,2203.48,ft,NGVD29,"GW level, calib electric tape",Approved
+2025-06-02 19:11:00,62611,2205.65,ft,NAVD88,"GW level, calib electric tape",Approved
+2025-06-02 19:11:00,72019,191.52,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2025-08-01 17:56:00,62610,2203.64,ft,NGVD29,"GW level, calib electric tape",Approved
+2025-08-01 17:56:00,62611,2205.81,ft,NAVD88,"GW level, calib electric tape",Approved
+2025-08-01 17:56:00,72019,191.36,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2025-12-02 16:28:00,62610,2203.56,ft,NGVD29,"GW level, calib electric tape",Approved
+2025-12-02 16:28:00,62611,2205.73,ft,NAVD88,"GW level, calib electric tape",Approved
+2025-12-02 16:28:00,72019,191.44,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2026-02-11 21:24:00,62610,2205.68,ft,NGVD29,"GW level, calib electric tape",Approved
+2026-02-11 21:24:00,62611,2207.85,ft,NAVD88,"GW level, calib electric tape",Approved
+2026-02-11 21:24:00,72019,189.32,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2026-02-11 21:29:00,70309,0.1,ft,None,None,Approved
+2026-02-11 21:29:00,70309,23.1,ft,None,None,Approved
+2026-04-23 17:50:00,70309,23.1,ft,None,None,Approved
+2026-04-23 17:50:00,70309,0.1,ft,None,None,Approved
+2026-04-23 17:55:00,62610,2205.81,ft,NGVD29,"GW level, calib electric tape",Approved
+2026-04-23 17:55:00,62611,2207.98,ft,NAVD88,"GW level, calib electric tape",Approved
+2026-04-23 17:55:00,72019,189.19,ft,Local Assumed Datum,"GW level, calib electric tape",Approved
+2026-09-23 15:20:00,62610,2205.73,ft,NGVD29,"GW level, calib electric tape",Provisional
+2026-09-23 15:20:00,62611,2207.9,ft,NAVD88,"GW level, calib electric tape",Provisional
+2026-09-23 15:20:00,72019,189.27,ft,Local Assumed Datum,"GW level, calib electric tape",Provisional

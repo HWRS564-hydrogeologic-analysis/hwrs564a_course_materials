@@ -1,14 +1,17 @@
+# D2L content page — Week 11
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week11.yml
+
 week: 11
-title: "Week 11 — Inputs, outputs, and hitting go"
+title: "Week 11 — Data sources and the computational landscape"
 dates: "November 3 & 5, 2026"
+
 overview: >
-  This week you build a model of the actual Tucson basin: 15 km by 10 km at 250 m
-  resolution, on land-surface elevations fitted to the 1,693 USGS wells you have
-  been working with since Week 5. Add a wellfield and recharge, run it, and map
-  the result. Then read the water budget, which is the only place a model tells
-  you where the pumped water came from — and compare modelled depth to water
-  against 80 real monitoring wells, which is where you find out what your invented
-  boundary conditions cost you.
+  This week starts Module 3 and has lectures only, with no lab. On Tuesday we
+  look at the data sources used across hydrologic processes. On Thursday we
+  cover the computational landscape: compiled and interpreted languages, the
+  Python stack, version control, editors, and environments for hydrologic
+  modeling.
 
 time_budget:
   - "3 hours in class"
@@ -17,37 +20,27 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Finish the Week 10 lab notebook"
-    url: "labs/week10/week10_lab_meeting_modflow.html"
-    site_relative: true
-    note: "Especially Parts 3 and 5 — this week assumes you can run a model and read its budget."
+  - text: "Keep working on HW 4"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Due Wednesday 11/11. There is no lab this week."
 
 class_material:
-  - text: "Tue 11/3 — Slides: Inputs, outputs, and hitting go"
-    url: "slides/week11_tue_inputs_outputs.html"
-    site_relative: true
-  - text: "Thu 11/5 — Slides: Budgets, and what a model is worth"
-    url: "slides/week11_thu_budgets.html"
-    site_relative: true
-  - text: "Lab notebook — A model of the Tucson basin"
-    url: "labs/week11/week11_lab_basin_model.html"
+  # TODO: Tuesday is a placeholder on the course site.
+  - "Tue 11/3 — Data sources across processes"
+  - text: "Thu 11/5 — Slides: The computational landscape"
+    url: "slides/week11_thu_computational_landscape.html"
     site_relative: true
 
 assignments:
-  - text: "Quiz 9 — on Week 10 material"
+  - text: "Quiz 9 — MODFLOW review: packages, running a model, the budget"
     quiz: "TBD-week11-quiz"
     note: "In class, Tuesday 11/3."
-  - text: "Submit: HW 5 — Three checks before believing an answer"
-    dropbox: "TBD-hw05-dropbox"
-    note: "Due Wednesday 11/4 at 11:59pm."
-  - text: "Open: HW 6 — Build and stress-test a basin model"
-    dropbox: "TBD-hw06-dropbox"
-    note: "Available after class Thursday 11/5; due Wednesday 11/18 at 11:59pm."
+  - text: "Continue: HW 4 — Putting the Pinal County wells on the model grid"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Due Wednesday 11/11 at 11:59pm."
 
 bonus:
-  - text: "FloPy plotting — PlotMapView and PlotCrossSection"
-    url: "https://flopy.readthedocs.io/en/stable/Notebooks/plot_map_view_example.html"
-  - text: "USGS — understanding a groundwater budget"
-    url: "https://www.usgs.gov/special-topics/water-science-school/science/groundwater-storage-and-budget"
-  - text: "Bredehoeft (2002), The Water Budget Myth Revisited"
-    url: "https://doi.org/10.1111/j.1745-6584.2002.tb02511.x"
+  - text: "Perkel (2019), Julia: come for the syntax, stay for the speed — Nature"
+    url: "https://doi.org/10.1038/d41586-019-02310-3"
+  - text: "Software Carpentry — Version control with Git"
+    url: "https://swcarpentry.github.io/git-novice/"

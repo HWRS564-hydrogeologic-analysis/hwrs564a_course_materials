@@ -395,5 +395,5 @@ What's due
 Next week
 :::
 
-Layers, rivers, and loading a model somebody else built, followed by a guided
-Thursday workshop using an inherited model.
+Layers, rivers, and loading a model somebody else built. On Thursday, an
+overview of hydrologic models and the questions they answer.

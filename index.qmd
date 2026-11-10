@@ -28,21 +28,21 @@ automatically. Do this before the first class of Week 2.
 | 2 | 8/31 | [Getting started with Python](slides/week02_tue_getting_started.qmd) · [Data types & sequences](slides/week02_thu_data_types.qmd) |
 | 3 | 9/7 | [Control flow](slides/week03_tue_control_flow.qmd) · [Functions and modules](slides/week03_thu_functions.qmd) |
 | 4 | 9/14 | [Arrays with numpy](slides/week04_tue_arrays.qmd) · [Iterative solutions](slides/week04_thu_iteration.qmd) |
-| 5 | 9/21 | [Pandas: labelled data through time](slides/week05_tue_pandas.qmd) · [Matplotlib from scratch](slides/week05_thu_filtering.qmd) |
+| 5 | 9/21 | [Pandas: labelled data through time](slides/week05_tue_pandas.qmd) · [Filter, summarise, and reshape](slides/week05_thu_filtering.qmd) |
 | **Module 2 · Introduction to MODFLOW & FloPy** | | |
-| 6 | 9/28 | [What MODFLOW is](slides/week06_tue_what_is_modflow.qmd) · [Running it](slides/week06_thu_running_it.qmd) |
-| 7 | 10/5 | [Inputs, outputs, hitting go](slides/week07_tue_inputs_outputs.qmd) · [Budgets](slides/week07_thu_budgets.qmd) |
-| 8 | 10/12 | [Discretization](slides/week08_tue_discretization.qmd) · [Unconfined flow](slides/week08_thu_unconfined.qmd) |
-| 9 | 10/19 | [Time and storage](slides/week09_tue_time.qmd) · [Capture and ET](slides/week09_thu_capture_et.qmd) |
-| 10 | 10/26 | [Layers, rivers, loading](slides/week10_tue_layers_rivers.qmd) · [Hydrologic models](slides/week10_thu_hydrologic_modeling.html) · [model inheritance lab](labs/week10/week10_lab_layers_rivers_loading.ipynb) |
+| 6 | 9/28 | [What MODFLOW is](slides/week06_tue_what_is_modflow.qmd) · [Running and checking a model](slides/week06_thu_running_it.qmd) |
+| 7 | 10/5 | [Your first FloPy model](slides/week07_tue_inputs_outputs.qmd) · [Loading and changing a model](slides/week07_thu_budgets.qmd) |
+| 8 | 10/12 | [Discretization and boundary conditions](slides/week08_tue_discretization.qmd) · [Unconfined flow](slides/week08_thu_unconfined.qmd) |
+| 9 | 10/19 | [Time and storage](slides/week09_tue_time.qmd) · [Hydrographs, capture, and ET](slides/week09_thu_capture_et.qmd) |
+| 10 | 10/26 | Layers, rivers, loading · [Hydrologic models](slides/week10_thu_hydrologic_modeling.html) |
 | **Module 3 · Data Analysis & Visualization** | | |
-| 11 | 11/2 | [Where data comes from](slides/week11_tue_apis.qmd) · [Gaps, duplicates, outliers](slides/week11_thu_cleaning.qmd) · [The computational landscape](slides/week11_thu_computational_landscape.html) |
-| 12 | 11/9 | [Differences, trends, and hypothesis tests](slides/week12_tue_inference.qmd) · [Inference and regression lab](slides/week12_thu_inference_lab.qmd) |
-| 13 | 11/16 | [Figures worth showing](slides/week13_tue_figures.qmd) · [Annotation and maps](slides/week13_thu_annotation_maps.qmd) |
+| 11 | 11/2 | Data sources across processes · [The computational landscape](slides/week11_thu_computational_landscape.html) |
+| 12 | 11/9 | [Working with real-world data](slides/week12_tue_real_world_data.qmd) · [Pinal water levels lab](labs/week12/week12_lab_pinal_water_levels.ipynb) · [Bonus: Tucson streamflow lab](labs/week12/week12_bonus_tucson_streamflow.ipynb) |
+| 13 | 11/16 | Coming soon |
 | 14 | 11/23 | Thanksgiving recess — no class all week |
 | **Module 4 · Reproducible Workflows** | | |
 | 15 | 11/30 | Debugging and coding practices |
-| 16 | 12/7 | Project 3 presentations *(Tue only)* |
+| 16 | 12/7 | Course closeout |
 
 ## How class works
 
@@ -57,6 +57,6 @@ prompt, and students create and submit their own executed Jupyter notebook.
 
 ## Getting help
 
-- **Office hours:** Tuesdays 1:00–2:00pm, Harshbarger 322B
+- **Office hours:** Tuesdays 1:00–2:00pm, Harshbarger 232
 - **Email:** [andrbenn@arizona.edu](mailto:andrbenn@arizona.edu)
 - **Found a bug in the material?** [Open an issue](https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials/issues) — genuinely welcome

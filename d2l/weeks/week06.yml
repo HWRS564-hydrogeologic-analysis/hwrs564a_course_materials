@@ -1,14 +1,17 @@
+# D2L content page — Week 6
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week06.yml
+
 week: 6
-title: "Week 6 — Working with real-world data"
+title: "Week 6 — What MODFLOW is, and running it"
 dates: "September 29 & October 1, 2026"
+
 overview: >
-  Last week's dataset was already tidy, because I tidied it. This week you get
-  data the way it actually arrives: from an API, with gaps in it, duplicate
-  rows, and values that look impossible but aren't. We cover pulling records
-  from the USGS, writing a fetch that survives the service being down, and the
-  judgement calls involved in deciding what is missing, what is zero, and which
-  outliers are errors rather than floods. None of those decisions come from the
-  data — they come from knowing what the number means.
+  This week starts Module 2. On Tuesday we cover what a groundwater model can
+  tell you that observations cannot, the conceptual model that comes before the
+  grid, the flow equation MODFLOW solves, and how MODFLOW splits its input into
+  packages that FloPy writes for you. On Thursday we run a model, check it
+  against an analytic solution, and read the `.list` file and the water budget.
 
 time_budget:
   - "3 hours in class"
@@ -20,36 +23,32 @@ background:
   - text: "Finish the Week 5 lab notebook"
     url: "labs/week05/week05_lab_pandas.html"
     site_relative: true
-    note: "Filtering, date parsing, and time-based summaries all return immediately this week."
-  - text: "USGS Water Data for the Nation — browse the Sabino Creek gauge"
-    url: "https://waterdata.usgs.gov/monitoring-location/09484000/"
-    note: "Ten minutes clicking around. You'll pull this record in class."
+  - text: "Confirm your codespace has the MODFLOW binaries"
+    url: "https://github.com/HWRS564-hydrogeologic-analysis/hwrs564a_course_materials"
+    note: "Open a terminal and run `ls modflow`. If it is empty, run ./postbuild.sh before Tuesday."
 
 class_material:
-  - text: "Tue 9/29 — Slides: Where data comes from"
-    url: "slides/week06_tue_apis.html"
+  - text: "Tue 9/29 — Slides: What MODFLOW is, and why"
+    url: "slides/week06_tue_what_is_modflow.html"
     site_relative: true
-  - text: "Thu 10/1 — Slides: Gaps, duplicates, and outliers"
-    url: "slides/week06_thu_cleaning.html"
+  - text: "Thu 10/1 — Slides: Running and checking a MODFLOW model"
+    url: "slides/week06_thu_running_it.html"
     site_relative: true
-  - text: "Lab notebook — Working with real-world data"
-    url: "labs/week06/week06_lab_real_world_data.html"
+  - text: "Lab notebook — Meeting MODFLOW"
+    url: "labs/week06/week06_lab_meeting_modflow.html"
     site_relative: true
-  - text: "Cheat sheet — pandas"
-    course_file: "pandas-cheat-sheet.pdf"
 
 assignments:
-  - text: "Quiz 4 — on Week 5 material"
+  - text: "Quiz 4 — on Week 5 material (pandas)"
     quiz: "TBD-week06-quiz"
     note: "In class, Tuesday 9/29."
-  - text: "Continue: HW 3 — Build a defensible groundwater dataset"
-    dropbox: "TBD-hw03-dropbox"
-    note: "Use this week's retrieval and cleaning material; due Wednesday 10/7 at 11:59pm."
+  # TODO: confirm the HW 3 release and due dates. week05.yml says released 9/24,
+  # due 10/7; d2l/assignments/hw03.md says released 10/8, due 10/21.
 
 bonus:
-  - text: "dataretrieval-python documentation"
-    url: "https://doi-usgs.github.io/dataretrieval-python/"
-  - text: "USGS parameter codes — what 00060 and 72019 mean"
-    url: "https://help.waterdata.usgs.gov/parameter_cd"
-  - text: "Tidy Data (Wickham 2014) — why long format keeps winning"
-    url: "https://vita.had.co.nz/papers/tidy-data.pdf"
+  - text: "MODFLOW-2005 online guide — the package reference"
+    url: "https://water.usgs.gov/nrp/gwsoftware/modflow2005/MODFLOW-2005-Guide.html"
+  - text: "FloPy documentation"
+    url: "https://flopy.readthedocs.io/"
+  - text: "Applied Groundwater Modeling (Anderson, Woessner & Hunt) — the standard text"
+    url: "https://doi.org/10.1016/C2009-0-21563-7"

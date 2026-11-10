@@ -5,6 +5,7 @@ project:
     - index.qmd
     - slides/*.qmd
     - labs/**/*.ipynb
+    - "!retired/"          # out-of-sequence material; keep it off the site
   resources:
     - data/**
     - assets/**
@@ -42,41 +43,29 @@ website:
           - href: slides/week05_tue_pandas.qmd
             text: "Wk 5 · Labelled data through time"
           - href: slides/week05_thu_filtering.qmd
-            text: "Wk 5 · Matplotlib from scratch"
+            text: "Wk 5 · Filter, summarise, and reshape"
           - href: slides/week06_tue_what_is_modflow.qmd
             text: "Wk 6 · What MODFLOW is"
           - href: slides/week06_thu_running_it.qmd
-            text: "Wk 6 · Running it"
+            text: "Wk 6 · Running and checking a model"
           - href: slides/week07_tue_inputs_outputs.qmd
-            text: "Wk 7 · Inputs, outputs, hitting go"
+            text: "Wk 7 · Your first FloPy model"
           - href: slides/week07_thu_budgets.qmd
-            text: "Wk 7 · Budgets"
+            text: "Wk 7 · Loading and changing a model"
           - href: slides/week08_tue_discretization.qmd
-            text: "Wk 8 · Discretization"
+            text: "Wk 8 · Discretization and boundary conditions"
           - href: slides/week08_thu_unconfined.qmd
             text: "Wk 8 · Unconfined flow"
           - href: slides/week09_tue_time.qmd
             text: "Wk 9 · Time and storage"
           - href: slides/week09_thu_capture_et.qmd
-            text: "Wk 9 · Capture and ET"
-          - href: slides/week10_tue_layers_rivers.qmd
-            text: "Wk 10 · Layers and rivers"
+            text: "Wk 9 · Hydrographs, capture, and ET"
           - href: slides/week10_thu_hydrologic_modeling.html
             text: "Wk 10 · Hydrologic models"
-          - href: slides/week11_tue_apis.qmd
-            text: "Wk 11 · Where data comes from"
-          - href: slides/week11_thu_cleaning.qmd
-            text: "Wk 11 · Gaps, duplicates, outliers"
           - href: slides/week11_thu_computational_landscape.html
             text: "Wk 11 · The computational landscape"
-          - href: slides/week12_tue_inference.qmd
-            text: "Wk 12 · Differences and trends"
-          - href: slides/week12_thu_inference_lab.qmd
-            text: "Wk 12 · Inference and regression lab"
-          - href: slides/week13_tue_figures.qmd
-            text: "Wk 13 · Figures worth showing"
-          - href: slides/week13_thu_annotation_maps.qmd
-            text: "Wk 13 · Annotation and maps"
+          - href: slides/week12_tue_real_world_data.qmd
+            text: "Wk 12 · Working with real-world data"
       - text: "Labs"
         menu:
           - href: labs/week02/week02_lab_python_basics.ipynb
@@ -103,14 +92,10 @@ website:
             text: "Wk 9 · Transient stresses"
           - href: labs/week09/week09_01_pinal_startup.ipynb
             text: "Wk 9 · Starting up the Pinal County model"
-          - href: labs/week10/week10_lab_layers_rivers_loading.ipynb
-            text: "Wk 10 · Layers and rivers"
-          - href: labs/week11/week11_lab_real_world_data.ipynb
-            text: "Wk 11 · Real-world data"
-          - href: labs/week12/week12_lab_inference.ipynb
-            text: "Wk 12 · Differences and trends"
-          - href: labs/week13/week13_lab_matplotlib.ipynb
-            text: "Wk 13 · Figures"
+          - href: labs/week12/week12_lab_pinal_water_levels.ipynb
+            text: "Wk 12 · Pinal water levels"
+          - href: labs/week12/week12_bonus_tucson_streamflow.ipynb
+            text: "Wk 12 · Bonus: Tucson streamflow"
   sidebar:
     style: docked
     collapse-level: 2
@@ -193,40 +178,22 @@ website:
                 text: "Lab · Starting up the Pinal County model"
           - section: "Week 10 — Layers, rivers, loading"
             contents:
-              - href: slides/week10_tue_layers_rivers.qmd
-                text: "Tue 10/27 · Slides"
               - href: slides/week10_thu_hydrologic_modeling.html
                 text: "Thu 10/29 · Slides"
-              - href: labs/week10/week10_lab_layers_rivers_loading.ipynb
-                text: "Lab · Layers, rivers, and inheriting a model"
       - section: "Module 3 · Data Analysis & Visualization"
         contents:
-          - section: "Week 11 — Real-world data"
+          - section: "Week 11 — Lectures"
             contents:
-              - href: slides/week11_tue_apis.qmd
-                text: "Tue 11/3 · Slides"
-              - href: slides/week11_thu_cleaning.qmd
-                text: "Thu 11/5 · Slides"
               - href: slides/week11_thu_computational_landscape.html
                 text: "Thu 11/5 · The computational landscape"
-              - href: labs/week11/week11_lab_real_world_data.ipynb
-                text: "Lab · Working with real-world data"
-          - section: "Week 12 — Inference and regression"
+          - section: "Week 12 — Real-world data"
             contents:
-              - href: slides/week12_tue_inference.qmd
+              - href: slides/week12_tue_real_world_data.qmd
                 text: "Tue 11/10 · Slides"
-              - href: slides/week12_thu_inference_lab.qmd
-                text: "Thu 11/12 · Slides"
-              - href: labs/week12/week12_lab_inference.ipynb
-                text: "Lab · From differences to trends"
-          - section: "Week 13 — More on Matplotlib"
-            contents:
-              - href: slides/week13_tue_figures.qmd
-                text: "Tue 11/17 · Slides"
-              - href: slides/week13_thu_annotation_maps.qmd
-                text: "Thu 11/19 · Slides"
-              - href: labs/week13/week13_lab_matplotlib.ipynb
-                text: "Lab · Figures worth showing people"
+              - href: labs/week12/week12_lab_pinal_water_levels.ipynb
+                text: "Lab · Water levels in the Pinal AMA"
+              - href: labs/week12/week12_bonus_tucson_streamflow.ipynb
+                text: "Bonus lab · Streamflow in the Tucson basin"
   page-footer:
     left: "HWRS 564a · Fall 2026 · Dr. Andrew Bennett"
     right: "Built with [Quarto](https://quarto.org)"

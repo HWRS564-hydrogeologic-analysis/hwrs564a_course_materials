@@ -1,13 +1,18 @@
+# D2L content page — Week 8
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week08.yml
+
 week: 8
-title: "Week 8 — More on matplotlib"
+title: "Week 8 — Discretization, boundaries, and unconfined flow"
 dates: "October 13 & 15, 2026"
+
 overview: >
-  Up to now you have made plots to find out what the data says. This week you
-  make plots to tell someone else, which is a different job with different
-  rules. Most of the difference is not aesthetic: a figure that encodes its
-  meaning in colour alone is unreadable to about one reader in twelve, and a
-  diverging colormap that isn't centred on zero says the opposite of what you
-  meant. Those are correctness problems, and they are what we spend the week on.
+  This week's model is a 15 km by 10 km piece of the Tucson basin. On Tuesday
+  we test how small the cells need to be and use `ibound` to mark which part of
+  the rectangular grid is aquifer. On Thursday we make the layer unconfined,
+  work through a run that does not converge with the default solver settings,
+  and deal with dry cells. We finish with a first look at the Pinal County model
+  you will use for Project 3.
 
 time_budget:
   - "3 hours in class"
@@ -16,43 +21,41 @@ time_budget:
   - "**7 hours TOTAL**"
 
 background:
-  - text: "Finish the Week 7 inference lab"
-    url: "labs/week07/week07_lab_inference.html"
+  - text: "Finish the Week 7 lab notebooks"
+    url: "labs/week07/week07_02_loading_modflow_models.html"
     site_relative: true
-    note: "Bring the effect estimate, interval, and limitation you will communicate in a figure."
-  - text: "Look at a figure you have made before and ask what its title says"
-    url: "https://www.data-to-viz.com/caveats.html"
-    note: "If the title could be generated from the axis labels, it is doing no work."
+  - text: "Notebook 0 — Wells in FloPy"
+    url: "labs/week08/week08_00_wells_in_flopy.html"
+    site_relative: true
+    note: "Read before Tuesday. It introduces the WEL package used in this week's model."
 
 class_material:
-  - text: "Tue 10/13 — Slides: Figures worth showing people"
-    url: "slides/week08_tue_figures.html"
+  - text: "Tue 10/13 — Slides: Discretization and boundary conditions"
+    url: "slides/week08_tue_discretization.html"
     site_relative: true
-  - text: "Thu 10/15 — Slides: Annotation, maps, and saving"
-    url: "slides/week08_thu_annotation_maps.html"
+  - text: "Thu 10/15 — Slides: Unconfined flow and dry cells"
+    url: "slides/week08_thu_unconfined.html"
     site_relative: true
-  - text: "Lab notebook — Figures worth showing people"
-    url: "labs/week08/week08_lab_matplotlib.html"
+  - text: "Lab notebook — Discretization and boundaries"
+    url: "labs/week08/week08_01_discretization_boundaries.html"
     site_relative: true
-  - text: "Cheat sheet — matplotlib commands"
-    course_file: "matplotlib_commands.png"
-  - text: "Cheat sheet — matplotlib, part 2"
-    course_file: "matplotlib_commands2.png"
+  - text: "Lab notebook — Unconfined flow and dry cells"
+    url: "labs/week08/week08_02_unconfined_dry_cells.html"
+    site_relative: true
+  # TODO: add the Google Drive link for the Pinal County model download here
+  # (the Week 8 Thursday slides send students to this page for it).
 
 assignments:
-  - text: "Quiz 6 — on Week 7 inference"
+  - text: "Quiz 6 — on Week 5 material (pandas time series)"
     quiz: "TBD-week08-quiz"
     note: "In class, Tuesday 10/13."
-  - text: "Continue: HW 4 — Evaluate and communicate a groundwater difference"
-    dropbox: "TBD-hw04-dropbox"
-    note: "Use this week's figure material to communicate the Week 7 analysis; due Wednesday 10/21 at 11:59pm."
-  - text: "Submit: Project 2 — analysis component, part 1"
-    dropbox: "TBD-project2a-dropbox"
+  - text: "Continue: HW 3 — Groundwater data and a first MODFLOW model"
+    dropbox: "TBD-hw03-dropbox"
+    note: "Due Wednesday 10/21 at 11:59pm."
+  # TODO: confirm whether Project 2 has a milestone this week.
 
 bonus:
-  - text: "matplotlib — choosing colormaps"
-    url: "https://matplotlib.org/stable/users/explain/colors/colormaps.html"
-  - text: "Why we use perceptually uniform colormaps (the viridis talk)"
-    url: "https://www.youtube.com/watch?v=xAoljeRJ3lU"
-  - text: "Coblis — check your figure with simulated colour vision deficiency"
-    url: "https://www.color-blindness.com/coblis-color-blindness-simulator/"
+  - text: "MODFLOW-NWT — the version that handles dewatering properly"
+    url: "https://www.usgs.gov/software/modflow-nwt-newton-formulation-modflow-2005"
+  - text: "Reilly & Harbaugh, Guidelines for evaluating ground-water flow models"
+    url: "https://pubs.usgs.gov/sir/2004/5038/"

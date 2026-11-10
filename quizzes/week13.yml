@@ -1,9 +1,9 @@
-# Week 13 quiz — covers Week 12 (discretization, ibound, unconfined, dry cells).
+# Week 13 quiz — covers Week 8 (discretization, ibound, unconfined, dry cells).
 
 quiz:
   week: 13
   title: "Week 13 Quiz"
-  covers: "Week 12 — grid convergence, ibound, laytyp, dry cells"
+  covers: "Week 8 — grid convergence, ibound, laytyp, dry cells"
   given: "Tuesday, November 17, start of class"
   time_limit_minutes: 5
   default_points: 1

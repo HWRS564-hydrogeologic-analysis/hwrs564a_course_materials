@@ -494,7 +494,7 @@ Today: get it onto your machine and look at it. We won't run it yet.
 
 ## Getting started
 
-Open `labs/week08/week08_03_pinal_startup.ipynb`.
+Open `labs/week09/week09_01_pinal_startup.ipynb`.
 
 ::: {.incremental}
 1. Download the model from the Google Drive link on the Week 8 D2L page

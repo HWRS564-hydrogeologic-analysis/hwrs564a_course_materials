@@ -1,0 +1,23 @@
+# D2L content page — Week 16
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week16.yml
+
+week: 16
+title: "Week 16 — Course closeout"
+dates: "December 8, 2026"
+
+overview: >
+  The last week of the semester. Details will be posted here.
+
+time_budget:
+  - "1.5 hours in class"
+
+background: []
+
+class_material:
+  # TODO: add closeout material.
+  - "Details will be posted before class."
+
+assignments: []
+
+bonus: []

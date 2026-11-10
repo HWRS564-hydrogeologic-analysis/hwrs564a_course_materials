@@ -1,13 +1,17 @@
+# D2L content page — Week 7
+#
+# Generate with:  python d2l/generate.py d2l/weeks/week07.yml
+
 week: 7
-title: "Week 7 — Uncertainty and hypothesis testing"
+title: "Week 7 — Building and changing a FloPy model"
 dates: "October 6 & 8, 2026"
+
 overview: >
-  An apparent difference is not yet evidence. This week uses paired Tucson-area
-  monitoring wells to ask whether a change in median depth to water is larger
-  than the variability expected under a no-change model. Students identify the
-  observational unit, report an effect in feet, construct a permutation null
-  distribution, bootstrap an uncertainty interval, and write a conclusion that
-  distinguishes evidence from a causal mechanism.
+  On Tuesday we build a simple steady-state, confined model one package at a
+  time: the grid, the boundary conditions, aquifer properties, output control,
+  and the solver. Then we run it and read the heads and flows back in. On
+  Thursday we load that model from its input files, make a changed copy in its
+  own folder with a different K field, and compare the two runs.
 
 time_budget:
   - "3 hours in class"
@@ -17,30 +21,36 @@ time_budget:
 
 background:
   - text: "Finish the Week 6 lab notebook"
-    url: "labs/week06/week06_lab_real_world_data.html"
+    url: "labs/week06/week06_lab_meeting_modflow.html"
     site_relative: true
-    note: "The Week 7 dataset is already cleaned so inference remains the main task."
 
 class_material:
-  - text: "Tue 10/6 — Slides: Is the difference larger than the noise?"
-    url: "slides/week07_tue_inference.html"
+  - text: "Tue 10/6 — Slides: Your first FloPy model"
+    url: "slides/week07_tue_inputs_outputs.html"
     site_relative: true
-  - text: "Thu 10/8 — Slides: Groundwater inference lab"
-    url: "slides/week07_thu_inference_lab.html"
+  - text: "Thu 10/8 — Slides: Loading and changing a model"
+    url: "slides/week07_thu_budgets.html"
     site_relative: true
-  - text: "Lab notebook — Is the difference larger than the noise?"
-    url: "labs/week07/week07_lab_inference.html"
+  - text: "Lab notebook — A simple FloPy model"
+    url: "labs/week07/week07_01_flopy_simple_model.html"
     site_relative: true
+  - text: "Lab notebook — Loading and modifying a model"
+    url: "labs/week07/week07_02_loading_modflow_models.html"
+    site_relative: true
+    note: "Keep your `simple_model` folder from Tuesday; this notebook loads it."
 
 assignments:
-  - text: "Quiz 5 — on Week 6 material"
+  # The Fall 2026 Week 7 quiz was retired (it covered material not taught
+  # before Week 7). Write a new one on Week 6 before next fall.
+  - text: "Quiz 5 — on Week 6 material (MODFLOW)"
     quiz: "TBD-week07-quiz"
     note: "In class, Tuesday 10/6."
-  - text: "Submit: HW 3 — Build a defensible groundwater dataset"
+  - text: "Open: HW 3 — Groundwater data and a first MODFLOW model"
     dropbox: "TBD-hw03-dropbox"
-    note: "Due Wednesday 10/7 at 11:59pm."
-  - text: "Open: HW 4 — Evaluate and communicate a groundwater difference"
-    dropbox: "TBD-hw04-dropbox"
-    note: "Inference this week, evidence figure in Week 8; due Wednesday 10/21 at 11:59pm."
+    note: "Available Thursday 10/8; due Wednesday 10/21 at 11:59pm."
 
-bonus: []
+bonus:
+  - text: "FloPy documentation"
+    url: "https://flopy.readthedocs.io/"
+  - text: "FloPy — loading and modifying existing models"
+    url: "https://flopy.readthedocs.io/en/stable/Notebooks/mf_load_example.html"

@@ -1,6 +1,6 @@
 ---
 title: "From differences to trends"
-subtitle: "HWRS 564a · Week 12 · Tuesday, November 10"
+subtitle: "HWRS 564a · Week 12 · Thursday, November 12"
 author: "Dr. Andrew Bennett"
 ---
 
@@ -366,9 +366,10 @@ $p\approx0.001$). Wells—not tape readings—are the observational units. Witho
 random site selection or an untreated control, the comparison does not describe
 the entire aquifer or establish a cause.
 
-## Thursday
+## The lab notebook
 
-The lab uses one notebook to complete both compact workflows:
+`labs/week12/week12_lab_inference.ipynb` completes both compact workflows on
+your own time:
 
 1. paired effect, plot, permutation p-value, and bounded conclusion; then
 2. simple trend, residual check, and bounded interpretation.

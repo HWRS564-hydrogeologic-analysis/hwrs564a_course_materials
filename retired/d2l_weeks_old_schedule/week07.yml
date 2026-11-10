@@ -1,0 +1,46 @@
+week: 7
+title: "Week 7 — Uncertainty and hypothesis testing"
+dates: "October 6 & 8, 2026"
+overview: >
+  An apparent difference is not yet evidence. This week uses paired Tucson-area
+  monitoring wells to ask whether a change in median depth to water is larger
+  than the variability expected under a no-change model. Students identify the
+  observational unit, report an effect in feet, construct a permutation null
+  distribution, bootstrap an uncertainty interval, and write a conclusion that
+  distinguishes evidence from a causal mechanism.
+
+time_budget:
+  - "3 hours in class"
+  - "1 hour preparing for class"
+  - "3 hours completing homework"
+  - "**7 hours TOTAL**"
+
+background:
+  - text: "Finish the Week 6 lab notebook"
+    url: "labs/week06/week06_lab_real_world_data.html"
+    site_relative: true
+    note: "The Week 7 dataset is already cleaned so inference remains the main task."
+
+class_material:
+  - text: "Tue 10/6 — Slides: Is the difference larger than the noise?"
+    url: "slides/week07_tue_inference.html"
+    site_relative: true
+  - text: "Thu 10/8 — Slides: Groundwater inference lab"
+    url: "slides/week07_thu_inference_lab.html"
+    site_relative: true
+  - text: "Lab notebook — Is the difference larger than the noise?"
+    url: "labs/week07/week07_lab_inference.html"
+    site_relative: true
+
+assignments:
+  - text: "Quiz 5 — on Week 6 material"
+    quiz: "TBD-week07-quiz"
+    note: "In class, Tuesday 10/6."
+  - text: "Submit: HW 3 — Build a defensible groundwater dataset"
+    dropbox: "TBD-hw03-dropbox"
+    note: "Due Wednesday 10/7 at 11:59pm."
+  - text: "Open: HW 4 — Evaluate and communicate a groundwater difference"
+    dropbox: "TBD-hw04-dropbox"
+    note: "Inference this week, evidence figure in Week 8; due Wednesday 10/21 at 11:59pm."
+
+bonus: []

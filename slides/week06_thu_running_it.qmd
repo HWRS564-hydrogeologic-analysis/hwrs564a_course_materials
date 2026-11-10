@@ -379,5 +379,5 @@ The three checks, on every run
 Next week
 :::
 
-Build a basin model with a wellfield and recharge, then examine the resulting
-head field.
+Build a simple FloPy model one package at a time, then load it back in from
+its input files and change it.
