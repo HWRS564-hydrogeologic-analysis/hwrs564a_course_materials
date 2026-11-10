@@ -295,16 +295,32 @@ window.Quarto = {
  <span class="dropdown-text">Wk 6 · Meeting MODFLOW</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week07/week07_lab_basin_model.html">
- <span class="dropdown-text">Wk 7 · Tucson basin model</span></a>
+    <a class="dropdown-item" href="../../labs/week07/week07_01_flopy_simple_model.html">
+ <span class="dropdown-text">Wk 7 · A simple FloPy model</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week08/week08_lab_discretization_boundaries.html">
- <span class="dropdown-text">Wk 8 · Discretization</span></a>
+    <a class="dropdown-item" href="../../labs/week07/week07_02_loading_modflow_models.html">
+ <span class="dropdown-text">Wk 7 · Loading and modifying a model</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../labs/week09/week09_lab_transient_stresses.html">
+    <a class="dropdown-item" href="../../labs/week08/week08_00_wells_in_flopy.html">
+ <span class="dropdown-text">Wk 8 · Wells in FloPy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_01_discretization_boundaries.html">
+ <span class="dropdown-text">Wk 8 · Discretization and boundaries</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week08/week08_02_unconfined_dry_cells.html">
+ <span class="dropdown-text">Wk 8 · Unconfined flow and dry cells</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week09/week09_00_lab_transient_stresses.html">
  <span class="dropdown-text">Wk 9 · Transient stresses</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week09/week09_01_pinal_startup.html">
+ <span class="dropdown-text">Wk 9 · Starting up the Pinal County model</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/week10/week10_lab_layers_rivers_loading.html">
@@ -535,8 +551,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week07/week07_lab_basin_model.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · A model of the Tucson basin</span></a>
+  <a href="../../labs/week07/week07_01_flopy_simple_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · A simple FloPy model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week07/week07_02_loading_modflow_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Loading and modifying a model</span></a>
   </div>
 </li>
       </ul>
@@ -564,8 +586,20 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week08/week08_lab_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab · Discretization and unconfined flow</span></a>
+  <a href="../../labs/week08/week08_00_wells_in_flopy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Wells in FloPy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_01_discretization_boundaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Discretization and boundaries</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week08/week08_02_unconfined_dry_cells.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Unconfined flow and dry cells</span></a>
   </div>
 </li>
       </ul>
@@ -593,8 +627,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../labs/week09/week09_lab_transient_stresses.html" class="sidebar-item-text sidebar-link">
+  <a href="../../labs/week09/week09_00_lab_transient_stresses.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab · Stresses that change with time</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week09/week09_01_pinal_startup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab · Starting up the Pinal County model</span></a>
   </div>
 </li>
       </ul>
@@ -798,7 +838,7 @@ window.Quarto = {
 
 <p><strong>HWRS 564a · Fall 2026</strong></p>
 <p>Two ideas this week, and they belong together.</p>
-<p>The first is <code>numpy</code>: a container for numbers that lets you say <code>heads * 3.28</code> instead of writing a loop. The second is <strong>iteration</strong> — solving equations you cannot rearrange by hand, by making a guess and improving it. Every groundwater model you run after Week 6 is doing exactly this, several thousand times a second.</p>
+<p>The first is <code>numpy</code>: a container for numbers that lets you say <code>heads * 3.28</code> instead of writing a loop. The second is <strong>iteration</strong> — solving equations you cannot rearrange by hand, by making a guess and improving it. Every groundwater model you run after Week 10 is doing exactly this, several thousand times a second.</p>
 <section id="how-to-use-this-notebook" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-use-this-notebook">How to use this notebook</h2>
 <p>Run each cell with <strong>Shift+Enter</strong>. Cells marked <strong><code># YOUR TURN</code></strong> have something for you to write. Cells marked <strong><code># CHECK</code></strong> verify your answer — if they run without complaint, you’re right.</p>
@@ -858,7 +898,7 @@ window.Quarto = {
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"numpy:              </span><span class="sc">{</span>array_time <span class="op">*</span> <span class="dv">1000</span><span class="sc">:7.1f}</span><span class="ss"> ms"</span>)</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"speedup:            </span><span class="sc">{</span>list_time <span class="op">/</span> array_time<span class="sc">:7.0f}</span><span class="ss">x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>By Week 7 your model grids have hundreds of thousands of cells and you will touch them once per iteration. A 50× difference stops being an academic point.</p>
+<p>By Week 11 your model grids have hundreds of thousands of cells and you will touch them once per iteration. A 50× difference stops being an academic point.</p>
 <p>An array has a <code>shape</code>, a <code>dtype</code>, and a fixed size. A list has none of those.</p>
 <div id="c008" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"shape: </span><span class="sc">{</span>depths<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -896,7 +936,7 @@ window.Quarto = {
 </section>
 <section id="part-2-two-dimensions-and-what-axis-means" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-two-dimensions-and-what-axis-means">Part 2 — Two dimensions, and what <code>axis</code> means</h2>
-<p>A model grid is 2D, so most arrays you meet after Week 6 are too. Here is a small head field: 4 rows (north to south) by 6 columns (west to east).</p>
+<p>A model grid is 2D, so most arrays you meet after Week 10 are too. Here is a small head field: 4 rows (north to south) by 6 columns (west to east).</p>
 <div id="c013" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>heads <span class="op">=</span> np.array([</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">412.1</span>, <span class="fl">411.4</span>, <span class="fl">410.2</span>, <span class="fl">408.9</span>, <span class="fl">406.3</span>, <span class="fl">403.1</span>],</span>
@@ -963,7 +1003,7 @@ window.Quarto = {
 <p><span class="math display">\[q(h) = \frac{K\,(h^2 - h_{stream}^2)}{2L}\]</span></p>
 <p>At steady state that discharge has to equal the recharge collected upgradient, <span class="math inline">\(R \cdot L\)</span>. So the equilibrium water table height <span class="math inline">\(h\)</span> is the value where</p>
 <p><span class="math display">\[f(h) = \frac{K\,(h^2 - h_{stream}^2)}{2L} - R\,L = 0\]</span></p>
-<p>You <em>could</em> rearrange this one by hand — it’s quadratic. Most of the equations you meet after Week 6 you cannot, so we will solve it the way you’d solve those.</p>
+<p>You <em>could</em> rearrange this one by hand — it’s quadratic. Most of the equations you meet after Week 10 you cannot, so we will solve it the way you’d solve those.</p>
 <div id="c025" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="fl">15.0</span>          <span class="co"># m/d</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> <span class="fl">900.0</span>         <span class="co"># m, distance from the divide to the stream</span></span>
@@ -996,7 +1036,7 @@ window.Quarto = {
 <li>if <code>func(lo)</code> and <code>func(mid)</code> have <strong>opposite signs</strong>, the root is in the lower half, so <code>hi = mid</code>; otherwise <code>lo = mid</code></li>
 <li>stop when <code>hi - lo</code> is smaller than <code>tol</code></li>
 </ol>
-<p>Two things to get right, both of which come back in Week 8:</p>
+<p>Two things to get right, both of which come back in Week 12:</p>
 <ul>
 <li>Compare with a <strong>tolerance</strong>, never <code>==</code>. You met this in Week 2.</li>
 <li>Carry a <code>max_iter</code> guard, like the <code>while</code> loop in Week 3.</li>

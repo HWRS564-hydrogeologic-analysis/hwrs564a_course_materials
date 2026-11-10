@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Discretization</title>
+  <title>HWRS 564a – Discretization and boundary conditions</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,7 +197,7 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Discretization</h1>
+  <h1 class="title">Discretization and boundary conditions</h1>
   <p class="subtitle">HWRS 564a · Week 8 · Tuesday, October 13</p>
 
 <div class="quarto-title-authors">
@@ -215,80 +215,124 @@ Dr.&nbsp;Andrew Bennett
 <p>Week 8, session 1 of 2</p>
 </div>
 <ol type="1">
-<li>Quiz — five minutes, on MODFLOW basics</li>
-<li>Choosing a cell size, and testing whether it mattered</li>
-<li>The one number that never converges</li>
-<li><code>ibound</code>, and domains that aren’t rectangles</li>
-<li>Connectivity, which nothing checks for you</li>
+<li>Quiz, five minutes</li>
+<li>This week’s model: part of the Tucson basin</li>
+<li>How small do the cells need to be?</li>
+<li><code>ibound</code>: active, inactive, and constant-head cells</li>
+<li>Checking that the active cells are connected</li>
 </ol>
+<p>We’re working through <code>week08_01_discretization_boundaries.ipynb</code>. Open it now and run cells as we go.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Grid convergence</h1>
+<h1>The model</h1>
 
 </section>
 <section class="slide level2">
-<h2>You picked 250 m because I said so</h2>
-<p><strong>A number that changes when you refine the grid is a number about your grid, not about the aquifer.</strong></p>
+<h2>A bigger model than last week</h2>
+
+<img data-src="week08_tue_discretization_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><p>15 km by 10 km on the north side of the Tucson basin. Land surface is from SRTM, averaged onto 250 m cells: 40 rows, 60 columns.</p>
+</section>
+<section class="slide level2">
+<h2>What’s in it</h2>
+<table class="caption-top">
+<tbody>
+<tr class="odd">
+<td>Layer</td>
+<td>one, confined, top at 600 m, bottom at 400 m</td>
+</tr>
+<tr class="even">
+<td>Hydraulic conductivity</td>
+<td>12 m/d</td>
+</tr>
+<tr class="odd">
+<td>West edge</td>
+<td>constant head, 620 m</td>
+</tr>
+<tr class="even">
+<td>East edge</td>
+<td>constant head, 700 m</td>
+</tr>
+<tr class="odd">
+<td>Recharge</td>
+<td>1.2e-4 m/d everywhere</td>
+</tr>
+<tr class="even">
+<td>Well</td>
+<td>20,000 m³/d, 7.5 km east and 5 km south of the NW corner</td>
+</tr>
+</tbody>
+</table>
 <div class="fragment">
-<p>The test: run the same physical problem at two resolutions and see whether the answer moves.</p>
+<p>Same packages as Week 7, plus <code>RCH</code> for recharge. For the first half of today we ignore the mountains and treat the whole rectangle as aquifer.</p>
+</div>
+</section></section>
+<section>
+<section class="title-slide slide level1 center" data-background-color="#AB0520">
+<h1>Cell size</h1>
+
+</section>
+<section class="slide level2">
+<h2>Why 250 m?</h2>
+<p>A smaller cell gives a more detailed answer and a slower model. So how do you know when the cells are small enough?</p>
+<div class="fragment">
+<p>Run the same problem at two or three cell sizes and compare. If the answer stops changing, the cells are small enough.</p>
 </div>
 <div class="fragment">
-<p>Note <em>physical</em> problem. The well goes at the same <strong>location</strong>, not the same cell index — 7,500 m east and 5,000 m south, whatever that is in cells.</p>
+<p>Keep the problem the same on the ground. The well stays 7.5 km east and 5 km south of the corner, so its row and column change with the cell size.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Three resolutions</h2>
-<div id="fccb7eef" class="cell" data-execution_count="2">
+<h2>Three cell sizes</h2>
+<div id="c1184629" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-stdout">
-<pre><code> cell size     cells   well head   min head
-      500m       600    655.990m    620.00m
-      250m     2,400    654.365m    620.00m
-      125m     9,600    653.101m    620.00m</code></pre>
+<pre><code> cell size    cells    well cell    1 km west of well
+     500 m      600    655.990 m            652.463 m
+     250 m    2,400    654.365 m            652.401 m
+     125 m    9,600    653.101 m            652.367 m</code></pre>
 </div>
 </div>
-<div class="fragment">
-<p>The minimum head does not move at all — it is a boundary condition. The <strong>well head keeps falling</strong>.</p>
-</div>
+<ul>
+<li class="fragment">One kilometre from the well, the head changes by a few centimetres</li>
+<li class="fragment">In the well cell, it changes by more than a metre each time</li>
+</ul>
 </section>
 <section class="slide level2">
-<h2>Which is expected</h2>
+<h2>The two heads behave differently</h2>
 
-<img data-src="week08_tue_discretization_files/figure-revealjs/cell-4-output-1.png" class="r-stretch"></section>
+<img data-src="week08_tue_discretization_files/figure-revealjs/cell-5-output-1.png" class="r-stretch"><p>Both panels have the same vertical span.</p>
+</section>
 <section class="slide level2">
-<h2>Why it never converges</h2>
-<p>Head near a well varies <strong>logarithmically</strong> with distance:</p>
+<h2>Why the well cell keeps changing</h2>
+<p>Head near a well depends on the log of the distance from it:</p>
 <p><span class="math display">\[h(r) = h_0 + \frac{Q}{2\pi T}\ln\frac{r}{r_0}\]</span></p>
 <div class="fragment">
-<p>So the <em>average</em> head over a cell containing a well depends on how big that cell is — forever. Halve the cell and the average goes deeper.</p>
+<p>MODFLOW gives one head per cell. A smaller cell represents a region closer to the well, so its head is lower.</p>
 </div>
-<div class="fragment due-notice">
-<p><strong>The head in a pumping cell is not a water level in a well.</strong> Reporting it as one is among the most common errors in groundwater modelling reports.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>What does converge</h2>
-<ul>
-<li class="fragment">Regional heads away from the well</li>
-<li class="fragment">The <strong>water budget</strong> — every term</li>
-<li class="fragment">The shape and extent of the cone</li>
-</ul>
 <div class="fragment">
-<p>Those are the numbers you report. If you need a pumping water level you apply an analytical correction, refine locally, or say you can’t.</p>
+<p>Each time the cell size is halved, the well-cell head drops by about <span class="math inline">\(\frac{Q}{2\pi T}\ln 2\)</span>. Here that is about 0.9 m. It does not go to zero.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Your turn: is this converging?</h2>
-<p>Three runs of the same problem. Decide whether the grid is fine enough.</p>
+<h2>What this means in practice</h2>
+<ul>
+<li class="fragment">The head in a pumping cell is <strong>not</strong> the water level in the well. The water level in the well is lower.</li>
+<li class="fragment">To estimate the level in the well, use an analytical correction or a much finer grid around the well.</li>
+<li class="fragment">To decide whether the grid is fine enough, look at heads away from the wells and at the water budget.</li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Your turn: has it converged?</h2>
+<p>Heads 1 km west of the well at three cell sizes. Work out the two changes and whether the second is smaller than the first.</p>
 <script type="exercise-setup-ex_converge-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaGVhZHMgPSB7NTAwLjA6IDY1My4wOTMsIDI1MC4wOiA2NTQuMzYwLCAxMjUuMDogNjU0Ljk4N30ifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibmVhciA9IHs1MDAuMDogNjUyLjQ2MywgMjUwLjA6IDY1Mi40MDEsIDEyNS4wOiA2NTIuMzY3fSJ9
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJjaGFuZ2VfMSA9IGhlYWRzWzI1MC4wXSAtIGhlYWRzWzUwMC4wXVxuY2hhbmdlXzIgPSBfX19fX19cbmNvbnZlcmdpbmcgPSBfX19fX19cbnByaW50KGZcIjUwMCAtPiAyNTAgbSA6IHtjaGFuZ2VfMTorLjNmfSBtXCIpXG5wcmludChmXCIyNTAgLT4gMTI1IG0gOiB7Y2hhbmdlXzI6Ky4zZn0gbVwiKVxucHJpbnQoZlwiY2hhbmdlcyBzaHJpbmtpbmc/IHtjb252ZXJnaW5nfVwiKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NvbnZlcmdlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJjaGFuZ2VfMSA9IG5lYXJbMjUwLjBdIC0gbmVhcls1MDAuMF1cbmNoYW5nZV8yID0gX19fX19fXG5zaHJpbmtpbmcgPSBfX19fX19cbnByaW50KGZcIjUwMCAtPiAyNTAgbSA6IHtjaGFuZ2VfMTorLjNmfSBtXCIpXG5wcmludChmXCIyNTAgLT4gMTI1IG0gOiB7Y2hhbmdlXzI6Ky4zZn0gbVwiKVxucHJpbnQoZlwic2Vjb25kIGNoYW5nZSBzbWFsbGVyPyB7c2hyaW5raW5nfVwiKSJ9
 </script>
 </div>
 <div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_converge">
@@ -301,7 +345,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Converging means each successive change is smaller in magnitude than the last. <code>abs()</code> both of them before comparing.</p>
+<p>Compare the sizes of the changes, not their signs. Use <code>abs()</code> on both.</p>
 </div>
 </div>
 </div>
@@ -316,142 +360,10 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>change_2 <span class="op">=</span> heads[<span class="fl">125.0</span>] <span class="op">-</span> heads[<span class="fl">250.0</span>]</span>
-<span id="cb2-2"><a></a>converging <span class="op">=</span> <span class="bu">abs</span>(change_2) <span class="op">&lt;</span> <span class="bu">abs</span>(change_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>+1.267</code> then <code>+0.627</code> — halving each time, so yes, the sequence is converging, just to a value it never quite reaches.</p>
-<p><strong>Had the second change been larger than the first</strong>, the grid would be too coarse to be saying anything at all, and the right response is to refine until the changes shrink — not to pick whichever answer you like.</p>
-</div>
-</div>
-</div>
-</div>
-</section></section>
-<section>
-<section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1><code>ibound</code></h1>
-
-</section>
-<section class="slide level2">
-<h2>Three values, three meanings</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Value</th>
-<th>Meaning</th>
-<th>Head is</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>1</code></td>
-<td>active</td>
-<td>solved for</td>
-</tr>
-<tr class="even">
-<td><code>0</code></td>
-<td><strong>inactive</strong> — not in the model</td>
-<td>never computed</td>
-</tr>
-<tr class="odd">
-<td><code>-1</code></td>
-<td>constant head</td>
-<td>fixed at <code>strt</code>, forever</td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
-<p><strong><code>ibound = 0</code> is not the same as <code>hk = 0</code>.</strong> An inactive cell is removed from the equations. A zero-conductivity cell is still solved for, still has a head, and still makes your solver miserable.</p>
-</div>
-<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 12. -->
-</section>
-<section class="slide level2 smaller">
-<h2>Cell status turns a rectangle into a model domain</h2>
-<div class="columns">
-<div class="column" style="width:47%;">
-<p><img data-src="../assets/legacy/boundary_cells.jpg" style="width:88.0%" alt="A rectangular groundwater model grid with no-flow cells outside an aquifer boundary, constant-head cells at an edge, and variable-head cells inside"></p>
-</div><div class="column" style="width:53%;">
-<p>The grid stays rectangular, but the <strong>solved domain does not have to be</strong>.</p>
-<ul>
-<li class="fragment">Grey cells are removed from the equations</li>
-<li class="fragment">Blue cells impose a fixed head</li>
-<li class="fragment">White cells carry the unknown heads</li>
-<li class="fragment">The black line is the conceptual aquifer boundary</li>
-</ul>
-<div class="fragment due-notice">
-<p>Cell status is a modeling decision about the domain, not a cosmetic mask.</p>
-</div>
-</div></div>
-</section>
-<section class="slide level2">
-<h2>Cutting the basin out of the rectangle</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>ibound <span class="op">=</span> np.ones((<span class="dv">1</span>, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb3-2"><a></a>ibound[<span class="dv">0</span>][land_surface <span class="op">&gt;</span> <span class="fl">850.0</span>] <span class="op">=</span> <span class="dv">0</span>     <span class="co"># bedrock, not basin fill</span></span>
-<span id="cb3-3"><a></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
-<span id="cb3-4"><a></a>ibound[:, :, <span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>387 cells inactive — 16% of the grid. The domain is now basin-shaped.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>And the problem that creates</h2>
-
-<img data-src="week08_tue_discretization_files/figure-revealjs/cell-5-output-1.png" class="r-stretch"><div class="fragment">
-<p>The southern three rows became a wall with nothing behind it.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>MODFLOW would not tell you</h2>
-<ul>
-<li class="fragment">It runs</li>
-<li class="fragment">It solves the remaining domain</li>
-<li class="fragment">It computes nothing for rows 37–39</li>
-<li class="fragment">It reports a <strong>closed budget</strong> — because a region exchanging no water is trivially in balance</li>
-</ul>
-<div class="fragment due-notice">
-<p><strong>Checking connectivity is your job.</strong> Nothing in the software does it for you, and a zero discrepancy will not warn you.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Your turn: find the blocked rows</h2>
-<script type="exercise-setup-ex_connect-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbiMgYWN0aXZlLWNlbGwgY291bnRzIGZvciBhIDEwLXJvdyB0b3kgZG9tYWluXG5hY3RpdmVfcGVyX3JvdyA9IG5wLmFycmF5KFsxMiwgMTQsIDE1LCAxNSwgMTUsIDEzLCA4LCAwLCAwLCAwXSkifQ==
-</script>
-<div>
-<div id="pyodide-4" class="exercise-cell">
-
-</div>
-<script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImJsb2NrZWQgPSBfX19fX19cbndoaWNoID0gX19fX19fXG5wcmludChmXCJ7YmxvY2tlZH0gcm93cyBhcmUgZnVsbHkgaW5hY3RpdmU6IHJvd3Mge3doaWNofVwiKSJ9
-</script>
-</div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_connect">
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Hint</strong></p>
-</div>
-<div class="callout-content">
-<p>Summing a boolean array counts the <code>True</code>s. <code>np.where(condition)[0]</code> gives the indices where it holds.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_connect">
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Solution</strong></p>
-</div>
-<div class="callout-content">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>blocked <span class="op">=</span> <span class="bu">int</span>((active_per_row <span class="op">==</span> <span class="dv">0</span>).<span class="bu">sum</span>())</span>
-<span id="cb4-2"><a></a>which <span class="op">=</span> np.where(active_per_row <span class="op">==</span> <span class="dv">0</span>)[<span class="dv">0</span>].tolist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Three rows, 7 through 9.</p>
-<p>The fix in the lab is to raise the bedrock cutoff until every row reaches a boundary. Note what that means: <strong>you changed a geological decision because of a numerical problem.</strong> Sometimes right, sometimes the start of a model answering a different question — but either way it goes in the report, not in your head.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>change_2 <span class="op">=</span> near[<span class="fl">125.0</span>] <span class="op">-</span> near[<span class="fl">250.0</span>]</span>
+<span id="cb2-2"><a></a>shrinking <span class="op">=</span> <span class="bu">abs</span>(change_2) <span class="op">&lt;</span> <span class="bu">abs</span>(change_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The changes are −0.062 m and −0.034 m. Each is about half the one before, so the next would be under 2 cm. For most purposes 250 m is fine here.</p>
+<p>If the second change were as big as the first, you would need smaller cells.</p>
 </div>
 </div>
 </div>
@@ -459,15 +371,15 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section>
 <section class="slide level2">
 <h2>Your turn: pick a cell size</h2>
-<p>You need to resolve a cone of depression about 2 km across, and the domain is 15 km by 10 km. Cells must be square.</p>
+<p>A rule of thumb: put at least 8 cells across the smallest feature you care about. You want to see a cone of depression about 2 km across in a 15 km by 10 km domain.</p>
 <script type="exercise-setup-ex_cellsize-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NlbGxzaXplIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY29uZV93aWR0aF9tID0gMjAwMC4wXG5kb21haW5feCwgZG9tYWluX3kgPSAxNTAwMC4wLCAxMDAwMC4wXG5jZWxsc19hY3Jvc3NfY29uZSA9IDggICAgICAgICMgYSBydWxlIG9mIHRodW1iOiBhdCBsZWFzdCA4IGNlbGxzIGFjcm9zcyBhIGZlYXR1cmUifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NlbGxzaXplIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiY29uZV93aWR0aF9tID0gMjAwMC4wXG5kb21haW5feCwgZG9tYWluX3kgPSAxNTAwMC4wLCAxMDAwMC4wXG5jZWxsc19hY3Jvc3NfY29uZSA9IDgifQ==
 </script>
 <div>
-<div id="pyodide-6" class="exercise-cell">
+<div id="pyodide-4" class="exercise-cell">
 
 </div>
-<script type="pyodide-6-contents">
+<script type="pyodide-4-contents">
 eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NlbGxzaXplIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJtYXhfY2VsbF9zaXplID0gX19fX19fXG5uX2NlbGxzID0gX19fX19fXG5wcmludChmXCJjZWxsIHNpemUgbm8gbGFyZ2VyIHRoYW4ge21heF9jZWxsX3NpemU6LjBmfSBtXCIpXG5wcmludChmXCJ0aGF0IGlzIHtuX2NlbGxzOiwuMGZ9IGNlbGxzIGluIG9uZSBsYXllclwiKSJ9
 </script>
 </div>
@@ -481,7 +393,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>If you need 8 cells across a 2 km feature, each cell can be at most 2000/8 across. Then count how many fit in the domain.</p>
+<p>Divide the feature width by the number of cells you want across it. Then work out how many cells of that size fit in each direction.</p>
 </div>
 </div>
 </div>
@@ -496,14 +408,195 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>max_cell_size <span class="op">=</span> cone_width_m <span class="op">/</span> cells_across_cone</span>
-<span id="cb5-2"><a></a>n_cells <span class="op">=</span> (domain_x <span class="op">/</span> max_cell_size) <span class="op">*</span> (domain_y <span class="op">/</span> max_cell_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>250 m cells, 2,400 of them — which is where the number I handed you in Week 7 came from.</p>
-<p><strong>Resolve the feature you came to look at.</strong> Same argument as choosing a time step, and the same argument as choosing a rolling window in Week 5: the discretization has to be finer than the thing you are trying to see.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>max_cell_size <span class="op">=</span> cone_width_m <span class="op">/</span> cells_across_cone</span>
+<span id="cb3-2"><a></a>n_cells <span class="op">=</span> (domain_x <span class="op">/</span> max_cell_size) <span class="op">*</span> (domain_y <span class="op">/</span> max_cell_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>250 m cells, and 2,400 of them. That is the grid we are using.</p>
 </div>
 </div>
 </div>
 </div>
+</section></section>
+<section>
+<section class="title-slide slide level1 center" data-background-color="#0C234B">
+<h1><code>ibound</code></h1>
+
+</section>
+<section class="slide level2">
+<h2>Three values</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Meaning</th>
+<th>Head</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>1</code></td>
+<td>active</td>
+<td>calculated by MODFLOW</td>
+</tr>
+<tr class="even">
+<td><code>0</code></td>
+<td>inactive</td>
+<td>not calculated; the cell is not in the model</td>
+</tr>
+<tr class="odd">
+<td><code>-1</code></td>
+<td>constant head</td>
+<td>fixed at the value in <code>strt</code></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>You set <code>ibound</code> in the <code>BAS</code> package. In Week 7 it was all ones, with <code>-1</code> down the left and right edges.</p>
+</div>
+<!-- Figure recovered from old_slides/hwrs564a_oct23.pdf, p. 12. -->
+</section>
+<section class="slide level2 smaller">
+<h2>The grid is a rectangle. The aquifer is not.</h2>
+<div class="columns">
+<div class="column" style="width:47%;">
+<p><img data-src="../assets/legacy/boundary_cells.jpg" style="width:88.0%" alt="A rectangular groundwater model grid with no-flow cells outside an aquifer boundary, constant-head cells at an edge, and variable-head cells inside"></p>
+</div><div class="column" style="width:53%;">
+<ul>
+<li class="fragment">The black line is the edge of the aquifer</li>
+<li class="fragment">Grey cells are inactive (<code>0</code>)</li>
+<li class="fragment">Blue cells are constant head (<code>-1</code>)</li>
+<li class="fragment">White cells are active (<code>1</code>)</li>
+</ul>
+<div class="fragment">
+<p>An active cell next to an inactive cell has a no-flow boundary on that side. You do not have to set that up. It follows from <code>ibound</code>.</p>
+</div>
+</div></div>
+</section>
+<section class="slide level2">
+<h2><code>ibound = 0</code> is not <code>hk = 0</code></h2>
+<ul>
+<li class="fragment">An inactive cell is left out of the equations</li>
+<li class="fragment">A cell with <code>hk = 0</code> is still in the equations and still gets a head</li>
+<li class="fragment">Cells like that can slow the solver or stop it converging</li>
+</ul>
+<div class="fragment">
+<p>To leave rock out of the model, use <code>ibound = 0</code>.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Cutting out the mountains</h2>
+<p>We don’t have a map of where the basin fill ends. As a stand-in: any cell with land surface above 850 m is bedrock.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>ibound <span class="op">=</span> np.ones((<span class="dv">1</span>, NROW, NCOL), dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb4-2"><a></a>ibound[<span class="dv">0</span>][land_surface <span class="op">&gt;</span> <span class="fl">850.0</span>] <span class="op">=</span> <span class="dv">0</span>     <span class="co"># bedrock</span></span>
+<span id="cb4-3"><a></a>ibound[:, :, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>                    <span class="co"># constant head on the west edge</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p>The east edge is mostly mountain front now, so we leave it as no-flow and keep constant head on the west edge only.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>The result</h2>
+
+<img data-src="week08_tue_discretization_files/figure-revealjs/cell-6-output-1.png" class="r-stretch"><div id="afe1641d" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-stdout">
+<pre><code>1604 active, 756 inactive, 40 constant head</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Run it</h2>
+<div id="91662b66" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-stdout">
+<pre><code>success = False
+highest head in an active cell: 232,584 m</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>The run fails, and the highest head is hundreds of kilometres up.</p>
+</div>
+<div class="fragment">
+<p>Look at the east edge of the map again. A few small patches of active cells are surrounded by inactive ones. They get recharge and have nowhere to send it.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Finding cut-off cells</h2>
+<p>MODFLOW moves water only between cells that share a face. Cells that touch at a corner are not connected.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="im">from</span> scipy <span class="im">import</span> ndimage</span>
+<span id="cb7-2"><a></a></span>
+<span id="cb7-3"><a></a>in_model <span class="op">=</span> ibound[<span class="dv">0</span>] <span class="op">!=</span> <span class="dv">0</span>                      <span class="co"># active or constant head</span></span>
+<span id="cb7-4"><a></a>regions, n_regions <span class="op">=</span> ndimage.label(in_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p><code>ndimage.label</code> numbers each group of connected cells 1, 2, 3, … and uses the same shared-face rule.</p>
+</div>
+<div id="4cae7662" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-stdout">
+<pre><code>4 separate regions, with [1633, 8, 2, 1] cells</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: how many cells are cut off?</h2>
+<script type="exercise-setup-ex_connect-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbmNlbGxzX3Blcl9yZWdpb24gPSBucC5hcnJheShbMTYzMywgOCwgMiwgMV0pIn0=
+</script>
+<div>
+<div id="pyodide-6" class="exercise-cell">
+
+</div>
+<script type="pyodide-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nvbm5lY3QiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6Im1haW5fcmVnaW9uID0gX19fX19fICAgICAgICAgICAjIHJlZ2lvbiBudW1iZXJzIHN0YXJ0IGF0IDFcbm5fY3V0X29mZiA9IF9fX19fX1xucHJpbnQoZlwibWFpbiByZWdpb246IHttYWluX3JlZ2lvbn1cIilcbnByaW50KGZcImNlbGxzIGN1dCBvZmYgZnJvbSBpdDoge25fY3V0X29mZn1cIikifQ==
+</script>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_connect">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hint</strong></p>
+</div>
+<div class="callout-content">
+<p><code>argmax()</code> gives the position of the largest value, counting from 0. The cut-off cells are everything that is not in the largest region.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_connect">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Solution</strong></p>
+</div>
+<div class="callout-content">
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>main_region <span class="op">=</span> <span class="bu">int</span>(cells_per_region.argmax()) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb9-2"><a></a>n_cut_off <span class="op">=</span> <span class="bu">int</span>(cells_per_region.<span class="bu">sum</span>() <span class="op">-</span> cells_per_region.<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Region 1 is the basin. Eleven cells in three small patches are cut off from it.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Remove them and run again</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>ibound_fixed <span class="op">=</span> ibound.copy()</span>
+<span id="cb10-2"><a></a>ibound_fixed[<span class="dv">0</span>][regions <span class="op">!=</span> main_region] <span class="op">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<img data-src="week08_tue_discretization_files/figure-revealjs/cell-10-output-1.png" class="r-stretch"><div id="73ababae" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-stdout">
+<pre><code>success = True, head 610.7 to 620.0 m</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Check this every time</h2>
+<ul>
+<li class="fragment">MODFLOW reported a solver failure. It did not say the cells were cut off.</li>
+<li class="fragment">Without recharge on those cells, the run would have succeeded and they would have kept their starting head.</li>
+<li class="fragment">Run the connectivity check whenever you build or change <code>ibound</code>.</li>
+<li class="fragment">Mask inactive cells before you plot heads. They hold a placeholder value, <code>hnoflo</code>, in the head file.</li>
+</ul>
 </section>
 <section class="slide level2 smaller">
 <h2>Wrap up</h2>
@@ -511,28 +604,28 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>Test the answer against cell size; a number that moves is about your grid</li>
-<li>The pumping-cell head never converges, and is not a well water level</li>
-<li><code>ibound</code>: 1 active, 0 inactive, −1 constant head — and 0 is not <code>hk = 0</code></li>
-<li>A disconnected region still reports a closed budget</li>
+<li>Ran one problem at three cell sizes and compared the answers</li>
+<li>Saw why the head in a pumping cell is not the water level in the well</li>
+<li>Used <code>ibound</code> to make part of the grid inactive</li>
+<li>Found cells that were cut off from the model and removed them</li>
 </ul>
 <div class="kicker">
 <p>Before Thursday</p>
 </div>
 <ul>
-<li>Parts 1–3 of <code>labs/week08/week08_lab_discretization_boundaries.ipynb</code></li>
+<li>Finish <code>labs/week08/week08_01_discretization_boundaries.ipynb</code></li>
 </ul>
 <div class="kicker">
 <p>Thursday</p>
 </div>
-<p>Taking the confining layer off, and the model that stops converging.</p>
+<p>Unconfined flow, a model that does not converge with the default solver settings, and dry cells. Then a first look at the Pinal County model for Project 3.</p>
 
 
 <script type="pyodide-data">
 eyJvcHRpb25zIjp7ImVudiI6eyJQTE9UTFlfUkVOREVSRVIiOiJwbG90bHlfbWltZXR5cGUifSwiaW5kZXhVUkwiOiJodHRwczovL2Nkbi5qc2RlbGl2ci5uZXQvcHlvZGlkZS92MC4yOC4xL2Z1bGwvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsicHlvZGlkZV9odHRwIiwibWljcm9waXAiLCJpcHl0aG9uIiwibnVtcHkiLCJtYXRwbG90bGliIiwicGFuZGFzIl19fQ==
 </script>
 <script type="ojs-module-contents">
-eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTYiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl82ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gU2V0dXAgY2VsbHMgYXJlIGV4ZWN1dGVkIGluIHRoZSBleGVyY2lzZSdzIHByZXBhcmF0aW9uIGVudmlyb25tZW50LiBLZWVwXG4gIC8vIHRoYXQgY29kZSB2aXNpYmxlIGluIHRoZSBlZGl0b3Igc28gc3R1ZGVudHMgY2FuIHNlZSBldmVyeSBzdXBwbGllZFxuICAvLyB2YXJpYWJsZSBpbW1lZGlhdGVseSBpbnN0ZWFkIG9mIGhhdmluZyB0byBpbmZlciBpdCBmcm9tIHRoZSBwcm9tcHQuXG4gIGNvbnN0IHNldHVwU2NyaXB0ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICBgc2NyaXB0W3R5cGU9XFxcImV4ZXJjaXNlLXNldHVwLSR7YmxvY2suYXR0ci5leGVyY2lzZX0tY29udGVudHNcXFwiXWBcbiAgKTtcbiAgY29uc3Qgc2V0dXBDb2RlID0gc2V0dXBTY3JpcHRcbiAgICA/IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNldHVwU2NyaXB0LnRleHRDb250ZW50KSkuY29kZS50cmltRW5kKClcbiAgICA6IFwiXCI7XG4gIGNvbnN0IHZpc2libGVDb2RlID0gc2V0dXBDb2RlID8gYCR7c2V0dXBDb2RlfVxcblxcbiR7YmxvY2suY29kZX1gIDogYmxvY2suY29kZTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS02LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihcbiAgICBweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLFxuICAgIHZpc2libGVDb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfNiA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfNiwge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfNiA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfNi5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfNCA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIFNldHVwIGNlbGxzIGFyZSBleGVjdXRlZCBpbiB0aGUgZXhlcmNpc2UncyBwcmVwYXJhdGlvbiBlbnZpcm9ubWVudC4gS2VlcFxuICAvLyB0aGF0IGNvZGUgdmlzaWJsZSBpbiB0aGUgZWRpdG9yIHNvIHN0dWRlbnRzIGNhbiBzZWUgZXZlcnkgc3VwcGxpZWRcbiAgLy8gdmFyaWFibGUgaW1tZWRpYXRlbHkgaW5zdGVhZCBvZiBoYXZpbmcgdG8gaW5mZXIgaXQgZnJvbSB0aGUgcHJvbXB0LlxuICBjb25zdCBzZXR1cFNjcmlwdCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXG4gICAgYHNjcmlwdFt0eXBlPVxcXCJleGVyY2lzZS1zZXR1cC0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9LWNvbnRlbnRzXFxcIl1gXG4gICk7XG4gIGNvbnN0IHNldHVwQ29kZSA9IHNldHVwU2NyaXB0XG4gICAgPyBKU09OLnBhcnNlKGI2NERlY29kZShzZXR1cFNjcmlwdC50ZXh0Q29udGVudCkpLmNvZGUudHJpbUVuZCgpXG4gICAgOiBcIlwiO1xuICBjb25zdCB2aXNpYmxlQ29kZSA9IHNldHVwQ29kZSA/IGAke3NldHVwQ29kZX1cXG5cXG4ke2Jsb2NrLmNvZGV9YCA6IGJsb2NrLmNvZGU7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcInB5b2RpZGUtNC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IoXG4gICAgcHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSxcbiAgICB2aXNpYmxlQ29kZSxcbiAgICBvcHRpb25zXG4gICk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF9weW9kaWRlX3ZhbHVlXzQgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzQsIHt9KTtcbl9weW9kaWRlX2ZlZWRiYWNrXzQgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBQeW9kaWRlR3JhZGVyKF9weW9kaWRlX3ZhbHVlXzQuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6InB5b2RpZGUtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3B5b2RpZGVfZWRpdG9yXzIgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBTZXR1cCBjZWxscyBhcmUgZXhlY3V0ZWQgaW4gdGhlIGV4ZXJjaXNlJ3MgcHJlcGFyYXRpb24gZW52aXJvbm1lbnQuIEtlZXBcbiAgLy8gdGhhdCBjb2RlIHZpc2libGUgaW4gdGhlIGVkaXRvciBzbyBzdHVkZW50cyBjYW4gc2VlIGV2ZXJ5IHN1cHBsaWVkXG4gIC8vIHZhcmlhYmxlIGltbWVkaWF0ZWx5IGluc3RlYWQgb2YgaGF2aW5nIHRvIGluZmVyIGl0IGZyb20gdGhlIHByb21wdC5cbiAgY29uc3Qgc2V0dXBTY3JpcHQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFxuICAgIGBzY3JpcHRbdHlwZT1cXFwiZXhlcmNpc2Utc2V0dXAtJHtibG9jay5hdHRyLmV4ZXJjaXNlfS1jb250ZW50c1xcXCJdYFxuICApO1xuICBjb25zdCBzZXR1cENvZGUgPSBzZXR1cFNjcmlwdFxuICAgID8gSlNPTi5wYXJzZShiNjREZWNvZGUoc2V0dXBTY3JpcHQudGV4dENvbnRlbnQpKS5jb2RlLnRyaW1FbmQoKVxuICAgIDogXCJcIjtcbiAgY29uc3QgdmlzaWJsZUNvZGUgPSBzZXR1cENvZGUgPyBgJHtzZXR1cENvZGV9XFxuXFxuJHtibG9jay5jb2RlfWAgOiBibG9jay5jb2RlO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJweW9kaWRlLTItY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKFxuICAgIHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsXG4gICAgdmlzaWJsZUNvZGUsXG4gICAgb3B0aW9uc1xuICApO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfcHlvZGlkZV92YWx1ZV8yID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl8yLCB7fSk7XG5fcHlvZGlkZV9mZWVkYmFja18yID0ge1xuICBjb25zdCB7IFB5b2RpZGVHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgUHlvZGlkZUdyYWRlcihfcHlvZGlkZV92YWx1ZV8yLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJweW9kaWRlT2pzID0ge1xuICBjb25zdCB7XG4gICAgUHlvZGlkZUV2YWx1YXRvcixcbiAgICBQeW9kaWRlRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUHl0aG9uLFxuICAgIHN0YXJ0UHlvZGlkZVdvcmtlcixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoLFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gUHlvZGlkZSBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBsZXQgcHlvZGlkZVByb21pc2UgPSAoYXN5bmMgKCkgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgUHlvZGlkZWA7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHN0YXJ0UHlvZGlkZVdvcmtlcihkYXRhLm9wdGlvbnMpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiBtaWNyb3BpcGA7XG4gICAgYXdhaXQgcHlvZGlkZS5sb2FkUGFja2FnZShcIm1pY3JvcGlwXCIpO1xuICAgIGNvbnN0IG1pY3JvcGlwID0gYXdhaXQgcHlvZGlkZS5weWltcG9ydChcIm1pY3JvcGlwXCIpO1xuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIG1pY3JvcGlwLmluc3RhbGwocGtnKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcbiAgICBhd2FpdCBtaWNyb3BpcC5kZXN0cm95KCk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCBweW9kaWRlLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKGUubmFtZSAhPT0gXCJFcnJub0Vycm9yXCIpIHRocm93IGU7XG4gICAgICAgICAgaWYgKGUuZXJybm8gIT09IDIwKSB7XG4gICAgICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yICR7ZS5lcnJub30gXCIke2Vycm9yVGV4dH1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHRyeSB7XG4gICAgICAgIHJldHVybiBhd2FpdCBweW9kaWRlLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICBjb25zdCBlcnJvclRleHQgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuVVRGOFRvU3RyaW5nKGVycm9yVGV4dFB0cik7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICB9XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFB5b2RpZGUgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUHl0aG9uKHB5b2RpZGUpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHB5b2RpZGU7XG4gIH0pKCkuY2F0Y2goKGVycikgPT4ge1xuICAgIHN0YXR1c1RleHQuc3R5bGUuY29sb3IgPSBcInZhcigtLWV4ZXJjaXNlLWVkaXRvci1obC1lciwgI0FEMDAwMClcIjtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gZXJyLm1lc3NhZ2U7XG4gICAgLy9pbmRpY2F0b3JDb250YWluZXIucXVlcnlTZWxlY3RvcihcIi5zcGlubmVyLWdyb3dcIikuY2xhc3NMaXN0LmFkZChcImQtbm9uZVwiKTtcbiAgICB0aHJvdyBlcnI7XG4gIH0pO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCBweW9kaWRlID0gYXdhaXQgcHlvZGlkZVByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFB5b2RpZGVFdmFsdWF0b3IocHlvZGlkZSwgY29udGV4dCk7XG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHlvZGlkZVByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gICAgcHJvY2VzcyxcbiAgfTtcbn1cbiJ9XX0=
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTYiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl82ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcInB5b2RpZGUtNi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IocHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF9weW9kaWRlX3ZhbHVlXzYgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzYsIHt9KTtcbl9weW9kaWRlX2ZlZWRiYWNrXzYgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBQeW9kaWRlR3JhZGVyKF9weW9kaWRlX3ZhbHVlXzYuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6InB5b2RpZGUtNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3B5b2RpZGVfZWRpdG9yXzQgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS00LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfNCA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfNCwge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfNCA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfNC5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfMiA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJweW9kaWRlLTItY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfcHlvZGlkZV92YWx1ZV8yID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl8yLCB7fSk7XG5fcHlvZGlkZV9mZWVkYmFja18yID0ge1xuICBjb25zdCB7IFB5b2RpZGVHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgUHlvZGlkZUdyYWRlcihfcHlvZGlkZV92YWx1ZV8yLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJweW9kaWRlT2pzID0ge1xuICBjb25zdCB7XG4gICAgUHlvZGlkZUV2YWx1YXRvcixcbiAgICBQeW9kaWRlRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUHl0aG9uLFxuICAgIHN0YXJ0UHlvZGlkZVdvcmtlcixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoLFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gUHlvZGlkZSBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBsZXQgcHlvZGlkZVByb21pc2UgPSAoYXN5bmMgKCkgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgUHlvZGlkZWA7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHN0YXJ0UHlvZGlkZVdvcmtlcihkYXRhLm9wdGlvbnMpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiBtaWNyb3BpcGA7XG4gICAgYXdhaXQgcHlvZGlkZS5sb2FkUGFja2FnZShcIm1pY3JvcGlwXCIpO1xuICAgIGNvbnN0IG1pY3JvcGlwID0gYXdhaXQgcHlvZGlkZS5weWltcG9ydChcIm1pY3JvcGlwXCIpO1xuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIG1pY3JvcGlwLmluc3RhbGwocGtnKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcbiAgICBhd2FpdCBtaWNyb3BpcC5kZXN0cm95KCk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCBweW9kaWRlLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKGUubmFtZSAhPT0gXCJFcnJub0Vycm9yXCIpIHRocm93IGU7XG4gICAgICAgICAgaWYgKGUuZXJybm8gIT09IDIwKSB7XG4gICAgICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yICR7ZS5lcnJub30gXCIke2Vycm9yVGV4dH1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHRyeSB7XG4gICAgICAgIHJldHVybiBhd2FpdCBweW9kaWRlLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICBjb25zdCBlcnJvclRleHQgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuVVRGOFRvU3RyaW5nKGVycm9yVGV4dFB0cik7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICB9XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFB5b2RpZGUgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUHl0aG9uKHB5b2RpZGUpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHB5b2RpZGU7XG4gIH0pKCkuY2F0Y2goKGVycikgPT4ge1xuICAgIHN0YXR1c1RleHQuc3R5bGUuY29sb3IgPSBcInZhcigtLWV4ZXJjaXNlLWVkaXRvci1obC1lciwgI0FEMDAwMClcIjtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gZXJyLm1lc3NhZ2U7XG4gICAgLy9pbmRpY2F0b3JDb250YWluZXIucXVlcnlTZWxlY3RvcihcIi5zcGlubmVyLWdyb3dcIikuY2xhc3NMaXN0LmFkZChcImQtbm9uZVwiKTtcbiAgICB0aHJvdyBlcnI7XG4gIH0pO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCBweW9kaWRlID0gYXdhaXQgcHlvZGlkZVByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFB5b2RpZGVFdmFsdWF0b3IocHlvZGlkZSwgY29udGV4dCk7XG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHlvZGlkZVByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gICAgcHJvY2VzcyxcbiAgfTtcbn1cbiJ9XX0=
 </script>
 <div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
 <div id="exercise-loading-status" class="d-flex gap-2">
