@@ -1,0 +1,557 @@
+---
+title: "Unconfined flow and dry cells"
+subtitle: "HWRS 564a · Week 8 · Thursday, October 15"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+# Runs the same models as labs/week08/week08_02_unconfined_dry_cells.ipynb at
+# render time, so the figures and numbers on the slides are the ones students
+# get in the notebook.
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+ROOT = Path.cwd().parent
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh."
+RUN = ROOT / "_run"
+NROW, NCOL, DELR = 40, 60, 250.0
+WELL_ROW, WELL_COL = 20, 30
+EXTENT = [0, 15, 0, 10]
+
+
+def run_box(name, laytyp, well_q=-20000.0, botm=400.0, west_head=620.0,
+            start_head=660.0, pcg_kwargs=None):
+    ws = RUN / f"week08_slides_{name}"
+    ws.mkdir(parents=True, exist_ok=True)
+    mf = flopy.modflow.Modflow("box", model_ws=str(ws), exe_name=str(MF_EXE))
+    flopy.modflow.ModflowDis(mf, 1, NROW, NCOL, delr=DELR, delc=DELR,
+                             top=700.0, botm=botm, nper=1, steady=True)
+    ib = np.ones((1, NROW, NCOL), dtype=int)
+    ib[:, :, 0] = -1
+    ib[:, :, -1] = -1
+    strt = np.full((1, NROW, NCOL), start_head)
+    strt[:, :, 0] = west_head
+    strt[:, :, -1] = 680.0
+    flopy.modflow.ModflowBas(mf, ibound=ib, strt=strt)
+    flopy.modflow.ModflowLpf(mf, hk=12.0, laytyp=laytyp, ipakcb=53)
+    flopy.modflow.ModflowWel(
+        mf, stress_period_data={0: [[0, WELL_ROW, WELL_COL, well_q]]}, ipakcb=53)
+    flopy.modflow.ModflowRch(mf, rech=1.2e-4, ipakcb=53)
+    flopy.modflow.ModflowPcg(mf, **(pcg_kwargs or {}))
+    flopy.modflow.ModflowOc(mf, stress_period_data={(0, 0): ["save head", "save budget"]})
+    mf.write_input()
+    ok, _ = mf.run_model(silent=True, report=True)
+    return ok, flopy.utils.HeadFile(str(ws / "box.hds")).get_data(), ws
+
+
+def budget_value(ws, name):
+    rows = flopy.utils.MfListBudget(str(ws / "box.list")).get_data()
+    return float([r["value"] for r in rows if r["name"].decode() == name][0])
+
+
+ok_conf, head_conf, ws_conf = run_box("confined", 0)
+ok_uncf, head_uncf, ws_uncf = run_box("unconfined", 1)
+ok_more, head_more, ws_more = run_box("unconfined_more", 1, pcg_kwargs={"mxiter": 200})
+ok_fixed, head_fixed, ws_fixed = run_box("unconfined_fixed", 1, pcg_kwargs={"rclose": 1.0})
+assert ok_conf and ok_fixed and not ok_uncf and not ok_more
+max_diff = float(np.abs(head_uncf - head_fixed).max())
+
+_, head_conf_80, _ = run_box("confined_80", 0, well_q=-80000.0)
+_, head_uncf_80, _ = run_box("unconfined_80", 1, well_q=-80000.0,
+                             pcg_kwargs={"rclose": 1.0})
+
+ok_dry, head_dry, ws_dry = run_box("dry", 1, well_q=-40000.0, botm=640.0,
+                                   west_head=660.0, start_head=670.0,
+                                   pcg_kwargs={"mxiter": 200, "rclose": 1.0})
+dry_mask = head_dry[0] < -1e29
+head_masked = np.where(dry_mask, np.nan, head_dry[0])
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE = "#AB0520", "#0C234B"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 8, session 2 of 2
+:::
+
+1. `laytyp`: confined and unconfined layers
+2. A run that does not converge, and how to find out why
+3. Dry cells
+4. A first look at the Pinal County model for Project 3
+
+We're working through `week08_02_unconfined_dry_cells.ipynb`, then
+`week08_03_pinal_startup.ipynb`.
+
+# Confined or unconfined {background-color="#0C234B"}
+
+## One argument in `LPF`
+
+::: {.columns}
+::: {.column width="50%"}
+**`laytyp=0`, confined**
+
+$$T = Kb$$
+
+$b$ is the layer thickness. $T$ does not depend on head.
+:::
+
+::: {.column width="50%"}
+**`laytyp=1`, convertible**
+
+$$T = K(h - z_{bot})$$
+
+Used when head is below the layer top. $T$ depends on the head.
+:::
+:::
+
+::: {.fragment}
+Use `laytyp=1` when the top of the saturated zone is a water table. That is
+most of the Tucson basin.
+:::
+
+## What changes for the solver
+
+With `laytyp=1`, MODFLOW needs $T$ to solve for $h$, and needs $h$ to
+calculate $T$.
+
+::: {.incremental}
+1. Guess the heads
+2. Calculate $T$ from them
+3. Solve for new heads
+4. Repeat from step 2 until the heads stop changing
+:::
+
+::: {.fragment}
+Each pass through steps 2 and 3 is one **outer iteration**. This is the
+iteration idea from Week 4, applied to 2,400 cells at once.
+:::
+
+## Your turn: transmissivity as head falls
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_transmissivity
+hk = 12.0
+z_bot = 400.0
+heads = [680.0, 660.0, 640.0, 620.0]
+```
+
+```{pyodide}
+#| exercise: ex_transmissivity
+for h in heads:
+    T = ______
+    print(f"head {h:6.0f} m   saturated thickness {h - z_bot:5.0f} m   T = {T:7.0f} m2/d")
+```
+
+::: {.hint exercise="ex_transmissivity"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Transmissivity is conductivity times saturated thickness. The saturated
+thickness is the head minus the layer bottom.
+:::
+:::
+
+::: {.solution exercise="ex_transmissivity"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+T = hk * (h - z_bot)
+```
+
+$T$ goes from 3,360 to 2,640 m²/d as head falls 60 m. That is a 21% drop.
+:::
+:::
+
+# When a run doesn't converge {background-color="#AB0520"}
+
+## Same model, `laytyp` changed
+
+This is Tuesday's rectangular model at 250 m, with the layer top at 700 m and
+the east boundary at 680 m.
+
+```python
+ok_conf, head_conf, ws_conf = run_box("confined", laytyp=0)
+ok_uncf, head_uncf, ws_uncf = run_box("unconfined", laytyp=1)
+```
+
+```{python}
+#| echo: false
+print(f"confined:   success = {ok_conf}")
+print(f"unconfined: success = {ok_uncf}")
+```
+
+::: {.fragment}
+The `.list` file for the unconfined run says:
+
+```
+****FAILED TO MEET SOLVER CONVERGENCE CRITERIA IN TIME STEP 1 OF STRESS PERIOD 1****
+```
+:::
+
+## What the solver was asked to do
+
+PCG stops when **both** of these are met:
+
+| Argument | FloPy default | Meaning |
+|---|---|---|
+| `hclose` | 1e-5 | largest head change between iterations, in metres |
+| `rclose` | 1e-5 | largest water-balance error in any one cell, in m³/d |
+
+It also has limits on how long it will try:
+
+| Argument | FloPy default | Meaning |
+|---|---|---|
+| `mxiter` | 50 | maximum outer iterations |
+| `iter1` | 30 | maximum inner iterations per outer iteration |
+
+## How big are the flows?
+
+```{python}
+#| echo: false
+for name in ("CONSTANT_HEAD_IN", "RECHARGE_IN", "CONSTANT_HEAD_OUT", "WELLS_OUT", "IN-OUT"):
+    print(f"{name:20s} {budget_value(ws_uncf, name):14.4f}  m3/d")
+```
+
+::: {.fragment}
+About 140,000 m³/d moves through the model, and the budget balances.
+:::
+
+::: {.fragment}
+`rclose=1e-5` asks every cell to balance to 0.00001 m³/d. The solver gets close
+and then stops improving, because the numbers are not that precise.
+:::
+
+## More iterations?
+
+```python
+run_box("unconfined_more", laytyp=1, pcg_kwargs={"mxiter": 200})
+```
+
+```{python}
+#| echo: false
+print(f"mxiter=200: success = {ok_more}")
+```
+
+::: {.fragment}
+No. The residual has stopped shrinking, so more iterations don't help.
+:::
+
+::: {.fragment}
+```python
+run_box("unconfined_fixed", laytyp=1, pcg_kwargs={"rclose": 1.0})
+```
+
+```{python}
+#| echo: false
+print(f"rclose=1.0: success = {ok_fixed}")
+```
+
+1 m³/d is less than one part in 100,000 of the flow through this model.
+:::
+
+## Your turn: is the tolerance reasonable?
+
+Express `rclose` as a fraction of the total flow through the model, for the
+default and for the value we chose.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_rclose
+total_flow = 140903.0        # m3/d, from the budget
+rclose_values = [1e-5, 1.0]
+```
+
+```{pyodide}
+#| exercise: ex_rclose
+for rclose in rclose_values:
+    fraction = ______
+    print(f"rclose = {rclose:g} m3/d is {fraction:.1e} of the flow")
+```
+
+::: {.hint exercise="ex_rclose"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Divide the tolerance by the total flow.
+:::
+:::
+
+::: {.solution exercise="ex_rclose"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+fraction = rclose / total_flow
+```
+
+The default is about 7e-11 of the flow. MODFLOW-2005 stores numbers to about
+seven significant figures, so it cannot reach that. `rclose = 1.0` is 7e-6 of
+the flow, which it can.
+
+Set `rclose` from the size of the flows in your model.
+:::
+:::
+
+## Did the "failed" run get the wrong answer?
+
+```python
+np.abs(head_uncf - head_fixed).max()
+```
+
+```{python}
+#| echo: false
+print(f"{max_diff:.6f} m")
+```
+
+::: {.fragment}
+The heads are the same. The first run had reached the answer and was reported
+as failed because the tolerance could not be met.
+:::
+
+::: {.fragment}
+That is not always so. Tuesday's first basin model also failed, and its heads
+were nonsense. You have to look.
+:::
+
+## When a run fails
+
+::: {.incremental}
+1. Read the solver section and the budget in the `.list` file
+2. Compare `hclose` and `rclose` with the heads and flows in the model
+3. Look at the heads. Are they physically possible?
+4. Change one setting at a time and write down what you tried
+:::
+
+::: {.fragment}
+A run that converges has met its tolerances. Whether the boundary conditions,
+conductivity, and recharge are right is a separate question.
+:::
+
+## How much does `laytyp` matter?
+
+Both layer types, with the well pumping 80,000 m³/d:
+
+```{python}
+#| echo: false
+c = float(head_conf_80[0, WELL_ROW, WELL_COL])
+u = float(head_uncf_80[0, WELL_ROW, WELL_COL])
+print(f"confined   well-cell head {c:8.2f} m")
+print(f"unconfined well-cell head {u:8.2f} m")
+print(f"difference                {u - c:+8.2f} m")
+```
+
+::: {.incremental}
+- Pumping lowers the water table
+- That reduces the saturated thickness, and so $T$
+- Lower $T$ means more drawdown for the same pumping
+:::
+
+# Dry cells {background-color="#0C234B"}
+
+## When head falls below the layer bottom
+
+The cell has no saturated thickness. MODFLOW marks it **dry**, sets its head to
+`-1e30`, and takes it out of the calculation.
+
+To see it: layer bottom at 640 m, pumping 40,000 m³/d.
+
+```{python}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.5
+fig, axes = plt.subplots(1, 2, figsize=(11, 3.5))
+im0 = axes[0].imshow(head_dry[0], cmap="Blues_r", extent=EXTENT)
+fig.colorbar(im0, ax=axes[0], label="head (m)")
+axes[0].set_title("Head as written by MODFLOW")
+im1 = axes[1].imshow(head_masked, cmap="Blues_r", extent=EXTENT)
+axes[1].contourf(np.flipud(dry_mask.astype(float)), levels=[0.5, 1.5],
+                 colors=[UA_RED], alpha=0.85, extent=EXTENT)
+fig.colorbar(im1, ax=axes[1], label="head (m)")
+axes[1].set_title("Dry cells masked (shown in red)")
+for ax in axes:
+    ax.set_xlabel("distance east (km)")
+axes[0].set_ylabel("distance north (km)")
+plt.tight_layout()
+plt.show()
+```
+
+## Three kinds of value in the head file
+
+| Value | Meaning |
+|---|---|
+| `hnoflo` (`-999.99` by default) | inactive cell, `ibound = 0` |
+| `hdry` (`-1e30` by default) | the cell went dry during the run |
+| anything else | a calculated head |
+
+::: {.fragment}
+Mask the first two before you plot or calculate anything.
+:::
+
+```python
+dry_mask = head[0] < -1e29
+head_masked = np.where(dry_mask, np.nan, head[0])
+```
+
+## Your turn: mask them
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_dry
+import numpy as np
+head = np.array([[665.2, 664.1, -1e30, -1e30, 661.0],
+                 [664.8, 663.2, -1e30, 660.4, 659.9]])
+```
+
+```{pyodide}
+#| exercise: ex_dry
+dry = ______
+masked = ______
+print(f"{dry.sum()} of {head.size} cells dry")
+print(f"wet-cell range: {np.nanmin(masked):.1f} to {np.nanmax(masked):.1f} m")
+```
+
+::: {.hint exercise="ex_dry"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Compare against a threshold near the flag value, such as `-1e29`. Then use
+`np.where` to put `np.nan` in the dry cells.
+:::
+:::
+
+::: {.solution exercise="ex_dry"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+dry = head < -1e29
+masked = np.where(dry, np.nan, head)
+```
+
+Three dry cells. The wet ones run from 659.9 to 665.2 m.
+
+Use `< -1e29` and not `== -1e30`. Floating-point values should not be tested
+for exact equality, and `hdry` can be changed in the `LPF` package.
+:::
+:::
+
+## Masking fixes the plot, not the model
+
+```{python}
+#| echo: false
+print("pumping asked for:     40,000 m3/d")
+print(f"pumping in the budget: {abs(budget_value(ws_dry, 'WELLS_OUT')):,.0f} m3/d")
+```
+
+::: {.incremental}
+- The well is in a dry cell, and MODFLOW stops pumping from a dry cell
+- A dry cell carries no water, so its neighbours may go dry too
+- MODFLOW-2005 does not rewet a dry cell unless you turn rewetting on, and
+  that often causes convergence problems
+:::
+
+## If your model has dry cells, check
+
+::: {.incremental}
+- Is the pumping rate realistic for that location?
+- Is the layer bottom too shallow there?
+- Should the aquifer have more layers, so the water table can drop through the
+  top one?
+- Would MODFLOW-NWT be a better choice? It was written for unconfined problems
+  where cells dry and rewet.
+:::
+
+::: {.fragment}
+And compare the pumping in the budget with the pumping you asked for.
+:::
+
+# The Pinal County model {background-color="#AB0520"}
+
+## Project 3
+
+Project 3 uses a MODFLOW model of the Pinal Active Management Area, built by
+the Arizona Department of Water Resources.
+
+::: {.incremental}
+- It is a real model that is used for water management decisions
+- You will load it, change something, and compare the results
+- We cover what you need for that in Weeks 9 and 10
+:::
+
+::: {.fragment}
+Today: get it onto your machine and look at it. We won't run it yet.
+:::
+
+## Getting started
+
+Open `labs/week08/week08_03_pinal_startup.ipynb`.
+
+::: {.incremental}
+1. Download the model from the Google Drive link on the Week 8 D2L page
+2. Unzip it into a folder called `pinal_model` at the top of the course repo
+3. Run the notebook
+:::
+
+::: {.fragment}
+```python
+m = flopy.modflow.Modflow.load(
+    NAM.name, model_ws=str(MODEL_WS),
+    load_only=["dis", "bas6"], check=False, forgive=True,
+)
+```
+
+`load_only` reads just the packages you name. Here that is the grid and
+`ibound`.
+:::
+
+## What to look for
+
+Everything in the notebook is something you did this week on the small model.
+
+| This week | In the Pinal model |
+|---|---|
+| Cell size | How big are the cells? What does that mean near a well? |
+| `ibound` | How much of the grid is active? Is it all connected? |
+| `laytyp` | Which layers are confined and which are convertible? |
+| Solver | Which solver, and what tolerances? |
+
+::: {.fragment}
+Write your answers in the notebook and keep it. You'll use them when Project 3
+starts.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Switched a layer from confined to unconfined with `laytyp`
+- Found out from the `.list` file why a run did not converge, and fixed the
+  tolerance
+- Found and masked dry cells, and checked the pumping in the budget
+- Loaded the grid and `ibound` of the Pinal County model
+
+::: {.kicker}
+Before Tuesday
+:::
+
+- Finish the Week 8 notebooks, including the questions in
+  `week08_03_pinal_startup.ipynb`
+
+::: {.kicker}
+Next week
+:::
+
+Models that change through time: stress periods, storage, and wells that
+switch on and off.

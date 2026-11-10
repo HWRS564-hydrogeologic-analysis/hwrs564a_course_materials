@@ -1,0 +1,152 @@
+---
+title: "Inference and regression lab"
+subtitle: "HWRS 564a · Week 12 · Thursday, November 12"
+author: "Dr. Andrew Bennett"
+---
+
+## Today's two related questions
+
+Among Tucson-area wells monitored in both windows, how did median depth to
+water change from **1996–2000** to **2002–2006**?
+
+For one long-record well, what linear rate describes change through time, and
+do the residuals support treating that rate as a stable trend?
+
+::: {.kicker}
+One well, one paired change
+:::
+
+Positive change means the later water level was deeper below land surface.
+
+## What you will finish
+
+In one notebook:
+
+1. calculate the mean paired change;
+2. show all 18 changes in a plot;
+3. build the sign-flip null distribution and p-value;
+4. fit a simple linear trend in ft/year; and
+5. inspect residuals and write a bounded conclusion.
+
+No test-selection survey, full OLS derivation, or machine-learning workflow
+today. The point is the shared reasoning, not a catalogue of methods.
+
+# Before code {background-color="#0C234B"}
+
+## Keep the design in view
+
+| Choice | This investigation |
+|---|---|
+| observational unit | one monitored well |
+| paired change | post median minus pre median |
+| sample size | 18 wells |
+| null in words | no systematic pre/post change |
+| sign convention | positive means deeper |
+
+::: {.fragment .due-notice}
+The source has 866 tape readings, but it does not have 866 independent wells.
+:::
+
+## What is already done for you
+
+`data/week12_tucson_paired_wells.csv` is cleaned and instructor-checked.
+
+Each row contains one well's:
+
+- pre-period median depth;
+- post-period median depth;
+- number of years and measurements represented; and
+- paired change in feet.
+
+The coverage rule required measurements in at least three years of each window.
+
+# Five checkpoints {background-color="#AB0520"}
+
+## 1 — Effect and plot · target: 25 minutes
+
+Recalculate `post - pre`, then report the mean with its direction and unit.
+
+Your plot must show all 18 well changes and a zero reference line.
+
+::: {.incremental}
+- Do most wells point the same direction?
+- Are there exceptions?
+- Could a reader see whether one well dominates the result?
+:::
+
+## 2 — Permutation · target: 50 minutes
+
+Within each repetition:
+
+```python
+signs = rng.choice([-1, 1], size=n_wells)
+null_means[i] = (change * signs).mean()
+```
+
+Then count null means at least as far from zero as the observed mean.
+
+::: {.fragment}
+If you shuffle measurements across wells, stop: that breaks the paired design.
+:::
+
+## 3 — Interpret the test · target: 50 minutes
+
+State the +12.47-ft effect before the p-value. Read the p-value as the frequency
+of results this extreme under the no-effect, exchangeable-sign model—not as the
+probability that the null is true.
+
+## 4 — Fit a trend · target: 65 minutes
+
+For the long-record well, convert dates to elapsed years and fit:
+
+```python
+fit = stats.linregress(years_elapsed, depth_ft)
+```
+
+Report `fit.slope` in ft/year. Positive depth means a declining water table.
+
+## 5 — Diagnose and conclude · target: 75 minutes
+
+Plot residuals against time. Look for curvature, changing spread, long runs of
+one sign, and influential observations before interpreting `fit.pvalue`.
+
+Write one short conclusion for each analysis. Across the two conclusions:
+
+1. result, direction, and feet;
+2. permutation p-value or trend evidence, as appropriate;
+3. wells as the unit for the paired comparison and time dependence for the trend;
+4. one limitation on representativeness, stability, prediction, or causality.
+
+::: {.fragment}
+Write **+12.47 ft deeper**, not just **significant**.
+:::
+
+# Interpretation check {background-color="#0C234B"}
+
+## A sentence you may write
+
+> Across 18 paired monitoring wells, median depth to water was on average 12.47
+> ft greater in 2002–2006 than in 1996–2000.
+
+Then add the p-value, assumption, and limitation.
+
+## A sentence you may not write
+
+> The water-supply shift caused groundwater levels to decline by 12.47 ft.
+
+This is a before/after design without an untreated control. Pumping, recharge,
+climate, location, and delayed aquifer response also vary.
+
+## Before you leave
+
+1. Restart the kernel and run every completed cell in order.
+2. Confirm that positive always means deeper.
+3. Make sure the sample size is stated as 18 **wells**.
+4. Confirm the trend slope is reported in **ft/year**, not ft/day.
+5. Read both conclusions without looking at the code.
+
+::: {.due-notice}
+The assessment asks for one paired comparison and one simple trend—not the
+longer standalone regression clinic. Week 13 turns one result into a polished
+evidence figure; it does not add another statistical design.
+:::

@@ -28,18 +28,18 @@ automatically. Do this before the first class of Week 2.
 | 2 | 8/31 | [Getting started with Python](slides/week02_tue_getting_started.qmd) · [Data types & sequences](slides/week02_thu_data_types.qmd) |
 | 3 | 9/7 | [Control flow](slides/week03_tue_control_flow.qmd) · [Functions and modules](slides/week03_thu_functions.qmd) |
 | 4 | 9/14 | [Arrays with numpy](slides/week04_tue_arrays.qmd) · [Iterative solutions](slides/week04_thu_iteration.qmd) |
-| 5 | 9/21 | [Pandas: labelled data through time](slides/week05_tue_pandas.qmd) · [Filter, summarise, and reshape](slides/week05_thu_filtering.qmd) |
-| **Module 2 · Data Analysis & Visualization** | | |
-| 6 | 9/28 | [Where data comes from](slides/week06_tue_apis.qmd) · [Gaps, duplicates, outliers](slides/week06_thu_cleaning.qmd) |
-| 7 | 10/5 | [Uncertainty and hypothesis testing](slides/week07_tue_inference.qmd) · [Groundwater inference lab](slides/week07_thu_inference_lab.qmd) |
-| 8 | 10/12 | [Figures worth showing](slides/week08_tue_figures.qmd) · [Annotation and maps](slides/week08_thu_annotation_maps.qmd) |
-| 9 | 10/19 | [OLS, one step at a time](slides/week09_tue_regression.qmd) · [Regression lab](slides/week09_thu_regression_lab.qmd) |
-| **Module 3 · Introduction to MODFLOW & FloPy** | | |
-| 10 | 10/26 | [What MODFLOW is](slides/week10_tue_what_is_modflow.qmd) · [Running it](slides/week10_thu_running_it.qmd) |
-| 11 | 11/2 | [The computational landscape](slides/week11_thu_computational_landscape.html) |
-| 12 | 11/9 | [Discretization](slides/week12_tue_discretization.qmd) · [Unconfined flow](slides/week12_thu_unconfined.qmd) |
-| 13 | 11/16 | [Time and storage](slides/week13_tue_time.qmd) · [Capture and ET](slides/week13_thu_capture_et.qmd) |
-| 14 | 11/23 | [Layers, rivers, loading](slides/week14_tue_layers_rivers.qmd) *(Tue only)* |
+| 5 | 9/21 | [Pandas: labelled data through time](slides/week05_tue_pandas.qmd) · [Matplotlib from scratch](slides/week05_thu_filtering.qmd) |
+| **Module 2 · Introduction to MODFLOW & FloPy** | | |
+| 6 | 9/28 | [What MODFLOW is](slides/week06_tue_what_is_modflow.qmd) · [Running it](slides/week06_thu_running_it.qmd) |
+| 7 | 10/5 | [Inputs, outputs, hitting go](slides/week07_tue_inputs_outputs.qmd) · [Budgets](slides/week07_thu_budgets.qmd) |
+| 8 | 10/12 | [Discretization](slides/week08_tue_discretization.qmd) · [Unconfined flow](slides/week08_thu_unconfined.qmd) |
+| 9 | 10/19 | [Time and storage](slides/week09_tue_time.qmd) · [Capture and ET](slides/week09_thu_capture_et.qmd) |
+| 10 | 10/26 | [Layers, rivers, loading](slides/week10_tue_layers_rivers.qmd) · [Hydrologic models](slides/week10_thu_hydrologic_modeling.html) · [model inheritance lab](labs/week10/week10_lab_layers_rivers_loading.ipynb) |
+| **Module 3 · Data Analysis & Visualization** | | |
+| 11 | 11/2 | [Where data comes from](slides/week11_tue_apis.qmd) · [Gaps, duplicates, outliers](slides/week11_thu_cleaning.qmd) · [The computational landscape](slides/week11_thu_computational_landscape.html) |
+| 12 | 11/9 | [Differences, trends, and hypothesis tests](slides/week12_tue_inference.qmd) · [Inference and regression lab](slides/week12_thu_inference_lab.qmd) |
+| 13 | 11/16 | [Figures worth showing](slides/week13_tue_figures.qmd) · [Annotation and maps](slides/week13_thu_annotation_maps.qmd) |
+| 14 | 11/23 | Thanksgiving recess — no class all week |
 | **Module 4 · Reproducible Workflows** | | |
 | 15 | 11/30 | Debugging and coding practices |
 | 16 | 12/7 | Project 3 presentations *(Tue only)* |
@@ -48,7 +48,7 @@ automatically. Do this before the first class of Week 2.
 
 Each week has two sessions. Most sessions mix short lecture segments with coding
 exercises you work through in the slides. Most weeks open with a five-minute
-quiz on the previous week's material — ten over the semester, two lowest dropped.
+quiz on the previous week's material — twelve over the semester, two lowest dropped.
 
 Seven homework assignments are due every other Wednesday at 11:59pm through
 D2L. HW 1 is released during Week 2; after that, the next assignment opens on

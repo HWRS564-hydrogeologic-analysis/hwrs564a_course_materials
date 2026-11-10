@@ -1,0 +1,573 @@
+---
+title: "Loading and changing a model"
+subtitle: "HWRS 564a · Week 7 · Thursday, October 8"
+author: "Dr. Andrew Bennett"
+---
+
+```{python}
+#| echo: false
+#| include: false
+# Follows labs/week07/week07_02_loading_modflow_models.ipynb: rebuild Tuesday's
+# simple model, load it back from its input files, make the modified copy with
+# the random K field, and run both. Figures and numbers on the slides come from
+# these runs.
+from pathlib import Path
+
+import flopy
+import matplotlib.pyplot as plt
+import numpy as np
+
+ROOT = Path.cwd().parent
+MF_EXE = ROOT / "modflow" / "mf2005"
+assert MF_EXE.exists(), f"MODFLOW binary not found at {MF_EXE}. Run ./postbuild.sh."
+
+original_ws = ROOT / "_run" / "week07_simple"
+model_ws_modified = ROOT / "_run" / "week07_modified"
+original_ws.mkdir(parents=True, exist_ok=True)
+model_ws_modified.mkdir(parents=True, exist_ok=True)
+modelname, new_modelname = "simple_modflow_model", "modified_model"
+
+# --- Tuesday's model, so this deck renders on its own -----------------------
+m0 = flopy.modflow.Modflow(modelname, exe_name=str(MF_EXE), model_ws=str(original_ws))
+flopy.modflow.ModflowDis(m0, nlay=1, nrow=10, ncol=10, delr=10.0, delc=10.0,
+                         top=0.0, botm=-50.0, itmuni=4, lenuni=2,
+                         nper=1, steady=[True])
+ib0 = np.ones((1, 10, 10), dtype=np.int32)
+ib0[:, :, 0] = -1
+ib0[:, :, -1] = -1
+strt0 = 5 * np.ones((1, 10, 10), dtype=np.float32)
+strt0[:, :, 0] = 10.0
+strt0[:, :, -1] = 0.0
+flopy.modflow.ModflowBas(m0, ibound=ib0, strt=strt0)
+flopy.modflow.ModflowLpf(m0, hk=np.ones((1, 10, 10), dtype=np.float32) * 5,
+                         vka=np.ones((1, 10, 10), dtype=np.float32),
+                         laytyp=np.zeros((1,), dtype=np.int32), ipakcb=1)
+flopy.modflow.ModflowOc(m0, compact=True,
+                        stress_period_data={(0, 0): ["save head", "save budget"]})
+flopy.modflow.ModflowPcg(m0)
+m0.write_input()
+ok, buff = m0.run_model(silent=True, report=True)
+assert ok, "\n".join(buff[-20:])
+
+# --- Load it back, as in the notebook ---------------------------------------
+m = flopy.modflow.Modflow.load(f"{modelname}.nam", model_ws=str(original_ws),
+                               exe_name=str(MF_EXE))
+hk = m.lpf.hk.array
+
+# --- Modified copy ----------------------------------------------------------
+m_mod = flopy.modflow.Modflow(modelname=new_modelname, exe_name=str(MF_EXE),
+                              model_ws=str(model_ws_modified))
+flopy.modflow.ModflowDis(m_mod, nlay=m.nlay, nrow=m.nrow, ncol=m.ncol,
+                         delr=m.dis.delr.array, delc=m.dis.delc.array,
+                         top=m.dis.top.array, botm=m.dis.botm.array,
+                         nper=m.nper, perlen=m.dis.perlen.array,
+                         nstp=m.dis.nstp.array, steady=m.dis.steady.array)
+flopy.modflow.ModflowBas(m_mod, ibound=m.bas6.ibound.array, strt=m.bas6.strt.array)
+np.random.seed(42)
+new_hk = np.random.normal(loc=10.0, scale=2.0, size=hk.shape)
+new_hk[new_hk < 0.1] = 0.1
+flopy.modflow.ModflowLpf(m_mod, hk=new_hk, vka=1.0, sy=0.2, ss=1e-5, laytyp=1)
+flopy.modflow.ModflowPcg(m_mod)
+flopy.modflow.ModflowOc(m_mod, compact=True,
+                        stress_period_data={(0, 0): ["save head", "save budget"]})
+m_mod.write_input()
+ok, buff = m_mod.run_model(silent=True, report=True)
+assert ok, "\n".join(buff[-20:])
+
+head_original = flopy.utils.HeadFile(str(original_ws / f"{modelname}.hds")).get_data()
+head_modified = flopy.utils.HeadFile(
+    str(model_ws_modified / f"{new_modelname}.hds")).get_data()
+head_diff = head_modified - head_original
+
+plt.rcParams.update({"font.size": 13, "figure.dpi": 130})
+UA_RED, UA_BLUE = "#AB0520", "#0C234B"
+```
+
+## Today {.smaller}
+
+::: {.kicker}
+Week 7, session 2 of 2
+:::
+
+1. Loading a model back in from its input files
+2. Looking around inside it
+3. Making a changed copy in its own folder
+4. Comparing the two
+5. Your own experiment
+
+We're in `week07_02_loading_modflow_models.ipynb` today. It needs the
+`simple_model` folder from Tuesday, so if you don't have one, run all of
+`week07_01` first.
+
+# Loading {background-color="#0C234B"}
+
+## Where we left off
+
+Tuesday's notebook left a folder of MODFLOW files behind:
+
+```{python}
+#| echo: false
+keep = {".nam", ".dis", ".bas", ".lpf", ".oc", ".pcg", ".hds", ".cbc", ".list"}
+print("simple_model/")
+for name in sorted(p.name for p in original_ws.iterdir() if p.suffix in keep):
+    print("   ", name)
+```
+
+::: {.fragment}
+Those files are the model. The Python that made them is optional from here
+on. If somebody emails you a folder like this, you can pick it up and keep
+going.
+:::
+
+## One line to load it
+
+```python
+modelname = "simple_modflow_model"
+original_ws = './simple_model'
+modflow_path = '../../modflow/mf2005'
+m = flopy.modflow.Modflow.load(f'{original_ws}/{modelname}.nam', exe_name=modflow_path)
+print(m)
+```
+
+```{python}
+#| echo: false
+print(m)
+```
+
+::: {.fragment}
+You point `load` at the `.nam` file. That file lists every other file, so
+FloPy can find the rest on its own.
+:::
+
+## What's in there?
+
+```python
+print(m.get_package_list())
+print(m.nlay, m.nrow, m.ncol, m.nper)
+```
+
+```{python}
+#| echo: false
+print(m.get_package_list())
+print(m.nlay, m.nrow, m.ncol, m.nper)
+```
+
+::: {.incremental}
+- Each package hangs off the model by name: `m.dis`, `m.bas6`, `m.lpf`
+- Note it's `bas6`, not `bas`
+- Ask for a package the model doesn't have and you get `None`. That's what
+  happens with `m.wel` and `m.rch` here, since we never added wells or
+  recharge
+:::
+
+## Getting the arrays out
+
+```python
+lpf = m.lpf
+hk = lpf.hk.array
+```
+
+```{python}
+#| echo: false
+print("shape:", hk.shape)
+print("mean K:", hk.mean(), "m/d")
+```
+
+::: {.incremental}
+- `lpf.hk` is a FloPy object. Add `.array` to get the numpy array
+- Same pattern everywhere: `m.dis.top.array`, `m.bas6.ibound.array`,
+  `m.bas6.strt.array`
+- It's the 5 m/d we typed in on Tuesday, so the load worked
+:::
+
+## Your turn: summarize an array
+
+Here's `ibound` the way it comes back from `m.bas6.ibound.array`. Pull a few
+facts out of it.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_inspect
+import numpy as np
+ibound = np.ones((1, 10, 10), dtype=np.int32)
+ibound[:, :, 0] = -1
+ibound[:, :, -1] = -1
+```
+
+```{pyodide}
+#| exercise: ex_inspect
+shape = ______
+values = ______               # the different values that show up
+first_row = ______            # layer 0, row 0, every column
+print("shape:", shape)
+print("values:", values)
+print("first row:", first_row)
+```
+
+::: {.hint exercise="ex_inspect"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`.shape` is an attribute. `np.unique()` gives the distinct values. Index with
+`[layer, row, column]`.
+:::
+:::
+
+::: {.solution exercise="ex_inspect"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+shape = ibound.shape
+values = np.unique(ibound)
+first_row = ibound[0, 0, :]
+```
+
+Do this kind of check any time you load a model you didn't build. It's the
+quickest way to find out what you've been handed.
+:::
+:::
+
+# Making a changed copy {background-color="#AB0520"}
+
+## New folder, new model
+
+```python
+new_modelname = 'modified_model'
+model_ws_modified = './modified_model'
+os.makedirs(model_ws_modified, exist_ok=True)
+m_mod = flopy.modflow.Modflow(modelname=new_modelname,
+                              exe_name=modflow_path,
+                              model_ws=model_ws_modified)
+```
+
+::: {.fragment .due-notice}
+Put a modified model in its own folder. If you write it on top of the
+original, you lose the results you wanted to compare against.
+:::
+
+## Copy over what stays the same
+
+```python
+dis = flopy.modflow.ModflowDis(m_mod,
+                                nlay=m.nlay, nrow=m.nrow, ncol=m.ncol,
+                                delr=m.dis.delr.array, delc=m.dis.delc.array,
+                                top=m.dis.top.array, botm=m.dis.botm.array,
+                                nper=m.nper, perlen=m.dis.perlen.array,
+                                nstp=m.dis.nstp.array,
+                                steady=m.dis.steady.array)
+
+bas = flopy.modflow.ModflowBas(m_mod,
+                                ibound=m.bas6.ibound.array,
+                                strt=m.bas6.strt.array)
+```
+
+::: {.fragment}
+Same grid, same boundaries. Everything is read off the loaded model `m`, so
+there are no numbers to retype and get wrong.
+:::
+
+## Change the K field
+
+```python
+np.random.seed(42)  # For reproducibility
+new_hk = np.random.normal(loc=10.0, scale=2.0, size=hk.shape)
+new_hk[new_hk < 0.1] = 0.1  # Ensure minimum K value
+
+lpf_mod = flopy.modflow.ModflowLpf(m_mod, hk=new_hk, vka=1.0, sy=0.2, ss=1e-5, laytyp=1)
+```
+
+::: {.incremental}
+- Every cell gets its own K, drawn from a normal distribution
+- The seed means everyone in the room gets the same "random" field
+- A normal distribution can go negative and K can't, hence the floor at 0.1
+- Two things changed at once: K is now patchy, and the average went from 5 to
+  about 10 m/d
+:::
+
+## The new K field
+
+```{python}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+vmin, vmax = 0, new_hk.max()
+im = axes[0].imshow(hk[0], cmap="viridis", vmin=vmin, vmax=vmax)
+axes[0].set_title("Original K (m/d)")
+im = axes[1].imshow(new_hk[0], cmap="viridis", vmin=vmin, vmax=vmax)
+axes[1].set_title("Modified K (m/d)")
+for ax in axes:
+    ax.set_xlabel("Column")
+    ax.set_ylabel("Row")
+fig.colorbar(im, ax=axes, label="K (m/d)", shrink=0.9)
+plt.show()
+```
+
+```{python}
+#| echo: false
+print(f"original: {hk.mean():.2f} m/d everywhere")
+print(f"modified: {new_hk.mean():.2f} ± {new_hk.std():.2f} m/d, "
+      f"from {new_hk.min():.2f} to {new_hk.max():.2f}")
+```
+
+## Finish it and run
+
+```python
+pcg = flopy.modflow.ModflowPcg(m_mod)
+
+spd = {(0, 0): ['save head', 'save budget']}
+oc = flopy.modflow.ModflowOc(m_mod, stress_period_data=spd, compact=True)
+
+m_mod.write_input()
+success, buff = m_mod.run_model(silent=True)
+```
+
+::: {.incremental}
+- A new model starts empty. Skip `OC` and nothing gets saved, skip the solver
+  and it won't run
+- The notebook doesn't check `success` in this cell. Add the check yourself,
+  like we did last week
+- No `ipakcb` on the `LPF` this time, so there's no `.cbc` file for the
+  modified model
+:::
+
+# Comparing {background-color="#0C234B"}
+
+## Read both head files
+
+```python
+hds_original = flopy.utils.HeadFile(headfile_original)
+head_original = hds_original.get_data()
+
+hds_modified = flopy.utils.HeadFile(headfile_modified)
+head_modified = hds_modified.get_data()
+
+head_diff = head_modified - head_original
+```
+
+::: {.fragment}
+Both arrays are the same shape, so subtracting them just works. This is why we
+kept the grid identical.
+:::
+
+## Side by side
+
+```{python}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 3.9
+fig, axes = plt.subplots(1, 3, figsize=(12, 3.9))
+im1 = axes[0].imshow(head_original[0], cmap="viridis")
+axes[0].set_title("Original heads (m)")
+fig.colorbar(im1, ax=axes[0], label="Head (m)", shrink=0.85)
+im2 = axes[1].imshow(head_modified[0], cmap="viridis")
+axes[1].set_title("Modified heads (m)")
+fig.colorbar(im2, ax=axes[1], label="Head (m)", shrink=0.85)
+lim = np.max(np.abs(head_diff))
+im3 = axes[2].imshow(head_diff[0], cmap="RdBu_r", vmin=-lim, vmax=lim)
+axes[2].set_title("Modified - original")
+fig.colorbar(im3, ax=axes[2], label="Difference (m)", shrink=0.85)
+for ax in axes:
+    ax.set_xlabel("Column")
+    ax.set_ylabel("Row")
+plt.tight_layout()
+plt.show()
+```
+
+::: {.fragment}
+The first two look almost the same. The difference map is where you can see
+what changed.
+:::
+
+## How big is the change?
+
+```{python}
+#| echo: false
+print(f"biggest rise in head:  {head_diff.max():+.2f} m")
+print(f"biggest drop in head:  {head_diff.min():+.2f} m")
+print(f"head range in the model: {head_original.min():.0f} to "
+      f"{head_original.max():.0f} m")
+```
+
+::: {.incremental}
+- We doubled the average K and the heads moved by a quarter of a meter at most
+- The two edge columns didn't move at all. They're constant head
+- So what did doubling K do?
+:::
+
+## Your turn: what does doubling K do?
+
+Go back to the uniform model. Same boundaries, but K goes from 5 to 10 m/d.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_double
+import numpy as np
+ncol, nrow = 10, 10
+dx = dy = 10.0
+thickness = 50.0
+head_left, head_right = 10.0, 0.0
+
+def model(K):
+    heads = np.linspace(head_left, head_right, ncol)
+    gradient = (head_left - head_right) / ((ncol - 1) * dx)
+    total_flow = K * gradient * dy * thickness * nrow
+    return heads, total_flow
+```
+
+```{pyodide}
+#| exercise: ex_double
+heads_5, flow_5 = model(______)
+heads_10, flow_10 = model(______)
+
+print("biggest head change:", np.abs(heads_10 - heads_5).max(), "m")
+print(f"flow with K = 5:  {flow_5:,.0f} m3/d")
+print(f"flow with K = 10: {flow_10:,.0f} m3/d")
+```
+
+::: {.hint exercise="ex_double"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Just pass in the two K values. Then look at which output changed and which
+didn't.
+:::
+:::
+
+::: {.solution exercise="ex_double"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+heads_5, flow_5 = model(5.0)
+heads_10, flow_10 = model(10.0)
+```
+
+The heads don't change at all, and the flow doubles.
+
+With fixed heads on both sides and uniform K, the heads are a straight line no
+matter what K is. K only sets how much water moves. So the small head
+differences on the last slide all come from K being patchy. The higher average
+shows up in the flow, and you won't see it on a head map.
+:::
+:::
+
+## Check that in the budget
+
+Total flow through each model, from the bottom of the `.list` files:
+
+```{python}
+#| echo: false
+import re
+
+def total_in(path):
+    return float(re.findall(r"TOTAL IN =\s+([\d.]+)", Path(path).read_text())[-1])
+
+q0 = total_in(original_ws / f"{modelname}.list")
+q1 = total_in(model_ws_modified / f"{new_modelname}.list")
+print(f"original:  {q0:8,.0f} m3/d")
+print(f"modified:  {q1:8,.0f} m3/d")
+print(f"ratio:     {q1 / q0:8.2f}")
+```
+
+::: {.fragment}
+Almost double the water, with heads that barely moved. If you'd only looked at
+the head maps you would have missed the biggest change. Look at heads and the
+budget both.
+:::
+
+# Your experiment {background-color="#AB0520"}
+
+## Now you change something
+
+Pick one:
+
+::: {.incremental}
+1. **K zones**: a high-K channel, or a low-K barrier across the flow
+2. **A gradient**: K that increases from west to east
+3. **New boundary conditions**: a well, or more constant-head cells
+4. **Layer geometry**: change the top or bottom elevations
+:::
+
+## Your turn: build a barrier
+
+A warm-up for idea 1. Make a K array that's 10 m/d everywhere, with a low-K
+wall down columns 4 and 5.
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_barrier
+import numpy as np
+nlay, nrow, ncol = 1, 10, 10
+```
+
+```{pyodide}
+#| exercise: ex_barrier
+my_hk = ______                 # 10 m/d everywhere
+______                         # 0.1 m/d in columns 4 and 5
+print(my_hk[0, 0, :])
+```
+
+::: {.hint exercise="ex_barrier"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`np.full(shape, value)` makes the array. Slice the column axis with `4:6` to
+get columns 4 and 5.
+:::
+:::
+
+::: {.solution exercise="ex_barrier"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+my_hk = np.full((nlay, nrow, ncol), 10.0)
+my_hk[:, :, 4:6] = 0.1
+```
+
+Pass that as `hk=my_hk` when you build the `LPF` package. Before you run it,
+guess what the heads will do on either side of the wall.
+:::
+:::
+
+## The recipe
+
+::: {.incremental}
+1. Make a new folder for the experiment
+2. Load the original model
+3. Create a new, empty model pointed at the new folder
+4. Copy the packages you're keeping, change the one you're testing
+5. Add `PCG` and `OC`, write, run, check `success`
+6. Subtract the original heads and plot the difference
+:::
+
+::: {.fragment}
+Change one thing at a time. If you change two and the answer moves, you won't
+know which one did it.
+:::
+
+## Wrap up {.smaller}
+
+::: {.kicker}
+What you did today
+:::
+
+- Loaded a model from its `.nam` file and pulled arrays out of the packages
+- Built a modified copy in a separate folder
+- Compared heads with a difference map
+- Saw that heads and flows can tell you different things
+
+::: {.kicker}
+What's due
+:::
+
+- **HW 3 — From labelled data to a verified first model**, Wednesday 10/7 at 11:59pm
+- Finish both Week 7 notebooks, including your own experiment, before Tuesday
+
+::: {.kicker}
+Next week
+:::
+
+Discretization and boundary conditions.

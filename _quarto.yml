@@ -9,6 +9,7 @@ project:
     - data/**
     - assets/**
     - slides/week11_thu_computational_landscape.html
+    - slides/week10_thu_hydrologic_modeling.html
 
 jupyter: python3
 
@@ -41,41 +42,41 @@ website:
           - href: slides/week05_tue_pandas.qmd
             text: "Wk 5 · Labelled data through time"
           - href: slides/week05_thu_filtering.qmd
-            text: "Wk 5 · Filter, summarise, reshape"
-          - href: slides/week06_tue_apis.qmd
-            text: "Wk 6 · Where data comes from"
-          - href: slides/week06_thu_cleaning.qmd
-            text: "Wk 6 · Gaps, duplicates, outliers"
-          - href: slides/week07_tue_inference.qmd
-            text: "Wk 7 · Uncertainty and hypothesis testing"
-          - href: slides/week07_thu_inference_lab.qmd
-            text: "Wk 7 · Groundwater inference lab"
-          - href: slides/week08_tue_figures.qmd
-            text: "Wk 8 · Figures worth showing"
-          - href: slides/week08_thu_annotation_maps.qmd
-            text: "Wk 8 · Annotation and maps"
-          - href: slides/week09_tue_regression.qmd
-            text: "Wk 9 · Regression and uncertainty"
-          - href: slides/week09_thu_regression_lab.qmd
-            text: "Wk 9 · Regression lab"
-          - href: slides/week10_tue_what_is_modflow.qmd
-            text: "Wk 10 · What MODFLOW is"
-          - href: slides/week10_thu_running_it.qmd
-            text: "Wk 10 · Running it"
-          - href: slides/week11_tue_inputs_outputs.qmd
-            text: "Wk 11 · Inputs, outputs, hitting go"
-          - href: slides/week11_thu_budgets.qmd
-            text: "Wk 11 · Budgets"
-          - href: slides/week12_tue_discretization.qmd
-            text: "Wk 12 · Discretization"
-          - href: slides/week12_thu_unconfined.qmd
-            text: "Wk 12 · Unconfined flow"
-          - href: slides/week13_tue_time.qmd
-            text: "Wk 13 · Time and storage"
-          - href: slides/week13_thu_capture_et.qmd
-            text: "Wk 13 · Capture and ET"
-          - href: slides/week14_tue_layers_rivers.qmd
-            text: "Wk 14 · Layers and rivers"
+            text: "Wk 5 · Matplotlib from scratch"
+          - href: slides/week06_tue_what_is_modflow.qmd
+            text: "Wk 6 · What MODFLOW is"
+          - href: slides/week06_thu_running_it.qmd
+            text: "Wk 6 · Running it"
+          - href: slides/week07_tue_inputs_outputs.qmd
+            text: "Wk 7 · Inputs, outputs, hitting go"
+          - href: slides/week07_thu_budgets.qmd
+            text: "Wk 7 · Budgets"
+          - href: slides/week08_tue_discretization.qmd
+            text: "Wk 8 · Discretization"
+          - href: slides/week08_thu_unconfined.qmd
+            text: "Wk 8 · Unconfined flow"
+          - href: slides/week09_tue_time.qmd
+            text: "Wk 9 · Time and storage"
+          - href: slides/week09_thu_capture_et.qmd
+            text: "Wk 9 · Capture and ET"
+          - href: slides/week10_tue_layers_rivers.qmd
+            text: "Wk 10 · Layers and rivers"
+          - href: slides/week10_thu_hydrologic_modeling.html
+            text: "Wk 10 · Hydrologic models"
+          - href: slides/week11_tue_apis.qmd
+            text: "Wk 11 · Where data comes from"
+          - href: slides/week11_thu_cleaning.qmd
+            text: "Wk 11 · Gaps, duplicates, outliers"
+          - href: slides/week11_thu_computational_landscape.html
+            text: "Wk 11 · The computational landscape"
+          - href: slides/week12_tue_inference.qmd
+            text: "Wk 12 · Differences and trends"
+          - href: slides/week12_thu_inference_lab.qmd
+            text: "Wk 12 · Inference and regression lab"
+          - href: slides/week13_tue_figures.qmd
+            text: "Wk 13 · Figures worth showing"
+          - href: slides/week13_thu_annotation_maps.qmd
+            text: "Wk 13 · Annotation and maps"
       - text: "Labs"
         menu:
           - href: labs/week02/week02_lab_python_basics.ipynb
@@ -85,25 +86,31 @@ website:
           - href: labs/week04/week04_lab_arrays_iteration.ipynb
             text: "Wk 4 · Arrays and iteration"
           - href: labs/week05/week05_lab_pandas.ipynb
-            text: "Wk 5 · Pandas and time series"
-          - href: labs/week06/week06_lab_real_world_data.ipynb
-            text: "Wk 6 · Real-world data"
-          - href: labs/week07/week07_lab_inference.ipynb
-            text: "Wk 7 · Groundwater inference"
-          - href: labs/week08/week08_lab_matplotlib.ipynb
-            text: "Wk 8 · Figures"
-          - href: labs/week09/week09_lab_regression.ipynb
-            text: "Wk 9 · Linear regression clinic"
-          - href: labs/week10/week10_lab_meeting_modflow.ipynb
-            text: "Wk 10 · Meeting MODFLOW"
-          - href: labs/week11/week11_lab_basin_model.ipynb
-            text: "Wk 11 · Tucson basin model"
-          - href: labs/week12/week12_lab_discretization_boundaries.ipynb
-            text: "Wk 12 · Discretization"
-          - href: labs/week13/week13_lab_transient_stresses.ipynb
-            text: "Wk 13 · Transient stresses"
-          - href: labs/week14/week14_lab_layers_rivers_loading.ipynb
-            text: "Wk 14 · Layers and rivers"
+            text: "Wk 5 · Pandas and Matplotlib"
+          - href: labs/week06/week06_lab_meeting_modflow.ipynb
+            text: "Wk 6 · Meeting MODFLOW"
+          - href: labs/week07/week07_01_flopy_simple_model.ipynb
+            text: "Wk 7 · A simple FloPy model"
+          - href: labs/week07/week07_02_loading_modflow_models.ipynb
+            text: "Wk 7 · Loading and modifying a model"
+          - href: labs/week08/week08_00_wells_in_flopy.ipynb
+            text: "Wk 8 · Wells in FloPy"
+          - href: labs/week08/week08_01_discretization_boundaries.ipynb
+            text: "Wk 8 · Discretization and boundaries"
+          - href: labs/week08/week08_02_unconfined_dry_cells.ipynb
+            text: "Wk 8 · Unconfined flow and dry cells"
+          - href: labs/week09/week09_00_lab_transient_stresses.ipynb
+            text: "Wk 9 · Transient stresses"
+          - href: labs/week09/week09_01_pinal_startup.ipynb
+            text: "Wk 9 · Starting up the Pinal County model"
+          - href: labs/week10/week10_lab_layers_rivers_loading.ipynb
+            text: "Wk 10 · Layers and rivers"
+          - href: labs/week11/week11_lab_real_world_data.ipynb
+            text: "Wk 11 · Real-world data"
+          - href: labs/week12/week12_lab_inference.ipynb
+            text: "Wk 12 · Differences and trends"
+          - href: labs/week13/week13_lab_matplotlib.ipynb
+            text: "Wk 13 · Figures"
   sidebar:
     style: docked
     collapse-level: 2
@@ -134,88 +141,92 @@ website:
                 text: "Thu 9/17 · Slides"
               - href: labs/week04/week04_lab_arrays_iteration.ipynb
                 text: "Lab · Arrays and iterative solutions"
-          - section: "Week 5 — Pandas and time series"
+          - section: "Week 5 — Pandas and Matplotlib"
             contents:
               - href: slides/week05_tue_pandas.qmd
                 text: "Tue 9/22 · Slides"
               - href: slides/week05_thu_filtering.qmd
                 text: "Thu 9/24 · Slides"
               - href: labs/week05/week05_lab_pandas.ipynb
-                text: "Lab · Pandas and time series"
-      - section: "Module 2 · Data Analysis & Visualization"
+                text: "Lab · Pandas and Matplotlib"
+      - section: "Module 2 · MODFLOW & FloPy"
         contents:
-          - section: "Week 6 — Real-world data"
+          - section: "Week 6 — Meeting MODFLOW"
             contents:
-              - href: slides/week06_tue_apis.qmd
+              - href: slides/week06_tue_what_is_modflow.qmd
                 text: "Tue 9/29 · Slides"
-              - href: slides/week06_thu_cleaning.qmd
+              - href: slides/week06_thu_running_it.qmd
                 text: "Thu 10/1 · Slides"
-              - href: labs/week06/week06_lab_real_world_data.ipynb
-                text: "Lab · Working with real-world data"
-          - section: "Week 7 — Groundwater inference"
-            contents:
-              - href: slides/week07_tue_inference.qmd
-                text: "Tue 10/6 · Slides"
-              - href: slides/week07_thu_inference_lab.qmd
-                text: "Thu 10/8 · Slides"
-              - href: labs/week07/week07_lab_inference.ipynb
-                text: "Lab · Is the difference larger than the noise?"
-          - section: "Week 8 — Figures"
-            contents:
-              - href: slides/week08_tue_figures.qmd
-                text: "Tue 10/13 · Slides"
-              - href: slides/week08_thu_annotation_maps.qmd
-                text: "Thu 10/15 · Slides"
-              - href: labs/week08/week08_lab_matplotlib.ipynb
-                text: "Lab · Figures worth showing people"
-          - section: "Week 9 — Linear regression"
-            contents:
-              - href: slides/week09_tue_regression.qmd
-                text: "Tue 10/20 · Slides"
-              - href: slides/week09_thu_regression_lab.qmd
-                text: "Thu 10/22 · Slides"
-              - href: labs/week09/week09_lab_regression.ipynb
-                text: "Lab · Linear regression clinic"
-      - section: "Module 3 · MODFLOW & FloPy"
-        contents:
-          - section: "Week 10 — Meeting MODFLOW"
-            contents:
-              - href: slides/week10_tue_what_is_modflow.qmd
-                text: "Tue 10/27 · Slides"
-              - href: slides/week10_thu_running_it.qmd
-                text: "Thu 10/29 · Slides"
-              - href: labs/week10/week10_lab_meeting_modflow.ipynb
+              - href: labs/week06/week06_lab_meeting_modflow.ipynb
                 text: "Lab · Meeting MODFLOW"
-          - section: "Week 11 — Inputs, outputs, hitting go"
+          - section: "Week 7 — Inputs, outputs, hitting go"
             contents:
-              - href: slides/week11_tue_inputs_outputs.qmd
-                text: "Tue 11/3 · Slides"
-              - href: slides/week11_thu_budgets.qmd
-                text: "Thu 11/5 · Slides"
-              - href: labs/week11/week11_lab_basin_model.ipynb
-                text: "Lab · A model of the Tucson basin"
-          - section: "Week 12 — Discretization and boundaries"
+              - href: slides/week07_tue_inputs_outputs.qmd
+                text: "Tue 10/6 · Slides"
+              - href: slides/week07_thu_budgets.qmd
+                text: "Thu 10/8 · Slides"
+              - href: labs/week07/week07_01_flopy_simple_model.ipynb
+                text: "Lab · A simple FloPy model"
+              - href: labs/week07/week07_02_loading_modflow_models.ipynb
+                text: "Lab · Loading and modifying a model"
+          - section: "Week 8 — Discretization and boundaries"
             contents:
-              - href: slides/week12_tue_discretization.qmd
-                text: "Tue 11/10 · Slides"
-              - href: slides/week12_thu_unconfined.qmd
-                text: "Thu 11/12 · Slides"
-              - href: labs/week12/week12_lab_discretization_boundaries.ipynb
-                text: "Lab · Discretization and unconfined flow"
-          - section: "Week 13 — Transient stresses"
+              - href: slides/week08_tue_discretization.qmd
+                text: "Tue 10/13 · Slides"
+              - href: slides/week08_thu_unconfined.qmd
+                text: "Thu 10/15 · Slides"
+              - href: labs/week08/week08_00_wells_in_flopy.ipynb
+                text: "Lab · Wells in FloPy"
+              - href: labs/week08/week08_01_discretization_boundaries.ipynb
+                text: "Lab · Discretization and boundaries"
+              - href: labs/week08/week08_02_unconfined_dry_cells.ipynb
+                text: "Lab · Unconfined flow and dry cells"
+          - section: "Week 9 — Transient stresses"
             contents:
-              - href: slides/week13_tue_time.qmd
-                text: "Tue 11/17 · Slides"
-              - href: slides/week13_thu_capture_et.qmd
-                text: "Thu 11/19 · Slides"
-              - href: labs/week13/week13_lab_transient_stresses.ipynb
+              - href: slides/week09_tue_time.qmd
+                text: "Tue 10/20 · Slides"
+              - href: slides/week09_thu_capture_et.qmd
+                text: "Thu 10/22 · Slides"
+              - href: labs/week09/week09_00_lab_transient_stresses.ipynb
                 text: "Lab · Stresses that change with time"
-          - section: "Week 14 — Layers, rivers, loading"
+              - href: labs/week09/week09_01_pinal_startup.ipynb
+                text: "Lab · Starting up the Pinal County model"
+          - section: "Week 10 — Layers, rivers, loading"
             contents:
-              - href: slides/week14_tue_layers_rivers.qmd
-                text: "Tue 11/24 · Slides"
-              - href: labs/week14/week14_lab_layers_rivers_loading.ipynb
+              - href: slides/week10_tue_layers_rivers.qmd
+                text: "Tue 10/27 · Slides"
+              - href: slides/week10_thu_hydrologic_modeling.html
+                text: "Thu 10/29 · Slides"
+              - href: labs/week10/week10_lab_layers_rivers_loading.ipynb
                 text: "Lab · Layers, rivers, and inheriting a model"
+      - section: "Module 3 · Data Analysis & Visualization"
+        contents:
+          - section: "Week 11 — Real-world data"
+            contents:
+              - href: slides/week11_tue_apis.qmd
+                text: "Tue 11/3 · Slides"
+              - href: slides/week11_thu_cleaning.qmd
+                text: "Thu 11/5 · Slides"
+              - href: slides/week11_thu_computational_landscape.html
+                text: "Thu 11/5 · The computational landscape"
+              - href: labs/week11/week11_lab_real_world_data.ipynb
+                text: "Lab · Working with real-world data"
+          - section: "Week 12 — Inference and regression"
+            contents:
+              - href: slides/week12_tue_inference.qmd
+                text: "Tue 11/10 · Slides"
+              - href: slides/week12_thu_inference_lab.qmd
+                text: "Thu 11/12 · Slides"
+              - href: labs/week12/week12_lab_inference.ipynb
+                text: "Lab · From differences to trends"
+          - section: "Week 13 — More on Matplotlib"
+            contents:
+              - href: slides/week13_tue_figures.qmd
+                text: "Tue 11/17 · Slides"
+              - href: slides/week13_thu_annotation_maps.qmd
+                text: "Thu 11/19 · Slides"
+              - href: labs/week13/week13_lab_matplotlib.ipynb
+                text: "Lab · Figures worth showing people"
   page-footer:
     left: "HWRS 564a · Fall 2026 · Dr. Andrew Bennett"
     right: "Built with [Quarto](https://quarto.org)"

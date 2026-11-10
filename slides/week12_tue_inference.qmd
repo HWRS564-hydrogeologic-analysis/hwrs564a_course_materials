@@ -1,0 +1,378 @@
+---
+title: "From differences to trends"
+subtitle: "HWRS 564a · Week 12 · Tuesday, November 10"
+author: "Dr. Andrew Bennett"
+---
+
+## One statistical workflow, two questions
+
+Did typical depth to water change at Tucson-area monitoring wells after a major
+shift in the city's water-supply operations?
+
+::: {.kicker}
+Observed change → changes expected under no effect → is ours unusual?
+:::
+
+By the end, you should be able to identify the independent unit, report an
+effect in hydrologic units, test a paired difference, fit a simple linear trend,
+and explain what a p-value does—and does not—say.
+
+# Start with the groundwater {background-color="#0C234B"}
+
+## A physical event fixes the comparison
+
+Around 2000–01, Tucson Water shifted pumping toward Avra Valley
+recharge-and-recovery facilities and began delivering a blend containing
+recharged Colorado River water.
+
+Sources: [Arizona Department of Water Resources](https://www.azwater.gov/sites/default/files/2022-08/download.pdf)
+and [Tucson Water](https://www.tucsonaz.gov/Departments/Water/Water-Quality/CCR_MainSystem_2024-File).
+
+Among Tucson-area wells monitored in both windows, how did median depth to
+water change from **1996–2000** to **2002–2006**?
+
+::: {.incremental}
+- 2001 is treated as a transition year.
+- A well needs observations in at least three years of each window.
+- Each well contributes one pre median and one post median.
+- Positive change means water became **deeper** below land surface.
+:::
+
+::: {.fragment .due-notice}
+The event date came from operations records, not from searching the hydrograph.
+This before/after comparison does not by itself tell us why levels changed.
+:::
+
+## What counts as one observation?
+
+The source file contains 866 tape readings from the selected wells.
+
+::: {.columns}
+::: {.column width="48%"}
+**Not independent**
+
+519 pre-period readings and 347 post-period readings.
+:::
+
+::: {.column width="48%"}
+**Independent units for this analysis**
+
+18 paired monitoring wells.
+:::
+:::
+
+::: {.fragment}
+Readings from one well share location, construction, screened interval, and
+aquifer history. Different CSV rows do not automatically become replicates.
+:::
+
+## Let every well be its own control
+
+Depths range from about 20 to 330 ft across wells. Pairing separates those large
+site-to-site differences from the period comparison.
+
+For well $i$,
+
+$$d_i=\text{post median}_i-\text{pre median}_i.$$
+
+::: {.fragment}
+The analysis uses the 18 changes $d_i$. Our target quantity is their mean.
+:::
+
+## Calculate the observed effect
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_effect
+import numpy as np
+
+change_ft = np.array([
+    -15.620, 3.250, 7.340, 15.775, 13.380, 18.595,
+    38.850, 31.830, 24.180, 4.160, 24.750, -4.480,
+    1.000, 8.115, 23.050, 7.390, 16.945, 6.010,
+])
+```
+
+```{pyodide}
+#| exercise: ex_effect
+mean_change = ______
+print(f"mean paired change: {mean_change:+.2f} ft")
+```
+
+::: {.hint exercise="ex_effect"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Use the array's `.mean()` method.
+:::
+:::
+
+::: {.solution exercise="ex_effect"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+mean_change = change_ft.mean()
+```
+
+The observed mean change is **+12.47 ft**. Positive means the water table was
+deeper in the later window.
+:::
+:::
+
+## See the observations behind the mean
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 10
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(8, 3.5))
+ax.scatter(change_ft, np.arange(len(change_ft)), color="#1E5288")
+ax.axvline(0, color="0.35", ls="--", label="no change")
+ax.axvline(change_ft.mean(), color="#AB0520", lw=3, label="mean = +12.47 ft")
+ax.set(xlabel="post minus pre median depth (ft)", ylabel="well")
+ax.set_yticks([])
+ax.legend()
+plt.show()
+```
+
+::: {.fragment}
+Most wells became deeper, but not all. The mean preserves that variation.
+:::
+
+# Imagine no systematic period effect {background-color="#AB0520"}
+
+## The null hypothesis in ordinary language
+
+**Null:** across these kinds of wells, there is no systematic pre/post change.
+
+Written compactly:
+
+$$H_0:\text{mean paired change}=0\ \text{ft}.$$
+
+::: {.fragment}
+If the null were a reasonable description, “pre” and “post” could be swapped
+within each well without systematically changing the result.
+:::
+
+## A label swap is a sign flip
+
+For one well:
+
+$$d_i=\text{post}-\text{pre}.$$
+
+Swapping its labels gives
+
+$$\text{pre}-\text{post}=-d_i.$$
+
+Under the null, randomly keep or reverse each of the 18 signs, then calculate
+the mean again.
+
+::: {.fragment .due-notice}
+Keep the well pairs intact. Do not shuffle individual tape readings.
+:::
+
+## Try one null world
+
+```{pyodide}
+#| exercise: ex_one_shuffle
+rng = np.random.default_rng(7)
+signs = rng.choice([-1, 1], size=len(change_ft))
+null_once = ______
+print(f"observed mean: {change_ft.mean():+.2f} ft")
+print(f"one null mean: {null_once:+.2f} ft")
+```
+
+::: {.hint exercise="ex_one_shuffle"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Multiply every change by its sign, then take the mean.
+:::
+:::
+
+::: {.solution exercise="ex_one_shuffle"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+null_once = (change_ft * signs).mean()
+```
+
+One shuffled result is not enough. Repeat the same operation many times to see
+the full range expected under the null.
+:::
+:::
+
+## Build the null distribution
+
+```{pyodide}
+#| edit: false
+#| autorun: false
+#| min-lines: 14
+rng = np.random.default_rng(5647)
+n_perm = 10_000
+null_means = np.empty(n_perm)
+
+for i in range(n_perm):
+    signs = rng.choice([-1, 1], size=len(change_ft))
+    null_means[i] = (change_ft * signs).mean()
+
+observed = change_ft.mean()
+p_value = (np.sum(np.abs(null_means) >= abs(observed)) + 1) / (n_perm + 1)
+
+fig, ax = plt.subplots(figsize=(8, 3.5))
+ax.hist(null_means, bins=35, color="#1E5288", edgecolor="white")
+ax.axvline(observed, color="#AB0520", lw=3, label=f"observed = {observed:.2f} ft")
+ax.axvline(-observed, color="#AB0520", lw=3)
+ax.set(xlabel="mean change under no systematic effect (ft)", ylabel="shuffles")
+ax.legend()
+plt.show()
+print(f"two-sided p = {p_value:.4f}")
+```
+
+## Read the p-value as a conditional statement
+
+Here $p\approx0.001$.
+
+> **If** there were no systematic period effect and within-well labels were
+> exchangeable, only about 1 in 1,000 random sign assignments would produce a
+> mean change at least this far from zero.
+
+::: {.fragment}
+It is not a 0.1% probability that the null is true.
+:::
+
+::: {.incremental}
+- **Size:** +12.47 ft gives magnitude and direction.
+- **Evidence:** $p\approx0.001$ says the result is unusual under the null.
+- **Cause:** neither number isolates pumping, recharge, climate, or aquifer lag.
+:::
+
+# Regression asks whether an effect changes with x {background-color="#0C234B"}
+
+## A line is a model for the mean
+
+For a time trend,
+
+$$\text{depth}_i=\beta_0+\beta_1\text{year}_i+\varepsilon_i.$$
+
+::: {.columns}
+::: {.column width="50%"}
+**Effect**
+
+$\beta_1$: expected change in depth per year.
+:::
+
+::: {.column width="50%"}
+**Null hypothesis**
+
+$H_0:\beta_1=0$ ft/year.
+:::
+:::
+
+::: {.fragment}
+The logic is the same as the paired test: estimate an effect, describe its
+uncertainty, ask whether zero is plausible, and keep the claim inside the design.
+:::
+
+## Fit and interpret, without a full derivation
+
+```{pyodide}
+#| setup: true
+#| exercise: ex_regression
+import numpy as np
+from scipy import stats
+
+year = np.arange(2000, 2012)
+depth_ft = np.array([100, 102, 101, 104, 105, 107,
+                     108, 108, 111, 113, 112, 116])
+fit = stats.linregress(year, depth_ft)
+```
+
+```{pyodide}
+#| exercise: ex_regression
+effect = ______
+units = ______
+evidence_against_zero = ______
+print(f"slope = {effect:.2f} {units}; p = {evidence_against_zero:.4f}")
+```
+
+::: {.hint exercise="ex_regression"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Use `fit.slope`, `"ft/year"`, and `fit.pvalue`.
+:::
+:::
+
+::: {.solution exercise="ex_regression"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```python
+effect = fit.slope
+units = "ft/year"
+evidence_against_zero = fit.pvalue
+```
+
+A positive depth slope means the water table became deeper through time. The
+sign only makes sense after stating how the response variable is measured.
+:::
+:::
+
+## The fitted line is not the whole analysis
+
+```python
+predicted = fit.intercept + fit.slope * year
+residual = depth_ft - predicted
+```
+
+Inspect residuals against fitted values and time.
+
+::: {.incremental}
+- Curvature challenges a straight-line mean.
+- Changing spread challenges the ordinary standard error.
+- Runs of positive or negative residuals challenge independence.
+- One extreme point can control a short record.
+:::
+
+::: {.fragment .due-notice}
+`linregress` will always calculate a line when $x$ varies. It does not certify
+that the line is a useful model or that its p-value is trustworthy.
+:::
+
+# Finish with the claim the design supports {background-color="#AB0520"}
+
+## Difference and trend are the same workflow
+
+| Question | Effect | Null | Essential design check |
+|---|---|---|---|
+| before vs after | mean paired change (ft) | change = 0 | preserve wells as pairs |
+| change through time | slope (ft/year) | slope = 0 | inspect residuals and dependence |
+
+## Four sentences
+
+1. **Result:** state the effect, direction, and units.
+2. **Evidence:** report the p-value as conditional on the null and assumptions.
+3. **Design:** name the independent unit or regression structure.
+4. **Limitation:** say what prevents a broader, predictive, or causal claim.
+
+Across 18 paired Tucson-area monitoring wells, median depth to water was on
+average **12.47 ft greater** in 2002–2006 than in 1996–2000 (paired permutation
+$p\approx0.001$). Wells—not tape readings—are the observational units. Without
+random site selection or an untreated control, the comparison does not describe
+the entire aquifer or establish a cause.
+
+## Thursday
+
+The lab uses one notebook to complete both compact workflows:
+
+1. paired effect, plot, permutation p-value, and bounded conclusion; then
+2. simple trend, residual check, and bounded interpretation.
+
+::: {.kicker}
+Effect first. Evidence second. Assumptions always.
+:::
