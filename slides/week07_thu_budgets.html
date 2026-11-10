@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Dr.&nbsp;Andrew Bennett">
-  <title>HWRS 564a – Loading and changing a model</title>
+  <title>HWRS 564a – Budgets, and what a model is worth</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,7 +197,7 @@
     <div class="slides">
 
 <section class="quarto-title-block center">
-  <h1 class="title">Loading and changing a model</h1>
+  <h1 class="title">Budgets, and what a model is worth</h1>
   <p class="subtitle">HWRS 564a · Week 7 · Thursday, October 8</p>
 
 <div class="quarto-title-authors">
@@ -215,103 +215,78 @@ Dr.&nbsp;Andrew Bennett
 <p>Week 7, session 2 of 2</p>
 </div>
 <ol type="1">
-<li>Loading a model back in from its input files</li>
-<li>Looking around inside it</li>
-<li>Making a changed copy in its own folder</li>
-<li>Comparing the two</li>
-<li>Your own experiment</li>
+<li>The water budget, term by term</li>
+<li>Depletion and capture — the distinction that regulation is built on</li>
+<li>Comparing your model with real measurements</li>
+<li>Why it doesn’t match, and why that is the useful part</li>
 </ol>
-<p>We’re in <code>week07_02_loading_modflow_models.ipynb</code> today. It needs the <code>simple_model</code> folder from Tuesday, so if you don’t have one, run all of <code>week07_01</code> first.</p>
 </section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Loading</h1>
+<h1>The budget</h1>
 
 </section>
 <section class="slide level2">
-<h2>Where we left off</h2>
-<p>Tuesday’s notebook left a folder of MODFLOW files behind:</p>
-<div id="dc07252e" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-stdout">
-<pre><code>simple_model/
-    simple_modflow_model.bas
-    simple_modflow_model.cbc
-    simple_modflow_model.dis
-    simple_modflow_model.hds
-    simple_modflow_model.list
-    simple_modflow_model.lpf
-    simple_modflow_model.nam
-    simple_modflow_model.oc
-    simple_modflow_model.pcg</code></pre>
-</div>
-</div>
+<h2>Four terms, one basin</h2>
+<p>Tuesday’s model: 20,000 m³/d wellfield, uniform recharge, constant heads on the east and west edges.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>m³/d</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>recharge in</td>
+<td>+17,400</td>
+</tr>
+<tr class="even">
+<td>net constant-head in</td>
+<td>+2,600</td>
+</tr>
+<tr class="odd">
+<td><strong>wells out</strong></td>
+<td><strong>−20,000</strong></td>
+</tr>
+<tr class="even">
+<td>discrepancy</td>
+<td>0.00 %</td>
+</tr>
+</tbody>
+</table>
 <div class="fragment">
-<p>Those files are the model. The Python that made them is optional from here on. If somebody emails you a folder like this, you can pick it up and keep going.</p>
+<p>And here is the sentence that took a model to write: <em>of the 20,000 m³/d pumped, 17,400 comes from recharge and 2,600 is captured from flow that would otherwise have left the basin.</em></p>
 </div>
 </section>
 <section class="slide level2">
-<h2>One line to load it</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>modelname <span class="op">=</span> <span class="st">"simple_modflow_model"</span></span>
-<span id="cb2-2"><a></a>original_ws <span class="op">=</span> <span class="st">'./simple_model'</span></span>
-<span id="cb2-3"><a></a>modflow_path <span class="op">=</span> <span class="st">'../../modflow/mf2005'</span></span>
-<span id="cb2-4"><a></a>m <span class="op">=</span> flopy.modflow.Modflow.load(<span class="ss">f'</span><span class="sc">{</span>original_ws<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>modelname<span class="sc">}</span><span class="ss">.nam'</span>, exe_name<span class="op">=</span>modflow_path)</span>
-<span id="cb2-5"><a></a><span class="bu">print</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="5ef3df85" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-stdout">
-<pre><code>MODFLOW 1 layer(s) 10 row(s) 10 column(s) 1 stress period(s)</code></pre>
-</div>
-</div>
+<h2>You predicted that number</h2>
+<p>Before running anything, in Tuesday’s lab:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>n_active_cells <span class="op">=</span> (ibound <span class="op">&gt;</span> <span class="dv">0</span>).<span class="bu">sum</span>()            <span class="co"># 2320, not 2400</span></span>
+<span id="cb1-2"><a></a>total_recharge <span class="op">=</span> RECHARGE <span class="op">*</span> n_active_cells <span class="op">*</span> DELR <span class="op">*</span> DELC</span>
+<span id="cb1-3"><a></a>deficit <span class="op">=</span> <span class="op">-</span>WELL_Q <span class="op">-</span> total_recharge             <span class="co"># 2600</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
-<p>You point <code>load</code> at the <code>.nam</code> file. That file lists every other file, so FloPy can find the rest on its own.</p>
+<p><strong>Recharge landing on a constant-head cell is discarded</strong> — MODFLOW applies <code>RCH</code> only where <code>ibound &gt; 0</code>. That is 80 cells and 600 m³/d.</p>
+</div>
+<div class="fragment due-notice">
+<p>Predicting the budget before you run is how you find out that your model is doing something you did not intend. The 600 m³/d is small; the <em>habit</em> is not.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>What’s in there?</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="bu">print</span>(m.get_package_list())</span>
-<span id="cb4-2"><a></a><span class="bu">print</span>(m.nlay, m.nrow, m.ncol, m.nper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="933cc52f" class="cell" data-execution_count="4">
-<div class="cell-output cell-output-stdout">
-<pre><code>['DIS', 'BAS6', 'LPF', 'OC', 'PCG']
-1 10 10 1</code></pre>
-</div>
-</div>
-<ul>
-<li class="fragment">Each package hangs off the model by name: <code>m.dis</code>, <code>m.bas6</code>, <code>m.lpf</code></li>
-<li class="fragment">Note it’s <code>bas6</code>, not <code>bas</code></li>
-<li class="fragment">Ask for a package the model doesn’t have and you get <code>None</code>. That’s what happens with <code>m.wel</code> and <code>m.rch</code> here, since we never added wells or recharge</li>
-</ul>
-</section>
-<section class="slide level2">
-<h2>Getting the arrays out</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>lpf <span class="op">=</span> m.lpf</span>
-<span id="cb6-2"><a></a>hk <span class="op">=</span> lpf.hk.array</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="ac8bffe9" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-stdout">
-<pre><code>shape: (1, 10, 10)
-mean K: 5.0 m/d</code></pre>
-</div>
-</div>
-<ul>
-<li class="fragment"><code>lpf.hk</code> is a FloPy object. Add <code>.array</code> to get the numpy array</li>
-<li class="fragment">Same pattern everywhere: <code>m.dis.top.array</code>, <code>m.bas6.ibound.array</code>, <code>m.bas6.strt.array</code></li>
-<li class="fragment">It’s the 5 m/d we typed in on Tuesday, so the load worked</li>
-</ul>
-</section>
-<section class="slide level2">
-<h2>Your turn: summarize an array</h2>
-<p>Here’s <code>ibound</code> the way it comes back from <code>m.bas6.ibound.array</code>. Pull a few facts out of it.</p>
-<script type="exercise-setup-ex_inspect-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2luc3BlY3QiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbmlib3VuZCA9IG5wLm9uZXMoKDEsIDEwLCAxMCksIGR0eXBlPW5wLmludDMyKVxuaWJvdW5kWzosIDosIDBdID0gLTFcbmlib3VuZFs6LCA6LCAtMV0gPSAtMSJ9
+<h2>Your turn: close a budget</h2>
+<p>A model reports these terms. One is missing — work out what it must be.</p>
+<script type="exercise-setup-ex_close-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nsb3NlIiwibWluLWxpbmVzIjoiNCIsInNldHVwIjp0cnVlLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoicmVjaGFyZ2VfaW4gPSAxNzQwMC4wXG5jb25zdGFudF9oZWFkX2luID0gMTMxNzc0LjZcbmNvbnN0YW50X2hlYWRfb3V0ID0gMTI5MTc0LjZcbndlbGxzX291dCA9IDIwMDAwLjAifQ==
 </script>
 <div>
 <div id="pyodide-2" class="exercise-cell">
 
 </div>
 <script type="pyodide-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2luc3BlY3QiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6InNoYXBlID0gX19fX19fXG52YWx1ZXMgPSBfX19fX18gICAgICAgICAgICAgICAjIHRoZSBkaWZmZXJlbnQgdmFsdWVzIHRoYXQgc2hvdyB1cFxuZmlyc3Rfcm93ID0gX19fX19fICAgICAgICAgICAgIyBsYXllciAwLCByb3cgMCwgZXZlcnkgY29sdW1uXG5wcmludChcInNoYXBlOlwiLCBzaGFwZSlcbnByaW50KFwidmFsdWVzOlwiLCB2YWx1ZXMpXG5wcmludChcImZpcnN0IHJvdzpcIiwgZmlyc3Rfcm93KSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2Nsb3NlIiwibWluLWxpbmVzIjoiNCIsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJ0b3RhbF9pbiA9IF9fX19fX1xudG90YWxfb3V0ID0gX19fX19fXG5kaXNjcmVwYW5jeV9wY3QgPSAxMDAgKiAodG90YWxfaW4gLSB0b3RhbF9vdXQpIC8gKCh0b3RhbF9pbiArIHRvdGFsX291dCkgLyAyKVxucHJpbnQoZlwiaW4ge3RvdGFsX2luOiwuMWZ9ICBvdXQge3RvdGFsX291dDosLjFmfSAgZGlzY3JlcGFuY3kge2Rpc2NyZXBhbmN5X3BjdDorLjRmfSAlXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_inspect">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_close">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -321,12 +296,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p><code>.shape</code> is an attribute. <code>np.unique()</code> gives the distinct values. Index with <code>[layer, row, column]</code>.</p>
+<p>Every <code>_in</code> term goes on one side, every <code>_out</code> term on the other. There are two of each.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_inspect">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_close">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -336,10 +311,10 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>shape <span class="op">=</span> ibound.shape</span>
-<span id="cb8-2"><a></a>values <span class="op">=</span> np.unique(ibound)</span>
-<span id="cb8-3"><a></a>first_row <span class="op">=</span> ibound[<span class="dv">0</span>, <span class="dv">0</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Do this kind of check any time you load a model you didn’t build. It’s the quickest way to find out what you’ve been handed.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>total_in <span class="op">=</span> recharge_in <span class="op">+</span> constant_head_in</span>
+<span id="cb2-2"><a></a>total_out <span class="op">=</span> constant_head_out <span class="op">+</span> wells_out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>149,174.6 both ways, discrepancy zero.</p>
+<p>Notice how <strong>large the constant-head terms are</strong> — 131,000 m³/d flowing through the domain, against 20,000 pumped. The regional throughflow dwarfs the well, and the budget is the only place you see that. It is also a warning: if your boundary conditions are wrong, they are wrong about the biggest number in the model.</p>
 </div>
 </div>
 </div>
@@ -347,132 +322,51 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </section></section>
 <section>
 <section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Making a changed copy</h1>
+<h1>Depletion vs capture</h1>
 
 </section>
 <section class="slide level2">
-<h2>New folder, new model</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>new_modelname <span class="op">=</span> <span class="st">'modified_model'</span></span>
-<span id="cb9-2"><a></a>model_ws_modified <span class="op">=</span> <span class="st">'./modified_model'</span></span>
-<span id="cb9-3"><a></a>os.makedirs(model_ws_modified, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb9-4"><a></a>m_mod <span class="op">=</span> flopy.modflow.Modflow(modelname<span class="op">=</span>new_modelname,</span>
-<span id="cb9-5"><a></a>                              exe_name<span class="op">=</span>modflow_path,</span>
-<span id="cb9-6"><a></a>                              model_ws<span class="op">=</span>model_ws_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>Two ways to produce water</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Depletion</strong></p>
+<p>Water taken out of storage.</p>
+<p>A one-off withdrawal from the aquifer’s stock. Not renewable.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Capture</strong></p>
+<p>Recharge or throughflow diverted to the well.</p>
+<p>Renewable — but it was going somewhere, and now it isn’t.</p>
+</div></div>
 <div class="fragment due-notice">
-<p>Put a modified model in its own folder. If you write it on top of the original, you lose the results you wanted to compare against.</p>
+<p><strong>Neither is free.</strong> “Safe yield” regulation is an argument about how much capture is acceptable and whose water it was.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Copy over what stays the same</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>dis <span class="op">=</span> flopy.modflow.ModflowDis(m_mod,</span>
-<span id="cb10-2"><a></a>                                nlay<span class="op">=</span>m.nlay, nrow<span class="op">=</span>m.nrow, ncol<span class="op">=</span>m.ncol,</span>
-<span id="cb10-3"><a></a>                                delr<span class="op">=</span>m.dis.delr.array, delc<span class="op">=</span>m.dis.delc.array,</span>
-<span id="cb10-4"><a></a>                                top<span class="op">=</span>m.dis.top.array, botm<span class="op">=</span>m.dis.botm.array,</span>
-<span id="cb10-5"><a></a>                                nper<span class="op">=</span>m.nper, perlen<span class="op">=</span>m.dis.perlen.array,</span>
-<span id="cb10-6"><a></a>                                nstp<span class="op">=</span>m.dis.nstp.array,</span>
-<span id="cb10-7"><a></a>                                steady<span class="op">=</span>m.dis.steady.array)</span>
-<span id="cb10-8"><a></a></span>
-<span id="cb10-9"><a></a>bas <span class="op">=</span> flopy.modflow.ModflowBas(m_mod,</span>
-<span id="cb10-10"><a></a>                                ibound<span class="op">=</span>m.bas6.ibound.array,</span>
-<span id="cb10-11"><a></a>                                strt<span class="op">=</span>m.bas6.strt.array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2>In this model</h2>
+<ul>
+<li class="fragment">Storage is zero — it is steady state, nothing is changing</li>
+<li class="fragment">So 100% of the well’s yield is <strong>capture</strong></li>
+<li class="fragment">17,400 m³/d of captured recharge</li>
+<li class="fragment">2,600 m³/d of throughflow that no longer leaves to the north-west</li>
+</ul>
 <div class="fragment">
-<p>Same grid, same boundaries. Everything is read off the loaded model <code>m</code>, so there are no numbers to retype and get wrong.</p>
+<p>Downstream of this basin, somebody is 2,600 m³/d short and has no way to measure why. Week 9 adds storage and the picture gets more interesting.</p>
 </div>
 </section>
 <section class="slide level2">
-<h2>Change the K field</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>np.random.seed(<span class="dv">42</span>)  <span class="co"># For reproducibility</span></span>
-<span id="cb11-2"><a></a>new_hk <span class="op">=</span> np.random.normal(loc<span class="op">=</span><span class="fl">10.0</span>, scale<span class="op">=</span><span class="fl">2.0</span>, size<span class="op">=</span>hk.shape)</span>
-<span id="cb11-3"><a></a>new_hk[new_hk <span class="op">&lt;</span> <span class="fl">0.1</span>] <span class="op">=</span> <span class="fl">0.1</span>  <span class="co"># Ensure minimum K value</span></span>
-<span id="cb11-4"><a></a></span>
-<span id="cb11-5"><a></a>lpf_mod <span class="op">=</span> flopy.modflow.ModflowLpf(m_mod, hk<span class="op">=</span>new_hk, vka<span class="op">=</span><span class="fl">1.0</span>, sy<span class="op">=</span><span class="fl">0.2</span>, ss<span class="op">=</span><span class="fl">1e-5</span>, laytyp<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li class="fragment">Every cell gets its own K, drawn from a normal distribution</li>
-<li class="fragment">The seed means everyone in the room gets the same “random” field</li>
-<li class="fragment">A normal distribution can go negative and K can’t, hence the floor at 0.1</li>
-<li class="fragment">Two things changed at once: K is now patchy, and the average went from 5 to about 10 m/d</li>
-</ul>
-</section>
-<section class="slide level2">
-<h2>The new K field</h2>
-
-<img data-src="week07_thu_budgets_files/figure-revealjs/cell-7-output-1.png" class="r-stretch"><div id="8d59c861" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-stdout">
-<pre><code>original: 5.00 m/d everywhere
-modified: 9.79 ± 1.81 m/d, from 4.76 to 13.70</code></pre>
-</div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Finish it and run</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>pcg <span class="op">=</span> flopy.modflow.ModflowPcg(m_mod)</span>
-<span id="cb13-2"><a></a></span>
-<span id="cb13-3"><a></a>spd <span class="op">=</span> {(<span class="dv">0</span>, <span class="dv">0</span>): [<span class="st">'save head'</span>, <span class="st">'save budget'</span>]}</span>
-<span id="cb13-4"><a></a>oc <span class="op">=</span> flopy.modflow.ModflowOc(m_mod, stress_period_data<span class="op">=</span>spd, compact<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb13-5"><a></a></span>
-<span id="cb13-6"><a></a>m_mod.write_input()</span>
-<span id="cb13-7"><a></a>success, buff <span class="op">=</span> m_mod.run_model(silent<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li class="fragment">A new model starts empty. Skip <code>OC</code> and nothing gets saved, skip the solver and it won’t run</li>
-<li class="fragment">The notebook doesn’t check <code>success</code> in this cell. Add the check yourself, like we did last week</li>
-<li class="fragment">No <code>ipakcb</code> on the <code>LPF</code> this time, so there’s no <code>.cbc</code> file for the modified model</li>
-</ul>
-</section></section>
-<section>
-<section class="title-slide slide level1 center" data-background-color="#0C234B">
-<h1>Comparing</h1>
-
-</section>
-<section class="slide level2">
-<h2>Read both head files</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>hds_original <span class="op">=</span> flopy.utils.HeadFile(headfile_original)</span>
-<span id="cb14-2"><a></a>head_original <span class="op">=</span> hds_original.get_data()</span>
-<span id="cb14-3"><a></a></span>
-<span id="cb14-4"><a></a>hds_modified <span class="op">=</span> flopy.utils.HeadFile(headfile_modified)</span>
-<span id="cb14-5"><a></a>head_modified <span class="op">=</span> hds_modified.get_data()</span>
-<span id="cb14-6"><a></a></span>
-<span id="cb14-7"><a></a>head_diff <span class="op">=</span> head_modified <span class="op">-</span> head_original</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="fragment">
-<p>Both arrays are the same shape, so subtracting them just works. This is why we kept the grid identical.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Side by side</h2>
-
-<img data-src="week07_thu_budgets_files/figure-revealjs/cell-9-output-1.png" class="r-stretch"><div class="fragment">
-<p>The first two look almost the same. The difference map is where you can see what changed.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>How big is the change?</h2>
-<div id="20adc91e" class="cell" data-execution_count="9">
-<div class="cell-output cell-output-stdout">
-<pre><code>biggest rise in head:  +0.25 m
-biggest drop in head:  -0.14 m
-head range in the model: 0 to 10 m</code></pre>
-</div>
-</div>
-<ul>
-<li class="fragment">We doubled the average K and the heads moved by a quarter of a meter at most</li>
-<li class="fragment">The two edge columns didn’t move at all. They’re constant head</li>
-<li class="fragment">So what did doubling K do?</li>
-</ul>
-</section>
-<section class="slide level2">
-<h2>Your turn: what does doubling K do?</h2>
-<p>Go back to the uniform model. Same boundaries, but K goes from 5 to 10 m/d.</p>
-<script type="exercise-setup-ex_double-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RvdWJsZSIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImltcG9ydCBudW1weSBhcyBucFxubmNvbCwgbnJvdyA9IDEwLCAxMFxuZHggPSBkeSA9IDEwLjBcbnRoaWNrbmVzcyA9IDUwLjBcbmhlYWRfbGVmdCwgaGVhZF9yaWdodCA9IDEwLjAsIDAuMFxuXG5kZWYgbW9kZWwoSyk6XG4gICAgaGVhZHMgPSBucC5saW5zcGFjZShoZWFkX2xlZnQsIGhlYWRfcmlnaHQsIG5jb2wpXG4gICAgZ3JhZGllbnQgPSAoaGVhZF9sZWZ0IC0gaGVhZF9yaWdodCkgLyAoKG5jb2wgLSAxKSAqIGR4KVxuICAgIHRvdGFsX2Zsb3cgPSBLICogZ3JhZGllbnQgKiBkeSAqIHRoaWNrbmVzcyAqIG5yb3dcbiAgICByZXR1cm4gaGVhZHMsIHRvdGFsX2Zsb3cifQ==
+<h2>Your turn: whose water is it?</h2>
+<script type="exercise-setup-ex_capture-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NhcHR1cmUiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJzY2VuYXJpb3MgPSB7XG4gICAgXCJhXCI6IFwic3RvcmFnZSDigJQgYSBvbmUtb2ZmIHdpdGhkcmF3YWwgZnJvbSB0aGUgYXF1aWZlcidzIHN0b2NrXCIsXG4gICAgXCJiXCI6IFwiY2FwdHVyZSDigJQgcmVjaGFyZ2UgdGhhdCB3b3VsZCBoYXZlIGZsb3dlZCB0byB0aGUgcml2ZXJcIixcbiAgICBcImNcIjogXCJjYXB0dXJlIOKAlCB0aHJvdWdoZmxvdyB0aGF0IHdvdWxkIGhhdmUgbGVmdCB0aGUgYmFzaW5cIixcbn0ifQ==
 </script>
 <div>
 <div id="pyodide-4" class="exercise-cell">
 
 </div>
 <script type="pyodide-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2RvdWJsZSIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoiaGVhZHNfNSwgZmxvd181ID0gbW9kZWwoX19fX19fKVxuaGVhZHNfMTAsIGZsb3dfMTAgPSBtb2RlbChfX19fX18pXG5cbnByaW50KFwiYmlnZ2VzdCBoZWFkIGNoYW5nZTpcIiwgbnAuYWJzKGhlYWRzXzEwIC0gaGVhZHNfNSkubWF4KCksIFwibVwiKVxucHJpbnQoZlwiZmxvdyB3aXRoIEsgPSA1OiAge2Zsb3dfNTosLjBmfSBtMy9kXCIpXG5wcmludChmXCJmbG93IHdpdGggSyA9IDEwOiB7Zmxvd18xMDosLjBmfSBtMy9kXCIpIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2NhcHR1cmUiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6IiMgQSBuZXcgd2VsbCBzdGFydHMgcHVtcGluZy4gQWZ0ZXIgNTAgeWVhcnMgdGhlIGFxdWlmZXIgaGFzIHJlLWVxdWlsaWJyYXRlZFxuIyBhbmQgaGVhZHMgYXJlIHN0ZWFkeSBhZ2Fpbi4gV2hlcmUgaXMgaXRzIHdhdGVyIGNvbWluZyBmcm9tP1xuYW5zd2VyID0gX19fX19fXG5wcmludChzY2VuYXJpb3NbYW5zd2VyXSkifQ==
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_double">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_capture">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -482,12 +376,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p>Just pass in the two K values. Then look at which output changed and which didn’t.</p>
+<p>At steady state, by definition, storage is not changing. So the water cannot be coming out of storage.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_double">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_capture">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -497,59 +391,48 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>heads_5, flow_5 <span class="op">=</span> model(<span class="fl">5.0</span>)</span>
-<span id="cb16-2"><a></a>heads_10, flow_10 <span class="op">=</span> model(<span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The heads don’t change at all, and the flow doubles.</p>
-<p>With fixed heads on both sides and uniform K, the heads are a straight line no matter what K is. K only sets how much water moves. So the small head differences on the last slide all come from K being patchy. The higher average shows up in the flow, and you won’t see it on a head map.</p>
+<p><code>"b"</code> or <code>"c"</code> — either is right; the point is that it is <strong>not</strong> <code>"a"</code>.</p>
+<p>Once heads are steady, storage contributes exactly zero by definition. Every litre the well produces is being taken from somewhere else in the budget: a river, a spring, a wetland, a neighbour’s throughflow, or evapotranspiration that no longer happens.</p>
+<p><strong>A well at steady state is not “using up” an aquifer. It is redirecting a flux.</strong> Which flux, and to whose cost, is what the budget tells you and nothing else does.</p>
 </div>
 </div>
 </div>
-</div>
-</section>
-<section class="slide level2">
-<h2>Check that in the budget</h2>
-<p>Total flow through each model, from the bottom of the <code>.list</code> files:</p>
-<div id="88966b4e" class="cell" data-execution_count="10">
-<div class="cell-output cell-output-stdout">
-<pre><code>original:     2,778 m3/d
-modified:     5,307 m3/d
-ratio:         1.91</code></pre>
-</div>
-</div>
-<div class="fragment">
-<p>Almost double the water, with heads that barely moved. If you’d only looked at the head maps you would have missed the biggest change. Look at heads and the budget both.</p>
 </div>
 </section></section>
 <section>
-<section class="title-slide slide level1 center" data-background-color="#AB0520">
-<h1>Your experiment</h1>
+<section class="title-slide slide level1 center" data-background-color="#0C234B">
+<h1>Comparing with reality</h1>
 
 </section>
 <section class="slide level2">
-<h2>Now you change something</h2>
-<p>Pick one:</p>
-<ol type="1">
-<li class="fragment"><strong>K zones</strong>: a high-K channel, or a low-K barrier across the flow</li>
-<li class="fragment"><strong>A gradient</strong>: K that increases from west to east</li>
-<li class="fragment"><strong>New boundary conditions</strong>: a well, or more constant-head cells</li>
-<li class="fragment"><strong>Layer geometry</strong>: change the top or bottom elevations</li>
-</ol>
+<h2>Head is not depth to water</h2>
+<p>MODFLOW reports head as an <strong>elevation</strong>. A well measures <strong>depth below land surface</strong>.</p>
+<p><span class="math display">\[\text{depth to water} = \text{land surface} - \text{head}\]</span></p>
+<div class="fragment">
+<p>Which means every comparison with a real measurement depends on a land-surface array MODFLOW knows nothing about.</p>
+</div>
 </section>
 <section class="slide level2">
-<h2>Your turn: build a barrier</h2>
-<p>A warm-up for idea 1. Make a K array that’s 10 m/d everywhere, with a low-K wall down columns 4 and 5.</p>
-<script type="exercise-setup-ex_barrier-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2JhcnJpZXIiLCJtaW4tbGluZXMiOiI0Iiwic2V0dXAiOnRydWUsInRpbWVsaW1pdCI6IjQ1In0sImNvZGUiOiJpbXBvcnQgbnVtcHkgYXMgbnBcbm5sYXksIG5yb3csIG5jb2wgPSAxLCAxMCwgMTAifQ==
+<h2>The comparison</h2>
+
+<img data-src="week07_thu_budgets_files/figure-revealjs/cell-3-output-1.png" class="r-stretch"><div class="fragment">
+<p>Medians: modelled <strong>{python} f”{np.median(dtw_model):.0f}“</strong> m, observed <strong>{python} f”{observed.median():.0f}“</strong> m. The model is biased deep by well over a hundred metres.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Your turn: convert head to depth</h2>
+<script type="exercise-setup-ex_dtw-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2R0dyIsIm1pbi1saW5lcyI6IjQiLCJzZXR1cCI6dHJ1ZSwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6ImxhbmRfc3VyZmFjZV9tID0gNzQ1LjAgICAgICMgYXQgdGhpcyB3ZWxsJ3MgbG9jYXRpb25cbm1vZGVsbGVkX2hlYWRfbSA9IDY2MS42XG5vYnNlcnZlZF9kZXB0aF9tID0gNTguMCJ9
 </script>
 <div>
 <div id="pyodide-6" class="exercise-cell">
 
 </div>
 <script type="pyodide-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2JhcnJpZXIiLCJtaW4tbGluZXMiOiI0IiwidGltZWxpbWl0IjoiNDUifSwiY29kZSI6Im15X2hrID0gX19fX19fICAgICAgICAgICAgICAgICAjIDEwIG0vZCBldmVyeXdoZXJlXG5fX19fX18gICAgICAgICAgICAgICAgICAgICAgICAgIyAwLjEgbS9kIGluIGNvbHVtbnMgNCBhbmQgNVxucHJpbnQobXlfaGtbMCwgMCwgOl0pIn0=
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X2R0dyIsIm1pbi1saW5lcyI6IjQiLCJ0aW1lbGltaXQiOiI0NSJ9LCJjb2RlIjoibW9kZWxsZWRfZGVwdGggPSBfX19fX19cbnJlc2lkdWFsID0gX19fX19fXG5wcmludChmXCJtb2RlbGxlZCBkZXB0aCB0byB3YXRlciB7bW9kZWxsZWRfZGVwdGg6LjFmfSBtXCIpXG5wcmludChmXCJvYnNlcnZlZCAgICAgICAgICAgICAgICB7b2JzZXJ2ZWRfZGVwdGhfbTouMWZ9IG1cIilcbnByaW50KGZcInJlc2lkdWFsIChtb2RlbCAtIG9icykgIHtyZXNpZHVhbDorLjFmfSBtXCIpIn0=
 </script>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_barrier">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_dtw">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -559,12 +442,12 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Hint</strong></p>
 </div>
 <div class="callout-content">
-<p><code>np.full(shape, value)</code> makes the array. Slice the column axis with <code>4:6</code> to get columns 4 and 5.</p>
+<p>Depth counts downward from the land surface, so it is the land surface <em>minus</em> the head. The residual convention is modelled minus observed, as in Week 12.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_barrier">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_dtw">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -574,26 +457,36 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p><strong>Solution</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>my_hk <span class="op">=</span> np.full((nlay, nrow, ncol), <span class="fl">10.0</span>)</span>
-<span id="cb18-2"><a></a>my_hk[:, :, <span class="dv">4</span>:<span class="dv">6</span>] <span class="op">=</span> <span class="fl">0.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Pass that as <code>hk=my_hk</code> when you build the <code>LPF</code> package. Before you run it, guess what the heads will do on either side of the wall.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>modelled_depth <span class="op">=</span> land_surface_m <span class="op">-</span> modelled_head_m</span>
+<span id="cb3-2"><a></a>residual <span class="op">=</span> modelled_depth <span class="op">-</span> observed_depth_m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>83.4 m modelled against 58.0 m observed — the model puts the water table <strong>25 m too deep</strong> at this well.</p>
+<p>Note that a 25 m head residual is only 0.3% of the elevations involved, which is why you must never assess a groundwater model by comparing <em>heads</em> as numbers. Compare <strong>residuals</strong>, and compare them against the head <em>range</em> across the domain — 80 m here, so 25 m is over a quarter of the signal.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section class="slide level2">
-<h2>The recipe</h2>
+<h2>Three reasons, none of them bugs</h2>
 <ol type="1">
-<li class="fragment">Make a new folder for the experiment</li>
-<li class="fragment">Load the original model</li>
-<li class="fragment">Create a new, empty model pointed at the new folder</li>
-<li class="fragment">Copy the packages you’re keeping, change the one you’re testing</li>
-<li class="fragment">Add <code>PCG</code> and <code>OC</code>, write, run, check <code>success</code></li>
-<li class="fragment">Subtract the original heads and plot the difference</li>
+<li class="fragment"><strong>The boundary heads were invented.</strong> 620 m and 700 m, chosen to give a plausible gradient. They set the entire head field.</li>
+<li class="fragment"><strong>The monitored wells are not a random sample.</strong> They cluster where people pump — the valley floor — which is where water is shallowest.</li>
+<li class="fragment"><strong>Uniform <code>K</code> and uniform recharge.</strong> The real basin has neither.</li>
 </ol>
 <div class="fragment">
-<p>Change one thing at a time. If you change two and the answer moves, you won’t know which one did it.</p>
+<p>Reason 2 is the subtle one, and it is the Week 13 sampling problem again. You are comparing a whole-domain distribution with a biased sample of it.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>What to do about it</h2>
+<div class="fragment">
+<p><strong>Calibration</strong>: adjust the things you guessed until the model reproduces what you measured — at the <em>locations you measured it</em>, not across the whole domain.</p>
+</div>
+<div class="fragment">
+<p>And then be honest about what that gets you. A calibrated model is <strong>one consistent explanation</strong> of the observations, not the truth. Several different parameter sets will fit equally well and disagree about the future.</p>
+</div>
+<div class="fragment due-notice">
+<p>That is what Project 3 is about, and why it asks for a comparison of scenarios rather than a single prediction.</p>
 </div>
 </section>
 <section class="slide level2 smaller">
@@ -602,29 +495,29 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>What you did today</p>
 </div>
 <ul>
-<li>Loaded a model from its <code>.nam</code> file and pulled arrays out of the packages</li>
-<li>Built a modified copy in a separate folder</li>
-<li>Compared heads with a difference map</li>
-<li>Saw that heads and flows can tell you different things</li>
+<li>Read a budget term by term, and predicted it before running</li>
+<li>Distinguished depletion from capture, and why regulation cares</li>
+<li>Compared modelled depth to water with 80 real wells</li>
+<li>Found a large bias, and named three reasons for it</li>
 </ul>
 <div class="kicker">
 <p>What’s due</p>
 </div>
 <ul>
 <li><strong>HW 3 — From labelled data to a verified first model</strong>, Wednesday 10/7 at 11:59pm</li>
-<li>Finish both Week 7 notebooks, including your own experiment, before Tuesday</li>
+<li>Finish the Week 7 lab before Tuesday</li>
 </ul>
 <div class="kicker">
 <p>Next week</p>
 </div>
-<p>Discretization and boundary conditions.</p>
+<p>Discretization and boundary conditions — and what happens when you take the confining layer off this model.</p>
 
 
 <script type="pyodide-data">
 eyJvcHRpb25zIjp7ImVudiI6eyJQTE9UTFlfUkVOREVSRVIiOiJwbG90bHlfbWltZXR5cGUifSwiaW5kZXhVUkwiOiJodHRwczovL2Nkbi5qc2RlbGl2ci5uZXQvcHlvZGlkZS92MC4yOC4xL2Z1bGwvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsicHlvZGlkZV9odHRwIiwibWljcm9waXAiLCJpcHl0aG9uIiwibnVtcHkiLCJtYXRwbG90bGliIiwicGFuZGFzIl19fQ==
 </script>
 <script type="ojs-module-contents">
-eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTYiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl82ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcInB5b2RpZGUtNi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IocHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF9weW9kaWRlX3ZhbHVlXzYgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzYsIHt9KTtcbl9weW9kaWRlX2ZlZWRiYWNrXzYgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBQeW9kaWRlR3JhZGVyKF9weW9kaWRlX3ZhbHVlXzYuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6InB5b2RpZGUtNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3B5b2RpZGVfZWRpdG9yXzQgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS00LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfNCA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfNCwge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfNCA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfNC5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfMiA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJweW9kaWRlLTItY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfcHlvZGlkZV92YWx1ZV8yID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl8yLCB7fSk7XG5fcHlvZGlkZV9mZWVkYmFja18yID0ge1xuICBjb25zdCB7IFB5b2RpZGVHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgUHlvZGlkZUdyYWRlcihfcHlvZGlkZV92YWx1ZV8yLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJweW9kaWRlT2pzID0ge1xuICBjb25zdCB7XG4gICAgUHlvZGlkZUV2YWx1YXRvcixcbiAgICBQeW9kaWRlRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUHl0aG9uLFxuICAgIHN0YXJ0UHlvZGlkZVdvcmtlcixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoLFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gUHlvZGlkZSBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBsZXQgcHlvZGlkZVByb21pc2UgPSAoYXN5bmMgKCkgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgUHlvZGlkZWA7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHN0YXJ0UHlvZGlkZVdvcmtlcihkYXRhLm9wdGlvbnMpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiBtaWNyb3BpcGA7XG4gICAgYXdhaXQgcHlvZGlkZS5sb2FkUGFja2FnZShcIm1pY3JvcGlwXCIpO1xuICAgIGNvbnN0IG1pY3JvcGlwID0gYXdhaXQgcHlvZGlkZS5weWltcG9ydChcIm1pY3JvcGlwXCIpO1xuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIG1pY3JvcGlwLmluc3RhbGwocGtnKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcbiAgICBhd2FpdCBtaWNyb3BpcC5kZXN0cm95KCk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCBweW9kaWRlLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKGUubmFtZSAhPT0gXCJFcnJub0Vycm9yXCIpIHRocm93IGU7XG4gICAgICAgICAgaWYgKGUuZXJybm8gIT09IDIwKSB7XG4gICAgICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yICR7ZS5lcnJub30gXCIke2Vycm9yVGV4dH1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHRyeSB7XG4gICAgICAgIHJldHVybiBhd2FpdCBweW9kaWRlLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICBjb25zdCBlcnJvclRleHQgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuVVRGOFRvU3RyaW5nKGVycm9yVGV4dFB0cik7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICB9XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFB5b2RpZGUgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUHl0aG9uKHB5b2RpZGUpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHB5b2RpZGU7XG4gIH0pKCkuY2F0Y2goKGVycikgPT4ge1xuICAgIHN0YXR1c1RleHQuc3R5bGUuY29sb3IgPSBcInZhcigtLWV4ZXJjaXNlLWVkaXRvci1obC1lciwgI0FEMDAwMClcIjtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gZXJyLm1lc3NhZ2U7XG4gICAgLy9pbmRpY2F0b3JDb250YWluZXIucXVlcnlTZWxlY3RvcihcIi5zcGlubmVyLWdyb3dcIikuY2xhc3NMaXN0LmFkZChcImQtbm9uZVwiKTtcbiAgICB0aHJvdyBlcnI7XG4gIH0pO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCBweW9kaWRlID0gYXdhaXQgcHlvZGlkZVByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFB5b2RpZGVFdmFsdWF0b3IocHlvZGlkZSwgY29udGV4dCk7XG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHlvZGlkZVByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gICAgcHJvY2VzcyxcbiAgfTtcbn1cbiJ9XX0=
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTYiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl82ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gU2V0dXAgY2VsbHMgYXJlIGV4ZWN1dGVkIGluIHRoZSBleGVyY2lzZSdzIHByZXBhcmF0aW9uIGVudmlyb25tZW50LiBLZWVwXG4gIC8vIHRoYXQgY29kZSB2aXNpYmxlIGluIHRoZSBlZGl0b3Igc28gc3R1ZGVudHMgY2FuIHNlZSBldmVyeSBzdXBwbGllZFxuICAvLyB2YXJpYWJsZSBpbW1lZGlhdGVseSBpbnN0ZWFkIG9mIGhhdmluZyB0byBpbmZlciBpdCBmcm9tIHRoZSBwcm9tcHQuXG4gIGNvbnN0IHNldHVwU2NyaXB0ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICBgc2NyaXB0W3R5cGU9XFxcImV4ZXJjaXNlLXNldHVwLSR7YmxvY2suYXR0ci5leGVyY2lzZX0tY29udGVudHNcXFwiXWBcbiAgKTtcbiAgY29uc3Qgc2V0dXBDb2RlID0gc2V0dXBTY3JpcHRcbiAgICA/IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNldHVwU2NyaXB0LnRleHRDb250ZW50KSkuY29kZS50cmltRW5kKClcbiAgICA6IFwiXCI7XG4gIGNvbnN0IHZpc2libGVDb2RlID0gc2V0dXBDb2RlID8gYCR7c2V0dXBDb2RlfVxcblxcbiR7YmxvY2suY29kZX1gIDogYmxvY2suY29kZTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwicHlvZGlkZS02LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFB5b2RpZGVFeGVyY2lzZUVkaXRvcihcbiAgICBweW9kaWRlT2pzLnB5b2RpZGVQcm9taXNlLFxuICAgIHZpc2libGVDb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3B5b2RpZGVfdmFsdWVfNiA9IHB5b2RpZGVPanMucHJvY2VzcyhfcHlvZGlkZV9lZGl0b3JfNiwge30pO1xuX3B5b2RpZGVfZmVlZGJhY2tfNiA9IHtcbiAgY29uc3QgeyBQeW9kaWRlR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFB5b2RpZGVHcmFkZXIoX3B5b2RpZGVfdmFsdWVfNi5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfNCA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIFNldHVwIGNlbGxzIGFyZSBleGVjdXRlZCBpbiB0aGUgZXhlcmNpc2UncyBwcmVwYXJhdGlvbiBlbnZpcm9ubWVudC4gS2VlcFxuICAvLyB0aGF0IGNvZGUgdmlzaWJsZSBpbiB0aGUgZWRpdG9yIHNvIHN0dWRlbnRzIGNhbiBzZWUgZXZlcnkgc3VwcGxpZWRcbiAgLy8gdmFyaWFibGUgaW1tZWRpYXRlbHkgaW5zdGVhZCBvZiBoYXZpbmcgdG8gaW5mZXIgaXQgZnJvbSB0aGUgcHJvbXB0LlxuICBjb25zdCBzZXR1cFNjcmlwdCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXG4gICAgYHNjcmlwdFt0eXBlPVxcXCJleGVyY2lzZS1zZXR1cC0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9LWNvbnRlbnRzXFxcIl1gXG4gICk7XG4gIGNvbnN0IHNldHVwQ29kZSA9IHNldHVwU2NyaXB0XG4gICAgPyBKU09OLnBhcnNlKGI2NERlY29kZShzZXR1cFNjcmlwdC50ZXh0Q29udGVudCkpLmNvZGUudHJpbUVuZCgpXG4gICAgOiBcIlwiO1xuICBjb25zdCB2aXNpYmxlQ29kZSA9IHNldHVwQ29kZSA/IGAke3NldHVwQ29kZX1cXG5cXG4ke2Jsb2NrLmNvZGV9YCA6IGJsb2NrLmNvZGU7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcInB5b2RpZGUtNC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IoXG4gICAgcHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSxcbiAgICB2aXNpYmxlQ29kZSxcbiAgICBvcHRpb25zXG4gICk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF9weW9kaWRlX3ZhbHVlXzQgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzQsIHt9KTtcbl9weW9kaWRlX2ZlZWRiYWNrXzQgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBQeW9kaWRlR3JhZGVyKF9weW9kaWRlX3ZhbHVlXzQuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6InB5b2RpZGUtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3B5b2RpZGVfZWRpdG9yXzIgPSB7XG4gIGNvbnN0IHsgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBTZXR1cCBjZWxscyBhcmUgZXhlY3V0ZWQgaW4gdGhlIGV4ZXJjaXNlJ3MgcHJlcGFyYXRpb24gZW52aXJvbm1lbnQuIEtlZXBcbiAgLy8gdGhhdCBjb2RlIHZpc2libGUgaW4gdGhlIGVkaXRvciBzbyBzdHVkZW50cyBjYW4gc2VlIGV2ZXJ5IHN1cHBsaWVkXG4gIC8vIHZhcmlhYmxlIGltbWVkaWF0ZWx5IGluc3RlYWQgb2YgaGF2aW5nIHRvIGluZmVyIGl0IGZyb20gdGhlIHByb21wdC5cbiAgY29uc3Qgc2V0dXBTY3JpcHQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFxuICAgIGBzY3JpcHRbdHlwZT1cXFwiZXhlcmNpc2Utc2V0dXAtJHtibG9jay5hdHRyLmV4ZXJjaXNlfS1jb250ZW50c1xcXCJdYFxuICApO1xuICBjb25zdCBzZXR1cENvZGUgPSBzZXR1cFNjcmlwdFxuICAgID8gSlNPTi5wYXJzZShiNjREZWNvZGUoc2V0dXBTY3JpcHQudGV4dENvbnRlbnQpKS5jb2RlLnRyaW1FbmQoKVxuICAgIDogXCJcIjtcbiAgY29uc3QgdmlzaWJsZUNvZGUgPSBzZXR1cENvZGUgPyBgJHtzZXR1cENvZGV9XFxuXFxuJHtibG9jay5jb2RlfWAgOiBibG9jay5jb2RlO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJweW9kaWRlLTItY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKFxuICAgIHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsXG4gICAgdmlzaWJsZUNvZGUsXG4gICAgb3B0aW9uc1xuICApO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfcHlvZGlkZV92YWx1ZV8yID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl8yLCB7fSk7XG5fcHlvZGlkZV9mZWVkYmFja18yID0ge1xuICBjb25zdCB7IFB5b2RpZGVHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgUHlvZGlkZUdyYWRlcihfcHlvZGlkZV92YWx1ZV8yLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJweW9kaWRlT2pzID0ge1xuICBjb25zdCB7XG4gICAgUHlvZGlkZUV2YWx1YXRvcixcbiAgICBQeW9kaWRlRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUHl0aG9uLFxuICAgIHN0YXJ0UHlvZGlkZVdvcmtlcixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoLFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gUHlvZGlkZSBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBsZXQgcHlvZGlkZVByb21pc2UgPSAoYXN5bmMgKCkgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgUHlvZGlkZWA7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHN0YXJ0UHlvZGlkZVdvcmtlcihkYXRhLm9wdGlvbnMpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiBtaWNyb3BpcGA7XG4gICAgYXdhaXQgcHlvZGlkZS5sb2FkUGFja2FnZShcIm1pY3JvcGlwXCIpO1xuICAgIGNvbnN0IG1pY3JvcGlwID0gYXdhaXQgcHlvZGlkZS5weWltcG9ydChcIm1pY3JvcGlwXCIpO1xuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIG1pY3JvcGlwLmluc3RhbGwocGtnKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcbiAgICBhd2FpdCBtaWNyb3BpcC5kZXN0cm95KCk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCBweW9kaWRlLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKGUubmFtZSAhPT0gXCJFcnJub0Vycm9yXCIpIHRocm93IGU7XG4gICAgICAgICAgaWYgKGUuZXJybm8gIT09IDIwKSB7XG4gICAgICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yICR7ZS5lcnJub30gXCIke2Vycm9yVGV4dH1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHRyeSB7XG4gICAgICAgIHJldHVybiBhd2FpdCBweW9kaWRlLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICBjb25zdCBlcnJvclRleHQgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuVVRGOFRvU3RyaW5nKGVycm9yVGV4dFB0cik7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICB9XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFB5b2RpZGUgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUHl0aG9uKHB5b2RpZGUpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHB5b2RpZGU7XG4gIH0pKCkuY2F0Y2goKGVycikgPT4ge1xuICAgIHN0YXR1c1RleHQuc3R5bGUuY29sb3IgPSBcInZhcigtLWV4ZXJjaXNlLWVkaXRvci1obC1lciwgI0FEMDAwMClcIjtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gZXJyLm1lc3NhZ2U7XG4gICAgLy9pbmRpY2F0b3JDb250YWluZXIucXVlcnlTZWxlY3RvcihcIi5zcGlubmVyLWdyb3dcIikuY2xhc3NMaXN0LmFkZChcImQtbm9uZVwiKTtcbiAgICB0aHJvdyBlcnI7XG4gIH0pO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCBweW9kaWRlID0gYXdhaXQgcHlvZGlkZVByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFB5b2RpZGVFdmFsdWF0b3IocHlvZGlkZSwgY29udGV4dCk7XG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHlvZGlkZVByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gICAgcHJvY2VzcyxcbiAgfTtcbn1cbiJ9XX0=
 </script>
 <div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
 <div id="exercise-loading-status" class="d-flex gap-2">
