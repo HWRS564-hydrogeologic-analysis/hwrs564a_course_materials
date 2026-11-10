@@ -1,8 +1,8 @@
 name: Publish course site
 
+# Runs only when started by hand (Actions tab -> Run workflow). The site is
+# published locally with `quarto publish gh-pages`; pushes to main do not build.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 # Required for quarto publish to push to the gh-pages branch

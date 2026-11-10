@@ -6,8 +6,10 @@ project:
     - slides/*.qmd
     - labs/**/*.ipynb
     - "!retired/"          # out-of-sequence material; keep it off the site
+    - "!labs/week09/pinal_county_model/"   # Project 3 model; distributed via Google Drive
   resources:
-    - data/**
+    - /data/**             # leading slash: only the top-level data/ folder, not .venv/**/data
+    - "!data/arsenic wells_pinal_co.csv"
     - assets/**
     - slides/week11_thu_computational_landscape.html
     - slides/week10_thu_hydrologic_modeling.html
