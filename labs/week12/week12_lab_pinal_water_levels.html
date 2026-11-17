@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -108,6 +108,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -214,6 +217,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../slides/week12_tue_real_world_data.html">
  <span class="dropdown-text">Wk 12 · Working with real-world data</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_tue_statistical_evidence.html">
+ <span class="dropdown-text">Wk 13 · Statistical evidence</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../slides/week13_thu_regression_evaluation.html">
+ <span class="dropdown-text">Wk 13 · Regression and model evaluation</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -276,6 +287,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../labs/week12/week12_bonus_tucson_streamflow.html">
  <span class="dropdown-text">Wk 12 · Bonus: Tucson streamflow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week13/week13_01_statistical_evidence.html">
+ <span class="dropdown-text">Wk 13 · Statistical evidence</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/week13/week13_02_regression_evaluation.html">
+ <span class="dropdown-text">Wk 13 · Regression and model evaluation</span></a>
   </li>  
     </ul>
   </li>
@@ -652,6 +671,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false">
+ <span class="menu-text">Week 13 — Statistical analysis and model evaluation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_tue_statistical_evidence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tue 11/17 · Statistical evidence</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week13/week13_01_statistical_evidence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 · Statistical evidence</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../slides/week13_thu_regression_evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thu 11/19 · Regression and model evaluation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/week13/week13_02_regression_evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2 · Regression and model evaluation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
       </ul>
   </li>
     </ul>
@@ -741,7 +795,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="part-1-download-the-measurements">Part 1 — Download the measurements</h2>
 <p><code>dataretrieval</code> is the USGS’s Python package for its water data. It builds the web request, sends it, and returns a pandas DataFrame. We use its <code>waterdata</code> module. (Many online tutorials use the older <code>nwis</code> module, which the USGS is retiring.)</p>
 <p><code>BBOX</code> is the area to search: a box around Maricopa, Casa Grande, Eloy, and Florence, given as west, south, east, north in degrees.</p>
-<div id="w12p-02" class="cell">
+<div id="w12p-02" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -795,61 +849,706 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>The download takes 10–20 seconds.</p>
-<div id="w12p-06a" class="cell">
+<div id="84ed5f1d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataretrieval <span class="im">import</span> waterdata</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>raw, md <span class="op">=</span> waterdata.get_field_measurements(bbox<span class="op">=</span>BBOX, parameter_code<span class="op">=</span><span class="st">"72019"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"request:"</span>, md.url)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"downloaded from the USGS: </span><span class="sc">{</span><span class="bu">len</span>(raw)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>q, md <span class="op">=</span> waterdata.get_daily(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    monitoring_location_id<span class="op">=</span><span class="st">"USGS-09484000"</span>,   <span class="co"># Sabino Creek near Tucson</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    parameter_code<span class="op">=</span>[<span class="st">"00060"</span>, <span class="st">"00065"</span>],                   <span class="co"># discharge, ft³/s</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    statistic_id<span class="op">=</span>[<span class="st">"00002"</span>, <span class="st">"00003"</span>],                     <span class="co"># daily mean</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    time<span class="op">=</span><span class="st">"1990-10-01/2025-09-30"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>q.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Retrieving: daily · 1 page · 12,784 rows</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">time_series_id</th>
+<th data-quarto-table-cell-role="th">monitoring_location_id</th>
+<th data-quarto-table-cell-role="th">parameter_code</th>
+<th data-quarto-table-cell-role="th">statistic_id</th>
+<th data-quarto-table-cell-role="th">time</th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">unit_of_measure</th>
+<th data-quarto-table-cell-role="th">approval_status</th>
+<th data-quarto-table-cell-role="th">qualifier</th>
+<th data-quarto-table-cell-role="th">last_modified</th>
+<th data-quarto-table-cell-role="th">geometry</th>
+<th data-quarto-table-cell-role="th">daily_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>7c258cdb400f4be09d400446555e9579</td>
+<td>USGS-09484000</td>
+<td>00060</td>
+<td>00003</td>
+<td>1990-10-01</td>
+<td>1.60</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+<td>None</td>
+<td>2025-08-25 18:59:16.985008+00:00</td>
+<td>[-110.81091666666666, 32.31472222222222]</td>
+<td>eaf7e02a-fa89-481a-85b6-6f06f4822d25</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>7c258cdb400f4be09d400446555e9579</td>
+<td>USGS-09484000</td>
+<td>00060</td>
+<td>00003</td>
+<td>1990-10-02</td>
+<td>1.30</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+<td>[ESTIMATED]</td>
+<td>2025-03-03 19:26:24.060052+00:00</td>
+<td>[-110.81091666666666, 32.31472222222222]</td>
+<td>dbbb5d1b-6b28-4264-a6b7-1cb26f94b7cb</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>7c258cdb400f4be09d400446555e9579</td>
+<td>USGS-09484000</td>
+<td>00060</td>
+<td>00003</td>
+<td>1990-10-03</td>
+<td>1.00</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+<td>None</td>
+<td>2025-08-25 18:59:16.985008+00:00</td>
+<td>[-110.81091666666666, 32.31472222222222]</td>
+<td>bc9e48a5-8f6e-4f8b-a9ad-d067a6f00658</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>7c258cdb400f4be09d400446555e9579</td>
+<td>USGS-09484000</td>
+<td>00060</td>
+<td>00003</td>
+<td>1990-10-04</td>
+<td>0.37</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+<td>None</td>
+<td>2025-03-03 19:26:24.060052+00:00</td>
+<td>[-110.81091666666666, 32.31472222222222]</td>
+<td>ea05110c-6470-46fb-aaa1-bd1db4ebde5a</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>7c258cdb400f4be09d400446555e9579</td>
+<td>USGS-09484000</td>
+<td>00060</td>
+<td>00003</td>
+<td>1990-10-05</td>
+<td>0.26</td>
+<td>ft^3/s</td>
+<td>Approved</td>
+<td>None</td>
+<td>2025-03-03 19:26:24.060052+00:00</td>
+<td>[-110.81091666666666, 32.31472222222222]</td>
+<td>3e146c32-f11c-44a5-b436-962e9a9cf4df</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="6ac35ab6" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>q[<span class="st">'parameter_code'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>array(['00060'], dtype=object)</code></pre>
+</div>
+</div>
+<div id="w12p-06a" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataretrieval <span class="im">import</span> waterdata</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>raw, md <span class="op">=</span> waterdata.get_field_measurements(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>BBOX, parameter_code<span class="op">=</span><span class="st">"72019"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"request:"</span>, md.url)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"downloaded from the USGS: </span><span class="sc">{</span><span class="bu">len</span>(raw)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Geopandas not installed. Geometries will be flattened into pandas DataFrames.
+Retrieving: field-measurements · 1 page · 16,676 rows
+No API key detected — register for higher rate limits at https://api.waterdata.usgs.gov/signup/</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>request: https://api.waterdata.usgs.gov/ogcapi/v0/collections/field-measurements/items?parameter_code=72019&amp;limit=50000&amp;bbox=-112.1%2C32.6%2C-111.3%2C33.15
+downloaded from the USGS: 16,676 rows</code></pre>
+</div>
+</div>
+<div id="fd4a048f" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>raw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">field_measurements_series_id</th>
+<th data-quarto-table-cell-role="th">reading_type</th>
+<th data-quarto-table-cell-role="th">field_visit_id</th>
+<th data-quarto-table-cell-role="th">parameter_code</th>
+<th data-quarto-table-cell-role="th">monitoring_location_id</th>
+<th data-quarto-table-cell-role="th">observing_procedure_code</th>
+<th data-quarto-table-cell-role="th">observing_procedure</th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">unit_of_measure</th>
+<th data-quarto-table-cell-role="th">time</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">measuring_agency</th>
+<th data-quarto-table-cell-role="th">last_modified</th>
+<th data-quarto-table-cell-role="th">control_condition</th>
+<th data-quarto-table-cell-role="th">measurement_rated</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">month</th>
+<th data-quarto-table-cell-role="th">day</th>
+<th data-quarto-table-cell-role="th">time_of_day</th>
+<th data-quarto-table-cell-role="th">geometry</th>
+<th data-quarto-table-cell-role="th">field_measurement_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>b19526b7-5870-4925-a1d2-f1ed6b48fad5</td>
+<td>ReferencePrimary</td>
+<td>c3fc0d70-2d50-4d50-a67c-c67ffe9bb09a</td>
+<td>72019</td>
+<td>AZ014-324257111340301</td>
+<td>V</td>
+<td>GW level, calib electric tape</td>
+<td>666.40</td>
+<td>ft</td>
+<td>1898-05-30 12:00:00+00:00</td>
+<td>...</td>
+<td>None</td>
+<td>2026-10-18 05:49:37.120032+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>1898</td>
+<td>5.0</td>
+<td>30.0</td>
+<td>None</td>
+<td>[-111.568177115037, 32.7158966948983]</td>
+<td>721c6c8b-503a-4aef-bebf-72a856b7f1f8</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>14d40190-08d8-4181-95b0-8fa1094c2786</td>
+<td>ReferencePrimary</td>
+<td>5e614641-016d-4aa3-b905-dea5c82fabf2</td>
+<td>72019</td>
+<td>USGS-330201111231601</td>
+<td>O</td>
+<td>GW level, estim, report, observ</td>
+<td>9.00</td>
+<td>ft</td>
+<td>1910-01-01 12:00:00+00:00</td>
+<td>...</td>
+<td>None</td>
+<td>2026-10-18 06:55:01.023719+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>1910</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>None</td>
+<td>[-111.388454284297, 33.0336729055676]</td>
+<td>c6e7f8fb-82bc-49c0-a317-ba439d5dfe9c</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>cc4e076b-2d13-49de-b369-3099822fbcbc</td>
+<td>ReferencePrimary</td>
+<td>30f25ee1-e9fa-4337-9a57-6ddc1106ae84</td>
+<td>72019</td>
+<td>USGS-324458111381301</td>
+<td>O</td>
+<td>GW level, estim, report, observ</td>
+<td>64.00</td>
+<td>ft</td>
+<td>1914-01-01 12:00:00+00:00</td>
+<td>...</td>
+<td>None</td>
+<td>2026-10-18 06:06:10.179744+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>1914</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>None</td>
+<td>[-111.637624120988, 32.7556165306261]</td>
+<td>33a962ef-5cc2-4840-b91c-e41a3f0f5f72</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>46ee5218-3cb5-4ce3-aa32-29e41d7eb33b</td>
+<td>ReferencePrimary</td>
+<td>6b6ec3f9-6dd4-438f-a0a4-27e1c12beab7</td>
+<td>72019</td>
+<td>USGS-324502111464501</td>
+<td>Z</td>
+<td>None</td>
+<td>133.50</td>
+<td>ft</td>
+<td>1915-01-01 12:00:00+00:00</td>
+<td>...</td>
+<td>None</td>
+<td>2026-10-18 06:01:12.181436+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>1915</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>None</td>
+<td>[-111.779850204222, 32.750613244116]</td>
+<td>9c172d41-5f4a-45e8-ab90-bf8edb902516</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>4f3b719e-23f8-4e5a-a96f-037cd7580da0</td>
+<td>ReferencePrimary</td>
+<td>c5c1ac05-8ceb-483d-9c68-14ff0e9f66a7</td>
+<td>72019</td>
+<td>USGS-324502111464601</td>
+<td>Z</td>
+<td>None</td>
+<td>57.00</td>
+<td>ft</td>
+<td>1915-02-01 12:00:00+00:00</td>
+<td>...</td>
+<td>None</td>
+<td>2026-10-18 06:01:53.516867+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>1915</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>None</td>
+<td>[-111.780127989136, 32.750613237993]</td>
+<td>067253c6-ad50-4b75-a589-17fb45e7611f</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16671</td>
+<td>374229b7-5874-4f1e-8616-907fc2feda20</td>
+<td>ReferencePrimary</td>
+<td>1e81311c-eb0c-4c03-8e0c-704b3daa308e</td>
+<td>72019</td>
+<td>AZ014-330420112034301</td>
+<td>V</td>
+<td>GW level, calib electric tape</td>
+<td>82.65</td>
+<td>ft</td>
+<td>2013-07-23 20:07:00+00:00</td>
+<td>...</td>
+<td>USGS</td>
+<td>2026-10-18 07:01:45.426757+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>2013</td>
+<td>7.0</td>
+<td>23.0</td>
+<td>20:07:00+00:00</td>
+<td>[-112.061222222222, 33.0721111111111]</td>
+<td>d6624fef-6807-42c9-9adf-64d173767d3e</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">16672</td>
+<td>374229b7-5874-4f1e-8616-907fc2feda20</td>
+<td>ReferencePrimary</td>
+<td>1e81311c-eb0c-4c03-8e0c-704b3daa308e</td>
+<td>72019</td>
+<td>AZ014-330420112034301</td>
+<td>V</td>
+<td>GW level, calib electric tape</td>
+<td>82.18</td>
+<td>ft</td>
+<td>2013-07-23 20:19:00+00:00</td>
+<td>...</td>
+<td>USGS</td>
+<td>2026-10-18 07:01:45.426757+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>2013</td>
+<td>7.0</td>
+<td>23.0</td>
+<td>20:19:00+00:00</td>
+<td>[-112.061222222222, 33.0721111111111]</td>
+<td>7f21efc7-5178-4a73-8eef-4b0f6d0c4cf7</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16673</td>
+<td>374229b7-5874-4f1e-8616-907fc2feda20</td>
+<td>ReferencePrimary</td>
+<td>1e81311c-eb0c-4c03-8e0c-704b3daa308e</td>
+<td>72019</td>
+<td>AZ014-330420112034301</td>
+<td>V</td>
+<td>GW level, calib electric tape</td>
+<td>82.14</td>
+<td>ft</td>
+<td>2013-07-23 20:23:00+00:00</td>
+<td>...</td>
+<td>USGS</td>
+<td>2026-10-18 07:01:45.426757+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>2013</td>
+<td>7.0</td>
+<td>23.0</td>
+<td>20:23:00+00:00</td>
+<td>[-112.061222222222, 33.0721111111111]</td>
+<td>ca0be8bb-8c15-42a5-92f9-66a8d0cfa869</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">16674</td>
+<td>374229b7-5874-4f1e-8616-907fc2feda20</td>
+<td>ReferencePrimary</td>
+<td>1e81311c-eb0c-4c03-8e0c-704b3daa308e</td>
+<td>72019</td>
+<td>AZ014-330420112034301</td>
+<td>V</td>
+<td>GW level, calib electric tape</td>
+<td>81.96</td>
+<td>ft</td>
+<td>2013-07-23 20:28:00+00:00</td>
+<td>...</td>
+<td>USGS</td>
+<td>2026-10-18 07:01:45.426757+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>2013</td>
+<td>7.0</td>
+<td>23.0</td>
+<td>20:28:00+00:00</td>
+<td>[-112.061222222222, 33.0721111111111]</td>
+<td>ac793ede-dcfd-445d-95cb-5c42dfe7eb4b</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16675</td>
+<td>5a051e40-5f07-4493-8fec-d95b5a369337</td>
+<td>ReferencePrimary</td>
+<td>cc2537c4-5a7d-4542-a886-6983767a889c</td>
+<td>72019</td>
+<td>USGS-325312111524001</td>
+<td>V</td>
+<td>GW level, calib electric tape</td>
+<td>480.70</td>
+<td>ft</td>
+<td>2013-12-09 12:00:00+00:00</td>
+<td>...</td>
+<td>AZ014</td>
+<td>2026-10-18 06:29:41.609056+00:00</td>
+<td>None</td>
+<td>None</td>
+<td>2013</td>
+<td>12.0</td>
+<td>9.0</td>
+<td>None</td>
+<td>[-111.878744732185, 32.8867216987143]</td>
+<td>a765ea99-187c-451c-89a8-56a9bba14873</td>
+</tr>
+</tbody>
+</table>
+
+<p>16676 rows × 23 columns</p>
+</div>
+</div>
 </div>
 <p><code>raw</code> has many more columns than we need. Print their names, then look at the first rows of the five we will use:</p>
-<div id="w12p-06c" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(raw.columns))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>raw[[<span class="st">"monitoring_location_id"</span>, <span class="st">"time"</span>, <span class="st">"value"</span>, <span class="st">"qualifier"</span>, <span class="st">"geometry"</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="w12p-06c" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(raw.columns))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>raw[[<span class="st">"monitoring_location_id"</span>, <span class="st">"time"</span>, <span class="st">"value"</span>, <span class="st">"qualifier"</span>, <span class="st">"geometry"</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['field_measurements_series_id', 'reading_type', 'field_visit_id', 'parameter_code', 'monitoring_location_id', 'observing_procedure_code', 'observing_procedure', 'value', 'unit_of_measure', 'time', 'qualifier', 'vertical_datum', 'approval_status', 'measuring_agency', 'last_modified', 'control_condition', 'measurement_rated', 'year', 'month', 'day', 'time_of_day', 'geometry', 'field_measurement_id']</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">monitoring_location_id</th>
+<th data-quarto-table-cell-role="th">time</th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">qualifier</th>
+<th data-quarto-table-cell-role="th">geometry</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>AZ014-324257111340301</td>
+<td>1898-05-30 12:00:00+00:00</td>
+<td>666.4</td>
+<td>[Above, Pumping]</td>
+<td>[-111.568177115037, 32.7158966948983]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>USGS-330201111231601</td>
+<td>1910-01-01 12:00:00+00:00</td>
+<td>9.0</td>
+<td>[Static]</td>
+<td>[-111.388454284297, 33.0336729055676]</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>USGS-324458111381301</td>
+<td>1914-01-01 12:00:00+00:00</td>
+<td>64.0</td>
+<td>[Static]</td>
+<td>[-111.637624120988, 32.7556165306261]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>USGS-324502111464501</td>
+<td>1915-01-01 12:00:00+00:00</td>
+<td>133.5</td>
+<td>[Static]</td>
+<td>[-111.779850204222, 32.750613244116]</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>USGS-324502111464601</td>
+<td>1915-02-01 12:00:00+00:00</td>
+<td>57.0</td>
+<td>[Static]</td>
+<td>[-111.780127989136, 32.750613237993]</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
 </div>
 <p>Two of these columns need work before they fit in a table:</p>
 <ul>
 <li><code>qualifier</code> holds lists, like <code>['Above', 'Pumping']</code>. The function <code>join_codes</code> turns each list into text, like <code>"Above, Pumping"</code>.</li>
 <li><code>geometry</code> holds each well’s location as a pair of numbers, longitude first. <code>.str[0]</code> takes the first number and <code>.str[1]</code> the second.</li>
 </ul>
-<div id="w12p-06e" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> join_codes(q):</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Qualifiers arrive as lists, like ['Above', 'Pumping']. Store them as text."""</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(q, (<span class="bu">list</span>, <span class="bu">tuple</span>, np.ndarray)):</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">", "</span>.join(<span class="bu">str</span>(x) <span class="cf">for</span> x <span class="kw">in</span> q)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">""</span> <span class="cf">if</span> q <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> <span class="bu">str</span>(q)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>join_codes([<span class="st">"Above"</span>, <span class="st">"Pumping"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="w12p-06e" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> join_codes(q):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Qualifiers arrive as lists, like ['Above', 'Pumping']. Store them as text."""</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(q, (<span class="bu">list</span>, <span class="bu">tuple</span>, np.ndarray)):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">", "</span>.join(<span class="bu">str</span>(x) <span class="cf">for</span> x <span class="kw">in</span> q)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">""</span> <span class="cf">if</span> q <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> <span class="bu">str</span>(q)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>join_codes([<span class="st">"Above"</span>, <span class="st">"Pumping"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>'Above, Pumping'</code></pre>
+</div>
 </div>
 <p>Now build a new table with the six columns. <code>time</code> arrives as text with a time zone; the <code>date</code> line converts it to dates and drops the time of day.</p>
-<div id="w12p-06g" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"site"</span>: raw[<span class="st">"monitoring_location_id"</span>],</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>: pd.to_datetime(raw[<span class="st">"time"</span>], utc<span class="op">=</span><span class="va">True</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"mixed"</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>              .dt.tz_localize(<span class="va">None</span>).dt.normalize(),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"depth_to_water_ft"</span>: pd.to_numeric(raw[<span class="st">"value"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>),</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"qualifier"</span>: raw[<span class="st">"qualifier"</span>].<span class="bu">apply</span>(join_codes),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lon"</span>: raw[<span class="st">"geometry"</span>].<span class="bu">str</span>[<span class="dv">0</span>].<span class="bu">round</span>(<span class="dv">5</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lat"</span>: raw[<span class="st">"geometry"</span>].<span class="bu">str</span>[<span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">5</span>),</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> levels.sort_values([<span class="st">"site"</span>, <span class="st">"date"</span>], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>levels.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="w12p-06g" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"site"</span>: raw[<span class="st">"monitoring_location_id"</span>],</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>: pd.to_datetime(raw[<span class="st">"time"</span>], utc<span class="op">=</span><span class="va">True</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"mixed"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>              .dt.tz_localize(<span class="va">None</span>).dt.normalize(),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"depth_to_water_ft"</span>: pd.to_numeric(raw[<span class="st">"value"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"qualifier"</span>: raw[<span class="st">"qualifier"</span>].<span class="bu">apply</span>(join_codes),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lon"</span>: raw[<span class="st">"geometry"</span>].<span class="bu">str</span>[<span class="dv">0</span>].<span class="bu">round</span>(<span class="dv">5</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lat"</span>: raw[<span class="st">"geometry"</span>].<span class="bu">str</span>[<span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">5</span>),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> levels.sort_values([<span class="st">"site"</span>, <span class="st">"date"</span>], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>levels.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">site</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">depth_to_water_ft</th>
+<th data-quarto-table-cell-role="th">qualifier</th>
+<th data-quarto-table-cell-role="th">lon</th>
+<th data-quarto-table-cell-role="th">lat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>AZ014-323609111320001</td>
+<td>1942-03-01</td>
+<td>167.0</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>AZ014-323609111320001</td>
+<td>1949-02-01</td>
+<td>203.0</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>AZ014-323609111320001</td>
+<td>1984-11-15</td>
+<td>397.9</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>AZ014-323609111320001</td>
+<td>1988-11-02</td>
+<td>362.9</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>AZ014-323610111323301</td>
+<td>1984-11-15</td>
+<td>413.5</td>
+<td>Static</td>
+<td>-111.54317</td>
+<td>32.60284</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
 </div>
 </section>
 <section id="if-the-download-fails" class="level3">
 <h3 class="anchored" data-anchor-id="if-the-download-fails">If the download fails</h3>
 <p>Websites go down, and a whole class downloading at once can slow one down. If any of the cells above gave an error, use the saved copy of the same table in <code>data/cache/</code> instead: remove the <code>#</code> at the start of each line below (select the lines and press Ctrl+/ or Cmd+/), then run the cell. Otherwise skip it.</p>
-<div id="w12p-06i" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># levels = pd.read_csv(CACHE / "waterdata_pinal_field_72019.csv",</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                      parse_dates=["date"], keep_default_na=False,</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                      na_values={"depth_to_water_ft": [""]})</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># print(f"saved copy: {len(levels):,} rows")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="w12p-06i" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># levels = pd.read_csv(CACHE / "waterdata_pinal_field_72019.csv",</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                      parse_dates=["date"], keep_default_na=False,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                      na_values={"depth_to_water_ft": [""]})</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># print(f"saved copy: {len(levels):,} rows")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Last, add a <code>year</code> column and look at the finished table.</p>
-<div id="w12p-06" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>levels[<span class="st">"year"</span>] <span class="op">=</span> levels[<span class="st">"date"</span>].dt.year <span class="op">+</span> (levels[<span class="st">"date"</span>].dt.dayofyear <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> <span class="fl">365.25</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>levels.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="w12p-06" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>levels[<span class="st">"year"</span>] <span class="op">=</span> levels[<span class="st">"date"</span>].dt.year <span class="op">+</span> (levels[<span class="st">"date"</span>].dt.dayofyear <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> <span class="fl">365.25</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>levels.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">site</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">depth_to_water_ft</th>
+<th data-quarto-table-cell-role="th">qualifier</th>
+<th data-quarto-table-cell-role="th">lon</th>
+<th data-quarto-table-cell-role="th">lat</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>AZ014-323609111320001</td>
+<td>1942-03-01</td>
+<td>167.0</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+<td>1942.161533</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>AZ014-323609111320001</td>
+<td>1949-02-01</td>
+<td>203.0</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+<td>1949.084873</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>AZ014-323609111320001</td>
+<td>1984-11-15</td>
+<td>397.9</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+<td>1984.873374</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>AZ014-323609111320001</td>
+<td>1988-11-02</td>
+<td>362.9</td>
+<td>Static</td>
+<td>-111.53401</td>
+<td>32.60257</td>
+<td>1988.837782</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>AZ014-323610111323301</td>
+<td>1984-11-15</td>
+<td>413.5</td>
+<td>Static</td>
+<td>-111.54317</td>
+<td>32.60284</td>
+<td>1984.873374</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
 </div>
 <p>Look at the IDs. Most start with <code>USGS-</code>, but some start with <code>AZ014-</code>. That prefix is the agency code for the Arizona Department of Water Resources (ADWR): the USGS database also stores some of ADWR’s measurements. The prefix is part of the ID, so <code>USGS-...</code> and <code>AZ014-...</code> with the same number are different records.</p>
 <p>The <code>year</code> column is the date as a decimal year (1985.5 is the middle of 1985). It makes fitting trends easier later.</p>
@@ -862,44 +1561,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>n_measurements</code> — the number of rows</li>
 <li><code>first_year</code>, <code>last_year</code> — the calendar years of the earliest and latest measurements, as integers</li>
 </ul>
-<div id="w12p-08" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>n_wells <span class="op">=</span> ...</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n_measurements <span class="op">=</span> ...</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>first_year <span class="op">=</span> ...</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>last_year <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="w12p-08" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>n_wells <span class="op">=</span> ...</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>n_measurements <span class="op">=</span> ...</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>first_year <span class="op">=</span> ...</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>last_year <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="w12p-09" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_wells <span class="op">==</span> levels[<span class="st">"site"</span>].nunique(), <span class="ss">f"got </span><span class="sc">{</span>n_wells<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_measurements <span class="op">==</span> <span class="bu">len</span>(levels), <span class="ss">f"got </span><span class="sc">{</span>n_measurements<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> first_year <span class="op">==</span> levels[<span class="st">"date"</span>].dt.year.<span class="bu">min</span>(), <span class="ss">f"got </span><span class="sc">{</span>first_year<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> last_year <span class="op">==</span> levels[<span class="st">"date"</span>].dt.year.<span class="bu">max</span>(), <span class="ss">f"got </span><span class="sc">{</span>last_year<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_wells <span class="op">&gt;</span> <span class="dv">2000</span>, <span class="ss">f"expected more than 2,000 wells, got </span><span class="sc">{</span>n_wells<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_measurements<span class="sc">:,}</span><span class="ss"> measurements at </span><span class="sc">{</span>n_wells<span class="sc">:,}</span><span class="ss"> wells, </span><span class="sc">{</span>first_year<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>last_year<span class="sc">}</span><span class="ss">. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_wells <span class="op">==</span> levels[<span class="st">"site"</span>].nunique(), <span class="ss">f"got </span><span class="sc">{</span>n_wells<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_measurements <span class="op">==</span> <span class="bu">len</span>(levels), <span class="ss">f"got </span><span class="sc">{</span>n_measurements<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> first_year <span class="op">==</span> levels[<span class="st">"date"</span>].dt.year.<span class="bu">min</span>(), <span class="ss">f"got </span><span class="sc">{</span>first_year<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> last_year <span class="op">==</span> levels[<span class="st">"date"</span>].dt.year.<span class="bu">max</span>(), <span class="ss">f"got </span><span class="sc">{</span>last_year<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> n_wells <span class="op">&gt;</span> <span class="dv">2000</span>, <span class="ss">f"expected more than 2,000 wells, got </span><span class="sc">{</span>n_wells<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>n_measurements<span class="sc">:,}</span><span class="ss"> measurements at </span><span class="sc">{</span>n_wells<span class="sc">:,}</span><span class="ss"> wells, </span><span class="sc">{</span>first_year<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>last_year<span class="sc">}</span><span class="ss">. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now look at <strong>when</strong> the measurements were made and <strong>where</strong> the wells are.</p>
 <div id="w12p-11" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>per_decade <span class="op">=</span> levels.groupby((levels[<span class="st">"date"</span>].dt.year <span class="op">//</span> <span class="dv">10</span>) <span class="op">*</span> <span class="dv">10</span>).size()</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>fig, (left, right) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="fl">4.2</span>))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>left.bar(per_decade.index, per_decade.values, width<span class="op">=</span><span class="dv">8</span>, color<span class="op">=</span><span class="st">"#0C234B"</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>left.set_xlabel(<span class="st">"decade"</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>left.set_ylabel(<span class="st">"measurements"</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>left.set_title(<span class="st">"Measurements per decade"</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>wells <span class="op">=</span> levels.groupby(<span class="st">"site"</span>)[[<span class="st">"lon"</span>, <span class="st">"lat"</span>]].first()</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>n_per_well <span class="op">=</span> levels.groupby(<span class="st">"site"</span>).size()</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>right.scatter(wells[<span class="st">"lon"</span>], wells[<span class="st">"lat"</span>], s<span class="op">=</span>np.clip(n_per_well, <span class="dv">1</span>, <span class="dv">60</span>), alpha<span class="op">=</span><span class="fl">0.4</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>              color<span class="op">=</span><span class="st">"#AB0520"</span>)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>right.set_xlabel(<span class="st">"longitude"</span>)</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>right.set_ylabel(<span class="st">"latitude"</span>)</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>right.set_title(<span class="st">"Wells (dot size = number of measurements)"</span>)</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>right.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.radians(<span class="fl">32.9</span>)))</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(per_decade.to_string())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>per_decade <span class="op">=</span> levels.groupby((levels[<span class="st">"date"</span>].dt.year <span class="op">//</span> <span class="dv">10</span>) <span class="op">*</span> <span class="dv">10</span>).size()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>fig, (left, right) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="fl">4.2</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>left.bar(per_decade.index, per_decade.values, width<span class="op">=</span><span class="dv">8</span>, color<span class="op">=</span><span class="st">"#0C234B"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>left.set_xlabel(<span class="st">"decade"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>left.set_ylabel(<span class="st">"measurements"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>left.set_title(<span class="st">"Measurements per decade"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>wells <span class="op">=</span> levels.groupby(<span class="st">"site"</span>)[[<span class="st">"lon"</span>, <span class="st">"lat"</span>]].first()</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>n_per_well <span class="op">=</span> levels.groupby(<span class="st">"site"</span>).size()</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>right.scatter(wells[<span class="st">"lon"</span>], wells[<span class="st">"lat"</span>], s<span class="op">=</span>np.clip(n_per_well, <span class="dv">1</span>, <span class="dv">60</span>), alpha<span class="op">=</span><span class="fl">0.4</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>              color<span class="op">=</span><span class="st">"#AB0520"</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>right.set_xlabel(<span class="st">"longitude"</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>right.set_ylabel(<span class="st">"latitude"</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>right.set_title(<span class="st">"Wells (dot size = number of measurements)"</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>right.set_aspect(<span class="dv">1</span> <span class="op">/</span> np.cos(np.radians(<span class="fl">32.9</span>)))</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(per_decade.to_string())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Most measurements are from the 1940s through the 1990s, and the USGS database has none in this area after 2013. That doesn’t mean nobody is measuring: ADWR now does most of the monitoring in Pinal County and keeps the results in its <a href="https://azwatermaps.azwater.gov/gwsiweb/">Groundwater Site Inventory (GWSI)</a>. Always check whether the agency you’re downloading from is still the one collecting the data.</p>
 <hr>
@@ -909,7 +1608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="part-2-which-measurements-to-keep">Part 2 — Which measurements to keep</h2>
 <p>The <code>qualifier</code> column records the conditions when each measurement was made.</p>
 <div id="w12p-14" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>levels[<span class="st">"qualifier"</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>levels[<span class="st">"qualifier"</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <table class="caption-top table">
 <colgroup>
@@ -947,29 +1646,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>A pumping well pulls the water level down around itself, so a measurement taken during pumping is deeper than the water table nearby. At wells that have both kinds of measurement, compare them:</p>
 <div id="w12p-16" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> (levels[levels[<span class="st">"qualifier"</span>].isin([<span class="st">"Static"</span>, <span class="st">"Above, Pumping"</span>])]</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>        .groupby([<span class="st">"site"</span>, <span class="st">"qualifier"</span>])[<span class="st">"depth_to_water_ft"</span>].median()</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        .unstack().dropna())</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>difference <span class="op">=</span> both[<span class="st">"Above, Pumping"</span>] <span class="op">-</span> both[<span class="st">"Static"</span>]</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(both)<span class="sc">}</span><span class="ss"> wells have both kinds of measurement"</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"median difference (pumping minus static): </span><span class="sc">{</span>difference<span class="sc">.</span>median()<span class="sc">:.0f}</span><span class="ss"> ft deeper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> (levels[levels[<span class="st">"qualifier"</span>].isin([<span class="st">"Static"</span>, <span class="st">"Above, Pumping"</span>])]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>        .groupby([<span class="st">"site"</span>, <span class="st">"qualifier"</span>])[<span class="st">"depth_to_water_ft"</span>].median()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        .unstack().dropna())</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>difference <span class="op">=</span> both[<span class="st">"Above, Pumping"</span>] <span class="op">-</span> both[<span class="st">"Static"</span>]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(both)<span class="sc">}</span><span class="ss"> wells have both kinds of measurement"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"median difference (pumping minus static): </span><span class="sc">{</span>difference<span class="sc">.</span>median()<span class="sc">:.0f}</span><span class="ss"> ft deeper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Pumping measurements are typically about 55 ft deeper. Mixing them in with static measurements adds large errors that have nothing to do with the aquifer’s water level.</p>
 <section id="your-turn-2" class="level3">
 <h3 class="anchored" data-anchor-id="your-turn-2">YOUR TURN 2</h3>
 <p>Build <code>static</code>: only the rows whose <code>qualifier</code> is exactly <code>"Static"</code> <strong>and</strong> that have a depth value.</p>
 <div id="w12p-18" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>static <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>static <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="w12p-19" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (static[<span class="st">"qualifier"</span>] <span class="op">==</span> <span class="st">"Static"</span>).<span class="bu">all</span>(), <span class="st">"some rows are not Static"</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> static[<span class="st">"depth_to_water_ft"</span>].notna().<span class="bu">all</span>(), <span class="st">"some rows have no depth"</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>expected <span class="op">=</span> <span class="bu">int</span>(((levels[<span class="st">"qualifier"</span>] <span class="op">==</span> <span class="st">"Static"</span>) <span class="op">&amp;</span> levels[<span class="st">"depth_to_water_ft"</span>].notna()).<span class="bu">sum</span>())</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(static) <span class="op">==</span> expected, <span class="ss">f"expected </span><span class="sc">{</span>expected<span class="sc">}</span><span class="ss"> rows, got </span><span class="sc">{</span><span class="bu">len</span>(static)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"kept </span><span class="sc">{</span><span class="bu">len</span>(static)<span class="sc">:,}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(levels)<span class="sc">:,}</span><span class="ss"> measurements "</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"(</span><span class="sc">{</span><span class="bu">len</span>(static) <span class="op">/</span> <span class="bu">len</span>(levels)<span class="sc">:.0%}</span><span class="ss">). Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (static[<span class="st">"qualifier"</span>] <span class="op">==</span> <span class="st">"Static"</span>).<span class="bu">all</span>(), <span class="st">"some rows are not Static"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> static[<span class="st">"depth_to_water_ft"</span>].notna().<span class="bu">all</span>(), <span class="st">"some rows have no depth"</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>expected <span class="op">=</span> <span class="bu">int</span>(((levels[<span class="st">"qualifier"</span>] <span class="op">==</span> <span class="st">"Static"</span>) <span class="op">&amp;</span> levels[<span class="st">"depth_to_water_ft"</span>].notna()).<span class="bu">sum</span>())</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(static) <span class="op">==</span> expected, <span class="ss">f"expected </span><span class="sc">{</span>expected<span class="sc">}</span><span class="ss"> rows, got </span><span class="sc">{</span><span class="bu">len</span>(static)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"kept </span><span class="sc">{</span><span class="bu">len</span>(static)<span class="sc">:,}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(levels)<span class="sc">:,}</span><span class="ss"> measurements "</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"(</span><span class="sc">{</span><span class="bu">len</span>(static) <span class="op">/</span> <span class="bu">len</span>(levels)<span class="sc">:.0%}</span><span class="ss">). Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
@@ -978,18 +1677,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="part-3-one-well">Part 3 — One well</h2>
 <p>Start with the well that has the most static measurements, near Eloy. Depth to water is measured downward, so the plot flips the y-axis: a rising water table goes up on the page.</p>
 <div id="w12p-21" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>WELL <span class="op">=</span> <span class="st">"USGS-324637111335001"</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>one <span class="op">=</span> static[static[<span class="st">"site"</span>] <span class="op">==</span> WELL].sort_values(<span class="st">"date"</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>WELL<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(one)<span class="sc">}</span><span class="ss"> static measurements, </span><span class="sc">{</span>one[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>one[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.6</span>))</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>ax.plot(one[<span class="st">"date"</span>], one[<span class="st">"depth_to_water_ft"</span>], <span class="st">"o-"</span>, ms<span class="op">=</span><span class="dv">3</span>, lw<span class="op">=</span><span class="fl">0.8</span>, color<span class="op">=</span><span class="st">"#0C234B"</span>)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"depth to water (ft)"</span>)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"</span><span class="sc">{</span>WELL<span class="sc">}</span><span class="ss">, near Eloy"</span>)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>WELL <span class="op">=</span> <span class="st">"USGS-324637111335001"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>one <span class="op">=</span> static[static[<span class="st">"site"</span>] <span class="op">==</span> WELL].sort_values(<span class="st">"date"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>WELL<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(one)<span class="sc">}</span><span class="ss"> static measurements, </span><span class="sc">{</span>one[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>one[<span class="st">'date'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:</span><span class="op">%</span>Y<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.6</span>))</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>ax.plot(one[<span class="st">"date"</span>], one[<span class="st">"depth_to_water_ft"</span>], <span class="st">"o-"</span>, ms<span class="op">=</span><span class="dv">3</span>, lw<span class="op">=</span><span class="fl">0.8</span>, color<span class="op">=</span><span class="st">"#0C234B"</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"depth to water (ft)"</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"</span><span class="sc">{</span>WELL<span class="sc">}</span><span class="ss">, near Eloy"</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The water level fell through the 1970s and rose quickly after the mid-1980s. To put numbers on that, fit a straight line to each period. <code>np.polyfit(x, y, 1)</code> fits a line and returns <code>[slope, intercept]</code>, so <code>np.polyfit(x, y, 1)[0]</code> is the slope.</p>
 <p>One sign detail: when the water table <strong>rises</strong>, depth to water <strong>decreases</strong>. We want rising to be positive, so the rate is <strong>minus</strong> the slope of depth against time.</p>
@@ -1001,17 +1700,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>recovery_rate</code> — for <code>year</code> from 1985 up to (not including) 2005</li>
 </ul>
 <div id="w12p-23" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>decline_rate <span class="op">=</span> ...</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>recovery_rate <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>decline_rate <span class="op">=</span> ...</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>recovery_rate <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="w12p-24" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> decline_rate <span class="op">&lt;</span> <span class="dv">0</span>, <span class="ss">f"the water table was falling, so the rate should be negative; got </span><span class="sc">{</span>decline_rate<span class="sc">:.2f}</span><span class="ss">"</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(decline_rate <span class="op">-</span> (<span class="op">-</span><span class="fl">2.54</span>)) <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="ss">f"expected about -2.54 ft/yr, got </span><span class="sc">{</span>decline_rate<span class="sc">:.2f}</span><span class="ss">"</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(recovery_rate <span class="op">-</span> <span class="fl">11.34</span>) <span class="op">&lt;</span> <span class="fl">0.2</span>, <span class="ss">f"expected about +11.34 ft/yr, got </span><span class="sc">{</span>recovery_rate<span class="sc">:.2f}</span><span class="ss">"</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"1965-1980: </span><span class="sc">{</span>decline_rate<span class="sc">:+.2f}</span><span class="ss"> ft/yr"</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"1985-2005: </span><span class="sc">{</span>recovery_rate<span class="sc">:+.2f}</span><span class="ss"> ft/yr. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> decline_rate <span class="op">&lt;</span> <span class="dv">0</span>, <span class="ss">f"the water table was falling, so the rate should be negative; got </span><span class="sc">{</span>decline_rate<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(decline_rate <span class="op">-</span> (<span class="op">-</span><span class="fl">2.54</span>)) <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="ss">f"expected about -2.54 ft/yr, got </span><span class="sc">{</span>decline_rate<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(recovery_rate <span class="op">-</span> <span class="fl">11.34</span>) <span class="op">&lt;</span> <span class="fl">0.2</span>, <span class="ss">f"expected about +11.34 ft/yr, got </span><span class="sc">{</span>recovery_rate<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"1965-1980: </span><span class="sc">{</span>decline_rate<span class="sc">:+.2f}</span><span class="ss"> ft/yr"</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"1985-2005: </span><span class="sc">{</span>recovery_rate<span class="sc">:+.2f}</span><span class="ss"> ft/yr. Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
@@ -1030,58 +1729,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p>It returns the plain slope of whatever column you give it. You handle the sign afterward, because depth and head have opposite signs.</p>
 <div id="w12p-26" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> water_level_trend(df, value_col, start, end, min_n<span class="op">=</span><span class="dv">5</span>, min_span<span class="op">=</span><span class="dv">10</span>):</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Slope of value_col against year, per site, for sites with enough data."""</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># YOUR TURN</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> water_level_trend(df, value_col, start, end, min_n<span class="op">=</span><span class="dv">5</span>, min_span<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Slope of value_col against year, per site, for sites with enough data."""</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># YOUR TURN</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="w12p-27" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>toy <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"site"</span>: [<span class="st">"a"</span>] <span class="op">*</span> <span class="dv">5</span> <span class="op">+</span> [<span class="st">"b"</span>] <span class="op">*</span> <span class="dv">4</span> <span class="op">+</span> [<span class="st">"c"</span>] <span class="op">*</span> <span class="dv">5</span> <span class="op">+</span> [<span class="st">"d"</span>] <span class="op">*</span> <span class="dv">6</span>,</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>: [<span class="dv">1990</span>, <span class="dv">1993</span>, <span class="dv">1996</span>, <span class="dv">1999</span>, <span class="dv">2002</span>,  <span class="dv">1990</span>, <span class="dv">1995</span>, <span class="dv">2000</span>, <span class="dv">2004</span>,</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>             <span class="dv">1990</span>, <span class="dv">1992</span>, <span class="dv">1994</span>, <span class="dv">1996</span>, <span class="dv">1998</span>,  <span class="dv">1985</span>, <span class="dv">1988</span>, <span class="dv">1991</span>, <span class="dv">1994</span>, <span class="dv">1997</span>, <span class="dv">2000</span>],</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>toy[<span class="st">"value"</span>] <span class="op">=</span> np.where(toy[<span class="st">"site"</span>] <span class="op">==</span> <span class="st">"d"</span>, <span class="dv">50</span> <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> (toy[<span class="st">"year"</span>] <span class="op">-</span> <span class="dv">1985</span>),</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">100</span> <span class="op">+</span> <span class="fl">2.0</span> <span class="op">*</span> (toy[<span class="st">"year"</span>] <span class="op">-</span> <span class="dv">1990</span>))</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> water_level_trend(toy, <span class="st">"value"</span>, <span class="dv">1980</span>, <span class="dv">2010</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(result, pd.Series), <span class="ss">f"should return a Series, got </span><span class="sc">{</span><span class="bu">type</span>(result)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">set</span>(result.index) <span class="op">==</span> {<span class="st">"a"</span>, <span class="st">"d"</span>}, (</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"expected sites a and d only, got </span><span class="sc">{</span><span class="bu">sorted</span>(result.index)<span class="sc">}</span><span class="ss"> "</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"(b has 4 measurements; c spans only 8 years)"</span>)</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(result[<span class="st">"a"</span>] <span class="op">-</span> <span class="fl">2.0</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span> <span class="kw">and</span> <span class="bu">abs</span>(result[<span class="st">"d"</span>] <span class="op">+</span> <span class="fl">1.5</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, result.to_dict()</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">set</span>(water_level_trend(toy, <span class="st">"value"</span>, <span class="dv">1980</span>, <span class="dv">2001</span>).index) <span class="op">==</span> {<span class="st">"d"</span>}, <span class="op">\</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rows outside start-end should be ignored (site a has only 4 rows before 2001)"</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.to_string())</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>toy <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"site"</span>: [<span class="st">"a"</span>] <span class="op">*</span> <span class="dv">5</span> <span class="op">+</span> [<span class="st">"b"</span>] <span class="op">*</span> <span class="dv">4</span> <span class="op">+</span> [<span class="st">"c"</span>] <span class="op">*</span> <span class="dv">5</span> <span class="op">+</span> [<span class="st">"d"</span>] <span class="op">*</span> <span class="dv">6</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>: [<span class="dv">1990</span>, <span class="dv">1993</span>, <span class="dv">1996</span>, <span class="dv">1999</span>, <span class="dv">2002</span>,  <span class="dv">1990</span>, <span class="dv">1995</span>, <span class="dv">2000</span>, <span class="dv">2004</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>             <span class="dv">1990</span>, <span class="dv">1992</span>, <span class="dv">1994</span>, <span class="dv">1996</span>, <span class="dv">1998</span>,  <span class="dv">1985</span>, <span class="dv">1988</span>, <span class="dv">1991</span>, <span class="dv">1994</span>, <span class="dv">1997</span>, <span class="dv">2000</span>],</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>toy[<span class="st">"value"</span>] <span class="op">=</span> np.where(toy[<span class="st">"site"</span>] <span class="op">==</span> <span class="st">"d"</span>, <span class="dv">50</span> <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> (toy[<span class="st">"year"</span>] <span class="op">-</span> <span class="dv">1985</span>),</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">100</span> <span class="op">+</span> <span class="fl">2.0</span> <span class="op">*</span> (toy[<span class="st">"year"</span>] <span class="op">-</span> <span class="dv">1990</span>))</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> water_level_trend(toy, <span class="st">"value"</span>, <span class="dv">1980</span>, <span class="dv">2010</span>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(result, pd.Series), <span class="ss">f"should return a Series, got </span><span class="sc">{</span><span class="bu">type</span>(result)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">set</span>(result.index) <span class="op">==</span> {<span class="st">"a"</span>, <span class="st">"d"</span>}, (</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"expected sites a and d only, got </span><span class="sc">{</span><span class="bu">sorted</span>(result.index)<span class="sc">}</span><span class="ss"> "</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"(b has 4 measurements; c spans only 8 years)"</span>)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(result[<span class="st">"a"</span>] <span class="op">-</span> <span class="fl">2.0</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span> <span class="kw">and</span> <span class="bu">abs</span>(result[<span class="st">"d"</span>] <span class="op">+</span> <span class="fl">1.5</span>) <span class="op">&lt;</span> <span class="fl">1e-9</span>, result.to_dict()</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">set</span>(water_level_trend(toy, <span class="st">"value"</span>, <span class="dv">1980</span>, <span class="dv">2001</span>).index) <span class="op">==</span> {<span class="st">"d"</span>}, <span class="op">\</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rows outside start-end should be ignored (site a has only 4 rows before 2001)"</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.to_string())</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Apply it to the static measurements for two periods: the <strong>decline</strong> from 1950 to 1975, when groundwater pumping for agriculture was at its peak, and the <strong>recovery</strong> from 1985 to 2005. Remember the minus sign for depth.</p>
 <div id="w12p-29" class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ERAS <span class="op">=</span> {<span class="st">"decline 1950-75"</span>: (<span class="dv">1950</span>, <span class="dv">1975</span>), <span class="st">"recovery 1985-2005"</span>: (<span class="dv">1985</span>, <span class="dv">2005</span>)}</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>usgs <span class="op">=</span> {era: <span class="op">-</span>water_level_trend(static, <span class="st">"depth_to_water_ft"</span>, a, b)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> era, (a, b) <span class="kw">in</span> ERAS.items()}</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">3.6</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (era, rates) <span class="kw">in</span> <span class="bu">zip</span>(axes, usgs.items()):</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    ax.hist(rates, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">"#0C234B"</span>, alpha<span class="op">=</span><span class="fl">0.85</span>)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    ax.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"black"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    ax.axvline(rates.median(), color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="dv">2</span>, ls<span class="op">=</span><span class="st">"--"</span>,</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>               label<span class="op">=</span><span class="ss">f"median </span><span class="sc">{</span>rates<span class="sc">.</span>median()<span class="sc">:+.1f}</span><span class="ss"> ft/yr"</span>)</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"</span><span class="sc">{</span>era<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(rates)<span class="sc">}</span><span class="ss"> wells"</span>)</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"water-level change (ft/yr, rising positive)"</span>)</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"wells"</span>)</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ERAS <span class="op">=</span> {<span class="st">"decline 1950-75"</span>: (<span class="dv">1950</span>, <span class="dv">1975</span>), <span class="st">"recovery 1985-2005"</span>: (<span class="dv">1985</span>, <span class="dv">2005</span>)}</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>usgs <span class="op">=</span> {era: <span class="op">-</span>water_level_trend(static, <span class="st">"depth_to_water_ft"</span>, a, b)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> era, (a, b) <span class="kw">in</span> ERAS.items()}</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">3.6</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (era, rates) <span class="kw">in</span> <span class="bu">zip</span>(axes, usgs.items()):</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    ax.hist(rates, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">"#0C234B"</span>, alpha<span class="op">=</span><span class="fl">0.85</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    ax.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"black"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    ax.axvline(rates.median(), color<span class="op">=</span><span class="st">"#AB0520"</span>, lw<span class="op">=</span><span class="dv">2</span>, ls<span class="op">=</span><span class="st">"--"</span>,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>               label<span class="op">=</span><span class="ss">f"median </span><span class="sc">{</span>rates<span class="sc">.</span>median()<span class="sc">:+.1f}</span><span class="ss"> ft/yr"</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"</span><span class="sc">{</span>era<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(rates)<span class="sc">}</span><span class="ss"> wells"</span>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"water-level change (ft/yr, rising positive)"</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"wells"</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Water levels fell at nearly every well from 1950 to 1975 and rose at most wells from 1985 to 2005.</p>
 <p>How much did removing the pumping measurements matter? Repeat the recovery calculation with <strong>all</strong> measurements:</p>
 <div id="w12p-31" class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>with_depth <span class="op">=</span> levels[levels[<span class="st">"depth_to_water_ft"</span>].notna()]</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>all_rates <span class="op">=</span> <span class="op">-</span>water_level_trend(with_depth, <span class="st">"depth_to_water_ft"</span>, <span class="dv">1985</span>, <span class="dv">2005</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"recovery 1985-2005, static only:      median </span><span class="sc">{</span>usgs[<span class="st">'recovery 1985-2005'</span>]<span class="sc">.</span>median()<span class="sc">:+.2f}</span><span class="ss"> ft/yr"</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"recovery 1985-2005, all measurements: median </span><span class="sc">{</span>all_rates<span class="sc">.</span>median()<span class="sc">:+.2f}</span><span class="ss"> ft/yr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>with_depth <span class="op">=</span> levels[levels[<span class="st">"depth_to_water_ft"</span>].notna()]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>all_rates <span class="op">=</span> <span class="op">-</span>water_level_trend(with_depth, <span class="st">"depth_to_water_ft"</span>, <span class="dv">1985</span>, <span class="dv">2005</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"recovery 1985-2005, static only:      median </span><span class="sc">{</span>usgs[<span class="st">'recovery 1985-2005'</span>]<span class="sc">.</span>median()<span class="sc">:+.2f}</span><span class="ss"> ft/yr"</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"recovery 1985-2005, all measurements: median </span><span class="sc">{</span>all_rates<span class="sc">.</span>median()<span class="sc">:+.2f}</span><span class="ss"> ft/yr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Including the pumping measurements makes the recovery look about a third faster. In 1985–89, 13% of measurements were taken while pumping; after 1995, only 2–3% were. Deep readings early in the period and normal readings later make the water level look like it rose more than it did. Cleaning the data changed the answer.</p>
 <hr>
@@ -1123,50 +1822,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>These are <strong>heads</strong> (water-level elevations), not depths, so a rising water table already has a positive slope. No minus sign this time.</p>
 <div id="w12p-34" class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>MODEL_DIRS <span class="op">=</span> [ROOT <span class="op">/</span> <span class="st">"pinal_county_model"</span>, ROOT <span class="op">/</span> <span class="st">"labs"</span> <span class="op">/</span> <span class="st">"week09"</span> <span class="op">/</span> <span class="st">"pinal_county_model"</span>]</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>NAM_NAME <span class="op">=</span> <span class="st">"PM_AWS2019_SS25115.nam"</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_model_obs(ws):</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Observed and simulated heads from the model's HOB input and output files."""</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> flopy</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    nam <span class="op">=</span> ws <span class="op">/</span> NAM_NAME</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    units <span class="op">=</span> {}</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> nam.read_text(errors<span class="op">=</span><span class="st">"replace"</span>).splitlines():</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> line.split()</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(w) <span class="op">&gt;=</span> <span class="dv">3</span> <span class="kw">and</span> <span class="kw">not</span> line.lstrip().startswith(<span class="st">"#"</span>):</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>            units[<span class="bu">int</span>(w[<span class="dv">1</span>])] <span class="op">=</span> (w[<span class="dv">0</span>].upper(), w[<span class="dv">2</span>])</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    hob_file <span class="op">=</span> <span class="bu">next</span>(f <span class="cf">for</span> t, f <span class="kw">in</span> units.values() <span class="cf">if</span> t <span class="op">==</span> <span class="st">"HOB"</span>)</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> [l <span class="cf">for</span> l <span class="kw">in</span> (ws <span class="op">/</span> hob_file).read_text(errors<span class="op">=</span><span class="st">"replace"</span>).splitlines()</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>             <span class="cf">if</span> l.strip() <span class="kw">and</span> <span class="kw">not</span> l.lstrip().startswith(<span class="st">"#"</span>)]</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    out_file <span class="op">=</span> units[<span class="bu">int</span>(lines[<span class="dv">0</span>].split()[<span class="dv">3</span>])][<span class="dv">1</span>]</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    recs <span class="op">=</span> []</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l <span class="kw">in</span> lines[<span class="dv">2</span>:]:</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> l.split()</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(w) <span class="op">&gt;=</span> <span class="dv">9</span> <span class="kw">and</span> <span class="kw">not</span> w[<span class="dv">0</span>][<span class="dv">0</span>].isdigit():</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>            recs.append({<span class="st">"name"</span>: w[<span class="dv">0</span>], <span class="st">"row"</span>: <span class="bu">int</span>(w[<span class="dv">2</span>]) <span class="op">-</span> <span class="dv">1</span>, <span class="st">"col"</span>: <span class="bu">int</span>(w[<span class="dv">3</span>]) <span class="op">-</span> <span class="dv">1</span>,</span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"sp"</span>: <span class="bu">int</span>(w[<span class="dv">4</span>]), <span class="st">"toffset"</span>: <span class="bu">float</span>(w[<span class="dv">5</span>])})</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    obs <span class="op">=</span> pd.DataFrame(recs).merge(</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>        pd.read_csv(ws <span class="op">/</span> out_file, sep<span class="op">=</span><span class="vs">r"</span><span class="dv">\s</span><span class="op">+</span><span class="vs">"</span>, skiprows<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>                    names<span class="op">=</span>[<span class="st">"simulated"</span>, <span class="st">"observed"</span>, <span class="st">"name"</span>]), on<span class="op">=</span><span class="st">"name"</span>)</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> flopy.modflow.Modflow.load(NAM_NAME, model_ws<span class="op">=</span><span class="bu">str</span>(ws), load_only<span class="op">=</span>[<span class="st">"dis"</span>],</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>                                   check<span class="op">=</span><span class="va">False</span>, forgive<span class="op">=</span><span class="va">True</span>, verbose<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>    perlen <span class="op">=</span> m.dis.perlen.array</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># stress period 1 is steady-state 1922; stress period n &gt;= 2 is year 1921 + n</span></span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    obs[<span class="st">"year"</span>] <span class="op">=</span> np.where(obs[<span class="st">"sp"</span>] <span class="op">==</span> <span class="dv">1</span>, <span class="fl">1922.0</span>,</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>                           <span class="dv">1921</span> <span class="op">+</span> obs[<span class="st">"sp"</span>] <span class="op">+</span> obs[<span class="st">"toffset"</span>] <span class="op">/</span> perlen[obs[<span class="st">"sp"</span>] <span class="op">-</span> <span class="dv">1</span>])</span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>    obs[<span class="st">"site"</span>] <span class="op">=</span> obs[<span class="st">"name"</span>].<span class="bu">str</span>[:<span class="op">-</span><span class="dv">5</span>]</span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> obs[[<span class="st">"site"</span>, <span class="st">"row"</span>, <span class="st">"col"</span>, <span class="st">"year"</span>, <span class="st">"observed"</span>, <span class="st">"simulated"</span>]]</span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>model_ws <span class="op">=</span> <span class="bu">next</span>((d <span class="cf">for</span> d <span class="kw">in</span> MODEL_DIRS <span class="cf">if</span> (d <span class="op">/</span> NAM_NAME).exists()), <span class="va">None</span>)</span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> model_ws <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>    model_obs <span class="op">=</span> read_model_obs(model_ws)</span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"read from </span><span class="sc">{</span>model_ws<span class="sc">.</span>relative_to(ROOT)<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(model_obs)<span class="sc">:,}</span><span class="ss"> observations"</span>)</span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>    model_obs <span class="op">=</span> pd.read_csv(CACHE <span class="op">/</span> <span class="st">"pinal_model_head_obs.csv"</span>)</span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"model folder not found; saved copy: </span><span class="sc">{</span><span class="bu">len</span>(model_obs)<span class="sc">:,}</span><span class="ss"> observations"</span>)</span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>model_obs.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>MODEL_DIRS <span class="op">=</span> [ROOT <span class="op">/</span> <span class="st">"pinal_county_model"</span>, ROOT <span class="op">/</span> <span class="st">"labs"</span> <span class="op">/</span> <span class="st">"week09"</span> <span class="op">/</span> <span class="st">"pinal_county_model"</span>]</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>NAM_NAME <span class="op">=</span> <span class="st">"PM_AWS2019_SS25115.nam"</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_model_obs(ws):</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Observed and simulated heads from the model's HOB input and output files."""</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> flopy</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    nam <span class="op">=</span> ws <span class="op">/</span> NAM_NAME</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    units <span class="op">=</span> {}</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> nam.read_text(errors<span class="op">=</span><span class="st">"replace"</span>).splitlines():</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> line.split()</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(w) <span class="op">&gt;=</span> <span class="dv">3</span> <span class="kw">and</span> <span class="kw">not</span> line.lstrip().startswith(<span class="st">"#"</span>):</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>            units[<span class="bu">int</span>(w[<span class="dv">1</span>])] <span class="op">=</span> (w[<span class="dv">0</span>].upper(), w[<span class="dv">2</span>])</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    hob_file <span class="op">=</span> <span class="bu">next</span>(f <span class="cf">for</span> t, f <span class="kw">in</span> units.values() <span class="cf">if</span> t <span class="op">==</span> <span class="st">"HOB"</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> [l <span class="cf">for</span> l <span class="kw">in</span> (ws <span class="op">/</span> hob_file).read_text(errors<span class="op">=</span><span class="st">"replace"</span>).splitlines()</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>             <span class="cf">if</span> l.strip() <span class="kw">and</span> <span class="kw">not</span> l.lstrip().startswith(<span class="st">"#"</span>)]</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    out_file <span class="op">=</span> units[<span class="bu">int</span>(lines[<span class="dv">0</span>].split()[<span class="dv">3</span>])][<span class="dv">1</span>]</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    recs <span class="op">=</span> []</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l <span class="kw">in</span> lines[<span class="dv">2</span>:]:</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> l.split()</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(w) <span class="op">&gt;=</span> <span class="dv">9</span> <span class="kw">and</span> <span class="kw">not</span> w[<span class="dv">0</span>][<span class="dv">0</span>].isdigit():</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>            recs.append({<span class="st">"name"</span>: w[<span class="dv">0</span>], <span class="st">"row"</span>: <span class="bu">int</span>(w[<span class="dv">2</span>]) <span class="op">-</span> <span class="dv">1</span>, <span class="st">"col"</span>: <span class="bu">int</span>(w[<span class="dv">3</span>]) <span class="op">-</span> <span class="dv">1</span>,</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"sp"</span>: <span class="bu">int</span>(w[<span class="dv">4</span>]), <span class="st">"toffset"</span>: <span class="bu">float</span>(w[<span class="dv">5</span>])})</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    obs <span class="op">=</span> pd.DataFrame(recs).merge(</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>        pd.read_csv(ws <span class="op">/</span> out_file, sep<span class="op">=</span><span class="vs">r"</span><span class="dv">\s</span><span class="op">+</span><span class="vs">"</span>, skiprows<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>                    names<span class="op">=</span>[<span class="st">"simulated"</span>, <span class="st">"observed"</span>, <span class="st">"name"</span>]), on<span class="op">=</span><span class="st">"name"</span>)</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> flopy.modflow.Modflow.load(NAM_NAME, model_ws<span class="op">=</span><span class="bu">str</span>(ws), load_only<span class="op">=</span>[<span class="st">"dis"</span>],</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>                                   check<span class="op">=</span><span class="va">False</span>, forgive<span class="op">=</span><span class="va">True</span>, verbose<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>    perlen <span class="op">=</span> m.dis.perlen.array</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># stress period 1 is steady-state 1922; stress period n &gt;= 2 is year 1921 + n</span></span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>    obs[<span class="st">"year"</span>] <span class="op">=</span> np.where(obs[<span class="st">"sp"</span>] <span class="op">==</span> <span class="dv">1</span>, <span class="fl">1922.0</span>,</span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>                           <span class="dv">1921</span> <span class="op">+</span> obs[<span class="st">"sp"</span>] <span class="op">+</span> obs[<span class="st">"toffset"</span>] <span class="op">/</span> perlen[obs[<span class="st">"sp"</span>] <span class="op">-</span> <span class="dv">1</span>])</span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>    obs[<span class="st">"site"</span>] <span class="op">=</span> obs[<span class="st">"name"</span>].<span class="bu">str</span>[:<span class="op">-</span><span class="dv">5</span>]</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> obs[[<span class="st">"site"</span>, <span class="st">"row"</span>, <span class="st">"col"</span>, <span class="st">"year"</span>, <span class="st">"observed"</span>, <span class="st">"simulated"</span>]]</span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>model_ws <span class="op">=</span> <span class="bu">next</span>((d <span class="cf">for</span> d <span class="kw">in</span> MODEL_DIRS <span class="cf">if</span> (d <span class="op">/</span> NAM_NAME).exists()), <span class="va">None</span>)</span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> model_ws <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>    model_obs <span class="op">=</span> read_model_obs(model_ws)</span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"read from </span><span class="sc">{</span>model_ws<span class="sc">.</span>relative_to(ROOT)<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(model_obs)<span class="sc">:,}</span><span class="ss"> observations"</span>)</span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>    model_obs <span class="op">=</span> pd.read_csv(CACHE <span class="op">/</span> <span class="st">"pinal_model_head_obs.csv"</span>)</span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"model folder not found; saved copy: </span><span class="sc">{</span><span class="bu">len</span>(model_obs)<span class="sc">:,}</span><span class="ss"> observations"</span>)</span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>model_obs.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>One limitation before comparing: the model files don’t include map coordinates for the grid, and ADWR’s site IDs don’t match USGS IDs. So we can’t match USGS wells to model cells one by one. Instead, we compare the <strong>typical</strong> (median) trend across each set of wells, for the same area and the same periods.</p>
 <section id="your-turn-5" class="level3">
@@ -1178,29 +1877,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>The USGS row comes from <code>usgs</code>. For the model rows, apply <code>water_level_trend</code> to <code>model_obs</code>, using the <code>observed</code> and <code>simulated</code> columns.</p>
 <div id="w12p-36" class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>comparison <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR TURN</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>comparison <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="w12p-37" class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> [<span class="st">"USGS wells (static)"</span>, <span class="st">"model targets (observed)"</span>, <span class="st">"model (simulated)"</span>]</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">list</span>(comparison.index) <span class="op">==</span> rows, <span class="ss">f"index should be </span><span class="sc">{</span>rows<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span><span class="bu">list</span>(comparison.index)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">list</span>(comparison.columns) <span class="op">==</span> <span class="bu">list</span>(ERAS), <span class="ss">f"columns should be </span><span class="sc">{</span><span class="bu">list</span>(ERAS)<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span><span class="bu">list</span>(comparison.columns)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>expected <span class="op">=</span> pd.DataFrame([[<span class="op">-</span><span class="fl">4.73</span>, <span class="fl">3.60</span>], [<span class="op">-</span><span class="fl">4.86</span>, <span class="fl">3.63</span>], [<span class="op">-</span><span class="fl">4.45</span>, <span class="fl">2.30</span>]], index<span class="op">=</span>rows, columns<span class="op">=</span><span class="bu">list</span>(ERAS))</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>diff <span class="op">=</span> (comparison <span class="op">-</span> expected).<span class="bu">abs</span>()</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (diff <span class="op">&lt;</span> <span class="fl">0.3</span>).<span class="bu">all</span>().<span class="bu">all</span>(), <span class="ss">f"some values are off:</span><span class="ch">\n</span><span class="sc">{</span>comparison<span class="sc">.</span><span class="bu">round</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(comparison.<span class="bu">round</span>(<span class="dv">2</span>).to_string())</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHECK</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> [<span class="st">"USGS wells (static)"</span>, <span class="st">"model targets (observed)"</span>, <span class="st">"model (simulated)"</span>]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">list</span>(comparison.index) <span class="op">==</span> rows, <span class="ss">f"index should be </span><span class="sc">{</span>rows<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span><span class="bu">list</span>(comparison.index)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">list</span>(comparison.columns) <span class="op">==</span> <span class="bu">list</span>(ERAS), <span class="ss">f"columns should be </span><span class="sc">{</span><span class="bu">list</span>(ERAS)<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span><span class="bu">list</span>(comparison.columns)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>expected <span class="op">=</span> pd.DataFrame([[<span class="op">-</span><span class="fl">4.73</span>, <span class="fl">3.60</span>], [<span class="op">-</span><span class="fl">4.86</span>, <span class="fl">3.63</span>], [<span class="op">-</span><span class="fl">4.45</span>, <span class="fl">2.30</span>]], index<span class="op">=</span>rows, columns<span class="op">=</span><span class="bu">list</span>(ERAS))</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>diff <span class="op">=</span> (comparison <span class="op">-</span> expected).<span class="bu">abs</span>()</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (diff <span class="op">&lt;</span> <span class="fl">0.3</span>).<span class="bu">all</span>().<span class="bu">all</span>(), <span class="ss">f"some values are off:</span><span class="ch">\n</span><span class="sc">{</span>comparison<span class="sc">.</span><span class="bu">round</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(comparison.<span class="bu">round</span>(<span class="dv">2</span>).to_string())</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Correct."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="w12p-38" class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> comparison.T.plot.bar(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">3.8</span>), rot<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                           color<span class="op">=</span>[<span class="st">"#0C234B"</span>, <span class="st">"#81D3EB"</span>, <span class="st">"#AB0520"</span>])</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"black"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"median water-level change (ft/yr)"</span>)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>, axis<span class="op">=</span><span class="st">"y"</span>)</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> comparison.T.plot.bar(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">3.8</span>), rot<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                           color<span class="op">=</span>[<span class="st">"#0C234B"</span>, <span class="st">"#81D3EB"</span>, <span class="st">"#AB0520"</span>])</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"black"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"median water-level change (ft/yr)"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>, axis<span class="op">=</span><span class="st">"y"</span>)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>What the comparison shows:</strong></p>
 <ul>
